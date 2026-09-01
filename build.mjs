@@ -13,43 +13,43 @@ const PAGES = {
     route: 'index.html',
     title: 'Ecosophy Spa Dubai — Where Nature Restores You',
     description: 'Two sanctuaries, one philosophy. Balinese hands, Moroccan steam, and the quiet of a green room in Dubai.',
-    mark: 'assets/mark-woman-gold.png',
+    mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy For Her.dc.html': {
     route: 'for-her.html',
     title: 'Ecosophy Spa for Her — Dubai',
     description: 'Moroccan bath, Balinese massage and skin rituals for women, in a calm green room in Dubai.',
-    mark: 'assets/mark-woman-gold.png',
+    mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy For Him.dc.html': {
     route: 'for-him.html',
     title: 'Ecosophy Gent Spa for Him — Dubai',
     description: "The gentlemen's retreat. Moroccan bath, deep tissue massage, skin and grooming rituals for men in Dubai.",
-    mark: 'assets/mark-man-gold.png',
+    mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Services.dc.html': {
     route: 'services.html',
     title: 'Spa Menu & Prices — Ecosophy for Her',
     description: 'Full treatment menu and prices for Ecosophy Spa Dubai — massage, hammam, facials and body rituals.',
-    mark: 'assets/mark-woman-gold.png',
+    mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Service Detail.dc.html': {
     route: 'service.html',
     title: 'Treatment — Ecosophy Spa for Her',
     description: 'Treatment details, duration and pricing at Ecosophy Spa Dubai.',
-    mark: 'assets/mark-woman-gold.png',
+    mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Services.dc.html': {
     route: 'gent-services.html',
     title: 'Menu & Prices — Ecosophy Gent Spa',
     description: 'Full treatment menu and prices for Ecosophy Gent Spa Dubai — massage, hammam, skin and grooming.',
-    mark: 'assets/mark-man-gold.png',
+    mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',
     description: 'Treatment details, duration and pricing at Ecosophy Gent Spa Dubai.',
-    mark: 'assets/mark-man-gold.png',
+    mark: 'favicons/mark-man-gold-180.png',
   },
 };
 
@@ -135,9 +135,6 @@ for (const [srcName, page] of Object.entries(PAGES)) {
   console.log(`  ${page.route.padEnd(20)} <- ${srcName} (${(n / 1024).toFixed(0)} KB)`);
 }
 
-// Favicons are referenced only from the <head> we just injected, so add them explicitly.
-for (const p of Object.values(PAGES)) assets.add(p.mark);
-
 for (const rel of [...assets].sort()) {
   const from = join(SRC, rel);
   if (!existsSync(from)) { console.warn(`  ! missing asset: ${rel}`); continue; }
@@ -150,6 +147,13 @@ console.log(`  ${assets.size} assets copied`);
 for (const f of ['support.js', 'image-slot.js', '.image-slots.state.json']) {
   copyFileSync(join(SRC, f), join(OUT, f));
 }
+// Favicons: downscaled from the brand marks in favicons/, since the full-size
+// assets are ~800 KB each and would be fetched on every page view.
+mkdirSync(join(OUT, 'favicons'), { recursive: true });
+for (const p of new Set(Object.values(PAGES).map((p) => p.mark))) {
+  copyFileSync(p, join(OUT, p));
+}
+
 mkdirSync(join(OUT, 'vendor'), { recursive: true });
 for (const f of ['react.production.min.js', 'react-dom.production.min.js', 'babel.min.js']) {
   copyFileSync(join('vendor', f), join(OUT, 'vendor', f));
