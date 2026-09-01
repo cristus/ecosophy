@@ -1433,34 +1433,45 @@ class Component extends DCLogic {
       setEn: () => this.setState({ lang: 'en' }),
       setAr: () => this.setState({ lang: 'ar' }),
       fanCards: (() => {
+        // Ecosophy's own photography. Credit/href are intentionally empty: these
+        // are the centre's images, so no third-party attribution belongs on them.
         const P = {
-          caishan: ['1544161515-4ab6ce6db874','Photo by alan caishan on Unsplash','https://unsplash.com/@caishan119'],
-          heftiba: ['1519823551278-64ac92734fb1','Photo by Toa Heftiba on Unsplash','https://unsplash.com/@heftiba'],
-          akyurt: ['1600334129128-685c5582fd35','Photo by engin akyurt on Unsplash','https://unsplash.com/@enginakyurt'],
-          paje: ['1544843776-7c98a52e08a4','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria'],
-          nico: ['1560932992-a93e9ca8a0c9','Photo by Nico on Unsplash','https://unsplash.com/@nicobaby'],
-          kovach: ['1636525653613-2a3a05c00759','Photo by Natalie Kovach on Unsplash','https://unsplash.com/@nataliekovach'],
-          rosa: ['1570172619644-dfd03ed5d881','Photo by Rosa Rafael on Unsplash','https://unsplash.com/@rosarafael'],
-          hume: ['1515377905703-c4788e51af15','Photo by Christin Hume on Unsplash','https://unsplash.com/@christinhumephoto'],
-          element: ['1522337360788-8b13dee7a37e','Photo by Element5 Digital on Unsplash','https://unsplash.com/@element5digital'],
-          nickson: ['1540555700478-4be289fbecef','Photo by Roberto Nickson on Unsplash','https://unsplash.com/@rpnickson'],
-          frames: ['1603077864615-538e955d1ad1','Photo by Frames For Your Heart on Unsplash','https://unsplash.com/@framesforyourheart'],
-          parmanov: ['1630595271375-5073a6c0638b','Photo by Usen Parmanov on Unsplash','https://unsplash.com/@parmantegin'],
-          stones: ['1487412720507-e7ab37603c6f','Photo by Toa Heftiba on Unsplash','https://unsplash.com/@heftiba'],
-          salon: ['1512690459411-b9245aed614b','Photo by Adam Winger on Unsplash','https://unsplash.com/@awcreativeut'],
-          wellness: ['1571019614242-c5c5dee9f50b','Photo by Bruce Mars on Unsplash','https://unsplash.com/@brucemars'],
+          massage1: ['uploads/eco-her-massage-1.jpg','',''],
+          massage2: ['uploads/eco-her-massage-2.jpg','',''],
+          hammam1: ['uploads/eco-her-hammam-1.jpg','',''],
+          hammam2: ['uploads/eco-her-hammam-2.jpg','',''],
+          facial1: ['uploads/eco-her-facial-1.jpg','',''],
+          robe: ['uploads/eco-her-robe.jpg','',''],
+          nails1: ['uploads/eco-her-nails-1.jpg','',''],
+          nails2: ['uploads/eco-her-nails-2.jpg','',''],
+          jacuzzi1: ['uploads/eco-her-jacuzzi-1.jpg','',''],
+          jacuzzi2: ['uploads/eco-her-jacuzzi-2.jpg','',''],
+          sauna: ['uploads/eco-her-sauna.jpg','',''],
+          products1: ['uploads/eco-her-products-1.jpg','',''],
+          products2: ['uploads/eco-her-products-2.jpg','',''],
+          hair1: ['uploads/eco-her-hair-1.jpg','',''],
+          hair2: ['uploads/eco-her-hair-2.jpg','',''],
+          bridal: ['uploads/eco-her-bridal.jpg','',''],
+          exterior1: ['uploads/eco-her-exterior-1.jpg','',''],
+          exterior2: ['uploads/eco-her-exterior-2.jpg','',''],
+          makeup1: ['uploads/eco-her-makeup-1.jpg','',''],
+          makeup2: ['uploads/eco-her-makeup-2.jpg','',''],
         };
-        const u = p => 'https://images.unsplash.com/photo-' + p[0] + '?q=75&w=440&auto=format&fit=crop';
+        // Matches the For Him resolver: a local path is used as-is, anything else
+        // is treated as an Unsplash photo id. Note this tests the raw string, so
+        // these paths must stay relative — a leading slash breaks it.
+        const u = p => (p[0].charAt(0) === '.' || p[0].indexOf('uploads/') === 0) ? p[0] : 'https://images.unsplash.com/photo-' + p[0] + '?q=75&w=440&auto=format&fit=crop';
         const base = [
-          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.caishan,P.heftiba,P.nico]],
-          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.paje,P.akyurt,P.kovach]],
-          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.rosa,P.hume,P.stones]],
-          ['nails','NAILS & BROWS','nails','Shaping, tint and long-wear manicures by our top masters.',[P.element,P.salon,P.wellness]],
-          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.nickson,P.frames,P.parmanov]],
-          ['sauna','SAUNA','infrared sauna','Gentle infrared heat to warm the body before treatment.',[P.kovach,P.stones,P.frames]],
-          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.nico,P.nico,P.stones]],
-          ['hair','HAIR & STYLING','hair salon','Cut, colour and styling by our senior stylists.',[P.wellness,P.wellness,P.heftiba]],
-          ['lounge','THE LOUNGE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.parmanov,P.parmanov,P.akyurt]],
+          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.massage1,P.massage2,P.jacuzzi2]],
+          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam1,P.hammam2,P.products1]],
+          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facial1,P.robe,P.massage2]],
+          ['nails','NAILS & BROWS','nails','Shaping, tint and long-wear manicures by our top masters.',[P.nails1,P.nails2,P.makeup2]],
+          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.jacuzzi1,P.jacuzzi2,P.sauna]],
+          ['sauna','SAUNA','infrared sauna','Gentle infrared heat to warm the body before treatment.',[P.sauna,P.jacuzzi2,P.hammam2]],
+          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.products1,P.products2,P.hammam1]],
+          ['hair','HAIR & STYLING','hair salon','Cut, colour and styling by our senior stylists.',[P.hair1,P.hair2,P.bridal]],
+          ['makeup','MAKE-UP','make-up artistry','Bridal and evening make-up by our senior artists.',[P.makeup1,P.makeup2,P.bridal]],
+          ['lounge','THE CENTRE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.exterior1,P.exterior2,P.robe]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';
