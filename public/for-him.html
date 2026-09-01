@@ -197,7 +197,7 @@ a:hover { color:#B98F3E; }
     var now = Date.now();
     if (drag && drag.rail === rail) { rail.__touch = now; return false; }
     if (rail.__tw) return false;
-    if (rail.__touch && now - rail.__touch < 2600) return false;
+    if (rail.__touch && now - rail.__touch < 1100) return false;
     var last = rail.__dt || now;
     rail.__dt = now;
     var dt = Math.min(64, now - last);
@@ -242,7 +242,9 @@ a:hover { color:#B98F3E; }
     for (var i = 0; i < rails.length; i++) {
       var over = e.target.closest && e.target.closest('[data-fanscroll]') === rails[i];
       if (over && !rails[i].__hover) { rails[i].__hover = 1; rails[i].__still = 0; rails[i].__settled = 0; }
-      else if (!over && rails[i].__hover) { rails[i].__hover = 0; rails[i].__touch = Date.now(); rails[i].__dt = 0; }
+      // Leaving the fan is not an interaction: treating it as one froze the
+      // drift for the full settle window and let snap() yank the rail backwards.
+      else if (!over && rails[i].__hover) { rails[i].__hover = 0; }
     }
   });
   document.addEventListener('pointerdown', function(e){
@@ -266,11 +268,19 @@ a:hover { color:#B98F3E; }
   document.addEventListener('wheel', function(e){
     var rail = e.target.closest && e.target.closest('[data-fanscroll]');
     if (!rail) return;
-    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) {
-      rail.__tw = null; rail.__touch = Date.now(); rail.__dt = 0;
-      rail.__pos = null;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      // Vertical intent means the page should move, not the card rail. The rail
+      // is horizontally scrollable with no vertical overflow, so the browser
+      // otherwise routes the wheel into it: the fan jumps backwards and its
+      // drift then stalls for the whole settle window. Scroll the page instead.
+      e.preventDefault();
+      var k = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1);
+      window.scrollBy(0, e.deltaY * k);
+      return;
     }
-  }, { passive: true });
+    rail.__tw = null; rail.__touch = Date.now(); rail.__dt = 0;
+    rail.__pos = null;
+  }, { passive: false });
 })();
 </script>
 </helmet>

@@ -197,7 +197,7 @@ a:hover { color:#B98F3E; }
     var now = Date.now();
     if (drag && drag.rail === rail) { rail.__touch = now; return false; }
     if (rail.__tw) return false;
-    if (rail.__touch && now - rail.__touch < 2600) return false;
+    if (rail.__touch && now - rail.__touch < 1100) return false;
     var last = rail.__dt || now;
     rail.__dt = now;
     var dt = Math.min(64, now - last);
@@ -242,7 +242,9 @@ a:hover { color:#B98F3E; }
     for (var i = 0; i < rails.length; i++) {
       var over = e.target.closest && e.target.closest('[data-fanscroll]') === rails[i];
       if (over && !rails[i].__hover) { rails[i].__hover = 1; rails[i].__still = 0; rails[i].__settled = 0; }
-      else if (!over && rails[i].__hover) { rails[i].__hover = 0; rails[i].__touch = Date.now(); rails[i].__dt = 0; }
+      // Leaving the fan is not an interaction: treating it as one froze the
+      // drift for the full settle window and let snap() yank the rail backwards.
+      else if (!over && rails[i].__hover) { rails[i].__hover = 0; }
     }
   });
   document.addEventListener('pointerdown', function(e){
@@ -266,11 +268,19 @@ a:hover { color:#B98F3E; }
   document.addEventListener('wheel', function(e){
     var rail = e.target.closest && e.target.closest('[data-fanscroll]');
     if (!rail) return;
-    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) {
-      rail.__tw = null; rail.__touch = Date.now(); rail.__dt = 0;
-      rail.__pos = null;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      // Vertical intent means the page should move, not the card rail. The rail
+      // is horizontally scrollable with no vertical overflow, so the browser
+      // otherwise routes the wheel into it: the fan jumps backwards and its
+      // drift then stalls for the whole settle window. Scroll the page instead.
+      e.preventDefault();
+      var k = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1);
+      window.scrollBy(0, e.deltaY * k);
+      return;
     }
-  }, { passive: true });
+    rail.__tw = null; rail.__touch = Date.now(); rail.__dt = 0;
+    rail.__pos = null;
+  }, { passive: false });
 })();
 </script>
 </helmet>
@@ -1461,17 +1471,21 @@ class Component extends DCLogic {
         // is treated as an Unsplash photo id. Note this tests the raw string, so
         // these paths must stay relative — a leading slash breaks it.
         const u = p => (p[0].charAt(0) === '.' || p[0].indexOf('uploads/') === 0) ? p[0] : 'https://images.unsplash.com/photo-' + p[0] + '?q=75&w=440&auto=format&fit=crop';
+        // Each card cross-fades between exactly two images (src / src2), so every
+        // pair below must be distinct AND unused by any other card — otherwise the
+        // same photo surfaces on two cards at once as they cycle. Nine cards is
+        // what twenty distinct photos allows; the standalone SAUNA card is folded
+        // into THE SPA, whose copy already covers infrared heat.
         const base = [
-          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.massage1,P.massage2,P.jacuzzi2]],
-          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam1,P.hammam2,P.products1]],
-          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facial1,P.robe,P.massage2]],
-          ['nails','NAILS & BROWS','nails','Shaping, tint and long-wear manicures by our top masters.',[P.nails1,P.nails2,P.makeup2]],
-          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.jacuzzi1,P.jacuzzi2,P.sauna]],
-          ['sauna','SAUNA','infrared sauna','Gentle infrared heat to warm the body before treatment.',[P.sauna,P.jacuzzi2,P.hammam2]],
-          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.products1,P.products2,P.hammam1]],
-          ['hair','HAIR & STYLING','hair salon','Cut, colour and styling by our senior stylists.',[P.hair1,P.hair2,P.bridal]],
-          ['makeup','MAKE-UP','make-up artistry','Bridal and evening make-up by our senior artists.',[P.makeup1,P.makeup2,P.bridal]],
-          ['lounge','THE CENTRE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.exterior1,P.exterior2,P.robe]],
+          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.massage1,P.massage2]],
+          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam1,P.hammam2]],
+          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facial1,P.robe]],
+          ['nails','NAILS & BROWS','nails','Shaping, tint and long-wear manicures by our top masters.',[P.nails1,P.nails2]],
+          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.jacuzzi1,P.sauna]],
+          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.products1,P.products2]],
+          ['hair','HAIR & STYLING','hair salon','Cut, colour and styling by our senior stylists.',[P.hair1,P.hair2]],
+          ['makeup','MAKE-UP','make-up artistry','Bridal and evening make-up by our senior artists.',[P.makeup1,P.makeup2]],
+          ['lounge','THE CENTRE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.exterior1,P.exterior2]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';
