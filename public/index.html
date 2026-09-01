@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecosophy Spa Dubai — Where Nature Restores You</title>
+<meta name="description" content="Two sanctuaries, one philosophy. Balinese hands, Moroccan steam, and the quiet of a green room in Dubai.">
+<link rel="icon" type="image/png" href="/assets/mark-woman-gold.png">
+<link rel="apple-touch-icon" href="/assets/mark-woman-gold.png">
+<meta name="theme-color" content="#0E2B1C">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ecosophy Spa">
+<meta property="og:locale" content="en_AE">
+<meta property="og:title" content="Ecosophy Spa Dubai — Where Nature Restores You">
+<meta property="og:description" content="Two sanctuaries, one philosophy. Balinese hands, Moroccan steam, and the quiet of a green room in Dubai.">
+<meta property="og:url" content="https://ecosophy.pages.dev/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://ecosophy.pages.dev/">
+<script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/vendor/react.production.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/vendor/react-dom.production.min.js","https://unpkg.com/@babel/standalone@7.29.0/babel.min.js":"/vendor/babel.min.js"};</script>
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Prata&family=Manrope:wght@300;400;500;600&family=Amiri:ital@0;1&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="/image-slot.js"></script>
+<style>
+body { margin:0; background:#F6F1E6; font-family:'Manrope',sans-serif; color:#2A332C; }
+a { color:#14532D; text-decoration:none; }
+a:hover { color:#B98F3E; }
+</style>
+</helmet>
+
+<div id="choose" data-screen-label="Switcher" style="position:relative; height:calc(100vh - 96px); min-height:480px; background:#F6F1E6; display:flex; flex-direction:column; justify-content:center; padding:clamp(30px,5vh,64px) 0 clamp(24px,4vh,44px); box-sizing:border-box; overflow:hidden;">
+  <svg viewBox="0 0 200 120" style="pointer-events:none; position:absolute; left:-4%; top:12%; width:min(30vw,300px); opacity:.5;"><path d="M10 110 Q60 12 190 18 Q104 34 42 82 Q26 96 10 110 Z" fill="none" stroke="rgba(185,143,62,.35)" stroke-width="1"></path></svg>
+  <svg viewBox="0 0 200 120" style="pointer-events:none; position:absolute; right:-4%; bottom:8%; width:min(28vw,280px); opacity:.45; transform:rotate(180deg);"><path d="M10 110 Q60 12 190 18 Q104 34 42 82 Q26 96 10 110 Z" fill="none" stroke="rgba(185,143,62,.35)" stroke-width="1"></path></svg>
+
+  <div style="text-align:center; padding:0 20px;">
+    <div style="font-family:'Great Vibes',cursive; font-size:clamp(30px,4vw,42px); color:#14532D; line-height:1;">Ecosophy</div>
+    <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(24px,3.4vw,42px); letter-spacing:.05em; color:#14532D; margin-top:12px;">Choose your world</div>
+    <div style="font-size:13px; color:#77704F; margin-top:8px;">Two sanctuaries, one philosophy.</div>
+  </div>
+
+  <div style="flex:1 1 auto; min-height:0; display:flex; flex-direction:{{ doorDir }}; gap:3px; margin-top:clamp(16px,3vh,40px); align-items:stretch;">
+    <a href="/for-her" id="her" onClick="{{ selectHer }}" onMouseEnter="{{ hoverHer }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; cursor:pointer; position:relative; overflow:hidden; flex:{{ herFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
+      <image-slot id="sw-her" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1100&auto=format&fit=crop" credit="Photo by Rosa Rafael on Unsplash" credit-href="https://unsplash.com/@rosarafael" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+      <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.3) 0%, rgba(11,31,22,.22) 34%, rgba(11,31,22,.88) 100%);"></div>
+      <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:0 clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center;">
+        <img src="/assets/mark-woman-gold.png" alt="" style="width:{{ markSize }}; height:{{ markSize }}; opacity:.95;">
+        <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,2.4vw,30px); color:#C9A860; line-height:1.1;">for her</div>
+        <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(22px,2.6vw,38px); letter-spacing:.05em; color:#F1E3B8; margin-top:2px;">Ecosophy Spa</div>
+        <div style="overflow:hidden; height:{{ herDetail }}; opacity:{{ herDetailOpacity }}; transition:height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
+          <div style="font-size:13px; color:#C4CFC1; margin-top:10px;">Moroccan bath, facials and massage in a quiet women-only space.</div>
+          <div style="display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778;">ENTER</div>
+        </div>
+      </div>
+    </a>
+    <a href="/for-him" id="him" onClick="{{ selectHim }}" onMouseEnter="{{ hoverHim }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; cursor:pointer; position:relative; overflow:hidden; flex:{{ himFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
+      <image-slot id="sw-him" src="https://images.unsplash.com/photo-1696841212541-449ca29397cc?q=80&w=1100&auto=format&fit=crop" credit="Photo by Taylor Heery on Unsplash" credit-href="https://unsplash.com/@taylorheeryphoto" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+      <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.3) 0%, rgba(11,31,22,.22) 34%, rgba(11,31,22,.88) 100%);"></div>
+      <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:0 clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center;">
+        <img src="/assets/mark-man-gold.png" alt="" style="width:{{ markSize }}; height:{{ markSize }}; opacity:.95;">
+        <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,2.4vw,30px); color:#C9A860; line-height:1.1;">for him</div>
+        <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(22px,2.6vw,38px); letter-spacing:.05em; color:#F1E3B8; margin-top:2px;">Ecosophy Gent Spa</div>
+        <div style="overflow:hidden; height:{{ himDetail }}; opacity:{{ himDetailOpacity }}; transition:height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
+          <div style="font-size:13px; color:#C4CFC1; margin-top:10px;">Deep tissue, Moroccan bath and recovery therapy for men.</div>
+          <div style="display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778;">ENTER</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div data-screen-label="Footer" style="background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:22px 20px;">
+  <div style="max-width:1180px; margin:0 auto; display:flex; gap:20px 34px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="/assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
+      <span style="font-family:'Great Vibes',cursive; font-size:22px; color:#EBD9A6; line-height:1;">Ecosophy</span>
+      <span style="font-size:9.5px; letter-spacing:2.5px; color:#8FA192;">DUBAI, UAE</span>
+    </div>
+    <div style="display:flex; gap:22px; flex-wrap:wrap; font-size:11.5px; letter-spacing:1.5px;">
+      <a href="/for-her" style="color:#D7DECF;" style-hover="color:#E4C778;">FOR HER</a>
+      <a href="/for-him" style="color:#D7DECF;" style-hover="color:#E4C778;">FOR HIM</a>
+      <a href="https://www.instagram.com/ecosophy.ae/" style="color:#D7DECF;" style-hover="color:#E4C778;">INSTAGRAM</a>
+    </div>
+    <div style="font-size:11px; color:#7E8F81;">Daily · 10:00 – 22:00</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { hover: null, world: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+  componentDidMount() {
+    this._r = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this._r);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+  renderVals() {
+    const isMobile = this.state.w < 900;
+    const world = this.state.world;
+    const hover = (isMobile ? null : this.state.hover) || world;
+    return {
+      doorDir: isMobile ? 'column' : 'row',
+      selectHer: () => this.setState({ world: 'her' }),
+      selectHim: () => this.setState({ world: 'him' }),
+      hoverHer: () => { if (!isMobile) this.setState({ hover: 'her' }); },
+      hoverHim: () => { if (!isMobile) this.setState({ hover: 'him' }); },
+      hoverNone: () => { if (!isMobile) this.setState({ hover: null }); },
+      herFlex: isMobile ? '1 1 0' : (hover === 'her' ? 1.9 : hover === 'him' ? 0.7 : 1),
+      himFlex: isMobile ? '1 1 0' : (hover === 'him' ? 1.9 : hover === 'her' ? 0.7 : 1),
+      herDetail: isMobile ? 'auto' : (hover === 'her' ? '96px' : '0px'),
+      himDetail: isMobile ? 'auto' : (hover === 'him' ? '96px' : '0px'),
+      herDetailOpacity: isMobile ? 1 : (hover === 'her' ? 1 : 0),
+      himDetailOpacity: isMobile ? 1 : (hover === 'him' ? 1 : 0),
+      markSize: isMobile ? '104px' : 'clamp(58px,6vw,84px)',
+    };
+  }
+}
+</script>
+</body>
+</html>

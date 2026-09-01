@@ -1,0 +1,11 @@
+# Design-canvas working files (~118 MB, mostly unreferenced scratch uploads).
+# This tree lives in OneDrive, so it is already backed up. Only the built site
+# in public/ needs to ship. See README.md if you want these versioned instead.
+ref/
+
+# 128 MB archive — above GitHub's 100 MB per-file hard limit.
+*.zip
+
+node_modules/
+Thumbs.db
+.DS_Store

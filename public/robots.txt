@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ecosophy.pages.dev/sitemap.xml
