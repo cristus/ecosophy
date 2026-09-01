@@ -58,9 +58,19 @@ const LINK_MAP = Object.entries(PAGES)
   .map(([src, p]) => [src, '/' + p.route.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '')])
   .sort((a, b) => b[0].length - a[0].length);
 
-// Point the dc-runtime at local copies instead of unpkg.com. `window.__resources`
-// is the runtime's own override hook (see cdnScriptFor in support.js).
-const RESOURCES = `<script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/vendor/react.production.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/vendor/react-dom.production.min.js","https://unpkg.com/@babel/standalone@7.29.0/babel.min.js":"/vendor/babel.min.js"};</script>`;
+// Serve React and Babel from this origin instead of unpkg.com by defining the
+// globals before support.js runs: loadReactUmd() short-circuits on
+// `window.React && window.ReactDOM`, and ensureBabel() on `window.Babel`, so the
+// runtime never reaches for the CDN.
+//
+// Do NOT do this via the runtime's `window.__resources` hook. Setting that object
+// also suppresses boot()'s `fetch(location.href)` pass, which re-parses the page's
+// pristine source text and calls updateHtml() with it. Without that pass the
+// runtime keeps the DOM-parsed template, which loses interpolations such as the
+// hero fan's `width:{{ c.w }}` — the cards then render zero-width and collapse.
+const RESOURCES = `<script src="/vendor/react.production.min.js"></script>
+<script src="/vendor/react-dom.production.min.js"></script>
+<script src="/vendor/babel.min.js"></script>`;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -90,21 +100,19 @@ function buildPage(srcName, page) {
   // Cross-page links, in both markup and the page's logic block (?s=… survives).
   for (const [from, to] of LINK_MAP) html = html.split(from).join(to);
 
-  // Root-relative asset paths so every route resolves identically.
-  html = html.replace(/(["'(])\.?\/?((?:assets|uploads)\/[^"')]+)/g, (_m, q, path) => {
-    assets.add(decodeURIComponent(path));
-    return q + '/' + path;
-  });
+  // Collect referenced images, but DO NOT rewrite their paths. Each page's logic
+  // decides "local file vs Unsplash photo id" by testing the raw string, e.g.
+  //   p[0].charAt(0) === '.' || p[0].indexOf('uploads/') === 0
+  // so rewriting `uploads/x.jpg` to `/uploads/x.jpg` makes both tests fail and the
+  // image silently becomes a bogus images.unsplash.com URL. Every route lives at
+  // the site root, so the paths as authored already resolve correctly.
+  for (const m of html.matchAll(/(?:assets|uploads)\/[A-Za-z0-9._@%()+-]+/g)) {
+    assets.add(decodeURIComponent(m[0]));
+  }
   // A few images sit loose at the design-folder root rather than in assets/uploads.
-  // Only rewrite names that actually exist there, so ordinary strings are left alone.
-  html = html.replace(
-    /(["'(])(?:\.\/)?([A-Za-z0-9._@%()+-]+\.(?:png|jpe?g|svg|webp|gif))(?=["')])/g,
-    (m, q, file) => {
-      if (!existsSync(join(SRC, file))) return m;
-      assets.add(file);
-      return q + '/' + file;
-    },
-  );
+  for (const m of html.matchAll(/["'(](?:\.\/)?([A-Za-z0-9._@%()+-]+\.(?:png|jpe?g|svg|webp|gif))(?=["')])/g)) {
+    if (existsSync(join(SRC, m[1]))) assets.add(m[1]);
+  }
 
   html = html.replace(/(["'])\.\/(support|image-slot)\.js\1/g, '$1/$2.js$1');
 
