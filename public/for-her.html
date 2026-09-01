@@ -113,7 +113,16 @@ a:hover { color:#B98F3E; }
   var drag = null;
   function cards(rail){ return rail.querySelectorAll('[data-fancard]'); }
   function layout(rail){
-    var mid = rail.scrollLeft + rail.clientWidth / 2;
+    // scrollLeft is integer-quantised, so a 13 px/s drift arrives as a 1 px jump
+    // roughly 13 times a second with dead frames between. __pos holds the true
+    // fractional position: focus the fan from that, and carry the leftover
+    // sub-pixel on the cards' own transform so the motion reads as smooth.
+    var pos = rail.scrollLeft, sub = 0;
+    if (rail.__pos != null && Math.abs(rail.__pos - rail.scrollLeft) <= 1.5) {
+      pos = rail.__pos;
+      sub = pos - rail.scrollLeft;
+    }
+    var mid = pos + rail.clientWidth / 2;
     var cs = cards(rail);
     var best = { d: 1e9, el: null };
     for (var i = 0; i < cs.length; i++) {
@@ -124,7 +133,7 @@ a:hover { color:#B98F3E; }
       var scale = Math.max(0.74, 1.3 - ad * 0.19);
       var rot = Math.max(-17, Math.min(17, d * 6.2));
       var lift = -Math.max(0, 1.7 - ad) * 12;
-      el.style.transform = 'translate3d(0,' + lift.toFixed(1) + 'px,0) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      el.style.transform = 'translate3d(' + (-sub).toFixed(2) + 'px,' + lift.toFixed(1) + 'px,0) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
       el.style.zIndex = String(200 - Math.round(ad * 10));
       el.style.opacity = ad > 3.6 ? String(Math.max(0, 1 - (ad - 3.6))) : '1';
       if (ad < best.d) best = { d: ad, el: el };
@@ -298,7 +307,7 @@ a:hover { color:#B98F3E; }
         <a href="#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="#gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
-        <a href="/" style="display:{{ forHimShow }}; color:#9FB0A0; font-size:10px; white-space:nowrap;" style-hover="color:#E4C778;">⇄ FOR HIM</a>
+        <a href="/for-him" style="display:{{ forHimShow }}; color:#9FB0A0; font-size:10px; white-space:nowrap;" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
       <a href="/" title="Back to home" style="position:absolute; left:50%; top:{{ badgeTop }}; transform:translateX(-50%); transform-origin:top center; transition:top .35s ease; z-index:2; display:flex; flex-direction:{{ badgeDir }}; align-items:center; gap:{{ badgeGap }};">
@@ -322,7 +331,7 @@ a:hover { color:#B98F3E; }
       <a href="#rituals" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="#gallery" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="#book" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
-      <a href="/" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
+      <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
       <div style="display:flex; align-items:center; gap:0; margin-top:10px; border:1px solid rgba(201,168,96,.4); border-radius:16px; overflow:hidden; align-self:flex-start;">
         <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
         <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
@@ -348,7 +357,7 @@ a:hover { color:#B98F3E; }
         <div style="font-family:'Great Vibes',cursive; font-size:{{ heroScriptSize }}; color:#C9A860; margin-top:{{ heroScriptGap }}; animation:heroTextIn .9s ease .25s both; text-shadow:0 2px 18px rgba(0,0,0,.5);">the women's sanctuary</div>
         <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:{{ heroTitleSize }}; letter-spacing:.05em; color:#F4EFE3; line-height:1.1; margin:{{ heroTitleGap }} 0 0; max-width:{{ heroTitleMax }}; text-wrap:balance; animation:heroTextIn .9s ease .35s both; text-shadow:0 8px 34px rgba(0,0,0,.7);">WHERE NATURE RESTORES YOU</h1>
 
-        <div data-fanscroll data-fan-sets="4" style="display:flex; align-items:center; justify-content:flex-start; width:100%; margin-top:{{ fanRailGap }}; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; cursor:grab; padding:{{ fanPad }};">
+        <div data-fanscroll data-fan-sets="4" style="position:relative; display:flex; align-items:center; justify-content:flex-start; width:100%; margin-top:{{ fanRailGap }}; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; cursor:grab; padding:{{ fanPad }};">
           <sc-for list="{{ fanCards }}" as="c" hint-placeholder-count="7">
             <div data-fancard data-fan-svc="{{ c.name }}" data-fan-copy="{{ c.line }}" style="position:relative; flex:0 0 auto; width:{{ c.w }}; margin:0 {{ c.gap }}; will-change:transform;">
               <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:16px; overflow:hidden; border:1px solid rgba(201,168,96,.34); box-shadow:0 30px 60px -26px rgba(0,0,0,.95);">
