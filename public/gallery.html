@@ -237,8 +237,8 @@ img { display:block; }
     // rather than section progress: progress is pinned at 0 until the section
     // top passes the top of the screen, so the dome would hold one fixed circle
     // for its whole entrance and only start flattening once it was already
-    // full-bleed. Same trigger as the reference — begin as the top edge reaches
-    // 95% of the viewport, finish about two thirds of a screen later.
+    // full-bleed. Begin as the top edge reaches the bottom of the viewport and
+    // finish as it reaches the centre line, eased and damped (see below).
     //
     // Both radii are the SAME length, which is what makes the top read as a true
     // circle; a squashed vertical radius gives a flat-topped tunnel mouth. They
@@ -248,9 +248,23 @@ img { display:block; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      var qa = clamp((vh * 0.95 - rg.top) / (vh * 0.7), 0, 1);
-      var arch = ga[0] + (ga[1] - ga[0]) * qa;
-      var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
+      // Runs from the top edge entering the bottom of the screen to the moment
+      // it reaches the middle, where the dome settles and holds. Ending on the
+      // centre line is the point: the arch is finished flattening exactly when
+      // the panel takes the middle of the screen, and nothing moves after that.
+      var qa = clamp((vh * 1.05 - rg.top) / (vh * 0.55), 0, 1);
+      // Smoothstep, so it eases in and out instead of starting and stopping
+      // dead at both ends of the travel.
+      qa = qa * qa * (3 - 2 * qa);
+      var arch_to = ga[0] + (ga[1] - ga[0]) * qa;
+      // Chase that target rather than snapping to it. One wheel notch moves the
+      // panel ~100px in a single frame, and setting the radius straight from
+      // scroll position turns each notch into a visible step. Easing toward the
+      // target spreads a jump over ~12 frames, and the dome keeps gliding for a
+      // moment after the scroll stops — which is what reads as slow and smooth.
+      if (el.__arch == null) el.__arch = arch_to;
+      el.__arch += (arch_to - el.__arch) * 0.075;
+      var arch_px = (el.__arch / 100 * (window.innerWidth || 1)).toFixed(1);
       el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
     }
 

@@ -9,3 +9,6 @@ ref/
 node_modules/
 Thumbs.db
 .DS_Store
+
+# Playwright/Chromium debug output
+*.log
