@@ -84,8 +84,8 @@ a:hover { color:#B98F3E; }
 /* Phones: the editorial two-column blocks have a 560px minimum between them,
    which a phone cannot give, so stack them instead of letting them clip. */
 @media (max-width: 760px) {
-  .r-split { grid-template-columns:1fr !important; gap:clamp(28px,7vw,44px) !important; }
-  .r-offer { grid-template-columns:1fr !important; gap:26px !important; }
+  .r-split { grid-template-columns:minmax(0,1fr) !important; gap:clamp(28px,7vw,44px) !important; }
+  .r-offer { grid-template-columns:minmax(0,1fr) !important; gap:26px !important; }
 }
 </style>
 <script>
@@ -536,7 +536,7 @@ a:hover { color:#B98F3E; }
       <div style="font-size:13px; color:#77704F; line-height:1.7; max-width:580px;">{{ dSubheading }}</div>
 
       <sc-if value="{{ atCategories }}" hint-placeholder-val="{{ true }}">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:26px; animation:ddIn .32s ease both;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:18px; margin-top:26px; animation:ddIn .32s ease both;">
           <sc-for list="{{ dCategories }}" as="cat" hint-placeholder-count="3">
             <div onClick="{{ cat.open }}" style="cursor:pointer; position:relative; height:clamp(220px,24vw,280px); border-radius:18px; overflow:hidden; border:1px solid #DED4BD; transition:box-shadow .3s, transform .3s;" style-hover="box-shadow:0 18px 36px -18px rgba(60,50,20,.5); transform:translateY(-3px);">
               <image-slot id="{{ cat.slot }}" sc-camel-src="{{ cat.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
@@ -554,7 +554,7 @@ a:hover { color:#B98F3E; }
       </sc-if>
 
       <sc-if value="{{ atServices }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:24px; animation:ddIn .32s ease both;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:18px; margin-top:24px; animation:ddIn .32s ease both;">
           <sc-for list="{{ dServices }}" as="item" hint-placeholder-count="6">
             <a href="{{ item.href }}" style="display:block; color:#2A332C; cursor:pointer; background:#FFFDF7; border:1px solid #DED4BD; border-radius:16px; overflow:hidden; transition:box-shadow .3s, transform .3s;" style-hover="box-shadow:0 14px 34px rgba(70,64,40,.18); transform:translateY(-3px);">
               <div style="height:170px;"><image-slot id="{{ item.slot }}" placeholder="{{ item.photoHint }}" shape="rect"></image-slot></div>
@@ -572,7 +572,7 @@ a:hover { color:#B98F3E; }
       </sc-if>
 
       <sc-if value="{{ atDetail }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(28px,4vw,48px); align-items:start; margin-top:24px; animation:ddIn .32s ease both;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); gap:clamp(28px,4vw,48px); align-items:start; margin-top:24px; animation:ddIn .32s ease both;">
           <div>
             <div style="position:relative; height:clamp(260px,30vw,360px); border-radius:20px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
               <image-slot id="{{ detail.heroSlot }}" placeholder="{{ detail.photoHint }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
@@ -610,7 +610,7 @@ a:hover { color:#B98F3E; }
       <sc-if value="{{ atBooking }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:24px; animation:ddIn .32s ease both;">
           <div onClick="{{ ddClose }}" style="cursor:pointer; display:inline-block; font-size:10.5px; letter-spacing:2px; color:#9A917A;">← BACK TO TREATMENT DETAILS</div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:clamp(28px,4vw,48px); align-items:start; margin-top:18px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(28px,4vw,48px); align-items:start; margin-top:18px;">
             <div>
               <div style="font-size:10px; letter-spacing:2px; color:#9A917A;">CHOOSE A DAY</div>
               <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-top:12px;">
@@ -937,7 +937,7 @@ a:hover { color:#B98F3E; }
         <a href="{{ waHref }}" style="font-size:11px; letter-spacing:2.5px; color:#C9A860; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:4px;">OR MESSAGE US ON WHATSAPP</a>
       </div>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(32px,4vw,64px); margin-top:clamp(40px,5vw,64px); align-items:start;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); gap:clamp(32px,4vw,64px); margin-top:clamp(40px,5vw,64px); align-items:start;">
 
         <div style="position:relative;">
           <div style="position:relative; height:clamp(360px,44vw,540px); border-radius:220px 220px 28px 28px; overflow:hidden; border:1px solid rgba(201,168,96,.4);">

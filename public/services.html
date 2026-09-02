@@ -35,9 +35,50 @@ a:hover { color:#B98F3E; }
 @keyframes kb { 0% { transform:scale(1); } 100% { transform:scale(1.08); } }
 /* Phones: the category label sits above its treatments rather than beside them. */
 @media (max-width: 760px) {
-  .r-cat { grid-template-columns:1fr !important; gap:18px !important; }
+  .r-cat { grid-template-columns:minmax(0,1fr) !important; gap:18px !important; }
 }
 </style>
+<script>
+(function(){
+  // Gallery parallax engine, shared by the inside pages. Assignments stay
+  // snake_case: support.js rewrites `var someName =` inside inline scripts when
+  // it encodes the template, and the re-appended copy would not parse.
+  if (window.__ecoPlx) return; window.__ecoPlx = 1;
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  function frame(){
+    var vh = window.innerHeight || 1;
+    try {
+      var els = document.querySelectorAll('[data-gy],[data-gs]');
+      for (var i=0;i<els.length;i++){
+        var el = els[i], t = '';
+        var gy = parseFloat(el.getAttribute('data-gy'));
+        if (!isNaN(gy)) {
+          var r = el.getBoundingClientRect();
+          var prev_y = el.__ty || 0;
+          var mid = (r.top - prev_y) + r.height/2 - vh/2;
+          var ty = -mid * gy;
+          el.__ty = ty;
+          t += 'translate3d(0,' + ty.toFixed(1) + 'px,0) ';
+        }
+        var gs = el.getAttribute('data-gs');
+        if (gs) {
+          var parts = gs.split(',').map(parseFloat);
+          var sec = el.closest('[data-gsection]') || el;
+          var sr = sec.getBoundingClientRect();
+          var travel = sr.height - vh;
+          var p = travel > 0 ? clamp(-sr.top/travel,0,1) : clamp((vh-sr.top)/(vh+sr.height),0,1);
+          t += 'scale(' + (parts[0] + (parts[1]-parts[0])*p).toFixed(4) + ') ';
+        }
+        if (t) el.style.transform = t.trim();
+      }
+    } catch(e) {}
+  }
+  function loop(){ frame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  window.addEventListener('resize', frame);
+  window.addEventListener('load', frame);
+})();
+</script>
 </helmet>
 
 <div style="min-height:100vh; background:#F6F1E6; overflow-x:clip;">
@@ -88,14 +129,14 @@ a:hover { color:#B98F3E; }
     </div>
   </div>
 
-  <div data-screen-label="Page header" style="position:relative; padding:clamp(140px,16vw,200px) 20px clamp(70px,8vw,110px); background:#0E271C; overflow:hidden;">
-    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; left:4%; top:52%; transform:translateY(-50%); width:min(14vw,150px); opacity:.06;">
-    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; right:5%; top:26%; width:min(10vw,110px); opacity:.05;">
-    <div style="position:absolute; inset:0; opacity:.34;">
+  <div data-gsection data-screen-label="Page header" style="position:relative; padding:clamp(140px,16vw,200px) 20px clamp(70px,8vw,110px); background:#0E271C; overflow:hidden;">
+    <img data-gy="0.07" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; left:4%; top:52%; transform:translateY(-50%); width:min(14vw,150px); opacity:.06;">
+    <img data-gy="-0.1" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; right:5%; top:26%; width:min(10vw,110px); opacity:.05;">
+    <div data-gy="0.13" data-gs="1.05,1.16" style="position:absolute; inset:-14% 0; opacity:.34; will-change:transform;">
       <image-slot id="svc-head-bg" src="uploads/eco-her-massage-1.jpg?q=80&amp;w=2000&amp;auto=format&amp;fit=crop" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
-    <div style="position:relative; max-width:1180px; margin:0 auto; text-align:center;">
+    <div data-gy="-0.05" style="position:relative; max-width:1180px; margin:0 auto; text-align:center;">
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(24px,3vw,32px); color:#E4C778;">for her</div>
       <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(38px,6vw,74px); color:#F1E7CC; margin:6px 0 0; letter-spacing:.02em;">THE FULL MENU</h1>
       <div style="font-size:14px; color:#B9C7B6; line-height:1.9; max-width:560px; margin:18px auto 0; text-wrap:pretty;">Twenty-nine treatments across massage, bath rituals, facials and packages. Every price includes VAT.</div>
