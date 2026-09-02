@@ -59,6 +59,18 @@ const PAGES = {
     description: "Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.",
     mark: 'favicons/mark-man-gold-180.png',
   },
+  'Ecosophy Menu Prices.dc.html': {
+    route: 'menu-prices.html',
+    title: 'Menu & Prices — Ecosophy Spa for Her, Dubai',
+    description: 'Every treatment at Ecosophy Spa Dubai with its length and price — massage, hammam, facials, nails and packages.',
+    mark: 'favicons/mark-woman-gold-180.png',
+  },
+  'Ecosophy Gent Menu Prices.dc.html': {
+    route: 'gent-menu-prices.html',
+    title: 'Menu & Prices — Ecosophy Gent Spa, Dubai',
+    description: "Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.",
+    mark: 'favicons/mark-man-gold-180.png',
+  },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',

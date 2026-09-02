@@ -193,6 +193,44 @@ img { display:block; }
       // (slats are handled below, on their own timeline)
     }
 
+    // Snap-drift: the filter row travels left to right as it crosses the screen,
+    // but the travel is quantised to the bubbles rather than glided — it parks
+    // with one bubble on the centre line, then steps to the next. The detent is
+    // in the easing, not a scroll listener: fr is stretched about its midpoint so
+    // most of each step is spent parked and the move between them is quick, which
+    // keeps it reversible and frame-accurate under a scrub.
+    var gsx = el.getAttribute('data-gsnapx');
+    if (gsx != null && el.children.length > 1) {
+      var rs = el.getBoundingClientRect();
+      var b0 = el.children[0].getBoundingClientRect();
+      var b1 = el.children[1].getBoundingClientRect();
+      // Measured from the live layout, so the gap/width clamps are not restated
+      // here. A pure translate cancels out of the difference and out of width.
+      var pitch = (b1.left - b0.left) || 1;
+      var bw2 = b0.width;
+      var steps = el.children.length - 1;
+      var content_w = steps * pitch + bw2;
+      if (content_w < rs.width - 8) {
+        var q2 = clamp((vh - rs.top) / (vh * 0.85), 0, 1);
+        var u2 = q2 * steps;
+        var i2 = Math.floor(u2), fr = u2 - i2;
+        if (i2 >= steps) { i2 = steps - 1; fr = 1; }
+        var fe = clamp((fr - 0.5) * 3.2 + 0.5, 0, 1);
+        fe = fe * fe * (3 - 2 * fe);
+        var idx = steps - (i2 + fe);
+        // The row carries its own left padding, so the first bubble does not
+        // start at the content edge; without it every park sits a few px right.
+        var pad_l = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+        var tx2 = rs.width / 2 - (pad_l + idx * pitch + bw2 / 2);
+        el.style.willChange = 'transform';
+        el.style.transform = 'translateX(' + tx2.toFixed(1) + 'px)';
+      } else {
+        // Narrow screens: the bubbles already overflow, so leave the native
+        // horizontal scroll alone rather than fighting it with a transform.
+        el.style.transform = '';
+      }
+    }
+
     // Arch: the dome opens as a circle as soon as it clears the bottom of the
     // screen, then relaxes into a wide shallow arc as it climbs. The change has
     // to happen WHILE it rises, which is why this runs off the panel's own rect
@@ -337,7 +375,7 @@ img { display:block; }
       for (var i = 0; i < secs.length; i++) {
         var p = sectionProgress(secs[i], vh);
         secs[i].__p = p;
-        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gexpand],[data-gfadeout]');
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout]');
         for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
       var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
@@ -407,9 +445,9 @@ img { display:block; }
           <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
-        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
-        <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
+        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
         <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -439,9 +477,9 @@ img { display:block; }
     </div>
 
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
-      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
-      <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
+      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
       <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -485,7 +523,7 @@ img { display:block; }
         </div>
       </div>
 
-      <div style="display:flex; gap:clamp(16px,2.4vw,26px); overflow-x:auto; padding:clamp(30px,4vw,44px) 4px 8px; justify-content:flex-start;" class="reel-scroll">
+      <div data-gsnapx style="display:flex; gap:clamp(16px,2.4vw,26px); overflow-x:auto; padding:clamp(30px,4vw,44px) 4px 8px; justify-content:flex-start;" class="reel-scroll">
         <sc-for list="{{ gFilters }}" as="f" hint-placeholder-count="6">
           <div onClick="{{ f.pick }}" style="cursor:pointer; flex:none; width:84px; text-align:center;">
             <div class="{{ f.bubClass }}" style="width:84px; height:84px;">
@@ -593,7 +631,7 @@ img { display:block; }
   </div>
 
   <!-- ── 4. The Details · depth stack, layers moving against each other ──── -->
-  <div data-gsection style="position:relative; padding:clamp(90px,13vw,180px) clamp(20px,3vw,44px); overflow:hidden; min-height:250vh; display:flex; align-items:center;">
+  <div data-gsection style="position:relative; padding:clamp(90px,13vw,180px) clamp(20px,3vw,44px) clamp(120px,17vw,240px); overflow:hidden; display:flex; align-items:center;">
     <div style="max-width:1520px; margin:0 auto; position:relative;">
       <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(28px,5vw,80px); align-items:center;">
         <div style="position:relative;">
@@ -617,7 +655,7 @@ img { display:block; }
   </div>
 
   <!-- ── 5. The Artistry · staggered columns at three speeds ─────────────── -->
-  <div data-gsection style="position:relative; min-height:270vh; display:flex; align-items:center; padding:clamp(70px,10vw,130px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
+  <div data-gsection style="position:relative; display:flex; align-items:center; padding:clamp(110px,14vw,190px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
     <div style="max-width:1520px; margin:0 auto;">
       <div class="gal-eyebrow">05 — THE ARTISTRY</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Hair, brows and make-up</h2>

@@ -33,6 +33,10 @@ a { color:#14532D; text-decoration:none; }
 a:hover { color:#B98F3E; }
 @keyframes svcIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
 @keyframes kb { 0% { transform:scale(1); } 100% { transform:scale(1.08); } }
+/* Phones: the category label sits above its treatments rather than beside them. */
+@media (max-width: 760px) {
+  .r-cat { grid-template-columns:1fr !important; gap:18px !important; }
+}
 </style>
 </helmet>
 
@@ -46,9 +50,9 @@ a:hover { color:#B98F3E; }
           <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
-        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
-        <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
+        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -74,9 +78,9 @@ a:hover { color:#B98F3E; }
       </div>
     </div>
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
-      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
-      <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
+      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -112,7 +116,7 @@ a:hover { color:#B98F3E; }
 
     <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
       <div style="margin-top:clamp(48px,6vw,80px); animation:svcIn .4s ease both;">
-        <div style="display:grid; grid-template-columns:minmax(220px,300px) 1fr; gap:clamp(24px,4vw,52px); align-items:start;">
+        <div class="r-cat" style="display:grid; grid-template-columns:minmax(220px,300px) 1fr; gap:clamp(24px,4vw,52px); align-items:start;">
           <div style="position:sticky; top:150px;">
             <div style="position:relative; height:clamp(180px,20vw,240px); border-radius:18px; overflow:hidden; border:1px solid #DED4BD;">
               <image-slot id="{{ g.slot }}" sc-camel-src="{{ g.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
