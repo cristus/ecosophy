@@ -172,8 +172,27 @@ img { display:block; }
     if (t) el.style.transform = t.trim();
   }
 
+
+  // React renders the template and drops the muted attribute, so Chrome sees an
+  // unmuted clip and refuses to autoplay it: the element sits at readyState 4,
+  // paused, until something calls play(). Force the property imperatively. The
+  // flag lives on the element, so a re-render gets primed again.
+  function prime_videos(){
+    var vids = document.querySelectorAll('video[autoplay]');
+    for (var i = 0; i < vids.length; i++) {
+      var v = vids[i];
+      if (v.__primed) continue;
+      v.__primed = 1;
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      var pr = v.play();
+      if (pr && pr.catch) pr.catch(function(){});
+    }
+  }
   function frame(){
     var vh = window.innerHeight || 1;
+    prime_videos();
     try {
       var secs = document.querySelectorAll('[data-gsection]');
       for (var i = 0; i < secs.length; i++) {
