@@ -1058,6 +1058,20 @@ class Component extends DCLogic {
   state = { name: '', phone: '', day: null, time: null, ritual: null, monthOffset: 0, booked: false, formError: false, dCat: null, dSvc: null, gFilter: null, gIdx: null, gProgress: 0 };
   reelItems() {
     const I = (u, c, h) => [u + '?q=80&w=900&auto=format&fit=crop', c, h];
+    const L = u => [u, '', ''];
+    // One distinct still per ritual. The reels render three times over for the
+    // marquee, so any photo shared between two rituals shows up twice on screen
+    // at once — which is exactly what a shared constant used to cause.
+    const rBathRoyal   = L('uploads/eco-her-hammam-1.jpg');
+    const rBathClassic = L('uploads/eco-her-hammam-2.jpg');
+    const rHydra       = L('uploads/eco-her-facial-1.jpg');
+    const rSignature   = L('uploads/eco-her-robe.jpg');
+    const rBalinese    = L('uploads/eco-her-massage-1.jpg');
+    const rHotStone    = L('uploads/eco-her-massage-2.jpg');
+    const rManicure    = L('uploads/eco-her-nails-1.jpg');
+    const rBrow        = L('uploads/eco-her-nails-2.jpg');
+    const rJacuzzi     = L('uploads/eco-her-jacuzzi-1.jpg');
+    const rSauna       = L('uploads/eco-her-sauna.jpg');
     const paje = I('uploads/eco-her-hammam-1.jpg', 'Photo by paje victoria on Unsplash', 'https://unsplash.com/@pajevictoria');
     const hume = I('uploads/eco-her-robe.jpg', 'Photo by Christin Hume on Unsplash', 'https://unsplash.com/@christinhumephoto');
     const caishan = I('uploads/eco-her-massage-1.jpg', 'Photo by alan caishan on Unsplash', 'https://unsplash.com/@caishan119');
@@ -1066,25 +1080,25 @@ class Component extends DCLogic {
     const rosa = I('uploads/eco-her-facial-1.jpg', 'Photo by Rosa Rafael on Unsplash', 'https://unsplash.com/@rosarafael');
     const nick = I('uploads/eco-her-jacuzzi-1.jpg', 'Photo by Roberto Nickson on Unsplash', 'https://unsplash.com/@rpnickson');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', price: '262 AED', length: '0:24', pic: paje,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', price: '262 AED', length: '0:24', pic: rBathRoyal,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', price: '157 AED', length: '0:16', pic: nico,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', price: '157 AED', length: '0:16', pic: rBathClassic,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial', price: '390 AED', length: '0:18', pic: hume,
+      { type: 'FACIALS', title: 'HydraFacial', price: '390 AED', length: '0:18', pic: rHydra,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', price: '472 AED', length: '0:29', pic: rosa,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', price: '472 AED', length: '0:29', pic: rSignature,
         caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
-      { type: 'MASSAGE', title: 'Balinese Massage', price: '200 AED', length: '0:31', pic: caishan,
+      { type: 'MASSAGE', title: 'Balinese Massage', price: '200 AED', length: '0:31', pic: rBalinese,
         caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
-      { type: 'MASSAGE', title: 'Hot Stone Massage', price: '300 AED', length: '0:26', pic: nico,
+      { type: 'MASSAGE', title: 'Hot Stone Massage', price: '300 AED', length: '0:26', pic: rHotStone,
         caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', price: '220 AED', length: '0:15', pic: element,
+      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', price: '220 AED', length: '0:15', pic: rManicure,
         caption: 'Long-lasting strength with a natural finish, by our top masters.', cta: 'BOOK NAILS' },
-      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', price: '180 AED', length: '0:14', pic: hume,
+      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', price: '180 AED', length: '0:14', pic: rBrow,
         caption: 'Shape and tint by our Top Brow Master.', cta: 'BOOK BROWS' },
-      { type: 'THE SPA', title: 'Jacuzzi Therapy', price: '210 AED', length: '0:22', pic: nick,
+      { type: 'THE SPA', title: 'Jacuzzi Therapy', price: '210 AED', length: '0:22', pic: rJacuzzi,
         caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', price: '157 AED', length: '0:19', pic: paje,
+      { type: 'THE SPA', title: 'Infrared Sauna Session', price: '157 AED', length: '0:19', pic: rSauna,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
   }
