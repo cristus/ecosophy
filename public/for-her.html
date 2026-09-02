@@ -349,10 +349,12 @@ a:hover { color:#B98F3E; }
           <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
+        <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="#gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
-        <a href="/for-him" style="display:{{ forHimShow }}; color:#9FB0A0; font-size:10px; white-space:nowrap;" style-hover="color:#E4C778;">⇄ FOR HIM</a>
+        <a href="/for-him" style="display:{{ forHimShow }}; color:#9FB0A0; font-size:11px; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(9px,1vw,15px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
       <a href="/" title="Back to home" style="position:absolute; left:50%; top:{{ badgeTop }}; transform:translateX(-50%); transform-origin:top center; transition:top .35s ease; z-index:2; display:flex; flex-direction:{{ badgeDir }}; align-items:center; gap:{{ badgeGap }};">
@@ -373,7 +375,9 @@ a:hover { color:#B98F3E; }
       </div>
     </div>
     <div style="position:relative; z-index:3; display:{{ drawerShow }}; flex-direction:column; gap:2px; padding:{{ drawerPadTop }} 20px 18px; border-top:1px solid rgba(201,168,96,.2); background:rgba(9,24,17,.97);">
+      <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="#rituals" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="#gallery" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="#book" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
@@ -1374,6 +1378,9 @@ class Component extends DCLogic {
   renderVals() {
     const wa = (this.props.whatsapp ?? '+971 50 111 2233');
     const heroMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 860;
+    // The links collide with the centred wordmark well before 860px, so the
+    // burger has to take over earlier than the hero breakpoint.
+    const navMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 1300;
     const IMGS = {
       paje: ['uploads/eco-her-hammam-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria','Steam, black soap and a full body scrub on heated marble.'],
       hume: ['uploads/eco-her-robe.jpg?q=80&w=700&auto=format&fit=crop','Photo by Christin Hume on Unsplash','https://unsplash.com/@christinhumephoto'],
@@ -1481,7 +1488,7 @@ class Component extends DCLogic {
       showOffer: this.props.showOffer ?? true,
       whatsapp: wa,
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g,''),
-      navGap: heroMobile ? '12px' : 'clamp(10px,1.4vw,18px)',
+      navGap: heroMobile ? '12px' : 'clamp(9px,1.05vw,15px)',
       badgeSize: this.state.scrolled ? (heroMobile ? '34px' : '40px') : (heroMobile ? '54px' : '78px'),
       badgeDir: this.state.scrolled ? 'row' : 'column',
       badgeMarkFill: this.state.scrolled ? '100%' : '74%',
@@ -1496,9 +1503,9 @@ class Component extends DCLogic {
       badgeTop: this.state.scrolled ? (heroMobile ? '14px' : '13px') : (heroMobile ? '10px' : '12px'),
       badgeWordOpacity: (heroMobile && this.state.menuOpen) ? 0 : 1,
       badgeWordSize: this.state.scrolled ? (heroMobile ? '19px' : '22px') : (heroMobile ? '22px' : '26px'),
-      forHimShow: heroMobile ? 'none' : 'inline',
-      navShow: heroMobile ? 'none' : 'inline',
-      burgerShow: heroMobile ? 'flex' : 'none',
+      forHimShow: navMobile ? 'none' : 'inline',
+      navShow: navMobile ? 'none' : 'inline',
+      burgerShow: navMobile ? 'flex' : 'none',
       langShow: heroMobile ? 'none' : 'flex',
       waLabel: heroMobile ? 'BOOK' : 'WHATSAPP',
       waPad: heroMobile ? '8px 14px' : '9px 20px',
