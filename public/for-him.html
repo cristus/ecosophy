@@ -61,7 +61,12 @@ a:hover { color:#B98F3E; }
 .gv-bub { position:relative; transition:transform .35s cubic-bezier(.2,.8,.3,1); }
 .gv-bub:hover { transform:scale(1.07); }
 .gv-bub-on { animation:bubblePulse 2.6s ease-in-out infinite; }
-.gv-kb { position:absolute; inset:0; animation:kenBurns 12s ease-in-out infinite alternate; }
+.gv-kb { position:absolute; inset:0; animation:kenBurns 6s ease-in-out infinite alternate; }
+/* Stagger the zoom so the row does not breathe in unison. */
+.gv-reel:nth-child(3n) .gv-kb { animation-delay:-2s; }
+.gv-reel:nth-child(3n+2) .gv-kb { animation-delay:-4s; }
+/* Full-bleed marquee: fade both edges so the clipped cards read as intentional. */
+.reel-loop { -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 4%,rgba(0,0,0,1) 96%,rgba(0,0,0,0) 100%); mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 4%,rgba(0,0,0,1) 96%,rgba(0,0,0,0) 100%); }
 .gv-reel { animation:popIn .5s ease both; transition:transform .35s cubic-bezier(.2,.8,.3,1), box-shadow .35s ease; }
 .gv-reel:hover { transform:translateY(-6px); box-shadow:0 20px 38px -18px rgba(0,0,0,.6); }
 .gv-storytext > * { animation:slideUp .55s cubic-bezier(.2,.8,.3,1) both; }
@@ -290,6 +295,46 @@ a:hover { color:#B98F3E; }
     rail.__tw = null; rail.__touch = Date.now(); rail.__dt = 0;
     rail.__pos = null;
   }, { passive: false });
+})();
+</script>
+<script>
+(function(){
+  // Endless marquee for the reels rail. The list is rendered three times, so
+  // advancing past two set-widths and subtracting one lands on identical
+  // content — the wrap is invisible. Native overflow scrolling is kept, so a
+  // swipe or trackpad still works; a manual scroll just resyncs and yields
+  // briefly before the drift resumes.
+  if (window.__ecoReel) return; window.__ecoReel = 1;
+  var SPEED = 42;
+  function frame(){
+    var rails = document.querySelectorAll('[data-reelloop]');
+    for (var i = 0; i < rails.length; i++) {
+      try {
+        var r = rails[i];
+        var sets = parseFloat(r.getAttribute('data-reel-sets')) || 3;
+        var set = r.scrollWidth / sets;
+        if (!set || r.scrollWidth <= r.clientWidth + 4) continue;
+        var now = Date.now();
+        if (r.__touch && now - r.__touch < 1100) { r.__dt = 0; continue; }
+        var last = r.__dt || now;
+        r.__dt = now;
+        var dt = Math.min(64, now - last);
+        if (r.__pos == null || Math.abs(r.__pos - r.scrollLeft) > 2) r.__pos = r.scrollLeft;
+        r.__pos += SPEED * dt / 1000;
+        if (r.__pos >= set * 2) r.__pos -= set;
+        r.__self = 1;
+        r.scrollLeft = r.__pos;
+      } catch (e) {}
+    }
+  }
+  function loop(){ frame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  document.addEventListener('scroll', function(e){
+    var r = e.target;
+    if (!r || !r.hasAttribute || !r.hasAttribute('data-reelloop')) return;
+    if (r.__self) { r.__self = 0; return; }
+    r.__pos = r.scrollLeft; r.__touch = Date.now(); r.__dt = 0;
+  }, true);
 })();
 </script>
 </helmet>
@@ -704,7 +749,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:8%; bottom:6%; width:min(11vw,120px); opacity:.05;">
-    <div style="box-sizing:border-box; max-width:1520px; margin:0 auto; padding:0 clamp(20px,3vw,44px);">
+    <div style="box-sizing:border-box; max-width:none; margin:0 auto; padding:0 clamp(14px,1.6vw,24px);">
       <div style="text-align:center;">
         <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,3vw,30px); color:#C9A860;">moments of calm</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); letter-spacing:.04em; color:#F1E7CC; margin-top:4px;">INSIDE THE SANCTUARY</div>
@@ -742,7 +787,7 @@ a:hover { color:#B98F3E; }
       </div>
     </div>
 
-    <div style="display:flex; gap:clamp(12px,1.6vw,18px); overflow-x:auto; scroll-snap-type:x mandatory; box-sizing:border-box; width:100%; max-width:1520px; margin-left:auto; margin-right:auto; padding:clamp(24px,3vw,34px) clamp(20px,3vw,44px) 14px; align-items:flex-end;" class="reel-scroll">
+    <div data-reelloop data-reel-sets="3" style="display:flex; gap:clamp(12px,1.6vw,18px); overflow-x:auto; box-sizing:border-box; width:100%; padding:clamp(24px,3vw,34px) clamp(14px,1.6vw,24px) 14px; align-items:flex-end;" class="reel-scroll reel-loop">
       <sc-for list="{{ gReels }}" as="r" hint-placeholder-count="5">
         <div onClick="{{ r.open }}" class="gv-reel" style="cursor:pointer; scroll-snap-align:center; flex:none; width:clamp(170px,15vw,220px); aspect-ratio:9/16; position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
           <div class="gv-kb">
@@ -1074,11 +1119,14 @@ class Component extends DCLogic {
     const cur = gi != null ? list[gi] : null;
     return {
       gFilters,
-      gReels: list.map((it, i) => ({
+      // Three identical passes so the marquee can wrap by one set width with an
+      // invisible seam. Slot ids repeat on purpose: every copy must resolve to the
+      // same image.
+      gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
         slot: 'him-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
         title: it.title, price: it.price, length: it.length, type: it.type,
         open: () => this.setState({ gIdx: i, gProgress: 0 }),
-      })),
+      }))),
       gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
       gOpen: gi != null,
       gCurrent: cur && { slot: 'him-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
