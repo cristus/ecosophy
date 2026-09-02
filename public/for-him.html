@@ -704,7 +704,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:8%; bottom:6%; width:min(11vw,120px); opacity:.05;">
-    <div style="max-width:1180px; margin:0 auto; padding:0 20px;">
+    <div style="box-sizing:border-box; max-width:1520px; margin:0 auto; padding:0 clamp(20px,3vw,44px);">
       <div style="text-align:center;">
         <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,3vw,30px); color:#C9A860;">moments of calm</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); letter-spacing:.04em; color:#F1E7CC; margin-top:4px;">INSIDE THE SANCTUARY</div>
@@ -742,7 +742,7 @@ a:hover { color:#B98F3E; }
       </div>
     </div>
 
-    <div style="display:flex; gap:clamp(12px,1.6vw,18px); overflow-x:auto; scroll-snap-type:x mandatory; padding:clamp(24px,3vw,34px) max(20px,calc((100vw - 1180px)/2)) 14px; align-items:flex-end;" class="reel-scroll">
+    <div style="display:flex; gap:clamp(12px,1.6vw,18px); overflow-x:auto; scroll-snap-type:x mandatory; box-sizing:border-box; width:100%; max-width:1520px; margin-left:auto; margin-right:auto; padding:clamp(24px,3vw,34px) clamp(20px,3vw,44px) 14px; align-items:flex-end;" class="reel-scroll">
       <sc-for list="{{ gReels }}" as="r" hint-placeholder-count="5">
         <div onClick="{{ r.open }}" class="gv-reel" style="cursor:pointer; scroll-snap-align:center; flex:none; width:clamp(170px,15vw,220px); aspect-ratio:9/16; position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
           <div class="gv-kb">
