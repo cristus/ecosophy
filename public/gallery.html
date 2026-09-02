@@ -171,7 +171,13 @@ img { display:block; }
         var e = clamp((p - gexp[0]) / (gexp[1] - gexp[0]), 0, 1);
         e = e * e * (3 - 2 * e);
         var vw2 = window.innerWidth || 1;
-        var start_w = Math.min(vh * 0.4, 310), start_h = start_w * 16 / 9;
+        // Under 900px the copy is re-anchored below the clip rather than beside
+        // it (see the media query). A 310x551 arch sitting dead centre runs
+        // straight through that text, so on narrow screens the arch starts
+        // smaller and rides higher, and both concessions unwind as it expands.
+        var narrow = vw2 < 900;
+        var start_w = narrow ? Math.min(vh * 0.30, 250) : Math.min(vh * 0.4, 310);
+        var start_h = start_w * 16 / 9;
         var cur_w = start_w + (vw2 - start_w) * e;
         var cur_h = start_h + (vh - start_h) * e;
         el.style.width = cur_w.toFixed(1) + 'px';
@@ -182,8 +188,9 @@ img { display:block; }
         // Positioned by transform, not left/top: those are layout writes and
         // doing all four per frame halved the frame rate (62fps -> 32fps).
         var start_l = Math.max(vw2 * 0.07, 34);
+        var lift = narrow ? vh * 0.12 * (1 - e) : 0;
         el.style.transform = 'translate3d(' + (start_l * (1 - e)).toFixed(1) + 'px,' +
-          ((vh - cur_h) / 2).toFixed(1) + 'px,0)';
+          ((vh - cur_h) / 2 - lift).toFixed(1) + 'px,0)';
         var rr = 1 - e;
         el.style.borderRadius = (50 * rr).toFixed(2) + '% ' + (50 * rr).toFixed(2) + '% ' +
           (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px / ' +
@@ -392,9 +399,35 @@ img { display:block; }
       if (pr && pr.catch) pr.catch(function(){});
     }
   }
+  // The clip loops, so scrolling down to the section drops you wherever it
+  // happened to be — usually mid-shot, with the door already open. Send it back
+  // to frame one as it comes into view, and re-arm only once it has left the
+  // screen completely, so jitter at the edge cannot keep snapping it back.
+  var rewind_list = null;
+  function rewind_videos(vh){
+    if (rewind_list == null || !(prime_tick % 30)) {
+      rewind_list = document.querySelectorAll('video[data-grewind]');
+    }
+    for (var i = 0; i < rewind_list.length; i++) {
+      var v = rewind_list[i];
+      var rv = v.getBoundingClientRect();
+      if (!rv.height) continue;
+      var seen = rv.top < vh * 0.9 && rv.bottom > vh * 0.1;
+      if (seen && !v.__rewound) {
+        v.__rewound = 1;
+        try { v.currentTime = 0; } catch (e3) {}
+        var pv = v.play();
+        if (pv && pv.catch) pv.catch(function(){});
+      } else if (v.__rewound && (rv.top > vh || rv.bottom < 0)) {
+        v.__rewound = 0;
+      }
+    }
+  }
+
   function frame(){
     var vh = window.innerHeight || 1;
     prime_videos();
+    rewind_videos(vh);
     try {
       var secs = document.querySelectorAll('[data-gsection]');
       for (var i = 0; i < secs.length; i++) {
@@ -601,12 +634,12 @@ img { display:block; }
       <div class="gal-lead">Hammam, jacuzzi, infrared sauna and the treatment rooms — the spaces our therapists work in every day.</div>
     </div>
     <!-- The two rows slide against each other as the section passes. -->
-    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin:clamp(38px,5vw,64px) auto 0; max-width:1520px; padding:0 clamp(20px,3vw,44px);" data-gx="0.055">
+    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin:clamp(38px,5vw,64px) auto 0; max-width:1240px; padding:0 clamp(20px,3vw,44px);" data-gx="0.055">
       <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-1.jpg" alt="Treatment room"></div>
       <div class="gal-frame" style="flex:1.35 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-3.jpg" alt="Jacuzzi suite"></div>
       <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-5.jpg" alt="Infrared sauna"></div>
     </div>
-    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin:clamp(16px,2vw,28px) auto 0; max-width:1520px; padding:0 clamp(20px,3vw,44px);" data-gx="-0.055">
+    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin:clamp(16px,2vw,28px) auto 0; max-width:1240px; padding:0 clamp(20px,3vw,44px);" data-gx="-0.055">
       <div class="gal-frame" style="flex:1.5 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-4.jpg" alt="Jacuzzi room"></div>
       <div class="gal-frame" style="flex:1 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-2.jpg" alt="Massage room"></div>
     </div>
@@ -642,7 +675,7 @@ img { display:block; }
            doorway in the clip, then grows out to full bleed. -->
       <div data-gexpand="0.12,0.62" class="gal-vid-frame"
            style="position:absolute; left:0; top:0; width:310px; height:551px; will-change:transform,width,height; contain:layout paint; overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
-        <video src="uploads/gal-video.mp4" poster="uploads/gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
+        <video src="uploads/gal-video.mp4" data-grewind poster="uploads/gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
                style="width:100%; height:100%; object-fit:cover; display:block;"></video>
       </div>
 

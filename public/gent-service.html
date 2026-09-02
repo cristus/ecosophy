@@ -53,38 +53,360 @@ a:hover { color:#B98F3E; }
 </style>
 <script>
 (function(){
-  // Gallery parallax engine, shared by the inside pages. Assignments stay
-  // snake_case: support.js rewrites `var someName =` inside inline scripts when
-  // it encodes the template, and the re-appended copy would not parse.
-  if (window.__ecoPlx) return; window.__ecoPlx = 1;
-  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  // Gallery parallax engine.
+  //
+  // Two coordinate systems, because the sections need different things:
+  //
+  //  * Continuous drift - data-gy / data-gx / data-gr move an element relative
+  //    to how far its centre sits from the viewport centre, in pixels. Good for
+  //    layers that should glide the whole time they are on screen.
+  //
+  //  * Section progress - anything inside [data-gsection] also gets p, a 0..1
+  //    ratio of how far that section has travelled through the viewport. Good
+  //    for effects with a defined start and end: the pinned video scrub, the
+  //    wipe reveal, opacity ramps.
+  //
+  // Both are recomputed every frame from getBoundingClientRect, so nothing has
+  // to be invalidated on resize, and a rAF loop keeps it smooth while scrolling
+  // with the wheel, a trackpad or momentum.
+  // NOTE: support.js encodes the template with
+  //   CAMEL_ATTR_RE = /(\s)([a-z]+[A-Z][A-Za-z0-9]*)(\s*=)/g
+  // to preserve camelCase HTML attributes, and it runs over inline script
+  // bodies too. A statement like `var prevY = 0` therefore comes back as
+  // `var sc-camel-prev-y = 0` and the re-appended copy fails to parse. Keep
+  // every assignment in here lowercase or snake_case.
+  if (window.__ecoPlx_ecosophygentse) return; window.__ecoPlx_ecosophygentse = 1;
+
+  function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
+  function nums(el, attr, fallback){
+    var raw = el.getAttribute(attr);
+    if (!raw) return fallback;
+    var parts = raw.split(',').map(parseFloat);
+    return parts.some(isNaN) ? fallback : parts;
+  }
+
+  function sectionProgress(sec, vh){
+    var r = sec.getBoundingClientRect();
+    var travel = r.height - vh;
+    if (travel <= 0) {
+      // Section shorter than the viewport: ramp across its own height instead.
+      return clamp((vh - r.top) / (vh + r.height), 0, 1);
+    }
+    return clamp(-r.top / travel, 0, 1);
+  }
+
+  function apply(el, vh, p){
+    var t = '';
+    var gy = parseFloat(el.getAttribute('data-gy'));
+    var gx = parseFloat(el.getAttribute('data-gx'));
+    var gr = parseFloat(el.getAttribute('data-gr'));
+    if (!isNaN(gy) || !isNaN(gx) || !isNaN(gr)) {
+      var r = el.getBoundingClientRect();
+      var prev_y = el.__ty || 0, prev_x = el.__tx || 0;
+      // Subtract the offset already applied, so the reading is the untransformed
+      // position and the value cannot drift frame over frame.
+      var mid = (r.top - prev_y) + r.height / 2 - vh / 2;
+      var mid_x = (r.left - prev_x) + r.width / 2 - (window.innerWidth || 1) / 2;
+      var ty = isNaN(gy) ? 0 : -mid * gy;
+      var tx = isNaN(gx) ? 0 : -mid_x * gx;
+      el.__ty = ty; el.__tx = tx;
+      t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
+      if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
+    }
+    if (p != null) {
+      var gs = nums(el, 'data-gs', null);
+      if (gs) t += 'scale(' + (gs[0] + (gs[1] - gs[0]) * p).toFixed(4) + ') ';
+      var go = nums(el, 'data-go', null);
+      if (go) el.style.opacity = (go[0] + (go[1] - go[0]) * clamp(p / 0.38, 0, 1)).toFixed(3);
+      var gw = nums(el, 'data-gw', null);
+      if (gw) {
+        // Wipe: reveal from the given inset back to zero across the first half.
+        var k = clamp(p / 0.55, 0, 1);
+        var inset = gw[0] * (1 - k);
+        el.style.clipPath = 'inset(0 ' + inset.toFixed(2) + '% 0 0)';
+      }
+      // Expand: the arch panel grows out of its frame to fill the viewport, so
+      // the clip stops being a card and becomes the screen. Width/height are set
+      // directly rather than scaled, because a scaled video is resampled by the
+      // compositor and goes soft; the element is absolutely positioned, so
+      // resizing it reflows nothing around it.
+      var gexp = nums(el, 'data-gexpand', null);
+      if (gexp) {
+        var e = clamp((p - gexp[0]) / (gexp[1] - gexp[0]), 0, 1);
+        e = e * e * (3 - 2 * e);
+        var vw2 = window.innerWidth || 1;
+        // Under 900px the copy is re-anchored below the clip rather than beside
+        // it (see the media query). A 310x551 arch sitting dead centre runs
+        // straight through that text, so on narrow screens the arch starts
+        // smaller and rides higher, and both concessions unwind as it expands.
+        var narrow = vw2 < 900;
+        var start_w = narrow ? Math.min(vh * 0.30, 250) : Math.min(vh * 0.4, 310);
+        var start_h = start_w * 16 / 9;
+        var cur_w = start_w + (vw2 - start_w) * e;
+        var cur_h = start_h + (vh - start_h) * e;
+        el.style.width = cur_w.toFixed(1) + 'px';
+        el.style.height = cur_h.toFixed(1) + 'px';
+        // Starts inset from the left edge and slides back to 0 as it grows, so
+        // the panel opens on the left rather than blooming from the centre, and
+        // stays vertically centred until it is the height of the viewport.
+        // Positioned by transform, not left/top: those are layout writes and
+        // doing all four per frame halved the frame rate (62fps -> 32fps).
+        var start_l = Math.max(vw2 * 0.07, 34);
+        var lift = narrow ? vh * 0.12 * (1 - e) : 0;
+        el.style.transform = 'translate3d(' + (start_l * (1 - e)).toFixed(1) + 'px,' +
+          ((vh - cur_h) / 2 - lift).toFixed(1) + 'px,0)';
+        var rr = 1 - e;
+        el.style.borderRadius = (50 * rr).toFixed(2) + '% ' + (50 * rr).toFixed(2) + '% ' +
+          (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px / ' +
+          (27 * rr).toFixed(2) + '% ' + (27 * rr).toFixed(2) + '% ' +
+          (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px';
+        el.style.borderColor = 'rgba(201,168,96,' + (0.5 * rr).toFixed(3) + ')';
+      }
+      // Copy steps aside once the panel starts taking the screen.
+      var gfo = nums(el, 'data-gfadeout', null);
+      if (gfo) {
+        var f = clamp((p - gfo[0]) / (gfo[1] - gfo[0]), 0, 1);
+        el.style.opacity = (1 - f).toFixed(3);
+      }
+      // (slats are handled below, on their own timeline)
+    }
+
+    // Entrance drift: the filter row slides in from the left and settles with the
+    // whole row centred, then holds. It used to park one bubble at a time on the
+    // centre line and step through them, which ended with the FIRST bubble centred
+    // and the other five trailing off the right edge — a row that reads as shoved
+    // right rather than centred. The travel now ends on the row's own centre.
+    var gsx = el.getAttribute('data-gsnapx');
+    if (gsx != null && el.children.length > 1) {
+      var rs = el.getBoundingClientRect();
+      var b0 = el.children[0].getBoundingClientRect();
+      var b1 = el.children[1].getBoundingClientRect();
+      // Measured from the live layout, so the gap/width clamps are not restated
+      // here. A pure translate cancels out of the difference and out of width.
+      var pitch = (b1.left - b0.left) || 1;
+      var bw2 = b0.width;
+      var steps = el.children.length - 1;
+      var content_w = steps * pitch + bw2;
+      if (content_w < rs.width - 8) {
+        // The row carries its own left padding, so the first bubble does not
+        // start at the content edge; without it the rest sits a few px right.
+        var pad_l = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+        // Resting place: the whole group of bubbles on the centre line.
+        var mid_x = rs.width / 2 - (pad_l + content_w / 2);
+        // Same timing as the arch above — in from the bottom of the screen,
+        // done by the time the row reaches the middle — so the two settle
+        // together instead of one still moving after the other has stopped.
+        var q2 = clamp((vh * 1.05 - rs.top) / (vh * 0.55), 0, 1);
+        q2 = q2 * q2 * (3 - 2 * q2);
+        var lead_in = Math.min(rs.width * 0.28, 260);
+        var tx2 = mid_x - lead_in * (1 - q2);
+        // Damped like the arch: a wheel notch moves the row a long way in one
+        // frame, and easing toward the target turns that step into a glide.
+        if (el.__snapx == null) el.__snapx = tx2;
+        el.__snapx += (tx2 - el.__snapx) * 0.075;
+        el.style.willChange = 'transform';
+        el.style.transform = 'translateX(' + el.__snapx.toFixed(1) + 'px)';
+      } else {
+        // Narrow screens: the bubbles already overflow, so leave the native
+        // horizontal scroll alone rather than fighting it with a transform.
+        el.style.transform = '';
+      }
+    }
+
+    // Arch: the dome opens as a circle as soon as it clears the bottom of the
+    // screen, then relaxes into a wide shallow arc as it climbs. The change has
+    // to happen WHILE it rises, which is why this runs off the panel's own rect
+    // rather than section progress: progress is pinned at 0 until the section
+    // top passes the top of the screen, so the dome would hold one fixed circle
+    // for its whole entrance and only start flattening once it was already
+    // full-bleed. Begin as the top edge reaches the bottom of the viewport and
+    // finish as it reaches the centre line, eased and damped (see below).
+    //
+    // Both radii are the SAME length, which is what makes the top read as a true
+    // circle; a squashed vertical radius gives a flat-topped tunnel mouth. They
+    // are a fraction of the viewport width, so the curve is identical at every
+    // size, and when the pair exceeds the width the browser scales them to fit —
+    // that is what caps the start at a clean half-width dome.
+    var ga = nums(el, 'data-garch', null);
+    if (ga) {
+      var rg = el.getBoundingClientRect();
+      // Runs from the top edge entering the bottom of the screen to the moment
+      // it reaches the middle, where the dome settles and holds. Ending on the
+      // centre line is the point: the arch is finished flattening exactly when
+      // the panel takes the middle of the screen, and nothing moves after that.
+      var qa = clamp((vh * 1.05 - rg.top) / (vh * 0.55), 0, 1);
+      // Smoothstep, so it eases in and out instead of starting and stopping
+      // dead at both ends of the travel.
+      qa = qa * qa * (3 - 2 * qa);
+      var arch_to = ga[0] + (ga[1] - ga[0]) * qa;
+      // Chase that target rather than snapping to it. One wheel notch moves the
+      // panel ~100px in a single frame, and setting the radius straight from
+      // scroll position turns each notch into a visible step. Easing toward the
+      // target spreads a jump over ~12 frames, and the dome keeps gliding for a
+      // moment after the scroll stops — which is what reads as slow and smooth.
+      if (el.__arch == null) el.__arch = arch_to;
+      el.__arch += (arch_to - el.__arch) * 0.075;
+      var arch_px = (el.__arch / 100 * (window.innerWidth || 1)).toFixed(1);
+      el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
+    }
+
+    // Slats: vertical blinds over the photo, opening left to right. Driven by
+    // the photo's OWN position in the viewport rather than section progress:
+    // these sections are ~2800px tall, so section progress leaves the frame
+    // striped for almost all the time it is visible and it is never seen whole.
+    // Locally, the blinds finish while the photo is still high in view, which
+    // leaves a long stretch where the image simply sits there, fully open.
+    var slat_n = parseInt(el.getAttribute('data-gslats'), 10);
+    if (slat_n > 0) {
+      if (!el.__slats) {
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'position:absolute; inset:0; pointer-events:none; display:flex; z-index:3;';
+        var bars = [];
+        for (var b = 0; b < slat_n; b++) {
+          var bar = document.createElement('span');
+          bar.style.cssText = 'flex:1 1 0; background:#0B1F16; transform-origin:left center; will-change:transform;';
+          wrap.appendChild(bar);
+          bars.push(bar);
+        }
+        el.appendChild(wrap);
+        el.__slats = bars;
+      }
+      var list = el.__slats;
+      var rb = el.getBoundingClientRect();
+      var open_from = vh * 1.02, open_to = vh * 0.12;
+      var q = clamp((open_from - rb.top) / (open_from - open_to), 0, 1);
+      var slat_span = 0.6, slat_stagger = 0.24;
+      for (var qi = 0; qi < list.length; qi++) {
+        var slat_start = (qi / list.length) * slat_stagger;
+        var t2 = clamp((q - slat_start) / slat_span, 0, 1);
+        list[qi].style.transform = 'scaleX(' + (1 - t2).toFixed(4) + ')';
+      }
+    }
+
+    // Blinds: gold louvres over the hero that swing shut as it scrolls away, so
+    // the arch panel below rises through a closed shutter instead of the hero
+    // simply sliding off. Driven by the cover's OWN position in the viewport,
+    // not section progress: the hero is exactly 100vh, so it has no travel of
+    // its own and sectionProgress() falls back to a ramp that already reads 0.5
+    // before a wheel is touched — the shutter would be half shut on load.
+    var blind_n = parseInt(el.getAttribute('data-gblinds'), 10);
+    if (blind_n > 0) {
+      if (!el.__blinds) {
+        // Fewer, wider louvres on small screens: at phone width 52 of them are
+        // under 8px each, and the swing is too small to read as depth.
+        var vw3 = window.innerWidth || 1;
+        var want = vw3 < 700 ? Math.round(blind_n * 0.46)
+                 : vw3 < 1100 ? Math.round(blind_n * 0.68)
+                 : blind_n;
+        var louvres = [];
+        for (var c = 0; c < want; c++) {
+          var lv = document.createElement('span');
+          // Perspective is set per louvre, not on the cover: one shared
+          // perspective puts the vanishing point in the middle of the screen,
+          // and the outer louvres then swing on a visibly different axis to the
+          // centre ones. The gradient is kept shallow so the shut panel reads as
+          // a field of gold with seams, not as stripes.
+          // Each louvre is a pixel wider than its slot and shifted half a pixel
+          // left, so neighbours overlap. Butted edge-to-edge, subpixel rounding
+          // leaves hairline gaps and the shut panel is striped with the photo
+          // showing through. calc() keeps the overlap while the width stays
+          // fluid, so a resize needs no rebuild.
+          lv.style.cssText = 'position:absolute; top:0; height:100%; ' +
+            'left:calc(' + (100 * c / want) + '% - 0.5px); width:calc(' + (100 / want) + '% + 1px); ' +
+            'transform-origin:left center; will-change:transform; ' +
+            'background:linear-gradient(90deg,#1B4230 0%,#2E6B4A 38%,#3A7F58 72%,#183B2B 100%);';
+          el.appendChild(lv);
+          louvres.push(lv);
+        }
+        el.__blinds = louvres;
+      }
+      var bl = el.__blinds;
+      var rc = el.getBoundingClientRect();
+      // The arch panel below starts only 14vh under the hero, so it climbs the
+      // screen quickly. Shut the louvres well inside half a viewport: on a
+      // longer ramp the panel has already covered them by the time the last one
+      // lands, and the gold is never actually seen closed.
+      var qb = clamp((-rc.top - vh * 0.04) / (vh * 0.46), 0, 1);
+      var blind_span = 0.66, blind_stagger = 0.34;
+      for (var ci = 0; ci < bl.length; ci++) {
+        var b_start = (ci / bl.length) * blind_stagger;
+        var t3 = clamp((qb - b_start) / blind_span, 0, 1);
+        t3 = 1 - Math.pow(1 - t3, 3);
+        bl[ci].style.transform = 'perspective(760px) rotateY(' + (-90 * (1 - t3)).toFixed(2) + 'deg)';
+      }
+    }
+    if (t) el.style.transform = t.trim();
+  }
+
+
+  // React renders the template and drops the muted attribute, so Chrome sees an
+  // unmuted clip and refuses to autoplay it: the element sits at readyState 4,
+  // paused, until something calls play(). Force the property imperatively. The
+  // flag lives on the element, so a re-render gets primed again.
+  var prime_tick = 0;
+  function prime_videos(){
+    // Only re-scan occasionally: a querySelectorAll every frame is wasted work
+    // beside a decoding video.
+    if (prime_tick++ % 30) return;
+    var vids = document.querySelectorAll('video[autoplay]');
+    for (var i = 0; i < vids.length; i++) {
+      var v = vids[i];
+      if (v.__primed) continue;
+      v.__primed = 1;
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      // loop is dropped by the render too, so the clip stopped dead at the end.
+      v.loop = true;
+      v.addEventListener('ended', function(){ this.currentTime = 0; var q = this.play(); if (q && q.catch) q.catch(function(){}); });
+      var pr = v.play();
+      if (pr && pr.catch) pr.catch(function(){});
+    }
+  }
+  // The clip loops, so scrolling down to the section drops you wherever it
+  // happened to be — usually mid-shot, with the door already open. Send it back
+  // to frame one as it comes into view, and re-arm only once it has left the
+  // screen completely, so jitter at the edge cannot keep snapping it back.
+  var rewind_list = null;
+  function rewind_videos(vh){
+    if (rewind_list == null || !(prime_tick % 30)) {
+      rewind_list = document.querySelectorAll('video[data-grewind]');
+    }
+    for (var i = 0; i < rewind_list.length; i++) {
+      var v = rewind_list[i];
+      var rv = v.getBoundingClientRect();
+      if (!rv.height) continue;
+      var seen = rv.top < vh * 0.9 && rv.bottom > vh * 0.1;
+      if (seen && !v.__rewound) {
+        v.__rewound = 1;
+        try { v.currentTime = 0; } catch (e3) {}
+        var pv = v.play();
+        if (pv && pv.catch) pv.catch(function(){});
+      } else if (v.__rewound && (rv.top > vh || rv.bottom < 0)) {
+        v.__rewound = 0;
+      }
+    }
+  }
+
   function frame(){
     var vh = window.innerHeight || 1;
+    prime_videos();
+    rewind_videos(vh);
     try {
-      var els = document.querySelectorAll('[data-gy],[data-gs]');
-      for (var i=0;i<els.length;i++){
-        var el = els[i], t = '';
-        var gy = parseFloat(el.getAttribute('data-gy'));
-        if (!isNaN(gy)) {
-          var r = el.getBoundingClientRect();
-          var prev_y = el.__ty || 0;
-          var mid = (r.top - prev_y) + r.height/2 - vh/2;
-          var ty = -mid * gy;
-          el.__ty = ty;
-          t += 'translate3d(0,' + ty.toFixed(1) + 'px,0) ';
-        }
-        var gs = el.getAttribute('data-gs');
-        if (gs) {
-          var parts = gs.split(',').map(parseFloat);
-          var sec = el.closest('[data-gsection]') || el;
-          var sr = sec.getBoundingClientRect();
-          var travel = sr.height - vh;
-          var p = travel > 0 ? clamp(-sr.top/travel,0,1) : clamp((vh-sr.top)/(vh+sr.height),0,1);
-          t += 'scale(' + (parts[0] + (parts[1]-parts[0])*p).toFixed(4) + ') ';
-        }
-        if (t) el.style.transform = t.trim();
+      var secs = document.querySelectorAll('[data-gsection]');
+      for (var i = 0; i < secs.length; i++) {
+        var p = sectionProgress(secs[i], vh);
+        secs[i].__p = p;
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout]');
+        for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
-    } catch(e) {}
+      var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
+      for (var k = 0; k < drift.length; k++) {
+        var el = drift[k];
+        var host = el.closest ? el.closest('[data-gsection]') : null;
+        apply(el, vh, host ? host.__p : null);
+      }
+    } catch (e) {}
   }
   function loop(){ frame(); requestAnimationFrame(loop); }
   requestAnimationFrame(loop);
@@ -143,6 +465,9 @@ a:hover { color:#B98F3E; }
   </div>
 
   <div data-gsection data-screen-label="Hero" class="d-hero" style="position:relative; background:#0E271C; display:grid; grid-template-columns:1.02fr .98fr; align-items:stretch; overflow:hidden;">
+    <!-- Louvres that swing shut as the hero scrolls away, so the section below
+         rises through a closed shutter rather than the hero just sliding off. -->
+    <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
     <img data-gy="0.08" src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:0; bottom:0; transform:translate(-46%,40%); width:min(20vw,240px); opacity:.085;">
     <img data-gy="-0.11" src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:56%; top:14%; width:min(9vw,105px); opacity:.05;">
     <div class="d-hero-img" style="position:relative; grid-column:2; grid-row:1; min-height:min(84vh,720px); overflow:hidden;">
