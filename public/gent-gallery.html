@@ -76,6 +76,13 @@ img { display:block; }
 @keyframes slideUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
 @keyframes popIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:none; } }
 @keyframes storyIn { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:none; } }
+/* Smallest label tiers, raised on phones only. The desktop design keeps its
+   fine 8.5-9.5px small caps; below 760px they would fall under the legible
+   floor, so the same declarations resolve larger there. */
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+@media (max-width: 760px) {
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+}
 </style>
 <script>
 (function(){
@@ -407,7 +414,7 @@ img { display:block; }
         <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
-        <a href="/for-him#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/gent-book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
         <a href="/for-her" style="display:{{ navShow }}; color:#9FB0A0; font-size:11px; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(9px,1vw,15px);" style-hover="color:#E4C778;">⇄ FOR HER</a>
       </div>
 
@@ -420,7 +427,7 @@ img { display:block; }
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
           <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
-          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">GENT SPA · FOR HIM</span>
+          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">GENT SPA · FOR HIM</span>
         </span>
       </a>
 
@@ -439,7 +446,7 @@ img { display:block; }
       <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
-      <a href="/for-him#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
     </div>
   </div>
@@ -496,7 +503,7 @@ img { display:block; }
                 </sc-if>
               </div>
             </div>
-            <div style="font-size:9.5px; letter-spacing:1.4px; color:{{ f.labelColor }}; margin-top:10px; line-height:1.35;">{{ f.label }}</div>
+            <div style="font-size:var(--fs-sm); letter-spacing:1.4px; color:{{ f.labelColor }}; margin-top:10px; line-height:1.35;">{{ f.label }}</div>
           </div>
         </sc-for>
       </div>
@@ -516,10 +523,10 @@ img { display:block; }
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.45) 0%, rgba(11,31,22,0) 36%, rgba(11,31,22,.92) 100%);"></div>
           <div style="pointer-events:none; position:absolute; top:11px; left:11px; display:flex; align-items:center; gap:5px; background:rgba(11,31,22,.55); border-radius:12px; padding:5px 10px;">
             <span style="width:0; height:0; border-left:6px solid #EBD9A6; border-top:4px solid transparent; border-bottom:4px solid transparent;"></span>
-            <span style="font-size:8.5px; letter-spacing:1.2px; color:#EBD9A6;">{{ r.length }}</span>
+            <span style="font-size:var(--fs-xxs); letter-spacing:1.2px; color:#EBD9A6;">{{ r.length }}</span>
           </div>
           <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
-            <div style="font-size:8.5px; letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
+            <div style="font-size:var(--fs-xxs); letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
             <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
             <div style="font-size:11px; color:#C9A860; margin-top:6px;">{{ r.price }}</div>
           </div>
@@ -642,7 +649,7 @@ img { display:block; }
     <div style="display:flex; align-items:center; gap:10px;">
       <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
       <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
-      <span style="font-size:9.5px; letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
+      <span style="font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
     </div>
     <div style="display:flex; gap:18px; font-size:10.5px; letter-spacing:2.4px;">
       <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>

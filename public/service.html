@@ -43,6 +43,13 @@ a:hover { color:#B98F3E; }
   .d-mosaic { grid-template-columns:1fr 1fr !important; grid-auto-rows:170px !important; }
   .d-mosaic > div:nth-child(1) { grid-column:1/3 !important; grid-row:span 2 !important; }
 }
+/* Smallest label tiers, raised on phones only. The desktop design keeps its
+   fine 8.5-9.5px small caps; below 760px they would fall under the legible
+   floor, so the same declarations resolve larger there. */
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+@media (max-width: 760px) {
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+}
 </style>
 <script>
 (function(){
@@ -102,7 +109,7 @@ a:hover { color:#B98F3E; }
         <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
-        <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <!-- Holds the centre column open: the badge is absolutely positioned. -->
@@ -113,7 +120,7 @@ a:hover { color:#B98F3E; }
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
           <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
-          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
+          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
@@ -130,7 +137,7 @@ a:hover { color:#B98F3E; }
       <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
-      <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
     </div>
   </div>
@@ -289,9 +296,9 @@ a:hover { color:#B98F3E; }
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(84px,100%),1fr)); gap:10px; margin-top:14px;">
             <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
               <div onClick="{{ d.pick }}" style="cursor:pointer; text-align:center; padding:14px 6px; border-radius:14px; border:1px solid {{ d.border }}; background:{{ d.bg }}; transition:background .2s;">
-                <div style="font-size:9.5px; letter-spacing:1.6px; color:{{ d.sub }};">{{ d.dow }}</div>
+                <div style="font-size:var(--fs-sm); letter-spacing:1.6px; color:{{ d.sub }};">{{ d.dow }}</div>
                 <div style="font-family:'Prata',serif; font-size:19px; color:{{ d.fg }}; margin-top:5px;">{{ d.num }}</div>
-                <div style="font-size:9.5px; color:{{ d.sub }}; margin-top:4px;">{{ d.mon }}</div>
+                <div style="font-size:var(--fs-sm); color:{{ d.sub }}; margin-top:4px;">{{ d.mon }}</div>
               </div>
             </sc-for>
           </div>

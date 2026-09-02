@@ -37,6 +37,13 @@ a:hover { color:#B98F3E; }
 @media (max-width: 760px) {
   .r-cat { grid-template-columns:minmax(0,1fr) !important; gap:18px !important; }
 }
+/* Smallest label tiers, raised on phones only. The desktop design keeps its
+   fine 8.5-9.5px small caps; below 760px they would fall under the legible
+   floor, so the same declarations resolve larger there. */
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+@media (max-width: 760px) {
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+}
 </style>
 <script>
 (function(){
@@ -96,7 +103,7 @@ a:hover { color:#B98F3E; }
         <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
-        <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <!-- Holds the centre column open: the badge is absolutely positioned. -->
@@ -107,7 +114,7 @@ a:hover { color:#B98F3E; }
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
           <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
-          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
+          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
@@ -124,22 +131,23 @@ a:hover { color:#B98F3E; }
       <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
-      <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
     </div>
   </div>
 
-  <div data-gsection data-screen-label="Page header" style="position:relative; padding:clamp(140px,16vw,200px) 20px clamp(70px,8vw,110px); background:#0E271C; overflow:hidden;">
+  <div data-gsection data-screen-label="Page header" style="position:relative; min-height:88vh; display:flex; align-items:center; padding:clamp(120px,14vw,170px) 20px clamp(70px,8vw,110px); background:#0E271C; overflow:hidden;">
     <img data-gy="0.07" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; left:4%; top:52%; transform:translateY(-50%); width:min(14vw,150px); opacity:.06;">
     <img data-gy="-0.1" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; z-index:1; right:5%; top:26%; width:min(10vw,110px); opacity:.05;">
-    <div data-gy="0.13" data-gs="1.05,1.16" style="position:absolute; inset:-14% 0; opacity:.34; will-change:transform;">
+    <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-16% 0; opacity:.42; will-change:transform;">
       <image-slot id="svc-head-bg" src="uploads/eco-her-massage-1.jpg?q=80&amp;w=2000&amp;auto=format&amp;fit=crop" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
     </div>
     <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
     <div data-gy="-0.05" style="position:relative; max-width:1180px; margin:0 auto; text-align:center;">
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(24px,3vw,32px); color:#E4C778;">for her</div>
-      <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(38px,6vw,74px); color:#F1E7CC; margin:6px 0 0; letter-spacing:.02em;">THE FULL MENU</h1>
+      <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,88px); color:#F1E7CC; margin:6px 0 0; letter-spacing:.02em;">THE FULL MENU</h1>
       <div style="font-size:14px; color:#B9C7B6; line-height:1.9; max-width:560px; margin:18px auto 0; text-wrap:pretty;">Twenty-nine treatments across massage, bath rituals, facials and packages. Every price includes VAT.</div>
+      <div style="font-size:10px; letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>
   </div>
 

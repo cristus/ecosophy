@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Menu &amp; Prices — Ecosophy Gent Spa, Dubai</title>
-<meta name="description" content="Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.">
+<title>Book a Visit — Ecosophy Gent Spa, Dubai</title>
+<meta name="description" content="Request a treatment at Ecosophy Gent Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.">
 <link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy Spa">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Menu &amp; Prices — Ecosophy Gent Spa, Dubai">
-<meta property="og:description" content="Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.">
-<meta property="og:url" content="https://ecosophy.pages.dev/gent-menu-prices">
+<meta property="og:title" content="Book a Visit — Ecosophy Gent Spa, Dubai">
+<meta property="og:description" content="Request a treatment at Ecosophy Gent Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.">
+<meta property="og:url" content="https://ecosophy.pages.dev/gent-book">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://ecosophy.pages.dev/gent-menu-prices">
+<link rel="canonical" href="https://ecosophy.pages.dev/gent-book">
 <script src="/vendor/react.production.min.js"></script>
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
@@ -30,16 +30,15 @@
 body { margin:0; background:#0B1F16; font-family:'Manrope',sans-serif; color:#E7EDE2; }
 a { color:#E4C778; text-decoration:none; }
 img { display:block; }
-@keyframes mpRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
-.mp-rise { animation:mpRise 1s cubic-bezier(.2,.8,.3,1) both; }
-.mp-eyebrow { font-size:10.5px; letter-spacing:3.4px; color:#C9A860; }
-.mp-cat { font-family:'Italiana','Prata',serif; font-size:clamp(26px,3.6vw,44px); letter-spacing:.05em; color:#F4EFE3; }
-.mp-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:clamp(12px,2vw,28px); align-items:baseline; padding:16px 0; border-bottom:1px solid rgba(201,168,96,.16); }
-.mp-name { font-family:'Cormorant Garamond',serif; font-size:clamp(17px,1.7vw,22px); color:#F1E7CC; }
-.mp-desc { font-size:12px; color:#93A395; line-height:1.7; margin-top:4px; max-width:62ch; }
-.mp-dur { font-size:10px; letter-spacing:2.2px; color:#9FB0A0; white-space:nowrap; }
-.mp-price { font-size:13px; letter-spacing:1.4px; color:#E4C778; white-space:nowrap; }
-@media (max-width:620px){ .mp-row { grid-template-columns:minmax(0,1fr) auto; } .mp-dur { grid-column:1; } }
+@keyframes bkRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+.bk-rise { animation:bkRise 1s cubic-bezier(.2,.8,.3,1) both; }
+.bk-eyebrow { font-size:10.5px; letter-spacing:3.4px; color:#C9A860; }
+.bk-label { font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0; display:block; margin-bottom:7px; }
+.bk-field { width:100%; box-sizing:border-box; background:rgba(244,239,227,.06); border:1px solid rgba(201,168,96,.32); border-radius:12px; color:#F1E7CC; padding:13px 14px; font-family:inherit; font-size:13.5px; appearance:none; }
+.bk-field:focus { outline:none; border-color:rgba(201,168,96,.75); }
+.bk-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.bk-slot { border:1px solid rgba(201,168,96,.3); border-radius:20px; padding:9px 15px; font-size:11.5px; letter-spacing:1.4px; cursor:pointer; }
+@media (max-width:720px){ .bk-grid { grid-template-columns:1fr; } }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
@@ -103,10 +102,10 @@ img { display:block; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">MENU &amp; PRICES</a>
+        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
-        <a href="/gent-book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/gent-book" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">BOOK</a>
         <a href="/for-her" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HER</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
@@ -130,43 +129,56 @@ img { display:block; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-him" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">MENU &amp; PRICES</a>
+      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
-      <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">BOOK</a>
       <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
     </div>
   </div>
 
-  <!-- Hero · same drift and push-in as the gallery hero -->
+  <!-- Hero · the gallery drift and push-in -->
   <div data-gsection style="position:relative; height:88vh; min-height:520px; overflow:hidden;">
     <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
       <img src="uploads/gent-gal-hero.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
     </div>
-    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 44%, rgba(6,16,11,.34) 0%, rgba(6,16,11,.66) 60%, rgba(6,16,11,.9) 100%);"></div>
+    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 44%, rgba(6,16,11,.36) 0%, rgba(6,16,11,.68) 60%, rgba(6,16,11,.92) 100%);"></div>
     <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
-      <div class="mp-rise mp-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
-      <h1 class="mp-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(38px,6.6vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">MENU &amp; PRICES</h1>
-      <div class="mp-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">Every treatment we offer, with its length and its price. No packages hidden behind an enquiry.</div>
+      <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
+      <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">BOOK YOUR VISIT</h1>
+      <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:44ch; margin-top:16px;">Tell us the ritual and when suits you. The request opens in WhatsApp and our team confirms the slot.</div>
+      <div class="bk-rise" style="animation-delay:.55s; font-size:10px; letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>
   </div>
 
-  <div style="max-width:1080px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
-    <sc-for list="{{ menuRows }}" as="r" hint-placeholder-count="6">
-      <div style="display:{{ r.headShow }}; margin:clamp(34px,5vw,64px) 0 6px;">
-        <div class="mp-eyebrow">{{ r.kicker }}</div>
-        <div class="mp-cat" style="margin-top:8px;">{{ r.cat }}</div>
-        <div class="mp-desc" style="margin-top:10px;">{{ r.blurb }}</div>
+  <div style="max-width:780px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
+    <div style="border:1px solid rgba(201,168,96,.3); border-radius:22px; padding:clamp(24px,4vw,42px); background:rgba(11,31,22,.7);">
+      <div class="bk-eyebrow">REQUEST A BOOKING</div>
+      <div style="font-family:'Italiana','Prata',serif; font-size:clamp(24px,3.4vw,40px); color:#F4EFE3; margin-top:8px;">{{ headline }}</div>
+      <div style="margin-top:26px;"><span class="bk-label">RITUAL</span>
+        <select value="{{ ritual }}" onChange="{{ setRitual }}" class="bk-field">
+          <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
+        </select>
       </div>
-      <div class="mp-row" style="display:{{ r.itemShow }};">
-        <div><div class="mp-name">{{ r.name }}</div><div class="mp-desc">{{ r.desc }}</div></div>
-        <div class="mp-dur">{{ r.duration }}</div>
-        <div class="mp-price">{{ r.price }}</div>
+      <div class="bk-grid" style="margin-top:18px;">
+        <div><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
+          <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}">{{ d.v }}</option></sc-for>
+        </select></div>
+        <div><span class="bk-label">TIME</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
+          <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}">{{ t.v }}</option></sc-for>
+        </select></div>
       </div>
-    </sc-for>
-    <div style="margin-top:clamp(50px,7vw,90px); text-align:center;">
-      <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px; font-weight:600; display:inline-block;">BOOK ON WHATSAPP</a>
-      <a href="/gent-services" style="margin-left:10px; border:1px solid rgba(201,168,96,.6); color:#EBD9A6; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px; display:inline-block;">BROWSE SERVICES</a>
+      <div class="bk-grid" style="margin-top:18px;">
+        <div><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" class="bk-field"></div>
+        <div><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="05x xxx xxxx" class="bk-field"></div>
+      </div>
+      <div style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">Please choose a ritual and add your name.</div>
+      <div onClick="{{ submit }}" style="cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</div>
+      <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is charged here.</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-top:34px; font-size:11.5px; color:#9FB0A0; letter-spacing:1.4px;">
+      <div>DAILY · 10:00 – 22:00</div><div>AJMAN, UAE</div>
+      <a href="{{ waHref }}" style="color:#E4C778;">OR MESSAGE US DIRECTLY</a>
     </div>
   </div>
 
@@ -187,7 +199,8 @@ img { display:block; }
 
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 58 548 0899&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
-  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false };
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false,
+    ritual: '', day: '', time: '', name: '', phone: '', error: false };
   componentDidMount() {
     this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
     this._navScroll = () => { const past = (window.scrollY || 0) > 90; if (past !== this.state.scrolled) this.setState({ scrolled: past }); };
@@ -247,18 +260,43 @@ class Component extends DCLogic {
   renderVals() {
     const wa = (this.props.whatsapp ?? '+971 58 548 0899');
     const vw = this.state.vw || 1280;
-    // One flat list: a category header row, then its treatments. Flat keeps
-    // the template to a single sc-for instead of a nested pair.
-    const rows = [];
-    this.cats().forEach((c, ci) => {
-      rows.push({ headShow: 'block', itemShow: 'none', kicker: String(ci + 1).padStart(2, '0') + ' — ' + c.name.toUpperCase(),
-        cat: c.name, blurb: c.blurb, name: '', desc: '', duration: '', price: '' });
-      c.items.forEach(it => rows.push({
-        headShow: 'none', itemShow: 'grid', kicker: '', cat: '', blurb: '',
-        name: it.name, desc: it.desc, duration: it.duration, price: it.price }));
-    });
+    // Ritual list comes from the same cats() the menu and services pages use.
+    const rituals = [{ v: 'Choose a ritual' }];
+    this.cats().forEach(c => c.items.forEach(it => rituals.push({ v: it.name + ' · ' + it.price })));
+    const days = [{ v: 'Choose a day' }];
+    const fmt = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(); d.setDate(d.getDate() + i);
+      days.push({ v: fmt[d.getDay()] + ' ' + d.getDate() + ' ' + mon[d.getMonth()] });
+    }
+    const times = [{ v: 'Choose a time' }];
+    for (let h = 10; h <= 21; h++) times.push({ v: (h < 10 ? '0' : '') + h + ':00' });
+    const ready = this.state.ritual && this.state.ritual.indexOf('Choose') !== 0 && this.state.name.trim();
     return {
-      menuRows: rows,
+      headline: 'Tell us what you would like, and when.',
+      ritualOptions: rituals, dayOptions: days, timeOptions: times,
+      ritual: this.state.ritual, day: this.state.day, time: this.state.time,
+      name: this.state.name, phone: this.state.phone,
+      setRitual: (e) => this.setState({ ritual: e.target.value, error: false }),
+      setDay: (e) => this.setState({ day: e.target.value }),
+      setTime: (e) => this.setState({ time: e.target.value }),
+      setName: (e) => this.setState({ name: e.target.value, error: false }),
+      setPhone: (e) => this.setState({ phone: e.target.value }),
+      errShow: this.state.error ? 'block' : 'none',
+      submitLabel: ready ? 'SEND REQUEST ON WHATSAPP' : 'REQUEST A BOOKING',
+      submit: () => {
+        if (!ready) { this.setState({ error: true }); return; }
+        const lines = [
+          'Booking request — ' + 'Ecosophy Gent Spa',
+          'Ritual: ' + this.state.ritual,
+          'When: ' + (this.state.day || 'any day') + ' · ' + (this.state.time || 'any time'),
+          'Name: ' + this.state.name,
+          'Phone: ' + (this.state.phone || '-'),
+        ];
+        const n = wa.replace(/[^0-9]/g, '');
+        window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+      },
       navGap: vw < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
       navShow: vw < 1400 ? 'none' : 'inline',
       burgerShow: vw < 1400 ? 'flex' : 'none',

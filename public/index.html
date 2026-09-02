@@ -31,6 +31,13 @@
 body { margin:0; background:#F6F1E6; font-family:'Manrope',sans-serif; color:#2A332C; }
 a { color:#14532D; text-decoration:none; }
 a:hover { color:#B98F3E; }
+/* Smallest label tiers, raised on phones only. The desktop design keeps its
+   fine 8.5-9.5px small caps; below 760px they would fall under the legible
+   floor, so the same declarations resolve larger there. */
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+@media (max-width: 760px) {
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+}
 </style>
 </helmet>
 
@@ -79,7 +86,7 @@ a:hover { color:#B98F3E; }
     <div style="display:flex; align-items:center; gap:10px;">
       <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
       <span style="font-family:'Great Vibes',cursive; font-size:22px; color:#EBD9A6; line-height:1;">Ecosophy</span>
-      <span style="font-size:9.5px; letter-spacing:2.5px; color:#8FA192;">DUBAI, UAE</span>
+      <span style="font-size:var(--fs-sm); letter-spacing:2.5px; color:#8FA192;">DUBAI, UAE</span>
     </div>
     <div style="display:flex; gap:22px; flex-wrap:wrap; font-size:11.5px; letter-spacing:1.5px;">
       <a href="/for-her" style="color:#D7DECF;" style-hover="color:#E4C778;">FOR HER</a>

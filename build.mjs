@@ -71,6 +71,18 @@ const PAGES = {
     description: "Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.",
     mark: 'favicons/mark-man-gold-180.png',
   },
+  'Ecosophy Book.dc.html': {
+    route: 'book.html',
+    title: 'Book a Visit — Ecosophy Spa for Her, Dubai',
+    description: 'Request a treatment at Ecosophy Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
+    mark: 'favicons/mark-woman-gold-180.png',
+  },
+  'Ecosophy Gent Book.dc.html': {
+    route: 'gent-book.html',
+    title: 'Book a Visit — Ecosophy Gent Spa, Dubai',
+    description: 'Request a treatment at Ecosophy Gent Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
+    mark: 'favicons/mark-man-gold-180.png',
+  },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',
