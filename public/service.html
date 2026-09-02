@@ -46,9 +46,16 @@ a:hover { color:#B98F3E; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
-  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
+}
+/* Phones: footer links are stacked text at ~14-26px tall, well under a
+   comfortable thumb target, so give each one a 40px row of its own. */
+@media (max-width: 760px) {
+  [data-screen-label="Footer"] a, .r-foot a {
+    display:inline-flex; align-items:center; min-height:40px;
+  }
 }
 </style>
 <script>
@@ -420,7 +427,7 @@ a:hover { color:#B98F3E; }
 
   <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
     <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
-      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:10.5px; letter-spacing:1.3px; min-width:0;">
+      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:var(--fs-lg); letter-spacing:1.3px; min-width:0;">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
           <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
@@ -446,7 +453,7 @@ a:hover { color:#B98F3E; }
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:10.5px; letter-spacing:1.6px;">
+        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
           <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
           <span style="padding:6px 11px; color:#E4C778;">AR</span>
         </div>
@@ -470,7 +477,7 @@ a:hover { color:#B98F3E; }
     <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
     <img data-gy="0.08" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:0; bottom:0; transform:translate(-46%,40%); width:min(20vw,240px); opacity:.085;">
     <img data-gy="-0.11" src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:56%; top:14%; width:min(9vw,105px); opacity:.05;">
-    <div class="d-hero-img" style="position:relative; grid-column:2; grid-row:1; min-height:min(84vh,720px); overflow:hidden;">
+    <div class="d-hero-img" style="position:relative; grid-column:2; grid-row:1; min-height:min(124vh,1040px); overflow:hidden;">
       <div data-gy="0.12" data-gs="1.04,1.14" style="position:absolute; inset:-10% 0; will-change:transform;">
       <div style="position:absolute; inset:0; animation:dKb 20s ease-in-out infinite alternate;">
         <image-slot id="{{ heroSlot }}" sc-camel-src="{{ heroImg }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
@@ -481,7 +488,7 @@ a:hover { color:#B98F3E; }
       <div style="pointer-events:none; position:absolute; left:0; right:0; top:0; height:34%; background:linear-gradient(180deg,#0E271C 0%,rgba(14,39,28,.7) 26%,rgba(14,39,28,.28) 60%,rgba(14,39,28,0) 100%);"></div>
     </div>
     <div class="d-hero-text" style="position:relative; grid-column:1; grid-row:1; display:flex; flex-direction:column; justify-content:center; padding:clamp(106px,12vw,140px) clamp(22px,4.5vw,64px) clamp(56px,7vw,92px) max(20px,calc((100vw - 1180px) / 2));">
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; font-size:10.5px; letter-spacing:1.6px; color:rgba(215,222,207,.7);">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; font-size:var(--fs-lg); letter-spacing:1.6px; color:rgba(215,222,207,.7);">
         <a href="/services" style="white-space:nowrap; color:rgba(215,222,207,.7);" style-hover="color:#E4C778;">ALL SERVICES</a>
         <span style="color:#C9A860;">/</span>
         <a href="{{ catHref }}" style="white-space:nowrap; color:rgba(215,222,207,.7);" style-hover="color:#E4C778;">{{ catUpper }}</a>
@@ -494,17 +501,17 @@ a:hover { color:#B98F3E; }
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(16px,3vw,38px); margin-top:30px;">
         <div style="flex:0 0 auto;">
           <div style="font-family:'Prata',serif; font-size:clamp(28px,3.4vw,38px); color:#E4C778; line-height:1.1; white-space:nowrap;">{{ price }}</div>
-          <div style="font-size:10px; letter-spacing:1.8px; color:#93A392; margin-top:6px;">VAT INCLUDED</div>
+          <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">VAT INCLUDED</div>
         </div>
         <div style="width:1px; height:44px; background:rgba(201,168,96,.32);"></div>
         <div style="flex:0 0 auto;">
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">{{ durationLong }}</div>
-          <div style="font-size:10px; letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ roomLabel }}</div>
+          <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ roomLabel }}</div>
         </div>
         <div style="width:1px; height:44px; background:rgba(201,168,96,.32);"></div>
         <div style="flex:0 0 auto;">
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">★★★★★ {{ rating }}</div>
-          <div style="font-size:10px; letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ reviewCountLabel }}</div>
+          <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ reviewCountLabel }}</div>
         </div>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:32px;">
@@ -514,47 +521,53 @@ a:hover { color:#B98F3E; }
     </div>
   </div>
 
-  <div data-screen-label="Overview" style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,130px) 20px; overflow:clip;">
-    <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:0; top:24%; transform:translate(48%,0); width:min(19vw,225px); opacity:.07;">
-    <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:-3%; bottom:6%; width:min(11vw,130px); opacity:.05;">
-    <div class="d-split" style="position:relative; display:grid; grid-template-columns:1.25fr .85fr; gap:clamp(34px,6vw,80px); align-items:start;">
-      <div>
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">THE TREATMENT</div>
-        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:8px; line-height:1.1;">{{ overviewHeading }}</div>
-        <div style="font-size:15px; color:#5A5340; line-height:1.95; margin-top:16px; max-width:620px; text-wrap:pretty;">{{ overviewBody }}</div>
-        <div style="display:flex; flex-direction:column; margin-top:34px;">
-          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
-            <div style="display:grid; grid-template-columns:52px 1fr auto; gap:18px; align-items:baseline; padding:20px 0; border-top:1px solid #E3D9C2;">
-              <div style="font-family:'Prata',serif; font-size:15px; color:#C9A860;">{{ s.no }}</div>
-              <div>
-                <div style="font-family:'Prata',serif; font-size:16px; color:#14532D;">{{ s.name }}</div>
-                <div style="font-size:13px; color:#77704F; line-height:1.7; margin-top:5px; max-width:520px; text-wrap:pretty;">{{ s.desc }}</div>
+  <div data-gsection style="position:relative; margin-top:-30vh; z-index:2;">
+    <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
+         arc once it owns the screen. Same hand-off as the gallery. -->
+    <div data-garch="66,21" style="background:#F6F1E6; overflow:hidden; display:flex; flex-direction:column;">
+    <div data-screen-label="Overview" style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,130px) 20px; overflow:clip;">
+      <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:0; top:24%; transform:translate(48%,0); width:min(19vw,225px); opacity:.07;">
+      <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:-3%; bottom:6%; width:min(11vw,130px); opacity:.05;">
+      <div class="d-split" style="position:relative; display:grid; grid-template-columns:1.25fr .85fr; gap:clamp(34px,6vw,80px); align-items:start;">
+        <div>
+          <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">THE TREATMENT</div>
+          <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:8px; line-height:1.1;">{{ overviewHeading }}</div>
+          <div style="font-size:15px; color:#5A5340; line-height:1.95; margin-top:16px; max-width:620px; text-wrap:pretty;">{{ overviewBody }}</div>
+          <div style="display:flex; flex-direction:column; margin-top:34px;">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+              <div style="display:grid; grid-template-columns:52px 1fr auto; gap:18px; align-items:baseline; padding:20px 0; border-top:1px solid #E3D9C2;">
+                <div style="font-family:'Prata',serif; font-size:15px; color:#C9A860;">{{ s.no }}</div>
+                <div>
+                  <div style="font-family:'Prata',serif; font-size:16px; color:#14532D;">{{ s.name }}</div>
+                  <div style="font-size:13px; color:#77704F; line-height:1.7; margin-top:5px; max-width:520px; text-wrap:pretty;">{{ s.desc }}</div>
+                </div>
+                <div style="font-size:var(--fs-lg); letter-spacing:1.5px; color:#9A917A; white-space:nowrap;">{{ s.time }}</div>
               </div>
-              <div style="font-size:10.5px; letter-spacing:1.5px; color:#9A917A; white-space:nowrap;">{{ s.time }}</div>
-            </div>
-          </sc-for>
+            </sc-for>
+          </div>
         </div>
-      </div>
 
-      <div style="position:sticky; top:96px; background:#FFFDF7; border:1px solid #DED4BD; border-radius:20px; padding:clamp(22px,3vw,32px);">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">WHAT'S INCLUDED</div>
-        <div style="display:flex; flex-direction:column; gap:11px; margin-top:16px;">
-          <sc-for list="{{ includes }}" as="i" hint-placeholder-count="6">
-            <div style="display:grid; grid-template-columns:14px 1fr; gap:10px; font-size:13.5px; color:#5A5340; line-height:1.6;"><span style="color:#B98F3E;">·</span><span>{{ i.t }}</span></div>
-          </sc-for>
+        <div style="position:sticky; top:96px; background:#FFFDF7; border:1px solid #DED4BD; border-radius:20px; padding:clamp(22px,3vw,32px);">
+          <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">WHAT'S INCLUDED</div>
+          <div style="display:flex; flex-direction:column; gap:11px; margin-top:16px;">
+            <sc-for list="{{ includes }}" as="i" hint-placeholder-count="6">
+              <div style="display:grid; grid-template-columns:14px 1fr; gap:10px; font-size:13.5px; color:#5A5340; line-height:1.6;"><span style="color:#B98F3E;">·</span><span>{{ i.t }}</span></div>
+            </sc-for>
+          </div>
+          <div style="height:1px; background:#E3D9C2; margin:24px 0;"></div>
+          <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">GOOD TO KNOW</div>
+          <div style="display:flex; flex-direction:column; gap:14px; margin-top:16px;">
+            <sc-for list="{{ notes }}" as="n" hint-placeholder-count="4">
+              <div>
+                <div style="font-size:var(--fs-md); letter-spacing:1.6px; color:#9A917A;">{{ n.k }}</div>
+                <div style="font-size:13.5px; color:#3A4136; margin-top:3px; line-height:1.6;">{{ n.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <a href="#book" style="display:block; text-align:center; margin-top:26px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:24px; padding:14px 22px; font-size:11px; letter-spacing:2.6px; font-weight:600;">CHECK AVAILABILITY</a>
         </div>
-        <div style="height:1px; background:#E3D9C2; margin:24px 0;"></div>
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">GOOD TO KNOW</div>
-        <div style="display:flex; flex-direction:column; gap:14px; margin-top:16px;">
-          <sc-for list="{{ notes }}" as="n" hint-placeholder-count="4">
-            <div>
-              <div style="font-size:10px; letter-spacing:1.6px; color:#9A917A;">{{ n.k }}</div>
-              <div style="font-size:13.5px; color:#3A4136; margin-top:3px; line-height:1.6;">{{ n.v }}</div>
-            </div>
-          </sc-for>
-        </div>
-        <a href="#book" style="display:block; text-align:center; margin-top:26px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:24px; padding:14px 22px; font-size:11px; letter-spacing:2.6px; font-weight:600;">CHECK AVAILABILITY</a>
       </div>
+    </div>
     </div>
   </div>
 
@@ -579,7 +592,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:30%; bottom:10px; width:min(10vw,115px); opacity:.06;">
     <div style="position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:18px; flex-wrap:wrap;">
       <div>
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">THE ROOM</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">THE ROOM</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:6px;">{{ galleryHeading }}</div>
       </div>
       <div style="font-size:12.5px; color:#77704F; max-width:380px; line-height:1.75;">{{ galleryNote }}</div>
@@ -589,7 +602,7 @@ a:hover { color:#B98F3E; }
         <div onClick="{{ g.open }}" style="position:relative; cursor:pointer; grid-row:{{ g.span }}; border-radius:16px; overflow:hidden; border:1px solid #DED4BD;">
           <image-slot id="{{ g.slot }}" sc-camel-src="{{ g.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,31,22,.62) 0%,rgba(11,31,22,.12) 38%,rgba(11,31,22,0) 62%);"></div>
-          <div style="pointer-events:none; position:absolute; left:16px; top:14px; font-size:10px; letter-spacing:1.6px; color:#F1E7CC;">{{ g.label }}</div>
+          <div style="pointer-events:none; position:absolute; left:16px; top:14px; font-size:var(--fs-md); letter-spacing:1.6px; color:#F1E7CC;">{{ g.label }}</div>
         </div>
       </sc-for>
     </div>
@@ -610,14 +623,14 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:14%; top:5%; width:min(9vw,100px); opacity:.05;">
     <div style="position:relative; max-width:1180px; margin:0 auto;">
       <div style="text-align:center;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">APPOINTMENT</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">APPOINTMENT</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.8vw,48px); color:#14532D; margin-top:6px;">RESERVE YOUR SESSION</div>
         <div style="font-size:13.5px; color:#5A5340; margin-top:10px;">{{ bookingLine }}</div>
       </div>
 
       <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
         <div style="max-width:820px; margin:34px auto 0; background:#FFFDF7; border:1px solid #DED4BD; border-radius:22px; padding:clamp(22px,3.4vw,40px);">
-          <div style="font-size:10.5px; letter-spacing:2.4px; color:#9A917A;">1 · CHOOSE A DAY</div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A;">1 · CHOOSE A DAY</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(84px,100%),1fr)); gap:10px; margin-top:14px;">
             <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
               <div onClick="{{ d.pick }}" style="cursor:pointer; text-align:center; padding:14px 6px; border-radius:14px; border:1px solid {{ d.border }}; background:{{ d.bg }}; transition:background .2s;">
@@ -628,14 +641,14 @@ a:hover { color:#B98F3E; }
             </sc-for>
           </div>
 
-          <div style="font-size:10.5px; letter-spacing:2.4px; color:#9A917A; margin-top:30px;">2 · CHOOSE A TIME</div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:30px;">2 · CHOOSE A TIME</div>
           <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;">
             <sc-for list="{{ times }}" as="t" hint-placeholder-count="8">
               <div onClick="{{ t.pick }}" style="cursor:{{ t.cursor }}; font-size:12.5px; padding:11px 20px; border-radius:22px; border:1px solid {{ t.border }}; background:{{ t.bg }}; color:{{ t.fg }}; text-decoration:{{ t.strike }};">{{ t.label }}</div>
             </sc-for>
           </div>
 
-          <div style="font-size:10.5px; letter-spacing:2.4px; color:#9A917A; margin-top:30px;">3 · YOUR DETAILS</div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:30px;">3 · YOUR DETAILS</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr)); gap:14px; margin-top:14px;">
             <input value="{{ name }}" onChange="{{ setName }}" placeholder="Full name" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid #DED4BD; border-radius:12px; padding:15px 16px; outline:none;">
             <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="Mobile number" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid #DED4BD; border-radius:12px; padding:15px 16px; outline:none;">
@@ -655,7 +668,7 @@ a:hover { color:#B98F3E; }
           <div style="font-family:'Italiana','Prata',serif; font-size:26px; color:#14532D; margin-top:6px;">REQUEST RECEIVED</div>
           <div style="font-size:14px; color:#5A5340; line-height:1.85; margin-top:12px;">{{ confirmLine }}</div>
           <div style="font-size:13px; color:#77704F; line-height:1.8; margin-top:14px;">We will confirm on WhatsApp within a few minutes.</div>
-          <div onClick="{{ reset }}" style="cursor:pointer; display:inline-block; margin-top:22px; font-size:10.5px; letter-spacing:2.4px; color:#14532D; border-bottom:1px solid #C9A860; padding-bottom:4px;">MAKE ANOTHER BOOKING</div>
+          <div onClick="{{ reset }}" style="cursor:pointer; display:inline-block; margin-top:22px; font-size:var(--fs-lg); letter-spacing:2.4px; color:#14532D; border-bottom:1px solid #C9A860; padding-bottom:4px;">MAKE ANOTHER BOOKING</div>
         </div>
       </sc-if>
     </div>
@@ -666,7 +679,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:4%; bottom:4%; width:min(11vw,125px); opacity:.06;">
     <div class="d-split" style="position:relative; display:grid; grid-template-columns:.8fr 1.2fr; gap:clamp(30px,5vw,64px); align-items:start;">
       <div style="position:sticky; top:96px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#B98F3E;">GUEST REVIEWS</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">GUEST REVIEWS</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(30px,4vw,52px); color:#14532D; margin-top:8px; line-height:1.05;">{{ ratingHeading }}</div>
         <div style="font-size:19px; color:#C9A860; letter-spacing:3px; margin-top:8px;">★★★★★</div>
         <div style="font-size:12.5px; color:#77704F; margin-top:8px;">{{ ratingSub }}</div>
@@ -687,7 +700,7 @@ a:hover { color:#B98F3E; }
             <div style="font-size:14px; color:#3A4136; line-height:1.85; margin-top:12px; text-wrap:pretty;">{{ rv.text }}</div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:auto; padding-top:18px;">
               <span style="font-family:'Prata',serif; font-size:13.5px; color:#14532D;">{{ rv.name }}</span>
-              <span style="font-size:10px; letter-spacing:1.4px; color:#9A917A;">{{ rv.when }}</span>
+              <span style="font-size:var(--fs-md); letter-spacing:1.4px; color:#9A917A;">{{ rv.when }}</span>
             </div>
           </div>
         </sc-for>
@@ -719,7 +732,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:6%; width:min(11vw,125px); opacity:.06;">
     <div style="position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;">
       <div style="font-family:'Italiana','Prata',serif; font-size:clamp(26px,3.4vw,40px); color:#14532D;">PAIRS WELL WITH</div>
-      <a href="/services" style="font-size:10.5px; letter-spacing:2.4px; color:#14532D; border-bottom:1px solid #C9A860; padding-bottom:4px;">VIEW ALL SERVICES</a>
+      <a href="/services" style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#14532D; border-bottom:1px solid #C9A860; padding-bottom:4px;">VIEW ALL SERVICES</a>
     </div>
     <div style="position:relative; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:18px; margin-top:28px;">
       <sc-for list="{{ related }}" as="r" hint-placeholder-count="3">
@@ -731,7 +744,7 @@ a:hover { color:#B98F3E; }
             <div style="font-family:'Prata',serif; font-size:15.5px; color:#14532D;">{{ r.name }}</div>
             <div style="font-size:12.5px; color:#77704F; line-height:1.65; margin-top:7px;">{{ r.desc }}</div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:14px;">
-              <span style="font-size:10px; letter-spacing:1.6px; color:#9A917A;">{{ r.duration }}</span>
+              <span style="font-size:var(--fs-md); letter-spacing:1.6px; color:#9A917A;">{{ r.duration }}</span>
               <span style="font-size:14px; color:#B98F3E;">{{ r.price }}</span>
             </div>
           </div>
@@ -752,18 +765,18 @@ a:hover { color:#B98F3E; }
         <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Beauty centre and spa for women. Al Rawda 2, Ajman, UAE.</div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">CONTACT</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">CONTACT</div>
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
           <a href="https://www.instagram.com/ecosophy.ae/" style="color:#D7DECF;">@ecosophy.ae</a>
           <a href="{{ waHref }}" style="color:#D7DECF;">{{ whatsapp }}</a>
         </div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">HOURS</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 11:00 AM – 12:00 Midnight</div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">MORE</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">MORE</div>
         <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
           <a href="/services" style="color:#D7DECF;">All services</a>
           <a href="/for-her" style="color:#D7DECF;">For Her</a>

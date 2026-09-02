@@ -32,7 +32,7 @@ a { color:#E4C778; text-decoration:none; }
 img { display:block; }
 @keyframes bkRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
 .bk-rise { animation:bkRise 1s cubic-bezier(.2,.8,.3,1) both; }
-.bk-eyebrow { font-size:10.5px; letter-spacing:3.4px; color:#C9A860; }
+.bk-eyebrow { font-size:var(--fs-lg); letter-spacing:3.4px; color:#C9A860; }
 .bk-label { font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0; display:block; margin-bottom:7px; }
 .bk-field { width:100%; box-sizing:border-box; background:rgba(244,239,227,.06); border:1px solid rgba(201,168,96,.32); border-radius:12px; color:#F1E7CC; padding:13px 14px; font-family:inherit; font-size:13.5px; appearance:none; }
 .bk-field:focus { outline:none; border-color:rgba(201,168,96,.75); }
@@ -42,9 +42,16 @@ img { display:block; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
-  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
+}
+/* Phones: footer links are stacked text at ~14-26px tall, well under a
+   comfortable thumb target, so give each one a 40px row of its own. */
+@media (max-width: 760px) {
+  [data-screen-label="Footer"] a, .r-foot a {
+    display:inline-flex; align-items:center; min-height:40px;
+  }
 }
 </style>
 <script>
@@ -416,7 +423,7 @@ img { display:block; }
 
   <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
     <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
-      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:10.5px; letter-spacing:1.3px; min-width:0;">
+      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:var(--fs-lg); letter-spacing:1.3px; min-width:0;">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
           <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
@@ -441,7 +448,7 @@ img { display:block; }
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:10.5px; letter-spacing:1.6px;">
+        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
           <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
           <span style="padding:6px 11px; color:#E4C778;">AR</span>
         </div>
@@ -460,7 +467,7 @@ img { display:block; }
   </div>
 
   <!-- Hero · the gallery drift and push-in -->
-  <div data-gsection style="position:relative; height:88vh; min-height:520px; overflow:hidden;">
+  <div data-gsection style="position:relative; height:132vh; min-height:640px; overflow:hidden;">
     <!-- Louvres that swing shut as the hero scrolls away, so the section below
          rises through a closed shutter rather than the hero just sliding off. -->
     <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
@@ -472,53 +479,59 @@ img { display:block; }
       <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
       <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">BOOK YOUR VISIT</h1>
       <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:44ch; margin-top:16px;">Tell us the ritual and when suits you. The request opens in WhatsApp and our team confirms the slot.</div>
-      <div class="bk-rise" style="animation-delay:.55s; font-size:10px; letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
+      <div class="bk-rise" style="animation-delay:.55s; font-size:var(--fs-md); letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>
   </div>
 
-  <div style="max-width:780px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
-    <div style="border:1px solid rgba(201,168,96,.3); border-radius:22px; padding:clamp(24px,4vw,42px); background:rgba(11,31,22,.7);">
-      <div class="bk-eyebrow">REQUEST A BOOKING</div>
-      <div style="font-family:'Italiana','Prata',serif; font-size:clamp(24px,3.4vw,40px); color:#F4EFE3; margin-top:8px;">{{ headline }}</div>
-      <div style="margin-top:26px;"><span class="bk-label">RITUAL</span>
-        <select value="{{ ritual }}" onChange="{{ setRitual }}" class="bk-field">
-          <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
-        </select>
+  <div data-gsection style="position:relative; margin-top:-34vh; z-index:2;">
+    <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
+         arc once it owns the screen. Same hand-off as the gallery. -->
+    <div data-garch="66,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="max-width:780px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
+      <div style="border:1px solid rgba(201,168,96,.3); border-radius:22px; padding:clamp(24px,4vw,42px); background:rgba(11,31,22,.7);">
+        <div class="bk-eyebrow">REQUEST A BOOKING</div>
+        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(24px,3.4vw,40px); color:#F4EFE3; margin-top:8px;">{{ headline }}</div>
+        <div style="margin-top:26px;"><span class="bk-label">RITUAL</span>
+          <select value="{{ ritual }}" onChange="{{ setRitual }}" class="bk-field">
+            <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
+          </select>
+        </div>
+        <div class="bk-grid" style="margin-top:18px;">
+          <div><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
+            <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}">{{ d.v }}</option></sc-for>
+          </select></div>
+          <div><span class="bk-label">TIME</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
+            <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}">{{ t.v }}</option></sc-for>
+          </select></div>
+        </div>
+        <div class="bk-grid" style="margin-top:18px;">
+          <div><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" class="bk-field"></div>
+          <div><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="05x xxx xxxx" class="bk-field"></div>
+        </div>
+        <div style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">Please choose a ritual and add your name.</div>
+        <div onClick="{{ submit }}" style="cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</div>
+        <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is charged here.</div>
       </div>
-      <div class="bk-grid" style="margin-top:18px;">
-        <div><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
-          <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}">{{ d.v }}</option></sc-for>
-        </select></div>
-        <div><span class="bk-label">TIME</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
-          <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}">{{ t.v }}</option></sc-for>
-        </select></div>
+      <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-top:34px; font-size:11.5px; color:#9FB0A0; letter-spacing:1.4px;">
+        <div>DAILY · 10:00 – 22:00</div><div>AJMAN, UAE</div>
+        <a href="{{ waHref }}" style="color:#E4C778;">OR MESSAGE US DIRECTLY</a>
       </div>
-      <div class="bk-grid" style="margin-top:18px;">
-        <div><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" class="bk-field"></div>
-        <div><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="05x xxx xxxx" class="bk-field"></div>
-      </div>
-      <div style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">Please choose a ritual and add your name.</div>
-      <div onClick="{{ submit }}" style="cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</div>
-      <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is charged here.</div>
     </div>
-    <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-top:34px; font-size:11.5px; color:#9FB0A0; letter-spacing:1.4px;">
-      <div>DAILY · 10:00 – 22:00</div><div>AJMAN, UAE</div>
-      <a href="{{ waHref }}" style="color:#E4C778;">OR MESSAGE US DIRECTLY</a>
     </div>
   </div>
 
-  <div style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
+  <div class="r-foot" style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
     <div style="display:flex; align-items:center; gap:10px;">
       <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
       <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
       <span style="font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
     </div>
-    <div style="display:flex; gap:18px; font-size:10.5px; letter-spacing:2.4px;">
+    <div style="display:flex; gap:18px; font-size:var(--fs-lg); letter-spacing:2.4px;">
       <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
       <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>
       <a href="https://www.instagram.com/ecosophy.ae/" style="color:#C9A860;">INSTAGRAM</a>
     </div>
-    <div style="font-size:10.5px; letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
+    <div style="font-size:var(--fs-lg); letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
   </div>
 </div>
 

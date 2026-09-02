@@ -34,9 +34,16 @@ a:hover { color:#B98F3E; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
-  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
+}
+/* Phones: footer links are stacked text at ~14-26px tall, well under a
+   comfortable thumb target, so give each one a 40px row of its own. */
+@media (max-width: 760px) {
+  [data-screen-label="Footer"] a, .r-foot a {
+    display:inline-flex; align-items:center; min-height:40px;
+  }
 }
 </style>
 </helmet>

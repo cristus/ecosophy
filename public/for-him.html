@@ -90,9 +90,25 @@ a:hover { color:#B98F3E; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
-  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
+}
+/* Phones: footer links are stacked text at ~14-26px tall, well under a
+   comfortable thumb target, so give each one a 40px row of its own. */
+@media (max-width: 760px) {
+  [data-screen-label="Footer"] a, .r-foot a {
+    display:inline-flex; align-items:center; min-height:40px;
+  }
+}
+/* Phones: these secondary links are wide but only ~16-24px tall. Extend the
+   touch target with a pseudo-element so the visual design is untouched. */
+@media (max-width: 760px) {
+  .r-tap { position:relative; }
+  .r-tap::after {
+    content:''; position:absolute; left:0; right:0; top:50%;
+    transform:translateY(-50%); height:44px;
+  }
 }
 </style>
 <script>
@@ -356,7 +372,7 @@ a:hover { color:#B98F3E; }
 
   <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
     <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
-      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:10.5px; letter-spacing:1.3px; min-width:0;">
+      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:var(--fs-lg); letter-spacing:1.3px; min-width:0;">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
           <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
@@ -381,8 +397,8 @@ a:hover { color:#B98F3E; }
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:12px; white-space:nowrap;">
         <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.4); border-radius:16px; overflow:hidden;">
-          <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
-          <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
+          <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
+          <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
         </div>
         <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:20px; padding:{{ waPad }}; font-size:{{ waSize }}; letter-spacing:2px; font-weight:600;">{{ waLabel }}</a>
       </div>
@@ -395,8 +411,8 @@ a:hover { color:#B98F3E; }
       <a href="/gent-book" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
       <div style="display:flex; align-items:center; gap:0; margin-top:10px; border:1px solid rgba(201,168,96,.4); border-radius:16px; overflow:hidden; align-self:flex-start;">
-        <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
-        <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:10px; letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
+        <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
+        <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
       </div>
     </div>
   </div>
@@ -458,7 +474,7 @@ a:hover { color:#B98F3E; }
         </div>
         <div style="position:absolute; left:-18px; bottom:-18px; background:#14532D; color:#F4EFE3; border-radius:20px; padding:18px 22px; box-shadow:0 20px 40px -18px rgba(20,40,25,.4); max-width:200px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#E8CE8C;">Ajman</div>
-          <div style="font-size:10px; letter-spacing:2px; color:#C4CFC1; margin-top:4px;">UAE · SINCE DAY ONE</div>
+          <div style="font-size:var(--fs-md); letter-spacing:2px; color:#C4CFC1; margin-top:4px;">UAE · SINCE DAY ONE</div>
         </div>
       </div>
       <div>
@@ -472,14 +488,14 @@ a:hover { color:#B98F3E; }
         <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:16px;">From master barbers and beard specialists to advanced facials, Dermapen 4 microneedling, sports recovery and body contouring, Moroccan bath and Balinese massage, Ecosophy brings a full gentlemen’s grooming and wellness menu together under one roof.</div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:28px;">
           <sc-for list="{{ aboutTags }}" as="tag" hint-placeholder-count="7">
-            <span style="font-size:10.5px; letter-spacing:1.5px; color:#14532D; border:1px solid #D8CCA6; border-radius:20px; padding:8px 16px;">{{ tag }}</span>
+            <span style="font-size:var(--fs-lg); letter-spacing:1.5px; color:#14532D; border:1px solid #D8CCA6; border-radius:20px; padding:8px 16px;">{{ tag }}</span>
           </sc-for>
         </div>
       </div>
     </div>
     <div style="max-width:1180px; margin:clamp(56px,7vw,88px) auto 0; display:flex; flex-wrap:wrap; border-top:1px solid #E3D9C2; border-bottom:1px solid #E3D9C2;">
       <sc-for list="{{ aboutCategories }}" as="cat" hint-placeholder-count="6">
-        <div style="flex:1; min-width:130px; text-align:center; padding:20px 10px; font-size:10.5px; letter-spacing:2px; color:#14532D; border-left:1px solid #E3D9C2;">{{ cat }}</div>
+        <div style="flex:1; min-width:130px; text-align:center; padding:20px 10px; font-size:var(--fs-lg); letter-spacing:2px; color:#14532D; border-left:1px solid #E3D9C2;">{{ cat }}</div>
       </sc-for>
     </div>
   </div>
@@ -492,7 +508,7 @@ a:hover { color:#B98F3E; }
     <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(9,22,15,.88),rgba(9,22,15,.7) 45%,rgba(9,22,15,.92));"></div>
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; bottom:-14%; width:min(26vw,280px); opacity:.09;">
     <div data-plx="0.04" style="position:relative; max-width:900px; margin:0 auto; text-align:center;">
-      <div style="font-size:10px; letter-spacing:4px; color:#C9A860;">OUR PHILOSOPHY</div>
+      <div style="font-size:var(--fs-md); letter-spacing:4px; color:#C9A860;">OUR PHILOSOPHY</div>
       <div style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(24px,3.4vw,44px); line-height:1.34; color:#F4EADA; margin-top:20px; text-wrap:pretty;">Nature restores what the city takes. Balinese hands, Moroccan steam and one quiet hour — the oldest medicine we know, kept exactly as it was taught.</div>
       <div style="display:flex; align-items:center; justify-content:center; gap:11px; margin-top:26px;">
         <div style="width:clamp(30px,7vw,72px); height:1px; background:rgba(201,168,96,.55);"></div>
@@ -516,7 +532,7 @@ a:hover { color:#B98F3E; }
     </div>
     <div style="margin-top:clamp(28px,3.4vw,44px);">
       <div style="position:sticky; top:67px; z-index:30; background:rgba(246,241,230,.94); backdrop-filter:blur(8px); padding:13px 0 11px; border-bottom:1px solid #E3D9C2;">
-        <div style="display:flex; align-items:center; gap:9px; font-size:10.5px; letter-spacing:1.5px; min-height:20px;">
+        <div style="display:flex; align-items:center; gap:9px; font-size:var(--fs-lg); letter-spacing:1.5px; min-height:20px;">
           <span onClick="{{ goHome }}" style="cursor:pointer; color:{{ crumbHomeColor }};">ALL SERVICES</span>
           <sc-if value="{{ crumbCat }}" hint-placeholder-val="{{ false }}">
             <span style="color:#C9A860;">/</span>
@@ -534,7 +550,7 @@ a:hover { color:#B98F3E; }
         <sc-if value="{{ showPills }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
             <sc-for list="{{ dCategories }}" as="cat" hint-placeholder-count="3">
-              <div onClick="{{ cat.open }}" style="cursor:pointer; font-size:10.5px; letter-spacing:1.5px; padding:8px 16px; border-radius:20px; background:{{ cat.pillBg }}; color:{{ cat.pillColor }}; border:1px solid {{ cat.pillBorder }};">{{ cat.name }}</div>
+              <div onClick="{{ cat.open }}" style="cursor:pointer; font-size:var(--fs-lg); letter-spacing:1.5px; padding:8px 16px; border-radius:20px; background:{{ cat.pillBg }}; color:{{ cat.pillColor }}; border:1px solid {{ cat.pillBorder }};">{{ cat.name }}</div>
             </sc-for>
           </div>
         </sc-if>
@@ -551,7 +567,7 @@ a:hover { color:#B98F3E; }
               <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:18px 20px;">
                 <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#F1E7CC; line-height:1.15;">{{ cat.name }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:7px;">
-                  <span style="font-size:10.5px; letter-spacing:1.5px; color:rgba(241,231,204,.72);">{{ cat.countLabel }}</span>
+                  <span style="font-size:var(--fs-lg); letter-spacing:1.5px; color:rgba(241,231,204,.72);">{{ cat.countLabel }}</span>
                   <span style="font-size:12px; color:#C9A860;">{{ cat.fromLabel }}</span>
                 </div>
               </div>
@@ -569,7 +585,7 @@ a:hover { color:#B98F3E; }
                 <div style="font-family:'Prata',serif; font-size:15px; color:#14532D; line-height:1.35;">{{ item.name }}</div>
                 <div style="font-size:12.5px; color:#77704F; line-height:1.6; margin-top:6px;">{{ item.desc }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:auto; padding-top:12px;">
-                  <span style="font-size:10px; letter-spacing:1.5px; color:#9A917A;">{{ item.durationLabel }}</span>
+                  <span style="font-size:var(--fs-md); letter-spacing:1.5px; color:#9A917A;">{{ item.durationLabel }}</span>
                   <span style="font-size:13px; color:#B98F3E; white-space:nowrap;">{{ item.price }}</span>
                 </div>
               </div>
@@ -589,7 +605,7 @@ a:hover { color:#B98F3E; }
               <span style="font-size:11px; letter-spacing:2px; color:#77704F;">{{ detail.durationLabel }}</span>
             </div>
             <div style="font-size:14px; color:#5A5340; line-height:1.85; margin-top:12px;">{{ detail.desc }}</div>
-            <div style="font-size:10.5px; letter-spacing:2px; color:#14532D; margin-top:24px;">WHAT'S INCLUDED</div>
+            <div style="font-size:var(--fs-lg); letter-spacing:2px; color:#14532D; margin-top:24px;">WHAT'S INCLUDED</div>
             <div style="display:flex; flex-direction:column; gap:9px; margin-top:12px;">
               <sc-for list="{{ detail.includes }}" as="inc" hint-placeholder-count="3">
                 <div style="display:flex; gap:10px; font-size:13.5px; color:#5A5340;"><span style="color:#B98F3E;">·</span>{{ inc }}</div>
@@ -601,7 +617,7 @@ a:hover { color:#B98F3E; }
 
 
             <div style="height:1px; background:#E3D9C2; margin:28px 0 22px;"></div>
-            <div style="font-size:10px; letter-spacing:2px; color:#9A917A;">MORE IN {{ crumbCat }}</div>
+            <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">MORE IN {{ crumbCat }}</div>
             <div style="display:flex; flex-direction:column; gap:2px; margin-top:14px;">
               <sc-for list="{{ detailSiblings }}" as="sib" hint-placeholder-count="5">
                 <div onClick="{{ sib.open }}" style="cursor:pointer; display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:12px 12px; border-top:1px solid #E3D9C2; border-radius:9px;" style-hover="background:rgba(201,168,96,.1);">
@@ -616,10 +632,10 @@ a:hover { color:#B98F3E; }
 
       <sc-if value="{{ atBooking }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:24px; animation:ddIn .32s ease both;">
-          <div onClick="{{ ddClose }}" style="cursor:pointer; display:inline-block; font-size:10.5px; letter-spacing:2px; color:#9A917A;">← BACK TO TREATMENT DETAILS</div>
+          <div onClick="{{ ddClose }}" style="cursor:pointer; display:inline-block; font-size:var(--fs-lg); letter-spacing:2px; color:#9A917A;">← BACK TO TREATMENT DETAILS</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(28px,4vw,48px); align-items:start; margin-top:18px;">
             <div>
-              <div style="font-size:10px; letter-spacing:2px; color:#9A917A;">CHOOSE A DAY</div>
+              <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">CHOOSE A DAY</div>
               <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-top:12px;">
                 <sc-for list="{{ ddDays }}" as="d" hint-placeholder-count="7">
                   <div onClick="{{ d.pick }}" style="cursor:pointer; flex:none; width:60px; text-align:center; padding:11px 0; border-radius:14px; background:{{ d.bg }}; color:{{ d.color }}; border:1px solid {{ d.border }};">
@@ -630,27 +646,27 @@ a:hover { color:#B98F3E; }
                 </sc-for>
               </div>
 
-              <div style="font-size:10px; letter-spacing:2px; color:#9A917A; margin-top:24px;">CHOOSE A TIME</div>
+              <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A; margin-top:24px;">CHOOSE A TIME</div>
               <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
                 <sc-for list="{{ ddTimes }}" as="t" hint-placeholder-count="8">
                   <div onClick="{{ t.pick }}" style="cursor:{{ t.cursor }}; font-size:12.5px; padding:10px 17px; border-radius:20px; background:{{ t.bg }}; color:{{ t.color }}; border:1px solid {{ t.border }}; text-decoration:{{ t.deco }};">{{ t.label }}</div>
                 </sc-for>
               </div>
 
-              <div style="font-size:10px; letter-spacing:2px; color:#9A917A; margin-top:26px;">YOUR DETAILS</div>
+              <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A; margin-top:26px;">YOUR DETAILS</div>
               <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;">
                 <input value="{{ ddName }}" onChange="{{ setDdName }}" placeholder="Your name" style="flex:1; min-width:170px; background:#FFFDF7; border:1px solid #E3D9C2; border-radius:24px; padding:14px 20px; font-family:'Manrope',sans-serif; font-size:13px; color:#2A332C;">
                 <input value="{{ ddPhone }}" onChange="{{ setDdPhone }}" placeholder="Phone number" style="flex:1; min-width:170px; background:#FFFDF7; border:1px solid #E3D9C2; border-radius:24px; padding:14px 20px; font-family:'Manrope',sans-serif; font-size:13px; color:#2A332C;">
               </div>
 
               <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:28px;">
-                <span style="font-size:10px; letter-spacing:2px; color:#9A917A;">ADD OTHER TREATMENTS</span>
+                <span style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">ADD OTHER TREATMENTS</span>
                 <span style="font-size:11px; color:#B98F3E;">{{ ddExtraCount }}</span>
               </div>
               <div style="max-height:230px; overflow-y:auto; padding-right:12px; scrollbar-gutter:stable; margin-top:12px; border-top:1px solid #E3D9C2;">
                 <sc-for list="{{ ddExtras }}" as="x" hint-placeholder-count="6">
                   <div onClick="{{ x.toggle }}" style="cursor:pointer; display:flex; align-items:center; gap:12px; padding:10px 8px; border-radius:9px; background:{{ x.bg }};">
-                    <span style="flex:none; width:17px; height:17px; border-radius:5px; border:1px solid {{ x.boxBorder }}; background:{{ x.boxBg }}; color:#F1E7CC; font-size:10px; line-height:17px; text-align:center;">{{ x.mark }}</span>
+                    <span style="flex:none; width:17px; height:17px; border-radius:5px; border:1px solid {{ x.boxBorder }}; background:{{ x.boxBg }}; color:#F1E7CC; font-size:var(--fs-md); line-height:17px; text-align:center;">{{ x.mark }}</span>
                     <span style="flex:1; min-width:0; font-size:12.5px; color:#3A4136;">{{ x.name }}</span>
                     <span style="font-size:var(--fs-sm); letter-spacing:1px; color:#9A917A;">{{ x.catLabel }}</span>
                     <span style="font-size:12px; color:#B98F3E; white-space:nowrap; width:62px; text-align:right;">{{ x.price }}</span>
@@ -660,7 +676,7 @@ a:hover { color:#B98F3E; }
             </div>
 
             <div style="position:sticky; top:150px; background:#FFFDF7; border:1px solid #E3D9C2; border-radius:20px; padding:clamp(22px,2.5vw,30px);">
-              <div style="font-size:10px; letter-spacing:2px; color:#9A917A;">YOUR BOOKING</div>
+              <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">YOUR BOOKING</div>
               <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#14532D; line-height:1.2; margin-top:10px;">{{ crumbSvc }}</div>
               <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline; margin-top:6px;">
                 <span style="font-size:11px; letter-spacing:1.5px; color:#9A917A;">{{ ddBaseDuration }}</span>
@@ -678,11 +694,11 @@ a:hover { color:#B98F3E; }
                 </div>
               </sc-if>
               <div style="border-top:1px solid #EDE6D5; margin-top:16px; padding-top:14px; display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
-                <span style="font-size:10px; letter-spacing:2px; color:#9A917A;">WHEN</span>
+                <span style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">WHEN</span>
                 <span style="font-size:12.5px; color:#3A4136; text-align:right;">{{ ddWhen }}</span>
               </div>
               <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline; margin-top:10px;">
-                <span style="font-size:10px; letter-spacing:2px; color:#9A917A;">GUEST</span>
+                <span style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">GUEST</span>
                 <span style="font-size:12.5px; color:#3A4136; text-align:right;">{{ ddGuest }}</span>
               </div>
               <div style="border-top:1px solid #E3D9C2; margin-top:18px; padding-top:16px; display:flex; justify-content:space-between; align-items:baseline;">
@@ -704,7 +720,7 @@ a:hover { color:#B98F3E; }
           <div style="font-family:'Italiana','Prata',serif; font-size:24px; color:#F1E7CC; margin-top:8px;">{{ crumbSvc }}</div>
           <div style="font-size:13.5px; color:#D7DECF; line-height:1.9; margin-top:10px;">{{ ddWhen }} · {{ ddTotal }} · {{ ddGuest }}</div>
           <div style="font-size:12.5px; color:#9FB0A0; margin-top:10px; max-width:520px;">Your request opened in WhatsApp — send the message and our team will confirm your appointment.</div>
-          <div onClick="{{ ddReset }}" style="cursor:pointer; display:inline-block; font-size:10.5px; letter-spacing:2.5px; color:#C9A860; margin-top:20px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">BACK TO THE MENU</div>
+          <div onClick="{{ ddReset }}" style="cursor:pointer; display:inline-block; font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860; margin-top:20px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">BACK TO THE MENU</div>
         </div>
       </sc-if>
     </div>
@@ -731,7 +747,7 @@ a:hover { color:#B98F3E; }
     </div>
     <div style="position:relative; max-width:1080px; margin:0 auto; z-index:2;">
       <div style="text-align:center;">
-        <div style="font-size:10.5px; letter-spacing:4px; color:#B98F3E;">THIS SEASON · FOR HIM</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:4px; color:#B98F3E;">THIS SEASON · FOR HIM</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(32px,4.4vw,58px); letter-spacing:.04em; color:#14532D; margin-top:16px;">DRENCH YOUR SKIN</div>
         <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px;">
           <span style="width:56px; height:1px; background:rgba(20,83,45,.3);"></span>
@@ -797,8 +813,8 @@ a:hover { color:#B98F3E; }
       </div>
 
       <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; border-top:1px solid rgba(201,168,96,.22); padding-top:16px; margin-top:10px;">
-        <span style="font-size:10.5px; letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
-        <a href="https://www.instagram.com/ecosophy_gentspa/" style="font-size:10.5px; letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
+        <span style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
+        <a class="r-tap" href="https://www.instagram.com/ecosophy_gentspa/" style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
       </div>
     </div>
 
@@ -840,7 +856,7 @@ a:hover { color:#B98F3E; }
         </div>
         <div style="position:absolute; top:28px; left:14px; right:14px; display:flex; align-items:center; gap:10px;">
           <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px;">
-          <span style="flex:1; font-size:10px; letter-spacing:1.6px; color:#F1E7CC;">{{ gCurrent.type }}</span>
+          <span style="flex:1; font-size:var(--fs-md); letter-spacing:1.6px; color:#F1E7CC;">{{ gCurrent.type }}</span>
           <span onClick="{{ gClose }}" style="cursor:pointer; font-size:19px; color:#F1E7CC; line-height:1;">×</span>
         </div>
         <div onClick="{{ gPrev }}" style="cursor:pointer; position:absolute; left:0; top:52px; bottom:120px; width:34%;"></div>
@@ -848,7 +864,7 @@ a:hover { color:#B98F3E; }
         <div class="gv-storytext" key="{{ gCurrent.title }}" style="position:absolute; left:18px; right:18px; bottom:20px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#F4EFE3; line-height:1.2;">{{ gCurrent.title }}</div>
           <div style="font-size:12px; color:#C4CFC1; line-height:1.65; margin-top:7px;">{{ gCurrent.caption }}</div>
-          <a href="#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:10px; letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
+          <a href="#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
         </div>
       </div>
       <span onClick="{{ gNext }}" style="cursor:pointer; flex:none; font-size:26px; color:#C9A860;">›</span>
@@ -881,20 +897,20 @@ a:hover { color:#B98F3E; }
         <div style="flex:1; min-width:220px; max-width:340px; display:flex; flex-direction:column; gap:6px;">
           <sc-for list="{{ ratingBars }}" as="b" hint-placeholder-count="5">
             <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:10.5px; color:#9A917A; width:8px;">{{ b.star }}</span>
+              <span style="font-size:var(--fs-lg); color:#9A917A; width:8px;">{{ b.star }}</span>
               <span style="flex:1; height:5px; border-radius:3px; background:rgba(20,83,45,.12); overflow:hidden;">
                 <span style="display:block; height:100%; width:{{ b.w }}; background:#C9A860;"></span>
               </span>
-              <span style="font-size:10px; color:#B0A88E; width:26px; text-align:right;">{{ b.count }}</span>
+              <span style="font-size:var(--fs-md); color:#B0A88E; width:26px; text-align:right;">{{ b.count }}</span>
             </div>
           </sc-for>
         </div>
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="width:20px; height:20px; border-radius:50%; border:1px solid #D8CCA6; color:#14532D; font-size:11px; font-weight:600; line-height:19px; text-align:center;">G</span>
-            <span style="font-size:10.5px; letter-spacing:2px; color:#14532D;">VERIFIED ON GOOGLE</span>
+            <span style="font-size:var(--fs-lg); letter-spacing:2px; color:#14532D;">VERIFIED ON GOOGLE</span>
           </div>
-          <a href="https://www.google.com/maps/search/Ecosophy+Beauty+Center+Ajman" style="font-size:10.5px; letter-spacing:2px; color:#B98F3E; border-bottom:1px solid rgba(185,143,62,.5); padding-bottom:3px; align-self:flex-start;">WRITE A REVIEW</a>
+          <a class="r-tap" href="https://www.google.com/maps/search/Ecosophy+Beauty+Center+Ajman" style="font-size:var(--fs-lg); letter-spacing:2px; color:#B98F3E; border-bottom:1px solid rgba(185,143,62,.5); padding-bottom:3px; align-self:flex-start;">WRITE A REVIEW</a>
         </div>
       </div>
 
@@ -919,7 +935,7 @@ a:hover { color:#B98F3E; }
             </div>
           </div>
           <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; border-top:1px solid rgba(20,83,45,.16); margin-top:26px; padding-top:20px;">
-            <a href="https://www.google.com/maps/search/Ecosophy+Beauty+Center+Ajman" style="font-size:10px; letter-spacing:2px; color:#14532D; border-bottom:1px solid rgba(20,83,45,.3); padding-bottom:3px;">ALL 128 REVIEWS ON GOOGLE</a>
+            <a class="r-tap" href="https://www.google.com/maps/search/Ecosophy+Beauty+Center+Ajman" style="font-size:var(--fs-md); letter-spacing:2px; color:#14532D; border-bottom:1px solid rgba(20,83,45,.3); padding-bottom:3px;">ALL 128 REVIEWS ON GOOGLE</a>
             <div style="display:flex; gap:8px;">
               <sc-for list="{{ tDots }}" as="d" hint-placeholder-count="4">
                 <div onClick="{{ d.pick }}" class="{{ d.cls }}"></div>
@@ -941,7 +957,7 @@ a:hover { color:#B98F3E; }
           <div style="font-family:'Great Vibes',cursive; font-size:clamp(24px,3vw,34px); color:#C9A860; line-height:1;">reserve your calm</div>
           <div style="font-family:'Italiana','Prata',serif; font-size:clamp(26px,3.4vw,44px); letter-spacing:.06em; color:#F1E7CC; margin-top:6px;">BOOK YOUR VISIT</div>
         </div>
-        <a href="{{ waHref }}" style="font-size:11px; letter-spacing:2.5px; color:#C9A860; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:4px;">OR MESSAGE US ON WHATSAPP</a>
+        <a class="r-tap" href="{{ waHref }}" style="font-size:11px; letter-spacing:2.5px; color:#C9A860; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:4px;">OR MESSAGE US ON WHATSAPP</a>
       </div>
 
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); gap:clamp(32px,4vw,64px); margin-top:clamp(40px,5vw,64px); align-items:start;">
@@ -963,7 +979,7 @@ a:hover { color:#B98F3E; }
           <div style="display:flex; flex-direction:column; gap:22px;">
 
             <div>
-              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">01</span><span style="font-size:10px; letter-spacing:3px; color:#9FB0A0;">CHOOSE YOUR RITUAL</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">01</span><span style="font-size:var(--fs-md); letter-spacing:3px; color:#9FB0A0;">CHOOSE YOUR RITUAL</span></div>
               <div style="position:relative; margin-top:12px;">
                 <select value="{{ ritual }}" onChange="{{ setRitual }}" style="appearance:none; width:100%; box-sizing:border-box; background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:15px 46px 15px 20px; font-family:'Prata',serif; font-size:14px; color:#F1E7CC; outline:none; cursor:pointer;">
                   <option value="" style="color:#20180A;">Select a ritual…</option>
@@ -976,7 +992,7 @@ a:hover { color:#B98F3E; }
             </div>
 
             <div>
-              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">02</span><span style="font-size:10px; letter-spacing:3px; color:#9FB0A0;">PICK A DATE</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">02</span><span style="font-size:var(--fs-md); letter-spacing:3px; color:#9FB0A0;">PICK A DATE</span></div>
               <div style="margin-top:12px; border:1px solid rgba(244,239,227,.2); border-radius:16px; padding:16px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
                   <div onClick="{{ prevMonth }}" style="cursor:{{ prevCursor }}; color:{{ prevColor }}; font-size:14px; padding:2px 10px; user-select:none;">‹</div>
@@ -995,7 +1011,7 @@ a:hover { color:#B98F3E; }
             </div>
 
             <div>
-              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">03</span><span style="font-size:10px; letter-spacing:3px; color:#9FB0A0;">PICK A TIME</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">03</span><span style="font-size:var(--fs-md); letter-spacing:3px; color:#9FB0A0;">PICK A TIME</span></div>
               <div style="position:relative; margin-top:12px;">
                 <select value="{{ time }}" onChange="{{ setTime }}" style="appearance:none; width:100%; box-sizing:border-box; background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:15px 46px 15px 20px; font-family:'Prata',serif; font-size:14px; color:#F1E7CC; outline:none; cursor:pointer;">
                   <option value="" style="color:#20180A;">{{ timePlaceholder }}</option>
@@ -1008,7 +1024,7 @@ a:hover { color:#B98F3E; }
             </div>
 
             <div>
-              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">04</span><span style="font-size:10px; letter-spacing:3px; color:#9FB0A0;">YOUR DETAILS</span></div>
+              <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">04</span><span style="font-size:var(--fs-md); letter-spacing:3px; color:#9FB0A0;">YOUR DETAILS</span></div>
               <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
                 <input value="{{ name }}" onChange="{{ setName }}" placeholder="Your name" style="background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:14px 20px; font-size:13px; color:#F1E7CC; outline:none;">
                 <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="Phone number" style="background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:14px 20px; font-size:13px; color:#F1E7CC; outline:none;">
@@ -1025,8 +1041,8 @@ a:hover { color:#B98F3E; }
               <div style="font-family:'Great Vibes',cursive; font-size:34px; color:#E4C778; margin-top:6px;">thank you</div>
               <div style="font-size:13px; color:#D7DECF; line-height:1.8; margin-top:10px;">We have your request, <span style="color:#E4C778;">{{ name }}</span>.<br>{{ summaryRitual }} · {{ summaryWhen }}</div>
               <div style="font-size:12px; color:#9FB0A0; margin-top:10px;">Your request opened in WhatsApp — send the message and our team will confirm.</div>
-              <a href="{{ waHref }}" style="display:inline-block; margin-right:6px; font-size:10.5px; letter-spacing:2.5px; color:#E4C778; margin-top:12px; border:1px solid rgba(201,168,96,.5); border-radius:22px; padding:10px 22px;">OPEN WHATSAPP AGAIN</a>
-              <div onClick="{{ resetBooking }}" style="cursor:pointer; display:inline-block; font-size:10.5px; letter-spacing:2.5px; color:#C9A860; margin-top:16px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">MAKE ANOTHER REQUEST</div>
+              <a href="{{ waHref }}" style="display:inline-block; margin-right:6px; font-size:var(--fs-lg); letter-spacing:2.5px; color:#E4C778; margin-top:12px; border:1px solid rgba(201,168,96,.5); border-radius:22px; padding:10px 22px;">OPEN WHATSAPP AGAIN</a>
+              <div onClick="{{ resetBooking }}" style="cursor:pointer; display:inline-block; font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860; margin-top:16px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">MAKE ANOTHER REQUEST</div>
             </div>
           </sc-if>
         </div>
@@ -1049,18 +1065,18 @@ a:hover { color:#B98F3E; }
         <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Gent spa and grooming studio. Al Rawda 2, Ajman, UAE.</div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">CONTACT</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">CONTACT</div>
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
           <a href="https://www.instagram.com/ecosophy_gentspa/" style="color:#D7DECF;">@ecosophy_gentspa</a>
           <a href="{{ waHref }}" style="color:#D7DECF;">{{ whatsapp }}</a>
         </div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">HOURS</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 11:00 AM – 12:00 Midnight</div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:10.5px; letter-spacing:3px; color:#C9A860;">FOR HER</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>
         <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
           <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty &amp; Spa</a>
           <a href="/" style="color:#D7DECF;">Switch world</a>
@@ -1501,7 +1517,7 @@ class Component extends DCLogic {
       badgeGap: this.state.scrolled ? '10px' : '6px',
       badgeSlotW: this.state.scrolled ? (heroMobile ? '150px' : '190px') : (heroMobile ? '54px' : '78px'),
       badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
-      badgeSubSize: '8.5px',
+      badgeSubSize: 'var(--fs-xxs)',
       badgeSubShow: this.state.scrolled ? 'none' : 'block',
       badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
       badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
@@ -1514,8 +1530,8 @@ class Component extends DCLogic {
       burgerShow: navMobile ? 'flex' : 'none',
       langShow: heroMobile ? 'none' : 'flex',
       waLabel: heroMobile ? 'BOOK' : 'WHATSAPP',
-      waPad: heroMobile ? '8px 14px' : '9px 20px',
-      waSize: heroMobile ? '10px' : '11px',
+      waPad: heroMobile ? '12px 18px' : '9px 20px',
+      waSize: '11px',
       drawerShow: (heroMobile && this.state.menuOpen) ? 'flex' : 'none',
       drawerPadTop: '58px',
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),

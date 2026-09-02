@@ -34,10 +34,10 @@ img { display:block; }
 @keyframes galRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
 @keyframes galFade { from { opacity:0; } to { opacity:1; } }
 .gal-rise { animation:galRise 1s cubic-bezier(.2,.8,.3,1) both; }
-.gal-eyebrow { font-size:10.5px; letter-spacing:3.4px; color:#C9A860; }
+.gal-eyebrow { font-size:var(--fs-lg); letter-spacing:3.4px; color:#C9A860; }
 .gal-h2 { font-family:'Italiana','Prata',serif; font-weight:400; letter-spacing:.05em; color:#F4EFE3; line-height:1.12; margin:14px 0 0; }
 .gal-lead { font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:52ch; margin-top:16px; }
-.gal-cap { font-size:10px; letter-spacing:2.6px; color:#9FB0A0; margin-top:12px; }
+.gal-cap { font-size:var(--fs-md); letter-spacing:2.6px; color:#9FB0A0; margin-top:12px; }
 /* Every framed photo shares the same treatment so the sections differ by motion, not styling. */
 .gal-frame { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.28); box-shadow:0 34px 70px -34px rgba(0,0,0,.9); background:#0E2B1C; }
 .gal-frame img { width:100%; height:100%; object-fit:cover; }
@@ -82,9 +82,16 @@ img { display:block; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; }
+:root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
-  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; }
+  :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
+}
+/* Phones: footer links are stacked text at ~14-26px tall, well under a
+   comfortable thumb target, so give each one a 40px row of its own. */
+@media (max-width: 760px) {
+  [data-screen-label="Footer"] a, .r-foot a {
+    display:inline-flex; align-items:center; min-height:40px;
+  }
 }
 </style>
 <script>
@@ -526,7 +533,7 @@ img { display:block; }
       </a>
 
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:10.5px; letter-spacing:1.6px;">
+        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
           <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
           <span style="padding:6px 11px; color:#E4C778;">AR</span>
         </div>
@@ -603,8 +610,8 @@ img { display:block; }
       </div>
 
       <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; border-top:1px solid rgba(201,168,96,.22); padding-top:16px; margin-top:10px;">
-        <span style="font-size:10.5px; letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
-        <a href="https://www.instagram.com/ecosophy.ae/" style="font-size:10.5px; letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
+        <span style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
+        <a href="https://www.instagram.com/ecosophy.ae/" style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
       </div>
     </div>
 
@@ -762,18 +769,18 @@ img { display:block; }
     </div>
   </div>
 
-  <div style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; max-width:1520px; margin:0 auto;">
+  <div class="r-foot" style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; max-width:1520px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:10px;">
       <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
       <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
       <span style="font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
     </div>
-    <div style="display:flex; gap:18px; font-size:10.5px; letter-spacing:2.4px;">
+    <div style="display:flex; gap:18px; font-size:var(--fs-lg); letter-spacing:2.4px;">
       <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
       <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>
       <a href="https://www.instagram.com/ecosophy.ae/" style="color:#C9A860;">INSTAGRAM</a>
     </div>
-    <div style="font-size:10.5px; letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
+    <div style="font-size:var(--fs-lg); letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
   </div>
 </div>
 
@@ -794,7 +801,7 @@ img { display:block; }
         </div>
         <div style="position:absolute; top:28px; left:14px; right:14px; display:flex; align-items:center; gap:10px;">
           <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
-          <span style="flex:1; font-size:10px; letter-spacing:1.6px; color:#F1E7CC;">{{ gCurrent.type }}</span>
+          <span style="flex:1; font-size:var(--fs-md); letter-spacing:1.6px; color:#F1E7CC;">{{ gCurrent.type }}</span>
           <span onClick="{{ gClose }}" style="cursor:pointer; font-size:19px; color:#F1E7CC; line-height:1;">×</span>
         </div>
         <div onClick="{{ gPrev }}" style="cursor:pointer; position:absolute; left:0; top:52px; bottom:120px; width:34%;"></div>
@@ -802,7 +809,7 @@ img { display:block; }
         <div class="gv-storytext" key="{{ gCurrent.title }}" style="position:absolute; left:18px; right:18px; bottom:20px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#F4EFE3; line-height:1.2;">{{ gCurrent.title }}</div>
           <div style="font-size:12px; color:#C4CFC1; line-height:1.65; margin-top:7px;">{{ gCurrent.caption }}</div>
-          <a href="/for-her#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:10px; letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
+          <a href="/for-her#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
         </div>
       </div>
       <span onClick="{{ gNext }}" style="cursor:pointer; flex:none; font-size:26px; color:#C9A860;">›</span>
