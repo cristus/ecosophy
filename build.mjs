@@ -92,6 +92,25 @@ function head(page) {
 ${RESOURCES}`;
 }
 
+// Ten Unsplash photos backed all ~50 remaining stock slots across the site.
+// <image-slot> refuses to render an Unsplash-hosted image with no credit — it
+// shows a "This photo needs attribution" tile instead — so the credit captions
+// could not simply be hidden. Swapping in Ecosophy's own photography removes
+// both the caption and the reason for it. Keyed by Unsplash photo id; the pages
+// store these as full URLs, so one substitution reaches every page.
+const STOCK = {
+  '1544161515-4ab6ce6db874': 'uploads/eco-her-massage-1.jpg', // massage
+  '1544843776-7c98a52e08a4': 'uploads/eco-her-hammam-1.jpg', // moroccan bath
+  '1570172619644-dfd03ed5d881': 'uploads/eco-her-facial-1.jpg', // facial
+  '1515377905703-c4788e51af15': 'uploads/eco-her-robe.jpg', // facial / hydrafacial
+  '1560932992-a93e9ca8a0c9': 'uploads/eco-her-products-1.jpg', // body / scrub
+  '1522337360788-8b13dee7a37e': 'uploads/eco-her-nails-1.jpg', // nails & brows
+  '1540555700478-4be289fbecef': 'uploads/eco-her-jacuzzi-1.jpg', // spa / jacuzzi
+  '1636525653613-2a3a05c00759': 'uploads/hf_20260827_171947_1e9875d7-e5ab-4df5-b12e-8cd204eda2cb.png', // botanical bg
+  '1600334129128-685c5582fd35': 'uploads/eco-her-massage-2.jpg', // about
+  '1696841212541-449ca29397cc': 'uploads/eco-him-door.jpg', // men's world door
+};
+
 const assets = new Set();
 
 function buildPage(srcName, page) {
@@ -99,6 +118,14 @@ function buildPage(srcName, page) {
 
   // Cross-page links, in both markup and the page's logic block (?s=… survives).
   for (const [from, to] of LINK_MAP) html = html.split(from).join(to);
+
+  // Stock photography -> Ecosophy's own. Must run BEFORE the asset scan below,
+  // or a replacement referenced from nowhere else never gets copied and 404s.
+  // A trailing ?q=..&w=.. on a local file is harmless, so only the base URL is
+  // matched and whatever the page appends is left alone.
+  for (const [id, local] of Object.entries(STOCK)) {
+    html = html.split('https://images.unsplash.com/photo-' + id).join(local);
+  }
 
   // Collect referenced images, but DO NOT rewrite their paths. Each page's logic
   // decides "local file vs Unsplash photo id" by testing the raw string, e.g.
@@ -113,6 +140,15 @@ function buildPage(srcName, page) {
   for (const m of html.matchAll(/["'(](?:\.\/)?([A-Za-z0-9._@%()+-]+\.(?:png|jpe?g|svg|webp|gif))(?=["')])/g)) {
     if (existsSync(join(SRC, m[1]))) assets.add(m[1]);
   }
+
+  // Strip photo-credit badges. <image-slot> paints an overlay caption whenever
+  // `credit` is non-empty, which surfaced "Photo by ... on Unsplash" on top of
+  // the thumbnails on hover. The strings come from two places — literal
+  // attributes and {{ }} bindings fed by each page's photo tables — so blank the
+  // attribute itself and both are covered at once. credit-href goes first, since
+  // the credit pattern would otherwise match its prefix.
+  html = html.replace(/\scredit-href="[^"]*"/g, ' credit-href=""');
+  html = html.replace(/\scredit(?!-href)="[^"]*"/g, ' credit=""');
 
   html = html.replace(/(["'])\.\/(support|image-slot)\.js\1/g, '$1/$2.js$1');
 
@@ -152,9 +188,17 @@ for (const rel of [...assets].sort()) {
 console.log(`  ${assets.size} assets copied`);
 
 // image-slot.js fetches the slot state at runtime; without it every slot 404s.
-for (const f of ['support.js', 'image-slot.js', '.image-slots.state.json']) {
-  copyFileSync(join(SRC, f), join(OUT, f));
-}
+for (const f of ['support.js', 'image-slot.js']) copyFileSync(join(SRC, f), join(OUT, f));
+
+// The slot state pins images as embedded data URIs, which win over the `src`
+// attribute. `sw-him` is pinned to the stock photo the men's door used to show,
+// so it survived the stock swap above and left the two homepage doors mismatched
+// — the women's on Ecosophy's own room, the men's on a stock model. Drop that
+// one pin so the door falls through to its replacement.
+const PINS_TO_DROP = new Set(['sw-him']);
+const slotState = JSON.parse(readFileSync(join(SRC, '.image-slots.state.json'), 'utf8'));
+for (const k of PINS_TO_DROP) delete slotState[k];
+writeFileSync(join(OUT, '.image-slots.state.json'), JSON.stringify(slotState));
 // Favicons: downscaled from the brand marks in favicons/, since the full-size
 // assets are ~800 KB each and would be fetched on every page view.
 mkdirSync(join(OUT, 'favicons'), { recursive: true });

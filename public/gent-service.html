@@ -68,7 +68,7 @@ a:hover { color:#B98F3E; }
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:56%; top:14%; width:min(9vw,105px); opacity:.05;">
     <div class="d-hero-img" style="position:relative; grid-column:2; grid-row:1; min-height:min(84vh,720px); overflow:hidden;">
       <div style="position:absolute; inset:0; animation:dKb 20s ease-in-out infinite alternate;">
-        <image-slot id="{{ heroSlot }}" sc-camel-src="{{ heroImg }}" credit="{{ heroCredit }}" credit-href="{{ heroChref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+        <image-slot id="{{ heroSlot }}" sc-camel-src="{{ heroImg }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
       </div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(90deg,#0E271C 0%,rgba(14,39,28,.94) 8%,rgba(14,39,28,.72) 20%,rgba(14,39,28,.4) 34%,rgba(14,39,28,.14) 50%,rgba(14,39,28,0) 66%);"></div>
       <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; height:48%; background:linear-gradient(180deg,rgba(14,39,28,0) 0%,rgba(14,39,28,.14) 30%,rgba(14,39,28,.44) 58%,rgba(14,39,28,.82) 82%,#0E271C 100%);"></div>
@@ -181,7 +181,7 @@ a:hover { color:#B98F3E; }
     <div class="d-mosaic" style="position:relative; display:grid; grid-template-columns:1.4fr 1fr 1fr; grid-auto-rows:clamp(150px,17vw,210px); gap:14px; margin-top:28px;">
       <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="5">
         <div onClick="{{ g.open }}" style="position:relative; cursor:pointer; grid-row:{{ g.span }}; border-radius:16px; overflow:hidden; border:1px solid #DED4BD;">
-          <image-slot id="{{ g.slot }}" sc-camel-src="{{ g.img }}" credit="{{ g.credit }}" credit-href="{{ g.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+          <image-slot id="{{ g.slot }}" sc-camel-src="{{ g.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,31,22,.62) 0%,rgba(11,31,22,.12) 38%,rgba(11,31,22,0) 62%);"></div>
           <div style="pointer-events:none; position:absolute; left:16px; top:14px; font-size:10px; letter-spacing:1.6px; color:#F1E7CC;">{{ g.label }}</div>
         </div>
@@ -192,7 +192,7 @@ a:hover { color:#B98F3E; }
   <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeLightbox }}" style="position:fixed; inset:0; z-index:120; background:rgba(6,18,12,.95); display:flex; align-items:center; justify-content:center; padding:clamp(16px,4vw,60px); animation:dIn .25s ease both;">
       <div style="position:relative; width:min(1000px,100%); aspect-ratio:16/10; border-radius:18px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
-        <image-slot id="{{ lightbox.slot }}" sc-camel-src="{{ lightbox.img }}" credit="{{ lightbox.credit }}" credit-href="{{ lightbox.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+        <image-slot id="{{ lightbox.slot }}" sc-camel-src="{{ lightbox.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
       </div>
       <div style="position:absolute; top:26px; right:30px; font-size:11px; letter-spacing:2px; color:#E4C778; cursor:pointer;">CLOSE ✕</div>
     </div>
@@ -319,7 +319,7 @@ a:hover { color:#B98F3E; }
       <sc-for list="{{ related }}" as="r" hint-placeholder-count="3">
         <a href="{{ r.href }}" style="display:block; background:#FFFDF7; border:1px solid #DED4BD; border-radius:18px; overflow:hidden; transition:transform .3s, box-shadow .3s;" style-hover="transform:translateY(-3px); box-shadow:0 16px 34px rgba(70,64,40,.16);">
           <div style="position:relative; height:170px;">
-            <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="{{ r.credit }}" credit-href="{{ r.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+            <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           </div>
           <div style="padding:18px 20px 20px;">
             <div style="font-family:'Prata',serif; font-size:15.5px; color:#14532D;">{{ r.name }}</div>
@@ -369,11 +369,11 @@ a:hover { color:#B98F3E; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 50 444 5566&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;service&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 const IMG = {
-  massage: ['https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1600&auto=format&fit=crop','Photo by alan caishan on Unsplash','https://unsplash.com/@caishan119'],
-  bath: ['https://images.unsplash.com/photo-1544843776-7c98a52e08a4?q=80&w=1600&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria'],
-  facial: ['https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1600&auto=format&fit=crop','Photo by Rosa Rafael on Unsplash','https://unsplash.com/@rosarafael'],
-  water: ['https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1600&auto=format&fit=crop','Photo by Roberto Nickson on Unsplash','https://unsplash.com/@rpnickson'],
-  tech: ['https://images.unsplash.com/photo-1560932992-a93e9ca8a0c9?q=80&w=1600&auto=format&fit=crop','Photo by Nico on Unsplash','https://unsplash.com/@nicobaby'],
+  massage: ['uploads/eco-her-massage-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by alan caishan on Unsplash','https://unsplash.com/@caishan119'],
+  bath: ['uploads/eco-her-hammam-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria'],
+  facial: ['uploads/eco-her-facial-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Rosa Rafael on Unsplash','https://unsplash.com/@rosarafael'],
+  water: ['uploads/eco-her-jacuzzi-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Roberto Nickson on Unsplash','https://unsplash.com/@rpnickson'],
+  tech: ['uploads/eco-her-products-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Nico on Unsplash','https://unsplash.com/@nicobaby'],
 };
 
 const TYPE = {

@@ -363,9 +363,9 @@ a:hover { color:#B98F3E; }
           <sc-for list="{{ fanCards }}" as="c" hint-placeholder-count="7">
             <div data-fancard="" data-fan-svc="{{ c.name }}" data-fan-copy="{{ c.line }}" style="position:relative; flex:0 0 auto; width:{{ c.w }}; margin:0 {{ c.gap }}; will-change:transform;">
               <div style="position:relative; width:100%; aspect-ratio:3/4; border-radius:16px; overflow:hidden; border:1px solid rgba(201,168,96,.34); box-shadow:0 30px 60px -26px rgba(0,0,0,.95);">
-                <image-slot id="{{ c.slot }}" sc-camel-src="{{ c.src }}" credit="{{ c.credit }}" credit-href="{{ c.href }}" placeholder="{{ c.ph }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <image-slot id="{{ c.slot }}" sc-camel-src="{{ c.src }}" credit="" credit-href="" placeholder="{{ c.ph }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
                 <div style="position:absolute; inset:0; animation:cardCycle 30s ease-in-out infinite; animation-delay:{{ c.d2 }}; opacity:0;">
-                  <image-slot id="{{ c.slot2 }}" sc-camel-src="{{ c.src2 }}" credit="{{ c.credit2 }}" credit-href="{{ c.href2 }}" placeholder="{{ c.ph }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                  <image-slot id="{{ c.slot2 }}" sc-camel-src="{{ c.src2 }}" credit="" credit-href="" placeholder="{{ c.ph }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
                 </div>
                 <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,18,12,.6),rgba(6,18,12,0) 42%,rgba(6,18,12,.2));"></div>
                 <span style="pointer-events:none; position:absolute; left:11px; top:11px; font-size:9px; letter-spacing:2.2px; color:#E8CE8C; text-shadow:0 2px 10px rgba(0,0,0,.9);">{{ c.label }}</span>
@@ -486,7 +486,7 @@ a:hover { color:#B98F3E; }
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:26px; animation:ddIn .32s ease both;">
           <sc-for list="{{ dCategories }}" as="cat" hint-placeholder-count="3">
             <div onClick="{{ cat.open }}" style="cursor:pointer; position:relative; height:clamp(220px,24vw,280px); border-radius:18px; overflow:hidden; border:1px solid #DED4BD; transition:box-shadow .3s, transform .3s;" style-hover="box-shadow:0 18px 36px -18px rgba(60,50,20,.5); transform:translateY(-3px);">
-              <image-slot id="{{ cat.slot }}" sc-camel-src="{{ cat.img }}" credit="{{ cat.credit }}" credit-href="{{ cat.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <image-slot id="{{ cat.slot }}" sc-camel-src="{{ cat.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
               <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.05) 35%, rgba(11,31,22,.86) 100%);"></div>
               <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:18px 20px;">
                 <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#F1E7CC; line-height:1.15;">{{ cat.name }}</div>
@@ -726,7 +726,7 @@ a:hover { color:#B98F3E; }
                 </sc-if>
                 <sc-if value="{{ f.hasImg }}" hint-placeholder-val="{{ true }}">
                   <div style="position:absolute; left:0; right:0; top:-26%; height:152%; overflow:hidden;">
-                    <image-slot id="{{ f.slot }}" sc-camel-src="{{ f.img }}" credit="{{ f.credit }}" credit-href="{{ f.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                    <image-slot id="{{ f.slot }}" sc-camel-src="{{ f.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
                   </div>
                 </sc-if>
               </div>
@@ -746,7 +746,7 @@ a:hover { color:#B98F3E; }
       <sc-for list="{{ gReels }}" as="r" hint-placeholder-count="5">
         <div onClick="{{ r.open }}" class="gv-reel" style="cursor:pointer; scroll-snap-align:center; flex:none; width:clamp(170px,15vw,220px); aspect-ratio:9/16; position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
           <div class="gv-kb">
-            <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="{{ r.credit }}" credit-href="{{ r.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+            <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           </div>
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.45) 0%, rgba(11,31,22,0) 36%, rgba(11,31,22,.92) 100%);"></div>
           <div style="pointer-events:none; position:absolute; top:11px; left:11px; display:flex; align-items:center; gap:5px; background:rgba(11,31,22,.55); border-radius:12px; padding:5px 10px;">
@@ -768,7 +768,7 @@ a:hover { color:#B98F3E; }
       <span onClick="{{ gPrev }}" style="cursor:pointer; flex:none; font-size:26px; color:#9FB0A0;">‹</span>
       <div style="position:relative; height:100%; max-height:100%; width:auto; aspect-ratio:9/16; border-radius:18px; overflow:hidden; background:#0B1F16;">
         <div class="gv-kb">
-          <image-slot id="{{ gCurrent.slot }}" sc-camel-src="{{ gCurrent.img }}" credit="{{ gCurrent.credit }}" credit-href="{{ gCurrent.chref }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+          <image-slot id="{{ gCurrent.slot }}" sc-camel-src="{{ gCurrent.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
         </div>
         <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.75) 0%, rgba(11,31,22,0) 30%, rgba(11,31,22,.12) 52%, rgba(11,31,22,.92) 100%);"></div>
         <div style="position:absolute; top:12px; left:12px; right:12px; display:flex; gap:4px;">
