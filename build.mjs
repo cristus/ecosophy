@@ -45,6 +45,12 @@ const PAGES = {
     description: 'Full treatment menu and prices for Ecosophy Gent Spa Dubai — massage, hammam, skin and grooming.',
     mark: 'favicons/mark-man-gold-180.png',
   },
+  'Ecosophy Gallery.dc.html': {
+    route: 'gallery.html',
+    title: 'Gallery — Ecosophy Spa for Her, Dubai',
+    description: 'Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.',
+    mark: 'favicons/mark-woman-gold-180.png',
+  },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',
@@ -111,6 +117,9 @@ const STOCK = {
   '1696841212541-449ca29397cc': 'uploads/eco-him-door.jpg', // men's world door
 };
 
+// Filename the gallery video is expected under, inside the design folder's uploads/.
+const GALLERY_VIDEO = 'gal-video.mp4';
+
 const assets = new Set();
 
 function buildPage(srcName, page) {
@@ -139,6 +148,20 @@ function buildPage(srcName, page) {
   // A few images sit loose at the design-folder root rather than in assets/uploads.
   for (const m of html.matchAll(/["'(](?:\.\/)?([A-Za-z0-9._@%()+-]+\.(?:png|jpe?g|svg|webp|gif))(?=["')])/g)) {
     if (existsSync(join(SRC, m[1]))) assets.add(m[1]);
+  }
+
+  // The gallery's video section ships with only a poster until a file exists.
+  // A <video> with no source shows its poster and requests nothing, so dropping
+  // gal-video.mp4 into the design folder is all it takes to turn the section on.
+  if (html.includes('data-novideo')) {
+    if (existsSync(join(SRC, 'uploads', GALLERY_VIDEO))) {
+      assets.add('uploads/' + GALLERY_VIDEO);
+      html = html.replace('data-novideo', 'src="uploads/' + GALLERY_VIDEO + '"');
+      console.log(`  video:  uploads/${GALLERY_VIDEO} wired into the gallery`);
+    } else {
+      html = html.replace('data-novideo', '');
+      console.log(`  video:  uploads/${GALLERY_VIDEO} not present — poster only`);
+    }
   }
 
   // Strip photo-credit badges. <image-slot> paints an overlay caption whenever

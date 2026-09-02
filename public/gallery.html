@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gallery — Ecosophy Spa for Her, Dubai</title>
+<meta name="description" content="Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.">
+<link rel="icon" type="image/png" href="/favicons/mark-woman-gold-180.png">
+<link rel="apple-touch-icon" href="/favicons/mark-woman-gold-180.png">
+<meta name="theme-color" content="#0E2B1C">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ecosophy Spa">
+<meta property="og:locale" content="en_AE">
+<meta property="og:title" content="Gallery — Ecosophy Spa for Her, Dubai">
+<meta property="og:description" content="Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.">
+<meta property="og:url" content="https://ecosophy.pages.dev/gallery">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://ecosophy.pages.dev/gallery">
+<script src="/vendor/react.production.min.js"></script>
+<script src="/vendor/react-dom.production.min.js"></script>
+<script src="/vendor/babel.min.js"></script>
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&amp;family=Prata&amp;family=Manrope:wght@300;400;500;600&amp;family=Cormorant+Garamond:wght@300;400&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0B1F16; font-family:'Manrope',sans-serif; color:#E7EDE2; }
+a { color:#E4C778; text-decoration:none; }
+img { display:block; }
+@keyframes galRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+@keyframes galFade { from { opacity:0; } to { opacity:1; } }
+.gal-rise { animation:galRise 1s cubic-bezier(.2,.8,.3,1) both; }
+.gal-eyebrow { font-size:10.5px; letter-spacing:3.4px; color:#C9A860; }
+.gal-h2 { font-family:'Italiana','Prata',serif; font-weight:400; letter-spacing:.05em; color:#F4EFE3; line-height:1.12; margin:14px 0 0; }
+.gal-lead { font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:52ch; margin-top:16px; }
+.gal-cap { font-size:10px; letter-spacing:2.6px; color:#9FB0A0; margin-top:12px; }
+/* Every framed photo shares the same treatment so the sections differ by motion, not styling. */
+.gal-frame { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.28); box-shadow:0 34px 70px -34px rgba(0,0,0,.9); background:#0E2B1C; }
+.gal-frame img { width:100%; height:100%; object-fit:cover; }
+.gal-rail::-webkit-scrollbar { display:none; }
+.gal-rail { scrollbar-width:none; }
+@media (max-width: 900px) {
+  .gal-rooms-row { gap:14px !important; }
+  .gal-stack-float { position:static !important; width:auto !important; margin-top:16px !important; }
+  .gal-art-grid { grid-template-columns:1fr 1fr !important; }
+}
+@media (max-width: 620px) {
+  .gal-art-grid { grid-template-columns:1fr !important; }
+}
+</style>
+<script>
+(function(){
+  // Gallery parallax engine.
+  //
+  // Two coordinate systems, because the sections need different things:
+  //
+  //  * Continuous drift - data-gy / data-gx / data-gr move an element relative
+  //    to how far its centre sits from the viewport centre, in pixels. Good for
+  //    layers that should glide the whole time they are on screen.
+  //
+  //  * Section progress - anything inside [data-gsection] also gets p, a 0..1
+  //    ratio of how far that section has travelled through the viewport. Good
+  //    for effects with a defined start and end: the pinned video scrub, the
+  //    wipe reveal, opacity ramps.
+  //
+  // Both are recomputed every frame from getBoundingClientRect, so nothing has
+  // to be invalidated on resize, and a rAF loop keeps it smooth while scrolling
+  // with the wheel, a trackpad or momentum.
+  // NOTE: support.js encodes the template with
+  //   CAMEL_ATTR_RE = /(\s)([a-z]+[A-Z][A-Za-z0-9]*)(\s*=)/g
+  // to preserve camelCase HTML attributes, and it runs over inline script
+  // bodies too. A statement like `var prevY = 0` therefore comes back as
+  // `var sc-camel-prev-y = 0` and the re-appended copy fails to parse. Keep
+  // every assignment in here lowercase or snake_case.
+  if (window.__ecoGal) return; window.__ecoGal = 1;
+
+  function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
+  function nums(el, attr, fallback){
+    var raw = el.getAttribute(attr);
+    if (!raw) return fallback;
+    var parts = raw.split(',').map(parseFloat);
+    return parts.some(isNaN) ? fallback : parts;
+  }
+
+  function sectionProgress(sec, vh){
+    var r = sec.getBoundingClientRect();
+    var travel = r.height - vh;
+    if (travel <= 0) {
+      // Section shorter than the viewport: ramp across its own height instead.
+      return clamp((vh - r.top) / (vh + r.height), 0, 1);
+    }
+    return clamp(-r.top / travel, 0, 1);
+  }
+
+  function apply(el, vh, p){
+    var t = '';
+    var gy = parseFloat(el.getAttribute('data-gy'));
+    var gx = parseFloat(el.getAttribute('data-gx'));
+    var gr = parseFloat(el.getAttribute('data-gr'));
+    if (!isNaN(gy) || !isNaN(gx) || !isNaN(gr)) {
+      var r = el.getBoundingClientRect();
+      var prev_y = el.__ty || 0, prev_x = el.__tx || 0;
+      // Subtract the offset already applied, so the reading is the untransformed
+      // position and the value cannot drift frame over frame.
+      var mid = (r.top - prev_y) + r.height / 2 - vh / 2;
+      var mid_x = (r.left - prev_x) + r.width / 2 - (window.innerWidth || 1) / 2;
+      var ty = isNaN(gy) ? 0 : -mid * gy;
+      var tx = isNaN(gx) ? 0 : -mid_x * gx;
+      el.__ty = ty; el.__tx = tx;
+      t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
+      if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
+    }
+    if (p != null) {
+      var gs = nums(el, 'data-gs', null);
+      if (gs) t += 'scale(' + (gs[0] + (gs[1] - gs[0]) * p).toFixed(4) + ') ';
+      var go = nums(el, 'data-go', null);
+      if (go) el.style.opacity = (go[0] + (go[1] - go[0]) * clamp(p / 0.45, 0, 1)).toFixed(3);
+      var gw = nums(el, 'data-gw', null);
+      if (gw) {
+        // Wipe: reveal from the given inset back to zero across the first half.
+        var k = clamp(p / 0.55, 0, 1);
+        var inset = gw[0] * (1 - k);
+        el.style.clipPath = 'inset(0 ' + inset.toFixed(2) + '% 0 0)';
+      }
+    }
+    if (t) el.style.transform = t.trim();
+  }
+
+  function frame(){
+    var vh = window.innerHeight || 1;
+    try {
+      var secs = document.querySelectorAll('[data-gsection]');
+      for (var i = 0; i < secs.length; i++) {
+        var p = sectionProgress(secs[i], vh);
+        secs[i].__p = p;
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go]');
+        for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
+      }
+      var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
+      for (var k = 0; k < drift.length; k++) {
+        var el = drift[k];
+        var host = el.closest ? el.closest('[data-gsection]') : null;
+        apply(el, vh, host ? host.__p : null);
+      }
+    } catch (e) {}
+  }
+  function loop(){ frame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  window.addEventListener('resize', frame);
+  window.addEventListener('load', frame);
+})();
+</script>
+</helmet>
+
+<div style="min-height:100vh; background:#0B1F16; overflow-x:clip;">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div style="position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
+      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:11px; letter-spacing:1.4px; min-width:0;">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
+          <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
+          <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
+          <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
+        </button>
+        <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
+        <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
+        <a href="/gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
+        <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; font-size:11px; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(9px,1vw,15px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
+      </div>
+
+      <!-- Holds the centre column open: the badge below is absolutely positioned
+           and so takes no grid cell of its own. -->
+      <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
+      <a href="/" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
+          <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
+          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
+        </span>
+      </a>
+
+      <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
+        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:10.5px; letter-spacing:1.6px;">
+          <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
+          <span style="padding:6px 11px; color:#E4C778;">AR</span>
+        </div>
+        <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:10px 18px; font-size:11px; letter-spacing:2px; font-weight:600; white-space:nowrap;">{{ waLabel }}</a>
+      </div>
+    </div>
+
+    <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
+      <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
+      <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
+      <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
+      <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
+    </div>
+  </div>
+
+  <!-- ── 1. Hero · deep vertical drift + slow push-in ────────────────────── -->
+  <div data-gsection style="position:relative; height:100vh; min-height:560px; overflow:hidden;">
+    <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
+      <img src="uploads/gal-hero.jpg" alt="The hammam at Ecosophy" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 42%, rgba(6,16,11,.30) 0%, rgba(6,16,11,.62) 60%, rgba(6,16,11,.88) 100%);"></div>
+    <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
+      <div class="gal-rise gal-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HER</div>
+      <h1 class="gal-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(42px,7.4vw,104px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">THE GALLERY</h1>
+      <div class="gal-rise gal-lead" style="animation-delay:.4s; text-align:center; max-width:44ch;">Every room, ritual and finish, photographed where it happens — inside our green house in Dubai.</div>
+      <div class="gal-rise gal-cap" style="animation-delay:.55s;">SCROLL ↓</div>
+    </div>
+  </div>
+
+  <!-- ── 2. The Rooms · opposed horizontal drift ─────────────────────────── -->
+  <div data-gsection style="position:relative; padding:clamp(90px,13vw,170px) 0 clamp(70px,10vw,130px);">
+    <div style="max-width:1520px; margin:0 auto; padding:0 clamp(20px,3vw,44px);">
+      <div class="gal-eyebrow">01 — THE ROOMS</div>
+      <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Where the hours slow down</h2>
+      <div class="gal-lead">Hammam, jacuzzi, infrared sauna and the treatment rooms — the spaces our therapists work in every day.</div>
+    </div>
+    <!-- The two rows slide against each other as the section passes. -->
+    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin-top:clamp(38px,5vw,64px); padding:0 clamp(20px,3vw,44px);" data-gx="0.055">
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-1.jpg" alt="Treatment room"></div>
+      <div class="gal-frame" style="flex:1.35 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-3.jpg" alt="Jacuzzi suite"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-5.jpg" alt="Infrared sauna"></div>
+    </div>
+    <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin-top:clamp(16px,2vw,28px); padding:0 clamp(20px,3vw,44px);" data-gx="-0.055">
+      <div class="gal-frame" style="flex:1.5 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-4.jpg" alt="Jacuzzi room"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-2.jpg" alt="Massage room"></div>
+    </div>
+  </div>
+
+  <!-- ── 3. Video · pinned, scrubbed push-in ─────────────────────────────── -->
+  <div data-gsection style="position:relative; height:260vh;">
+    <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B;">
+      <div data-gs="1.22,1.0" style="position:absolute; inset:0; will-change:transform;">
+        <!-- The build fills in the source when the video file is present (see
+             GALLERY_VIDEO in build.mjs); until then the poster frame stands in.
+             A <video> with no source requests nothing, so this never 404s. -->
+        <video  poster="uploads/gal-video-poster.jpg" autoplay muted loop playsinline
+               style="width:100%; height:100%; object-fit:cover;"></video>
+      </div>
+      <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,16,11,.62),rgba(6,16,11,.24) 42%,rgba(6,16,11,.78));"></div>
+      <div data-go="0,1" style="position:absolute; left:0; right:0; bottom:clamp(48px,10vh,120px); text-align:center; padding:0 22px;">
+        <div class="gal-eyebrow">02 — THE MOROCCAN BATH</div>
+        <h2 class="gal-h2" style="font-size:clamp(32px,5.4vw,74px);">Steam, black soap, heated marble</h2>
+        <div class="gal-lead" style="margin-left:auto; margin-right:auto; text-align:center;">Forty minutes on the hot slab, finished with a full-body scrub and a wrap.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. The Details · depth stack, layers moving against each other ──── -->
+  <div data-gsection style="position:relative; padding:clamp(90px,13vw,180px) clamp(20px,3vw,44px); overflow:hidden;">
+    <div style="max-width:1520px; margin:0 auto; position:relative;">
+      <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(28px,5vw,80px); align-items:center;">
+        <div style="position:relative;">
+          <div class="gal-frame" data-gy="0.07" style="aspect-ratio:5/6;">
+            <img src="uploads/gal-detail-2.jpg" alt="The flower wall treatment room">
+          </div>
+          <div class="gal-frame gal-stack-float" data-gy="-0.16" style="position:absolute; right:-8%; bottom:-9%; width:46%; aspect-ratio:1/1;">
+            <img src="uploads/gal-detail-1.jpg" alt="Oils and balms">
+          </div>
+        </div>
+        <div>
+          <div class="gal-eyebrow">03 — THE DETAILS</div>
+          <h2 class="gal-h2" style="font-size:clamp(28px,4.2vw,56px);">Chosen, not stocked</h2>
+          <div class="gal-lead">Every oil, balm and mask on the trolley is picked for a specific skin and a specific ritual. Nothing is generic, and nothing is hurried.</div>
+          <div class="gal-frame" data-gy="-0.09" style="margin-top:clamp(24px,3vw,40px); aspect-ratio:16/10;">
+            <img src="uploads/gal-detail-3.jpg" alt="Product trolley">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. The Artistry · staggered columns at three speeds ─────────────── -->
+  <div data-gsection style="position:relative; padding:clamp(70px,10vw,130px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
+    <div style="max-width:1520px; margin:0 auto;">
+      <div class="gal-eyebrow">04 — THE ARTISTRY</div>
+      <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Hair, brows and make-up</h2>
+      <div class="gal-lead">Bridal and evening work by our senior artists — the part of the house that gets photographed most.</div>
+      <div class="gal-art-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,1.8vw,26px); margin-top:clamp(38px,5vw,64px); align-items:start;">
+        <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="0.045">
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-1.jpg" alt="Make-up"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-4.jpg" alt="Bridal styling"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-7.jpg" alt="Evening make-up"></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="-0.075">
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-2.jpg" alt="Make-up detail"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-5.jpg" alt="Styling"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-8.jpg" alt="Finished look"></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="0.11">
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-3.jpg" alt="Hair styling"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-6.jpg" alt="Brows and nails"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6. The Centre · wipe reveal + counter-drifting caption ──────────── -->
+  <div data-gsection style="position:relative; padding:clamp(70px,10vw,140px) clamp(20px,3vw,44px) clamp(90px,13vw,170px);">
+    <div style="max-width:1520px; margin:0 auto;">
+      <div class="gal-eyebrow">05 — THE CENTRE</div>
+      <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
+      <div class="gal-lead">A green house on a quiet street, open daily from ten in the morning until ten at night.</div>
+      <div class="gal-frame" data-gw="100,0" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
+        <img src="uploads/gal-centre-1.jpg" alt="Ecosophy Beauty Centre exterior" data-gy="0.05">
+      </div>
+      <div class="gal-frame" data-gw="100,0" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
+        <img src="uploads/gal-centre-2.jpg" alt="Ecosophy Beauty Centre signage" data-gy="-0.04">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Closing ─────────────────────────────────────────────────────────── -->
+  <div style="padding:clamp(70px,10vw,130px) 22px clamp(80px,11vw,150px); text-align:center; border-top:1px solid rgba(201,168,96,.22);">
+    <div class="gal-eyebrow">READY WHEN YOU ARE</div>
+    <h2 class="gal-h2" style="font-size:clamp(28px,4.4vw,58px);">Come and see it in person</h2>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:26px;">
+      <a href="/for-her#book" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px; font-weight:600;">BEGIN YOUR RITUAL</a>
+      <a href="/services" style="border:1px solid rgba(201,168,96,.65); color:#EBD9A6; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px;">SEE THE MENU</a>
+    </div>
+  </div>
+
+  <div style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; max-width:1520px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
+      <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
+      <span style="font-size:9.5px; letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
+    </div>
+    <div style="display:flex; gap:18px; font-size:10.5px; letter-spacing:2.4px;">
+      <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
+      <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>
+      <a href="https://www.instagram.com/ecosophy.ae/" style="color:#C9A860;">INSTAGRAM</a>
+    </div>
+    <div style="font-size:10.5px; letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
+  </div>
+</div>
+
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false };
+  componentDidMount() {
+    this._onResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
+    this._onScroll = () => {
+      const past = (window.scrollY || 0) > 90;
+      if (past !== this.state.scrolled) this.setState({ scrolled: past });
+    };
+    window.addEventListener('resize', this._onResize);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onScroll);
+  }
+  renderVals() {
+    // Same thresholds as the two world pages, so the header folds identically.
+    const navMobile = (this.state.vw || 1280) < 1300;
+    const heroMobile = (this.state.vw || 1280) < 860;
+    const wa = '+971 58 548 0899';
+    return {
+      navGap: heroMobile ? '12px' : 'clamp(9px,1.05vw,15px)',
+      navShow: navMobile ? 'none' : 'inline',
+      burgerShow: navMobile ? 'flex' : 'none',
+      langShow: heroMobile ? 'none' : 'flex',
+      menuShow: this.state.menuOpen && navMobile ? 'flex' : 'none',
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      badgeSize: this.state.scrolled ? (heroMobile ? '34px' : '40px') : (heroMobile ? '46px' : '58px'),
+      badgeWordSize: this.state.scrolled ? (heroMobile ? '17px' : '19px') : (heroMobile ? '19px' : '22px'),
+      badgeSlotW: this.state.scrolled ? (heroMobile ? '150px' : '190px') : (heroMobile ? '54px' : '78px'),
+      badgeSubShow: this.state.scrolled ? 'none' : 'block',
+      waLabel: heroMobile ? 'BOOK' : 'WHATSAPP',
+      waHref: 'https://wa.me/' + wa.replace(/\D/g, ''),
+    };
+  }
+}
+</script>
+</x-dc>
+</body>
+</html>
