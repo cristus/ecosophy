@@ -193,12 +193,11 @@ img { display:block; }
       // (slats are handled below, on their own timeline)
     }
 
-    // Snap-drift: the filter row travels left to right as it crosses the screen,
-    // but the travel is quantised to the bubbles rather than glided — it parks
-    // with one bubble on the centre line, then steps to the next. The detent is
-    // in the easing, not a scroll listener: fr is stretched about its midpoint so
-    // most of each step is spent parked and the move between them is quick, which
-    // keeps it reversible and frame-accurate under a scrub.
+    // Entrance drift: the filter row slides in from the left and settles with the
+    // whole row centred, then holds. It used to park one bubble at a time on the
+    // centre line and step through them, which ended with the FIRST bubble centred
+    // and the other five trailing off the right edge — a row that reads as shoved
+    // right rather than centred. The travel now ends on the row's own centre.
     var gsx = el.getAttribute('data-gsnapx');
     if (gsx != null && el.children.length > 1) {
       var rs = el.getBoundingClientRect();
@@ -211,19 +210,24 @@ img { display:block; }
       var steps = el.children.length - 1;
       var content_w = steps * pitch + bw2;
       if (content_w < rs.width - 8) {
-        var q2 = clamp((vh - rs.top) / (vh * 0.85), 0, 1);
-        var u2 = q2 * steps;
-        var i2 = Math.floor(u2), fr = u2 - i2;
-        if (i2 >= steps) { i2 = steps - 1; fr = 1; }
-        var fe = clamp((fr - 0.5) * 3.2 + 0.5, 0, 1);
-        fe = fe * fe * (3 - 2 * fe);
-        var idx = steps - (i2 + fe);
         // The row carries its own left padding, so the first bubble does not
-        // start at the content edge; without it every park sits a few px right.
+        // start at the content edge; without it the rest sits a few px right.
         var pad_l = parseFloat(getComputedStyle(el).paddingLeft) || 0;
-        var tx2 = rs.width / 2 - (pad_l + idx * pitch + bw2 / 2);
+        // Resting place: the whole group of bubbles on the centre line.
+        var mid_x = rs.width / 2 - (pad_l + content_w / 2);
+        // Same timing as the arch above — in from the bottom of the screen,
+        // done by the time the row reaches the middle — so the two settle
+        // together instead of one still moving after the other has stopped.
+        var q2 = clamp((vh * 1.05 - rs.top) / (vh * 0.55), 0, 1);
+        q2 = q2 * q2 * (3 - 2 * q2);
+        var lead_in = Math.min(rs.width * 0.28, 260);
+        var tx2 = mid_x - lead_in * (1 - q2);
+        // Damped like the arch: a wheel notch moves the row a long way in one
+        // frame, and easing toward the target turns that step into a glide.
+        if (el.__snapx == null) el.__snapx = tx2;
+        el.__snapx += (tx2 - el.__snapx) * 0.075;
         el.style.willChange = 'transform';
-        el.style.transform = 'translateX(' + tx2.toFixed(1) + 'px)';
+        el.style.transform = 'translateX(' + el.__snapx.toFixed(1) + 'px)';
       } else {
         // Narrow screens: the bubbles already overflow, so leave the native
         // horizontal scroll alone rather than fighting it with a transform.
