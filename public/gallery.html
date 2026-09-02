@@ -154,14 +154,18 @@ img { display:block; }
         var inset = gw[0] * (1 - k);
         el.style.clipPath = 'inset(0 ' + inset.toFixed(2) + '% 0 0)';
       }
-      // Arch: a panel rises with a domed top that flattens as it fills the
-      // screen. The vertical radius is kept well under the horizontal one so
-      // the curve reads as an arch rather than a circle.
+      // Arch: the panel rises as a circle and relaxes into a wide, shallow arc
+      // as it takes the screen. Both radii are the SAME length, which is what
+      // makes the top read as a true circle on the way in — a squashed vertical
+      // radius gives a flat-topped tunnel mouth instead. The values are a
+      // fraction of the viewport width, so the curve is identical at every size.
+      // When the two corner radii together exceed the width the browser scales
+      // them down to fit, which is exactly what turns the start into a dome.
       var ga = nums(el, 'data-garch', null);
       if (ga) {
         var arch = ga[0] + (ga[1] - ga[0]) * clamp(p / 0.86, 0, 1);
-        var av = (arch * 0.3).toFixed(2);
-        el.style.borderRadius = arch.toFixed(2) + '% ' + arch.toFixed(2) + '% 0 0 / ' + av + '% ' + av + '% 0 0';
+        var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
+        el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
       }
       // Expand: the arch panel grows out of its frame to fill the viewport, so
       // the clip stops being a card and becomes the screen. Width/height are set
@@ -266,7 +270,7 @@ img { display:block; }
           lv.style.cssText = 'position:absolute; top:0; height:100%; ' +
             'left:calc(' + (100 * c / want) + '% - 0.5px); width:calc(' + (100 / want) + '% + 1px); ' +
             'transform-origin:left center; will-change:transform; ' +
-            'background:linear-gradient(90deg,#B09250 0%,#C9A860 38%,#D0B068 72%,#A98C48 100%);';
+            'background:linear-gradient(90deg,#1B4230 0%,#2E6B4A 38%,#3A7F58 72%,#183B2B 100%);';
           el.appendChild(lv);
           louvres.push(lv);
         }
@@ -308,6 +312,9 @@ img { display:block; }
       v.muted = true;
       v.defaultMuted = true;
       v.playsInline = true;
+      // loop is dropped by the render too, so the clip stopped dead at the end.
+      v.loop = true;
+      v.addEventListener('ended', function(){ this.currentTime = 0; var q = this.play(); if (q && q.catch) q.catch(function(){}); });
       var pr = v.play();
       if (pr && pr.catch) pr.catch(function(){});
     }
@@ -450,8 +457,8 @@ img { display:block; }
   <!-- ── 2. The Rooms · opposed horizontal drift ─────────────────────────── -->
   <div data-gsection style="position:relative; margin-top:-14vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
-    <div data-garch="44,0" style="background:#0B1F16; padding:clamp(90px,13vw,170px) 0 clamp(70px,10vw,130px); overflow:hidden; min-height:300vh; display:flex; flex-direction:column; justify-content:center;">
-  <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:#0E271C; overflow:hidden; padding:clamp(100px,12vw,180px) 0;">
+    <div data-garch="66,21" style="background:#0B1F16; padding:clamp(90px,13vw,170px) 0 clamp(70px,10vw,130px); overflow:hidden; min-height:300vh; display:flex; flex-direction:column; justify-content:center;">
+  <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(100px,12vw,180px) 0;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:8%; bottom:6%; width:min(11vw,120px); opacity:.05;">
