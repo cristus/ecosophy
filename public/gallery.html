@@ -43,9 +43,8 @@ img { display:block; }
 .gal-rail::-webkit-scrollbar { display:none; }
 .gal-rail { scrollbar-width:none; }
 @media (max-width: 900px) {
-  .gal-video-row { flex-direction:column; gap:22px !important; }
-  .gal-video-row > div:first-child { width:min(46vh,230px) !important; }
-  .gal-video-copy { text-align:center; }
+  .gal-video-copy { left:50% !important; top:auto !important; bottom:5vh !important;
+    transform:translateX(-50%) !important; width:86vw !important; text-align:center; }
   .gal-video-copy .gal-lead { margin-left:auto; margin-right:auto; }
   .gal-rooms-row { gap:14px !important; }
   .gal-stack-float { position:static !important; width:auto !important; margin-top:16px !important; }
@@ -138,6 +137,32 @@ img { display:block; }
         var av = (arch * 0.3).toFixed(2);
         el.style.borderRadius = arch.toFixed(2) + '% ' + arch.toFixed(2) + '% 0 0 / ' + av + '% ' + av + '% 0 0';
       }
+      // Expand: the arch panel grows out of its frame to fill the viewport, so
+      // the clip stops being a card and becomes the screen. Width/height are set
+      // directly rather than scaled, because a scaled video is resampled by the
+      // compositor and goes soft; the element is absolutely positioned, so
+      // resizing it reflows nothing around it.
+      var gexp = nums(el, 'data-gexpand', null);
+      if (gexp) {
+        var e = clamp((p - gexp[0]) / (gexp[1] - gexp[0]), 0, 1);
+        e = e * e * (3 - 2 * e);
+        var vw2 = window.innerWidth || 1;
+        var start_w = Math.min(vh * 0.4, 310), start_h = start_w * 16 / 9;
+        el.style.width = (start_w + (vw2 - start_w) * e).toFixed(1) + 'px';
+        el.style.height = (start_h + (vh - start_h) * e).toFixed(1) + 'px';
+        var rr = 1 - e;
+        el.style.borderRadius = (50 * rr).toFixed(2) + '% ' + (50 * rr).toFixed(2) + '% ' +
+          (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px / ' +
+          (27 * rr).toFixed(2) + '% ' + (27 * rr).toFixed(2) + '% ' +
+          (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px';
+        el.style.borderColor = 'rgba(201,168,96,' + (0.5 * rr).toFixed(3) + ')';
+      }
+      // Copy steps aside once the panel starts taking the screen.
+      var gfo = nums(el, 'data-gfadeout', null);
+      if (gfo) {
+        var f = clamp((p - gfo[0]) / (gfo[1] - gfo[0]), 0, 1);
+        el.style.opacity = (1 - f).toFixed(3);
+      }
       // (slats are handled below, on their own timeline)
     }
 
@@ -181,7 +206,11 @@ img { display:block; }
   // unmuted clip and refuses to autoplay it: the element sits at readyState 4,
   // paused, until something calls play(). Force the property imperatively. The
   // flag lives on the element, so a re-render gets primed again.
+  var prime_tick = 0;
   function prime_videos(){
+    // Only re-scan occasionally: a querySelectorAll every frame is wasted work
+    // beside a decoding video.
+    if (prime_tick++ % 30) return;
     var vids = document.querySelectorAll('video[autoplay]');
     for (var i = 0; i < vids.length; i++) {
       var v = vids[i];
@@ -202,7 +231,7 @@ img { display:block; }
       for (var i = 0; i < secs.length; i++) {
         var p = sectionProgress(secs[i], vh);
         secs[i].__p = p;
-        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats]');
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gexpand],[data-gfadeout]');
         for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
       var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
@@ -323,28 +352,29 @@ img { display:block; }
     </div>
   </div>
 
-  <!-- ── 4. Film · its own section: pinned, portrait clip in an arch ─────── -->
-  <div data-gsection style="position:relative; height:380vh;">
-    <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B; display:flex; align-items:center; justify-content:center;">
-      <!-- Ambient backdrop: a still from the clip itself, blown up and blurred,
-           easing back so the panel stays the sharp thing on screen. -->
-      <div data-gs="1.4,1.14" style="position:absolute; inset:-10%; will-change:transform;">
-        <img src="uploads/gal-video-still.jpg" alt="" style="width:100%; height:100%; object-fit:cover; filter:blur(36px) saturate(.8) brightness(.46);">
-      </div>
-      <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(6,16,11,.22), rgba(6,16,11,.88));"></div>
+  <!-- ── 4. Film · pinned; the arch panel expands to fill the viewport ───── -->
+  <div data-gsection style="position:relative; height:420vh;">
+    <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B;">
+      <!-- Backdrop is blurred in the build, not by a CSS filter: a 36px blur over
+           a scaled full-viewport layer is re-rasterised every frame and starves
+           the video's own painting. -->
+      <img src="uploads/gal-video-blur.jpg" alt="" data-gs="1.16,1.0"
+           style="position:absolute; inset:-6%; width:112%; height:112%; object-fit:cover; will-change:transform;">
+      <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(6,16,11,.2), rgba(6,16,11,.86));"></div>
 
-      <div class="gal-video-row" style="position:relative; display:flex; align-items:center; justify-content:center; gap:clamp(26px,5vw,86px); width:100%; max-width:1520px; padding:0 clamp(20px,3vw,44px);">
-        <!-- Shot vertically, so shown vertically, in an arch that echoes the
-             doorway the clip walks through. -->
-        <div data-gs="1.16,1.0" data-gy="-0.045" style="flex:0 0 auto; width:min(40vh,310px); aspect-ratio:9/16; border-radius:50% 50% 22px 22px / 27% 27% 22px 22px; overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); will-change:transform;">
-          <video src="uploads/gal-video.mp4" poster="uploads/gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
-                 style="width:100%; height:100%; object-fit:cover;"></video>
-        </div>
-        <div class="gal-video-copy" data-go="0,1" data-gy="0.035" style="flex:1 1 0; max-width:44ch;">
-          <div class="gal-eyebrow">03 — THE ARRIVAL</div>
-          <h2 class="gal-h2" style="font-size:clamp(28px,4.4vw,60px);">Through the green door</h2>
-          <div class="gal-lead">A quiet street in Ajman, a walled garden, and a women-only house behind it. From the moment you step inside, the day belongs to you.</div>
-        </div>
+      <!-- Shot vertically, so it starts as a portrait arch that echoes the
+           doorway in the clip, then grows out to full bleed. -->
+      <div data-gexpand="0.12,0.62" class="gal-vid-frame"
+           style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
+        <video src="uploads/gal-video.mp4" poster="uploads/gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
+               style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+      </div>
+
+      <div class="gal-video-copy" data-go="0,1" data-gfadeout="0.14,0.34"
+           style="position:absolute; left:calc(50% + 215px); top:50%; transform:translateY(-50%); width:min(40ch,32vw); z-index:3;">
+        <div class="gal-eyebrow">03 — THE ARRIVAL</div>
+        <h2 class="gal-h2" style="font-size:clamp(26px,3.4vw,48px);">Through the green door</h2>
+        <div class="gal-lead">A quiet street in Ajman, a walled garden, and a women-only house behind it. From the moment you step inside, the day belongs to you.</div>
       </div>
     </div>
   </div>
