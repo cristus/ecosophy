@@ -134,31 +134,39 @@ img { display:block; }
         var av = (arch * 0.3).toFixed(2);
         el.style.borderRadius = arch.toFixed(2) + '% ' + arch.toFixed(2) + '% 0 0 / ' + av + '% ' + av + '% 0 0';
       }
-      // Slats: vertical blinds over the photo that open left to right. Built
-      // once on first sight, then only transformed, so the per-frame cost is a
-      // handful of scaleX writes rather than a re-layout.
-      var slat_n = parseInt(el.getAttribute('data-gslats'), 10);
-      if (slat_n > 0) {
-        if (!el.__slats) {
-          var wrap = document.createElement('div');
-          wrap.style.cssText = 'position:absolute; inset:0; pointer-events:none; display:flex; z-index:3;';
-          var bars = [];
-          for (var b = 0; b < slat_n; b++) {
-            var bar = document.createElement('span');
-            bar.style.cssText = 'flex:1 1 0; background:#0B1F16; transform-origin:left center; will-change:transform;';
-            wrap.appendChild(bar);
-            bars.push(bar);
-          }
-          el.appendChild(wrap);
-          el.__slats = bars;
+      // (slats are handled below, on their own timeline)
+    }
+
+    // Slats: vertical blinds over the photo, opening left to right. Driven by
+    // the photo's OWN position in the viewport rather than section progress:
+    // these sections are ~2800px tall, so section progress leaves the frame
+    // striped for almost all the time it is visible and it is never seen whole.
+    // Locally, the blinds finish while the photo is still high in view, which
+    // leaves a long stretch where the image simply sits there, fully open.
+    var slat_n = parseInt(el.getAttribute('data-gslats'), 10);
+    if (slat_n > 0) {
+      if (!el.__slats) {
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'position:absolute; inset:0; pointer-events:none; display:flex; z-index:3;';
+        var bars = [];
+        for (var b = 0; b < slat_n; b++) {
+          var bar = document.createElement('span');
+          bar.style.cssText = 'flex:1 1 0; background:#0B1F16; transform-origin:left center; will-change:transform;';
+          wrap.appendChild(bar);
+          bars.push(bar);
         }
-        var list = el.__slats;
-        var span = 0.62, stagger = 0.30;
-        for (var q = 0; q < list.length; q++) {
-          var start = (q / list.length) * stagger;
-          var t = clamp((p - start) / span, 0, 1);
-          list[q].style.transform = 'scaleX(' + (1 - t).toFixed(4) + ')';
-        }
+        el.appendChild(wrap);
+        el.__slats = bars;
+      }
+      var list = el.__slats;
+      var rb = el.getBoundingClientRect();
+      var open_from = vh * 1.02, open_to = vh * 0.12;
+      var q = clamp((open_from - rb.top) / (open_from - open_to), 0, 1);
+      var slat_span = 0.6, slat_stagger = 0.24;
+      for (var qi = 0; qi < list.length; qi++) {
+        var slat_start = (qi / list.length) * slat_stagger;
+        var t2 = clamp((q - slat_start) / slat_span, 0, 1);
+        list[qi].style.transform = 'scaleX(' + (1 - t2).toFixed(4) + ')';
       }
     }
     if (t) el.style.transform = t.trim();
@@ -351,10 +359,10 @@ img { display:block; }
       <div class="gal-eyebrow">05 — THE CENTRE</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
       <div class="gal-lead">A green house on a quiet street, open daily from ten in the morning until ten at night.</div>
-      <div class="gal-frame" data-gslats="16" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
+      <div class="gal-frame" data-gslats="12" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
         <img src="uploads/gal-centre-1.jpg" alt="Ecosophy Beauty Centre exterior" data-gy="0.05">
       </div>
-      <div class="gal-frame" data-gslats="16" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
+      <div class="gal-frame" data-gslats="12" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
         <img src="uploads/gal-centre-2.jpg" alt="Ecosophy Beauty Centre signage" data-gy="-0.04">
       </div>
     </div>
