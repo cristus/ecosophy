@@ -227,11 +227,9 @@ console.log(`  ${assets.size} assets copied`);
 for (const f of ['support.js', 'image-slot.js']) copyFileSync(join(SRC, f), join(OUT, f));
 
 // The slot state pins images as embedded data URIs, which win over the `src`
-// attribute. `sw-him` is pinned to the stock photo the men's door used to show,
-// so it survived the stock swap above and left the two homepage doors mismatched
-// — the women's on Ecosophy's own room, the men's on a stock model. Drop that
-// one pin so the door falls through to its replacement.
-const PINS_TO_DROP = new Set(['sw-him']);
+// attribute. `sw-him` is pinned to the men's door image; leave it alone — the
+// homepage doors are meant to stay as they were.
+const PINS_TO_DROP = new Set();
 const slotState = JSON.parse(readFileSync(join(SRC, '.image-slots.state.json'), 'utf8'));
 for (const k of PINS_TO_DROP) delete slotState[k];
 writeFileSync(join(OUT, '.image-slots.state.json'), JSON.stringify(slotState));

@@ -20,6 +20,7 @@
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
 <script src="/support.js"></script>
+<script src="/image-slot.js"></script>
 </head>
 <body>
 <x-dc>
@@ -50,6 +51,31 @@ img { display:block; }
 @media (max-width: 620px) {
   .gal-art-grid { grid-template-columns:1fr !important; }
 }
+
+/* ── Reels: ported from Ecosophy For Him, so the section stays one design in two places ── */
+.reel-scroll { scrollbar-width:none; }
+.reel-scroll::-webkit-scrollbar { display:none; }
+.gv-ring { position:absolute; inset:0; border-radius:50%; background:conic-gradient(from 0deg,#C9A860,#E8CE8C,#14532D,#C9A860); animation:ringSpin 6s linear infinite; }
+.gv-bub { position:relative; transition:transform .35s cubic-bezier(.2,.8,.3,1); }
+.gv-bub:hover { transform:scale(1.07); }
+.gv-bub-on { animation:bubblePulse 2.6s ease-in-out infinite; }
+.gv-kb { position:absolute; inset:0; animation:kenBurns 6s ease-in-out infinite alternate; }
+.gv-reel:nth-child(3n) .gv-kb { animation-delay:-2s; }
+.gv-reel:nth-child(3n+2) .gv-kb { animation-delay:-4s; }
+.reel-loop { -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 4%,rgba(0,0,0,1) 96%,rgba(0,0,0,0) 100%); mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 4%,rgba(0,0,0,1) 96%,rgba(0,0,0,0) 100%); }
+.gv-reel { animation:popIn .5s ease both; transition:transform .35s cubic-bezier(.2,.8,.3,1), box-shadow .35s ease; }
+.gv-reel:hover { transform:translateY(-6px); box-shadow:0 20px 38px -18px rgba(0,0,0,.6); }
+.gv-storytext > * { animation:slideUp .55s cubic-bezier(.2,.8,.3,1) both; }
+.gv-storytext > *:nth-child(2) { animation-delay:.09s; }
+.gv-storytext > *:nth-child(3) { animation-delay:.18s; }
+.gv-bar { transition:width .12s linear; }
+.gv-player { position:fixed; inset:0; z-index:120; background:rgba(6,18,12,.97); display:flex; align-items:center; justify-content:center; gap:clamp(10px,3vw,34px); padding:clamp(16px,4vw,44px); animation:storyIn .3s ease both; }
+@keyframes ringSpin { to { transform:rotate(360deg); } }
+@keyframes bubblePulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.06); } }
+@keyframes kenBurns { 0% { transform:scale(1); } 100% { transform:scale(1.12); } }
+@keyframes slideUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes popIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:none; } }
+@keyframes storyIn { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:none; } }
 </style>
 <script>
 (function(){
@@ -268,6 +294,46 @@ img { display:block; }
   window.addEventListener('load', frame);
 })();
 </script>
+<script>
+(function(){
+  // Endless marquee for the reels rail. The list is rendered three times, so
+  // advancing past two set-widths and subtracting one lands on identical
+  // content — the wrap is invisible. Native overflow scrolling is kept, so a
+  // swipe or trackpad still works; a manual scroll just resyncs and yields
+  // briefly before the drift resumes.
+  if (window.__ecoReel) return; window.__ecoReel = 1;
+  var SPEED = 42;
+  function frame(){
+    var rails = document.querySelectorAll('[data-reelloop]');
+    for (var i = 0; i < rails.length; i++) {
+      try {
+        var r = rails[i];
+        var sets = parseFloat(r.getAttribute('data-reel-sets')) || 3;
+        var set = r.scrollWidth / sets;
+        if (!set || r.scrollWidth <= r.clientWidth + 4) continue;
+        var now = Date.now();
+        if (r.__touch && now - r.__touch < 1100) { r.__dt = 0; continue; }
+        var last = r.__dt || now;
+        r.__dt = now;
+        var dt = Math.min(64, now - last);
+        if (r.__pos == null || Math.abs(r.__pos - r.scrollLeft) > 2) r.__pos = r.scrollLeft;
+        r.__pos += SPEED * dt / 1000;
+        if (r.__pos >= set * 2) r.__pos -= set;
+        r.__self = 1;
+        r.scrollLeft = r.__pos;
+      } catch (e) {}
+    }
+  }
+  function loop(){ frame(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  document.addEventListener('scroll', function(e){
+    var r = e.target;
+    if (!r || !r.hasAttribute || !r.hasAttribute('data-reelloop')) return;
+    if (r.__self) { r.__self = 0; return; }
+    r.__pos = r.scrollLeft; r.__touch = Date.now(); r.__dt = 0;
+  }, true);
+})();
+</script>
 </helmet>
 
 <div style="min-height:100vh; background:#0B1F16; overflow-x:clip;">
@@ -342,6 +408,68 @@ img { display:block; }
   <div data-gsection style="position:relative; margin-top:-14vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
     <div data-garch="44,0" style="background:#0B1F16; padding:clamp(90px,13vw,170px) 0 clamp(70px,10vw,130px); overflow:hidden; min-height:300vh; display:flex; flex-direction:column; justify-content:center;">
+  <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:#0E271C; overflow:hidden; padding:clamp(100px,12vw,180px) 0;">
+    <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
+    <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">
+    <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:8%; bottom:6%; width:min(11vw,120px); opacity:.05;">
+    <div style="box-sizing:border-box; max-width:none; margin:0 auto; padding:0 clamp(14px,1.6vw,24px);">
+      <div style="text-align:center;">
+        <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,3vw,30px); color:#C9A860;">moments of calm</div>
+        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); letter-spacing:.04em; color:#F1E7CC; margin-top:4px;">INSIDE THE SANCTUARY</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px;">
+          <span style="width:56px; height:1px; background:rgba(201,168,96,.4);"></span>
+          <svg width="18" height="18" viewBox="0 0 20 20"><path d="M10 2C10 2 13 6 10 10C7 6 10 2 10 2Z" fill="none" stroke="#C9A860" stroke-width="1.2"></path><path d="M10 10C10 10 13 14 10 18C7 14 10 10 10 10Z" fill="none" stroke="#C9A860" stroke-width="1.2"></path></svg>
+          <span style="width:56px; height:1px; background:rgba(201,168,96,.4);"></span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:clamp(16px,2.4vw,26px); overflow-x:auto; padding:clamp(30px,4vw,44px) 4px 8px; justify-content:flex-start;" class="reel-scroll">
+        <sc-for list="{{ gFilters }}" as="f" hint-placeholder-count="6">
+          <div onClick="{{ f.pick }}" style="cursor:pointer; flex:none; width:84px; text-align:center;">
+            <div class="{{ f.bubClass }}" style="width:84px; height:84px;">
+              <sc-if value="{{ f.showRing }}" hint-placeholder-val="{{ true }}"><div class="gv-ring"></div></sc-if>
+              <div style="position:absolute; inset:3px; border-radius:50%; overflow:hidden; border:2px solid #0E271C; background:#14532D; display:flex; align-items:center; justify-content:center;">
+                <sc-if value="{{ f.isAll }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-family:'Italiana','Prata',serif; font-size:23px; color:#EBD9A6;">{{ f.count }}</span>
+                </sc-if>
+                <sc-if value="{{ f.hasImg }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:absolute; left:0; right:0; top:-26%; height:152%; overflow:hidden;">
+                    <image-slot id="{{ f.slot }}" sc-camel-src="{{ f.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+            <div style="font-size:9.5px; letter-spacing:1.4px; color:{{ f.labelColor }}; margin-top:10px; line-height:1.35;">{{ f.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; border-top:1px solid rgba(201,168,96,.22); padding-top:16px; margin-top:10px;">
+        <span style="font-size:10.5px; letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
+        <a href="https://www.instagram.com/ecosophy_gentspa/" style="font-size:10.5px; letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
+      </div>
+    </div>
+
+    <div data-reelloop data-reel-sets="3" style="display:flex; gap:clamp(12px,1.6vw,18px); overflow-x:auto; box-sizing:border-box; width:100%; padding:clamp(24px,3vw,34px) clamp(14px,1.6vw,24px) 14px; align-items:flex-end;" class="reel-scroll reel-loop">
+      <sc-for list="{{ gReels }}" as="r" hint-placeholder-count="5">
+        <div onClick="{{ r.open }}" class="gv-reel" style="cursor:pointer; scroll-snap-align:center; flex:none; width:clamp(170px,15vw,220px); aspect-ratio:9/16; position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(201,168,96,.35);">
+          <div class="gv-kb">
+            <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+          </div>
+          <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.45) 0%, rgba(11,31,22,0) 36%, rgba(11,31,22,.92) 100%);"></div>
+          <div style="pointer-events:none; position:absolute; top:11px; left:11px; display:flex; align-items:center; gap:5px; background:rgba(11,31,22,.55); border-radius:12px; padding:5px 10px;">
+            <span style="width:0; height:0; border-left:6px solid #EBD9A6; border-top:4px solid transparent; border-bottom:4px solid transparent;"></span>
+            <span style="font-size:8.5px; letter-spacing:1.2px; color:#EBD9A6;">{{ r.length }}</span>
+          </div>
+          <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
+            <div style="font-size:8.5px; letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
+            <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
+            <div style="font-size:11px; color:#C9A860; margin-top:6px;">{{ r.price }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
     <div style="max-width:1520px; margin:0 auto; padding:0 clamp(20px,3vw,44px);">
       <div class="gal-eyebrow">01 — THE ROOMS</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Where the hours slow down</h2>
@@ -468,9 +596,120 @@ img { display:block; }
   </div>
 </div>
 
+  <sc-if value="{{ gOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="gv-player">
+      <span onClick="{{ gPrev }}" style="cursor:pointer; flex:none; font-size:26px; color:#9FB0A0;">‹</span>
+      <div style="position:relative; height:100%; max-height:100%; width:auto; aspect-ratio:9/16; border-radius:18px; overflow:hidden; background:#0B1F16;">
+        <div class="gv-kb">
+          <image-slot id="{{ gCurrent.slot }}" sc-camel-src="{{ gCurrent.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+        </div>
+        <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.75) 0%, rgba(11,31,22,0) 30%, rgba(11,31,22,.12) 52%, rgba(11,31,22,.92) 100%);"></div>
+        <div style="position:absolute; top:12px; left:12px; right:12px; display:flex; gap:4px;">
+          <sc-for list="{{ gBars }}" as="b" hint-placeholder-count="5">
+            <div style="flex:1; height:2px; border-radius:2px; background:rgba(244,239,227,.3); overflow:hidden;">
+              <div class="gv-bar" style="height:100%; width:{{ b.w }}; background:#EBD9A6;"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="position:absolute; top:28px; left:14px; right:14px; display:flex; align-items:center; gap:10px;">
+          <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px;">
+          <span style="flex:1; font-size:10px; letter-spacing:1.6px; color:#F1E7CC;">{{ gCurrent.type }}</span>
+          <span onClick="{{ gClose }}" style="cursor:pointer; font-size:19px; color:#F1E7CC; line-height:1;">×</span>
+        </div>
+        <div onClick="{{ gPrev }}" style="cursor:pointer; position:absolute; left:0; top:52px; bottom:120px; width:34%;"></div>
+        <div onClick="{{ gNext }}" style="cursor:pointer; position:absolute; right:0; top:52px; bottom:120px; width:66%;"></div>
+        <div class="gv-storytext" key="{{ gCurrent.title }}" style="position:absolute; left:18px; right:18px; bottom:20px;">
+          <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#F4EFE3; line-height:1.2;">{{ gCurrent.title }}</div>
+          <div style="font-size:12px; color:#C4CFC1; line-height:1.65; margin-top:7px;">{{ gCurrent.caption }}</div>
+          <a href="/for-him#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:10px; letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
+        </div>
+      </div>
+      <span onClick="{{ gNext }}" style="cursor:pointer; flex:none; font-size:26px; color:#C9A860;">›</span>
+    </div>
+  </sc-if>
+
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false };
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, gFilter: null, gIdx: null, gProgress: 0 };
+  reelItems() {
+    const I = (u, c, h) => [u + '?q=80&w=900&auto=format&fit=crop', c, h];
+    const L = u => [u, '', ''];
+    const paje = L('uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png');
+    const hume = L('uploads/imgi_33_man-getting-a-facial-treatment.jpg');
+    const shave = L('uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg');
+    const machine = L('uploads/photo_2026-07-24_03-51-31.jpg');
+    const caishan = L('uploads/775244964_18119167235477475_6941524398570787900_n.jpg');
+    const element = L('uploads/photo_2026-08-02_19-37-29.jpg');
+    const nico = L('uploads/photo_2026-08-02_19-37-20.jpg');
+    const rosa = L('uploads/photo_2026-07-25_02-02-55.jpg');
+    const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
+    const stone = L('uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg');
+    const room = L('uploads/photo_2026-08-02_15-49-56.jpg');
+    const lounge = L('uploads/photo_2026-08-02_19-37-25.jpg');
+    const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
+    return [
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', price: '262 AED', length: '0:24', pic: paje,
+        caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', price: '157 AED', length: '0:16', pic: stone,
+        caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
+      { type: 'FACIALS', title: 'HydraFacial', price: '390 AED', length: '0:18', pic: hume,
+        caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', price: '472 AED', length: '0:29', pic: fac,
+        caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
+      { type: 'MASSAGE', title: 'Balinese Massage', price: '200 AED', length: '0:31', pic: caishan,
+        caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
+      { type: 'MASSAGE', title: 'Hot Stone Massage', price: '300 AED', length: '0:26', pic: room,
+        caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
+      { type: 'BARBER & BEARD', title: 'Cut & Beard Sculpt', price: '150 AED', length: '0:15', pic: element,
+        caption: 'Scissor cut and beard shaping by our master barbers.', cta: 'BOOK THE BARBER' },
+      { type: 'BARBER & BEARD', title: 'Hot Towel Shave', price: '120 AED', length: '0:14', pic: shave,
+        caption: 'Steamed towels, straight razor and a cooling finish.', cta: 'BOOK A SHAVE' },
+      { type: 'THE SPA', title: 'Jacuzzi Therapy', price: '210 AED', length: '0:22', pic: nick,
+        caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
+      { type: 'THE SPA', title: 'Infrared Sauna Session', price: '157 AED', length: '0:19', pic: machine,
+        caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
+    ];
+  }
+  reelVals() {
+    const items = this.reelItems();
+    const TYPES = [];
+    items.forEach(it => { if (TYPES.indexOf(it.type) < 0) TYPES.push(it.type); });
+    const active = this.state.gFilter;
+    const list = active ? items.filter(it => it.type === active) : items;
+    this._gList = list;
+    const gFilters = [{ label: 'ALL RITUALS', key: null, isAll: true, hasImg: false, count: items.length, img: '', credit: '', chref: '', slot: 'him-gf-all' }]
+      .concat(TYPES.map((t, i) => {
+        const first = items.find(it => it.type === t);
+        return { label: t, key: t, isAll: false, hasImg: true, count: 0, img: first.pic[0], credit: first.pic[1], chref: first.pic[2], slot: 'him-gf-' + i };
+      }))
+      .map(f => ({ ...f,
+        bubClass: active === f.key ? 'gv-bub gv-bub-on' : 'gv-bub',
+        showRing: active === f.key,
+        labelColor: active === f.key ? '#EBD9A6' : '#9FB0A0',
+        pick: () => this.setState({ gFilter: f.key, gIdx: null, gProgress: 0 }),
+      }));
+    const gi = this.state.gIdx != null && this.state.gIdx < list.length ? this.state.gIdx : null;
+    const cur = gi != null ? list[gi] : null;
+    return {
+      gFilters,
+      // Three identical passes so the marquee can wrap by one set width with an
+      // invisible seam. Slot ids repeat on purpose: every copy must resolve to the
+      // same image.
+      gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
+        slot: 'him-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
+        title: it.title, price: it.price, length: it.length, type: it.type,
+        open: () => this.setState({ gIdx: i, gProgress: 0 }),
+      }))),
+      gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
+      gOpen: gi != null,
+      gCurrent: cur && { slot: 'him-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
+        title: cur.title, caption: cur.caption, cta: cur.cta, price: cur.price, type: cur.type },
+      gBars: list.map((_, i) => ({ w: gi != null && i < gi ? '100%' : (i === gi ? Math.round((this.state.gProgress || 0) * 100) + '%' : '0%') })),
+      gClose: () => this.setState({ gIdx: null, gProgress: 0 }),
+      gNext: () => this.setState(s => ({ gIdx: s.gIdx + 1 < list.length ? s.gIdx + 1 : 0, gProgress: 0 })),
+      gPrev: () => this.setState(s => ({ gIdx: s.gIdx > 0 ? s.gIdx - 1 : list.length - 1, gProgress: 0 })),
+    };
+  }
   componentDidMount() {
     this._onResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
     this._onScroll = () => {
@@ -480,10 +719,27 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._onResize);
     window.addEventListener('scroll', this._onScroll, { passive: true });
     this._onScroll();
+    // Story player: advance the bar every 100ms, roll to the next reel at the
+    // end, close after the last one.
+    this._reelTick = setInterval(() => {
+      if (this.state.gIdx == null) return;
+      const n = this._gList ? this._gList.length : 1;
+      this.setState(s => {
+        const p = (s.gProgress || 0) + 0.1 / 5;
+        if (p < 1) return { gProgress: p };
+        return s.gIdx + 1 < n ? { gIdx: s.gIdx + 1, gProgress: 0 } : { gIdx: null, gProgress: 0 };
+      });
+    }, 100);
+    setTimeout(() => {
+      try {
+        this._preloaded = (this.reelItems() || []).map(it => { const i = new Image(); i.decoding = 'async'; i.src = it.pic[0]; return i; });
+      } catch (e) {}
+    }, 1200);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this._onResize);
     window.removeEventListener('scroll', this._onScroll);
+    clearInterval(this._reelTick);
   }
   renderVals() {
     // Same thresholds as the two world pages, so the header folds identically.
@@ -491,6 +747,7 @@ class Component extends DCLogic {
     const heroMobile = (this.state.vw || 1280) < 860;
     const wa = '+971 58 548 0899';
     return {
+      ...this.reelVals(),
       navGap: heroMobile ? '12px' : 'clamp(9px,1.05vw,15px)',
       navShow: navMobile ? 'none' : 'inline',
       burgerShow: navMobile ? 'flex' : 'none',
