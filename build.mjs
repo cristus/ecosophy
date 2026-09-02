@@ -47,12 +47,14 @@ const PAGES = {
   },
   'Ecosophy Gallery.dc.html': {
     route: 'gallery.html',
+    video: 'gal-video.mp4',
     title: 'Gallery — Ecosophy Spa for Her, Dubai',
     description: 'Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Gallery.dc.html': {
     route: 'gent-gallery.html',
+    video: 'gent-gal-video.mp4',
     title: 'Gallery — Ecosophy Gent Spa, Dubai',
     description: "Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.",
     mark: 'favicons/mark-man-gold-180.png',
@@ -123,7 +125,8 @@ const STOCK = {
   '1696841212541-449ca29397cc': 'uploads/eco-him-door.jpg', // men's world door
 };
 
-// Filename the gallery video is expected under, inside the design folder's uploads/.
+// Fallback video filename, used when a gallery has no page-specific file of its
+// own. Both live in the design folder's uploads/.
 const GALLERY_VIDEO = 'gal-video.mp4';
 
 const assets = new Set();
@@ -160,13 +163,17 @@ function buildPage(srcName, page) {
   // A <video> with no source shows its poster and requests nothing, so dropping
   // gal-video.mp4 into the design folder is all it takes to turn the section on.
   if (html.includes('data-novideo')) {
-    if (existsSync(join(SRC, 'uploads', GALLERY_VIDEO))) {
-      assets.add('uploads/' + GALLERY_VIDEO);
-      html = html.replace('data-novideo', 'src="uploads/' + GALLERY_VIDEO + '"');
-      console.log(`  video:  uploads/${GALLERY_VIDEO} wired into the gallery`);
+    // Prefer the page's own file; fall back to the shared one so a single clip
+    // can serve both galleries.
+    const candidates = [...new Set([page.video, GALLERY_VIDEO].filter(Boolean))];
+    const found = candidates.find((f) => existsSync(join(SRC, 'uploads', f)));
+    if (found) {
+      assets.add('uploads/' + found);
+      html = html.replace('data-novideo', 'src="uploads/' + found + '"');
+      console.log(`  video:  uploads/${found} -> ${page.route}`);
     } else {
       html = html.replace('data-novideo', '');
-      console.log(`  video:  uploads/${GALLERY_VIDEO} not present — poster only`);
+      console.log(`  video:  none for ${page.route} (looked for ${candidates.join(', ')}) — poster only`);
     }
   }
 
