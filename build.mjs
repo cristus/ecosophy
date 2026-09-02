@@ -165,7 +165,7 @@ function buildPage(srcName, page) {
   if (html.includes('data-novideo')) {
     // Prefer the page's own file; fall back to the shared one so a single clip
     // can serve both galleries.
-    const candidates = [...new Set([page.video, GALLERY_VIDEO].filter(Boolean))];
+    const candidates = [page.video].filter(Boolean);
     const found = candidates.find((f) => existsSync(join(SRC, 'uploads', f)));
     if (found) {
       assets.add('uploads/' + found);
