@@ -43,8 +43,8 @@ img { display:block; }
 .gal-rail::-webkit-scrollbar { display:none; }
 .gal-rail { scrollbar-width:none; }
 @media (max-width: 900px) {
-  .gal-video-copy { left:50% !important; top:auto !important; bottom:5vh !important;
-    transform:translateX(-50%) !important; width:86vw !important; text-align:center; }
+  .gal-video-copy { left:50% !important; right:auto !important; top:auto !important;
+    bottom:5vh !important; transform:translateX(-50%) !important; width:86vw !important; text-align:center; }
   .gal-video-copy .gal-lead { margin-left:auto; margin-right:auto; }
   .gal-rooms-row { gap:14px !important; }
   .gal-stack-float { position:static !important; width:auto !important; margin-top:16px !important; }
@@ -148,8 +148,18 @@ img { display:block; }
         e = e * e * (3 - 2 * e);
         var vw2 = window.innerWidth || 1;
         var start_w = Math.min(vh * 0.4, 310), start_h = start_w * 16 / 9;
-        el.style.width = (start_w + (vw2 - start_w) * e).toFixed(1) + 'px';
-        el.style.height = (start_h + (vh - start_h) * e).toFixed(1) + 'px';
+        var cur_w = start_w + (vw2 - start_w) * e;
+        var cur_h = start_h + (vh - start_h) * e;
+        el.style.width = cur_w.toFixed(1) + 'px';
+        el.style.height = cur_h.toFixed(1) + 'px';
+        // Starts inset from the left edge and slides back to 0 as it grows, so
+        // the panel opens on the left rather than blooming from the centre, and
+        // stays vertically centred until it is the height of the viewport.
+        // Positioned by transform, not left/top: those are layout writes and
+        // doing all four per frame halved the frame rate (62fps -> 32fps).
+        var start_l = Math.max(vw2 * 0.07, 34);
+        el.style.transform = 'translate3d(' + (start_l * (1 - e)).toFixed(1) + 'px,' +
+          ((vh - cur_h) / 2).toFixed(1) + 'px,0)';
         var rr = 1 - e;
         el.style.borderRadius = (50 * rr).toFixed(2) + '% ' + (50 * rr).toFixed(2) + '% ' +
           (22 * rr).toFixed(1) + 'px ' + (22 * rr).toFixed(1) + 'px / ' +
@@ -198,6 +208,59 @@ img { display:block; }
         list[qi].style.transform = 'scaleX(' + (1 - t2).toFixed(4) + ')';
       }
     }
+
+    // Blinds: gold louvres over the hero that swing shut as it scrolls away, so
+    // the arch panel below rises through a closed shutter instead of the hero
+    // simply sliding off. Driven by the cover's OWN position in the viewport,
+    // not section progress: the hero is exactly 100vh, so it has no travel of
+    // its own and sectionProgress() falls back to a ramp that already reads 0.5
+    // before a wheel is touched — the shutter would be half shut on load.
+    var blind_n = parseInt(el.getAttribute('data-gblinds'), 10);
+    if (blind_n > 0) {
+      if (!el.__blinds) {
+        // Fewer, wider louvres on small screens: at phone width 52 of them are
+        // under 8px each, and the swing is too small to read as depth.
+        var vw3 = window.innerWidth || 1;
+        var want = vw3 < 700 ? Math.round(blind_n * 0.46)
+                 : vw3 < 1100 ? Math.round(blind_n * 0.68)
+                 : blind_n;
+        var louvres = [];
+        for (var c = 0; c < want; c++) {
+          var lv = document.createElement('span');
+          // Perspective is set per louvre, not on the cover: one shared
+          // perspective puts the vanishing point in the middle of the screen,
+          // and the outer louvres then swing on a visibly different axis to the
+          // centre ones. The gradient is kept shallow so the shut panel reads as
+          // a field of gold with seams, not as stripes.
+          // Each louvre is a pixel wider than its slot and shifted half a pixel
+          // left, so neighbours overlap. Butted edge-to-edge, subpixel rounding
+          // leaves hairline gaps and the shut panel is striped with the photo
+          // showing through. calc() keeps the overlap while the width stays
+          // fluid, so a resize needs no rebuild.
+          lv.style.cssText = 'position:absolute; top:0; height:100%; ' +
+            'left:calc(' + (100 * c / want) + '% - 0.5px); width:calc(' + (100 / want) + '% + 1px); ' +
+            'transform-origin:left center; will-change:transform; ' +
+            'background:linear-gradient(90deg,#B09250 0%,#C9A860 38%,#D0B068 72%,#A98C48 100%);';
+          el.appendChild(lv);
+          louvres.push(lv);
+        }
+        el.__blinds = louvres;
+      }
+      var bl = el.__blinds;
+      var rc = el.getBoundingClientRect();
+      // The arch panel below starts only 14vh under the hero, so it climbs the
+      // screen quickly. Shut the louvres well inside half a viewport: on a
+      // longer ramp the panel has already covered them by the time the last one
+      // lands, and the gold is never actually seen closed.
+      var qb = clamp((-rc.top - vh * 0.04) / (vh * 0.46), 0, 1);
+      var blind_span = 0.66, blind_stagger = 0.34;
+      for (var ci = 0; ci < bl.length; ci++) {
+        var b_start = (ci / bl.length) * blind_stagger;
+        var t3 = clamp((qb - b_start) / blind_span, 0, 1);
+        t3 = 1 - Math.pow(1 - t3, 3);
+        bl[ci].style.transform = 'perspective(760px) rotateY(' + (-90 * (1 - t3)).toFixed(2) + 'deg)';
+      }
+    }
     if (t) el.style.transform = t.trim();
   }
 
@@ -231,7 +294,7 @@ img { display:block; }
       for (var i = 0; i < secs.length; i++) {
         var p = sectionProgress(secs[i], vh);
         secs[i].__p = p;
-        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gexpand],[data-gfadeout]');
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gexpand],[data-gfadeout]');
         for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
       var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
@@ -307,7 +370,10 @@ img { display:block; }
       <img src="uploads/gal-hero.jpg" alt="The hammam at Ecosophy" style="width:100%; height:100%; object-fit:cover;">
     </div>
     <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 42%, rgba(6,16,11,.30) 0%, rgba(6,16,11,.62) 60%, rgba(6,16,11,.88) 100%);"></div>
-    <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
+    <!-- The shutter. Sits over the photo and under the copy, so the heading
+         stays legible while the louvres close behind it. -->
+    <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
+    <div data-gy="-0.05" style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
       <div class="gal-rise gal-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HER</div>
       <h1 class="gal-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(42px,7.4vw,104px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">THE GALLERY</h1>
       <div class="gal-rise gal-lead" style="animation-delay:.4s; text-align:center; max-width:44ch;">Every room, ritual and finish, photographed where it happens — inside our green house in Dubai.</div>
@@ -365,13 +431,13 @@ img { display:block; }
       <!-- Shot vertically, so it starts as a portrait arch that echoes the
            doorway in the clip, then grows out to full bleed. -->
       <div data-gexpand="0.12,0.62" class="gal-vid-frame"
-           style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
+           style="position:absolute; left:0; top:0; width:310px; height:551px; will-change:transform,width,height; contain:layout paint; overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
         <video src="uploads/gal-video.mp4" poster="uploads/gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
                style="width:100%; height:100%; object-fit:cover; display:block;"></video>
       </div>
 
       <div class="gal-video-copy" data-go="0,1" data-gfadeout="0.14,0.34"
-           style="position:absolute; left:calc(50% + 215px); top:50%; transform:translateY(-50%); width:min(40ch,32vw); z-index:3;">
+           style="position:absolute; left:46%; right:clamp(20px,6vw,90px); top:50%; transform:translateY(-50%); z-index:3;">
         <div class="gal-eyebrow">03 — THE ARRIVAL</div>
         <h2 class="gal-h2" style="font-size:clamp(26px,3.4vw,48px);">Through the green door</h2>
         <div class="gal-lead">A quiet street in Ajman, a walled garden, and a women-only house behind it. From the moment you step inside, the day belongs to you.</div>
