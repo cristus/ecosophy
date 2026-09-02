@@ -154,19 +154,6 @@ img { display:block; }
         var inset = gw[0] * (1 - k);
         el.style.clipPath = 'inset(0 ' + inset.toFixed(2) + '% 0 0)';
       }
-      // Arch: the panel rises as a circle and relaxes into a wide, shallow arc
-      // as it takes the screen. Both radii are the SAME length, which is what
-      // makes the top read as a true circle on the way in — a squashed vertical
-      // radius gives a flat-topped tunnel mouth instead. The values are a
-      // fraction of the viewport width, so the curve is identical at every size.
-      // When the two corner radii together exceed the width the browser scales
-      // them down to fit, which is exactly what turns the start into a dome.
-      var ga = nums(el, 'data-garch', null);
-      if (ga) {
-        var arch = ga[0] + (ga[1] - ga[0]) * clamp(p / 0.86, 0, 1);
-        var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
-        el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
-      }
       // Expand: the arch panel grows out of its frame to fill the viewport, so
       // the clip stops being a card and becomes the screen. Width/height are set
       // directly rather than scaled, because a scaled video is resampled by the
@@ -204,6 +191,29 @@ img { display:block; }
         el.style.opacity = (1 - f).toFixed(3);
       }
       // (slats are handled below, on their own timeline)
+    }
+
+    // Arch: the dome opens as a circle as soon as it clears the bottom of the
+    // screen, then relaxes into a wide shallow arc as it climbs. The change has
+    // to happen WHILE it rises, which is why this runs off the panel's own rect
+    // rather than section progress: progress is pinned at 0 until the section
+    // top passes the top of the screen, so the dome would hold one fixed circle
+    // for its whole entrance and only start flattening once it was already
+    // full-bleed. Same trigger as the reference — begin as the top edge reaches
+    // 95% of the viewport, finish about two thirds of a screen later.
+    //
+    // Both radii are the SAME length, which is what makes the top read as a true
+    // circle; a squashed vertical radius gives a flat-topped tunnel mouth. They
+    // are a fraction of the viewport width, so the curve is identical at every
+    // size, and when the pair exceeds the width the browser scales them to fit —
+    // that is what caps the start at a clean half-width dome.
+    var ga = nums(el, 'data-garch', null);
+    if (ga) {
+      var rg = el.getBoundingClientRect();
+      var qa = clamp((vh * 0.95 - rg.top) / (vh * 0.7), 0, 1);
+      var arch = ga[0] + (ga[1] - ga[0]) * qa;
+      var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
+      el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
     }
 
     // Slats: vertical blinds over the photo, opening left to right. Driven by
@@ -397,6 +407,7 @@ img { display:block; }
           <span style="display:block; height:1.5px; background:#E4C778; border-radius:2px;"></span>
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
+        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
         <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
@@ -408,7 +419,7 @@ img { display:block; }
       <!-- Holds the centre column open: the badge below is absolutely positioned
            and so takes no grid cell of its own. -->
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
-      <a href="/" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
+      <a href="/for-her" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
         <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
           <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
         </span>
@@ -428,6 +439,7 @@ img { display:block; }
     </div>
 
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
+      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
@@ -438,7 +450,7 @@ img { display:block; }
   </div>
 
   <!-- ── 1. Hero · deep vertical drift + slow push-in ────────────────────── -->
-  <div data-gsection style="position:relative; height:100vh; min-height:560px; overflow:hidden;">
+  <div data-gsection style="position:relative; height:155vh; min-height:560px; overflow:hidden;">
     <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
       <img src="uploads/gal-hero.jpg" alt="The hammam at Ecosophy" style="width:100%; height:100%; object-fit:cover;">
     </div>
@@ -446,7 +458,7 @@ img { display:block; }
     <!-- The shutter. Sits over the photo and under the copy, so the heading
          stays legible while the louvres close behind it. -->
     <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
-    <div data-gy="-0.05" style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
+    <div data-gy="-0.05" style="position:relative; z-index:2; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
       <div class="gal-rise gal-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HER</div>
       <h1 class="gal-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(42px,7.4vw,104px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">THE GALLERY</h1>
       <div class="gal-rise gal-lead" style="animation-delay:.4s; text-align:center; max-width:44ch;">Every room, ritual and finish, photographed where it happens — inside our green house in Dubai.</div>
@@ -455,10 +467,10 @@ img { display:block; }
   </div>
 
   <!-- ── 2. The Rooms · opposed horizontal drift ─────────────────────────── -->
-  <div data-gsection style="position:relative; margin-top:-14vh; z-index:2;">
+  <div data-gsection style="position:relative; margin-top:-70vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
-    <div data-garch="66,21" style="background:#0B1F16; padding:clamp(90px,13vw,170px) 0 clamp(70px,10vw,130px); overflow:hidden; min-height:300vh; display:flex; flex-direction:column; justify-content:center;">
-  <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(100px,12vw,180px) 0;">
+    <div data-garch="66,21" style="background:#0B1F16; padding:clamp(50px,6vw,90px) 0 clamp(70px,10vw,130px); overflow:hidden; display:flex; flex-direction:column;">
+  <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(24px,3vw,44px) 0 clamp(100px,12vw,180px);">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:8%; bottom:6%; width:min(11vw,120px); opacity:.05;">
@@ -828,7 +840,7 @@ class Component extends DCLogic {
     const wa = '+971 58 548 0899';
     return {
       ...this.reelVals(),
-      navGap: heroMobile ? '12px' : 'clamp(9px,1.05vw,15px)',
+      navGap: heroMobile ? '12px' : 'clamp(8px,0.85vw,13px)',
       navShow: navMobile ? 'none' : 'inline',
       burgerShow: navMobile ? 'flex' : 'none',
       langShow: heroMobile ? 'none' : 'flex',

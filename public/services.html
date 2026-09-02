@@ -38,18 +38,49 @@ a:hover { color:#B98F3E; }
 
 <div style="min-height:100vh; background:#F6F1E6; overflow-x:clip;">
 
-  <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(11,31,22,.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25);">
-    <div style="max-width:1280px; margin:0 auto; padding:0 20px; height:66px; display:flex; align-items:center; justify-content:space-between; gap:18px;">
-      <div style="display:flex; align-items:center; gap:clamp(12px,1.6vw,20px); font-size:11px; letter-spacing:1.4px;">
-        <a href="/for-her" style="color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="#catalogue" style="color:#E4C778; white-space:nowrap;">SERVICES</a>
-        <a href="/for-her#gallery" style="color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
+  <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
+    <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
+      <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:10.5px; letter-spacing:1.3px; min-width:0;">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
+          <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
+          <span style="display:block; height:1.5px; width:100%; background:#E4C778; border-radius:2px;"></span>
+          <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
+        </button>
+        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
+        <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
+        <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
+        <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
+        <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
-      <a href="/for-her" style="display:flex; align-items:center; gap:10px;">
-        <img src="assets/mark-woman-gold.png" alt="" style="width:30px; height:30px;">
-        <span style="font-family:'Great Vibes',cursive; font-size:26px; color:#EBD9A6; line-height:1;">Ecosophy</span>
+      <!-- Holds the centre column open: the badge is absolutely positioned. -->
+      <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
+      <a href="/for-her" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
+          <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
+          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
+        </span>
       </a>
-      <a href="#catalogue" style="border:1px solid rgba(201,168,96,.5); color:#E4C778; border-radius:22px; padding:9px 20px; font-size:10.5px; letter-spacing:2px; white-space:nowrap;" style-hover="background:rgba(201,168,96,.16);">BOOK NOW</a>
+      <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
+        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:10.5px; letter-spacing:1.6px;">
+          <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
+          <span style="padding:6px 11px; color:#E4C778;">AR</span>
+        </div>
+        <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:10px 18px; font-size:11px; letter-spacing:2px; font-weight:600; white-space:nowrap;">{{ waLabel }}</a>
+      </div>
+    </div>
+    <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
+      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
+      <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
+      <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
+      <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
+      <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
     </div>
   </div>
 
@@ -151,7 +182,7 @@ a:hover { color:#B98F3E; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 58 548 0899&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
-  state = { filter: null };
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, filter: null };
   cats() {
     const D = (n, d, p, desc) => ({ name: n, duration: d, price: p, desc });
     return [
@@ -201,6 +232,14 @@ class Component extends DCLogic {
       ] },
     ];
   }
+  componentDidMount() {
+    this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
+    this._navScroll = () => { const past = (window.scrollY || 0) > 90; if (past !== this.state.scrolled) this.setState({ scrolled: past }); };
+    window.addEventListener('resize', this._navResize);
+    window.addEventListener('scroll', this._navScroll, { passive: true });
+    this._navScroll();
+  }
+
   renderVals() {
     const cats = this.cats();
     const f = this.state.filter;
@@ -217,6 +256,17 @@ class Component extends DCLogic {
     const total = groups.reduce((n, c) => n + c.items.length, 0);
     const wa = this.props.whatsapp ?? '+971 58 548 0899';
     return {
+      navGap: (this.state.vw || 1280) < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
+      navShow: (this.state.vw || 1280) < 1400 ? 'none' : 'inline',
+      burgerShow: (this.state.vw || 1280) < 1400 ? 'flex' : 'none',
+      menuShow: this.state.menuOpen && (this.state.vw || 1280) < 1400 ? 'flex' : 'none',
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      langShow: (this.state.vw || 1280) < 860 ? 'none' : 'flex',
+      badgeSlotW: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '150px' : '190px') : ((this.state.vw || 1280) < 860 ? '54px' : '78px'),
+      badgeSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '34px' : '40px') : ((this.state.vw || 1280) < 860 ? '46px' : '58px'),
+      badgeWordSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '17px' : '19px') : ((this.state.vw || 1280) < 860 ? '19px' : '22px'),
+      badgeSubShow: this.state.scrolled ? 'none' : 'block',
+      waLabel: (this.state.vw || 1280) < 860 ? 'BOOK' : 'WHATSAPP',
       groups,
       filters: [mk('ALL TREATMENTS', null)].concat(cats.map(c => mk(c.name.toUpperCase(), c.name))),
       countLabel: total + ' shown',
