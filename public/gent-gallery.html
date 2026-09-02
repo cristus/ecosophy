@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gallery — Ecosophy Spa for Her, Dubai</title>
-<meta name="description" content="Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.">
-<link rel="icon" type="image/png" href="/favicons/mark-woman-gold-180.png">
-<link rel="apple-touch-icon" href="/favicons/mark-woman-gold-180.png">
+<title>Gallery — Ecosophy Gent Spa, Dubai</title>
+<meta name="description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
+<link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
+<link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy Spa">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Gallery — Ecosophy Spa for Her, Dubai">
-<meta property="og:description" content="Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.">
-<meta property="og:url" content="https://ecosophy.pages.dev/gallery">
+<meta property="og:title" content="Gallery — Ecosophy Gent Spa, Dubai">
+<meta property="og:description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
+<meta property="og:url" content="https://ecosophy.pages.dev/gent-gallery">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://ecosophy.pages.dev/gallery">
+<link rel="canonical" href="https://ecosophy.pages.dev/gent-gallery">
 <script src="/vendor/react.production.min.js"></script>
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
@@ -75,7 +75,7 @@ img { display:block; }
   // bodies too. A statement like `var prevY = 0` therefore comes back as
   // `var sc-camel-prev-y = 0` and the re-appended copy fails to parse. Keep
   // every assignment in here lowercase or snake_case.
-  if (window.__ecoGal) return; window.__ecoGal = 1;
+  if (window.__ecoGentGal) return; window.__ecoGentGal = 1;
 
   function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
   function nums(el, attr, fallback){
@@ -202,11 +202,11 @@ img { display:block; }
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
-        <a href="/for-her#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
-        <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
-        <a href="/gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
-        <a href="/for-her#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
-        <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; font-size:11px; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(9px,1vw,15px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
+        <a href="/for-him#rituals" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
+        <a href="/gent-gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
+        <a href="/for-him#book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/for-her" style="display:{{ navShow }}; color:#9FB0A0; font-size:11px; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(9px,1vw,15px);" style-hover="color:#E4C778;">⇄ FOR HER</a>
       </div>
 
       <!-- Holds the centre column open: the badge below is absolutely positioned
@@ -214,11 +214,11 @@ img { display:block; }
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
       <a href="/" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
         <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
-          <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+          <img src="assets/mark-man-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
           <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
-          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY &amp; SPA · FOR HER</span>
+          <span style="display:{{ badgeSubShow }}; font-size:8.5px; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">GENT SPA · FOR HIM</span>
         </span>
       </a>
 
@@ -233,24 +233,24 @@ img { display:block; }
 
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
-      <a href="/for-her#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
-      <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
-      <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
-      <a href="/for-her#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
-      <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
+      <a href="/for-him#rituals" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
+      <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
+      <a href="/for-him#book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
     </div>
   </div>
 
   <!-- ── 1. Hero · deep vertical drift + slow push-in ────────────────────── -->
   <div data-gsection style="position:relative; height:100vh; min-height:560px; overflow:hidden;">
     <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
-      <img src="uploads/gal-hero.jpg" alt="The hammam at Ecosophy" style="width:100%; height:100%; object-fit:cover;">
+      <img src="uploads/gent-gal-hero.jpg" alt="The gentlemen’s hammam" style="width:100%; height:100%; object-fit:cover;">
     </div>
     <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 42%, rgba(6,16,11,.30) 0%, rgba(6,16,11,.62) 60%, rgba(6,16,11,.88) 100%);"></div>
     <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
-      <div class="gal-rise gal-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HER</div>
+      <div class="gal-rise gal-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
       <h1 class="gal-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(42px,7.4vw,104px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">THE GALLERY</h1>
-      <div class="gal-rise gal-lead" style="animation-delay:.4s; text-align:center; max-width:44ch;">Every room, ritual and finish, photographed where it happens — inside our green house in Dubai.</div>
+      <div class="gal-rise gal-lead" style="animation-delay:.4s; text-align:center; max-width:44ch;">Every room, ritual and finish, photographed where it happens — inside the gentlemen’s side of the house.</div>
       <div class="gal-rise gal-cap" style="animation-delay:.55s;">SCROLL ↓</div>
     </div>
   </div>
@@ -262,17 +262,17 @@ img { display:block; }
     <div style="max-width:1520px; margin:0 auto; padding:0 clamp(20px,3vw,44px);">
       <div class="gal-eyebrow">01 — THE ROOMS</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Where the hours slow down</h2>
-      <div class="gal-lead">Hammam, jacuzzi, infrared sauna and the treatment rooms — the spaces our therapists work in every day.</div>
+      <div class="gal-lead">Hammam, infrared sauna, shower rooms and the treatment beds — the spaces our therapists work in every day.</div>
     </div>
     <!-- The two rows slide against each other as the section passes. -->
     <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin-top:clamp(38px,5vw,64px); padding:0 clamp(20px,3vw,44px);" data-gx="0.055">
-      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-1.jpg" alt="Treatment room"></div>
-      <div class="gal-frame" style="flex:1.35 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-3.jpg" alt="Jacuzzi suite"></div>
-      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gal-room-5.jpg" alt="Infrared sauna"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gent-gal-room-1.jpg" alt="Treatment room"></div>
+      <div class="gal-frame" style="flex:1.35 1 0; aspect-ratio:4/5;"><img src="uploads/gent-gal-room-3.jpg" alt="Jacuzzi suite"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gent-gal-room-5.jpg" alt="Infrared sauna"></div>
     </div>
     <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin-top:clamp(16px,2vw,28px); padding:0 clamp(20px,3vw,44px);" data-gx="-0.055">
-      <div class="gal-frame" style="flex:1.5 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-4.jpg" alt="Jacuzzi room"></div>
-      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:16/9;"><img src="uploads/gal-room-2.jpg" alt="Massage room"></div>
+      <div class="gal-frame" style="flex:1.5 1 0; aspect-ratio:16/9;"><img src="uploads/gent-gal-room-4.jpg" alt="Jacuzzi room"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:16/9;"><img src="uploads/gent-gal-room-2.jpg" alt="Massage room"></div>
     </div>
     </div>
   </div>
@@ -284,7 +284,7 @@ img { display:block; }
         <!-- The build fills in the source when the video file is present (see
              GALLERY_VIDEO in build.mjs); until then the poster frame stands in.
              A <video> with no source requests nothing, so this never 404s. -->
-        <video  poster="uploads/gal-video-poster.jpg" autoplay muted loop playsinline
+        <video  poster="uploads/gent-gal-video-poster.jpg" autoplay muted loop playsinline
                style="width:100%; height:100%; object-fit:cover;"></video>
       </div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,16,11,.62),rgba(6,16,11,.24) 42%,rgba(6,16,11,.78));"></div>
@@ -302,10 +302,10 @@ img { display:block; }
       <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(28px,5vw,80px); align-items:center;">
         <div style="position:relative;">
           <div class="gal-frame" data-gy="0.07" style="aspect-ratio:5/6;">
-            <img src="uploads/gal-detail-2.jpg" alt="The flower wall treatment room">
+            <img src="uploads/gent-gal-detail-2.jpg" alt="Treatment room">
           </div>
           <div class="gal-frame gal-stack-float" data-gy="-0.16" style="position:absolute; right:-8%; bottom:-9%; width:46%; aspect-ratio:1/1;">
-            <img src="uploads/gal-detail-1.jpg" alt="Oils and balms">
+            <img src="uploads/gent-gal-detail-1.jpg" alt="Grooming products">
           </div>
         </div>
         <div>
@@ -313,7 +313,7 @@ img { display:block; }
           <h2 class="gal-h2" style="font-size:clamp(28px,4.2vw,56px);">Chosen, not stocked</h2>
           <div class="gal-lead">Every oil, balm and mask on the trolley is picked for a specific skin and a specific ritual. Nothing is generic, and nothing is hurried.</div>
           <div class="gal-frame" data-gy="-0.09" style="margin-top:clamp(24px,3vw,40px); aspect-ratio:16/10;">
-            <img src="uploads/gal-detail-3.jpg" alt="Product trolley">
+            <img src="uploads/gent-gal-detail-3.jpg" alt="Product trolley">
           </div>
         </div>
       </div>
@@ -323,23 +323,23 @@ img { display:block; }
   <!-- ── 5. The Artistry · staggered columns at three speeds ─────────────── -->
   <div data-gsection style="position:relative; padding:clamp(70px,10vw,130px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
     <div style="max-width:1520px; margin:0 auto;">
-      <div class="gal-eyebrow">04 — THE ARTISTRY</div>
-      <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Hair, brows and make-up</h2>
-      <div class="gal-lead">Bridal and evening work by our senior artists — the part of the house that gets photographed most.</div>
+      <div class="gal-eyebrow">04 — THE TREATMENTS</div>
+      <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Skin, recovery and grooming</h2>
+      <div class="gal-lead">Facials, deep tissue, recovery therapy and beard work — the treatments our regulars come back for.</div>
       <div class="gal-art-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,1.8vw,26px); margin-top:clamp(38px,5vw,64px); align-items:start;">
         <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="0.045">
-          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-1.jpg" alt="Make-up"></div>
-          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-4.jpg" alt="Bridal styling"></div>
-          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-7.jpg" alt="Evening make-up"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-1.jpg" alt="Facial treatment"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gent-gal-art-4.jpg" alt="Massage"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-7.jpg" alt="Recovery therapy"></div>
         </div>
         <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="-0.075">
-          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-2.jpg" alt="Make-up detail"></div>
-          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-5.jpg" alt="Styling"></div>
-          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-8.jpg" alt="Finished look"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gent-gal-art-2.jpg" alt="Skin treatment"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-5.jpg" alt="Grooming"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gent-gal-art-8.jpg" alt="Compression therapy"></div>
         </div>
         <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="0.11">
-          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gal-art-3.jpg" alt="Hair styling"></div>
-          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gal-art-6.jpg" alt="Brows and nails"></div>
+          <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-3.jpg" alt="Deep tissue massage"></div>
+          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gent-gal-art-6.jpg" alt="Facial machine"></div>
         </div>
       </div>
     </div>
@@ -350,12 +350,12 @@ img { display:block; }
     <div style="max-width:1520px; margin:0 auto;">
       <div class="gal-eyebrow">05 — THE CENTRE</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
-      <div class="gal-lead">A green house on a quiet street, open daily from ten in the morning until ten at night.</div>
+      <div class="gal-lead">The same house, the same hours — the gentlemen’s entrance is around the side.</div>
       <div class="gal-frame" data-gslats="16" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
-        <img src="uploads/gal-centre-1.jpg" alt="Ecosophy Beauty Centre exterior" data-gy="0.05">
+        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Gent Spa" data-gy="0.05">
       </div>
       <div class="gal-frame" data-gslats="16" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
-        <img src="uploads/gal-centre-2.jpg" alt="Ecosophy Beauty Centre signage" data-gy="-0.04">
+        <img src="uploads/gent-gal-centre-2.jpg" alt="The gentlemen’s lounge" data-gy="-0.04">
       </div>
     </div>
   </div>
@@ -365,20 +365,20 @@ img { display:block; }
     <div class="gal-eyebrow">READY WHEN YOU ARE</div>
     <h2 class="gal-h2" style="font-size:clamp(28px,4.4vw,58px);">Come and see it in person</h2>
     <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:26px;">
-      <a href="/for-her#book" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px; font-weight:600;">BEGIN YOUR RITUAL</a>
-      <a href="/services" style="border:1px solid rgba(201,168,96,.65); color:#EBD9A6; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px;">SEE THE MENU</a>
+      <a href="/for-him#book" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px; font-weight:600;">BEGIN YOUR RITUAL</a>
+      <a href="/gent-services" style="border:1px solid rgba(201,168,96,.65); color:#EBD9A6; border-radius:28px; padding:14px 30px; font-size:11.5px; letter-spacing:3px;">SEE THE MENU</a>
     </div>
   </div>
 
   <div style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; max-width:1520px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:10px;">
-      <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
+      <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
       <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
       <span style="font-size:9.5px; letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
     </div>
     <div style="display:flex; gap:18px; font-size:10.5px; letter-spacing:2.4px;">
-      <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
       <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>
+      <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
       <a href="https://www.instagram.com/ecosophy.ae/" style="color:#C9A860;">INSTAGRAM</a>
     </div>
     <div style="font-size:10.5px; letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>

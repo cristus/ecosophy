@@ -51,6 +51,12 @@ const PAGES = {
     description: 'Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
+  'Ecosophy Gent Gallery.dc.html': {
+    route: 'gent-gallery.html',
+    title: 'Gallery — Ecosophy Gent Spa, Dubai',
+    description: "Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.",
+    mark: 'favicons/mark-man-gold-180.png',
+  },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',
