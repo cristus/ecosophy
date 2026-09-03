@@ -12,3 +12,6 @@ Thumbs.db
 
 # Playwright/Chromium debug output
 *.log
+
+# Local wrangler dev state (its own KV store, not the live one)
+.wrangler/

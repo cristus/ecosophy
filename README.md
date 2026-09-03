@@ -31,6 +31,13 @@ folder. Push to `main` and the site redeploys.
 The two detail pages are single templates driven by the `?s=` slug, so all ~30
 treatments per side are served by one file each.
 
+## Editing text and pictures
+
+Add `?edit=1` to any URL (or press Ctrl+Shift+E), type the editor password, and
+click any line of text or any picture to change it — then Save. It goes live
+immediately, without a rebuild or a redeploy. See [EDITING.md](EDITING.md) for
+the whole thing, including the one-time Cloudflare binding setup.
+
 ## Rebuilding
 
 The pages are authored as Claude Design canvas files (`.dc.html`) in

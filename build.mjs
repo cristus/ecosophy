@@ -106,9 +106,13 @@ const LINK_MAP = Object.entries(PAGES)
 // pristine source text and calls updateHtml() with it. Without that pass the
 // runtime keeps the DOM-parsed template, which loses interpolations such as the
 // hero fan's `width:{{ c.w }}` — the cards then render zero-width and collapse.
+// edit.js rides along here so it installs its MutationObserver *before* the
+// runtime's first render — it repaints the saved content overrides after every
+// render pass, and edit mode itself hangs off the same file.
 const RESOURCES = `<script src="/vendor/react.production.min.js"></script>
 <script src="/vendor/react-dom.production.min.js"></script>
-<script src="/vendor/babel.min.js"></script>`;
+<script src="/vendor/babel.min.js"></script>
+<script src="/edit.js"></script>`;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -249,6 +253,10 @@ console.log(`  ${assets.size} assets copied`);
 
 // image-slot.js fetches the slot state at runtime; without it every slot 404s.
 for (const f of ['support.js', 'image-slot.js']) copyFileSync(join(SRC, f), join(OUT, f));
+
+// The live content editor is ours, not the design tool's — it lives in editor/
+// and is copied in, since this script wipes OUT on every run.
+copyFileSync(join('editor', 'edit.js'), join(OUT, 'edit.js'));
 
 // The slot state pins images as embedded data URIs, which win over the `src`
 // attribute. `sw-him` is pinned to the men's door image; leave it alone — the
