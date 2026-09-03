@@ -73,8 +73,13 @@ It just needs attaching to the Pages project:
    - Type: **Secret**
    - Value: whatever password you want to type when editing.
    - Again for **Production** and **Preview**.
-3. Redeploy (or just push anything to `main`) — bindings apply to new
-   deployments, not to ones already built.
+3. Redeploy — bindings apply to new deployments, not to ones already built.
+   The project is direct-upload, so a git push does **not** deploy it:
+
+   ```sh
+   CLOUDFLARE_ACCOUNT_ID=bd249d898ce1822059b90ccb00734a5e \
+     npx wrangler pages deploy public --project-name=ecosophy --branch=main
+   ```
 
 Until step 1 and 2 are done, the site renders exactly as it does today and edit
 mode says the editor is not configured yet. To change the password later, edit

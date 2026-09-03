@@ -649,15 +649,15 @@ class Component extends DCLogic {
     const wa = this.props.whatsapp ?? '+971 50 444 5566';
     return {
       navGap: (this.state.vw || 1280) < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
-      navShow: (this.state.vw || 1280) < 1400 ? 'none' : 'inline',
-      burgerShow: (this.state.vw || 1280) < 1400 ? 'flex' : 'none',
-      menuShow: this.state.menuOpen && (this.state.vw || 1280) < 1400 ? 'flex' : 'none',
+      navShow: (this.state.vw || 1280) < 1280 ? 'none' : 'inline',
+      burgerShow: (this.state.vw || 1280) < 1280 ? 'flex' : 'none',
+      menuShow: this.state.menuOpen && (this.state.vw || 1280) < 1280 ? 'flex' : 'none',
       toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
       langShow: (this.state.vw || 1280) < 860 ? 'none' : 'flex',
       badgeSlotW: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '150px' : '190px') : ((this.state.vw || 1280) < 860 ? '54px' : '78px'),
       badgeSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '34px' : '40px') : ((this.state.vw || 1280) < 860 ? '46px' : '58px'),
       badgeWordSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '17px' : '19px') : ((this.state.vw || 1280) < 860 ? '19px' : '22px'),
-      badgeSubShow: this.state.scrolled ? 'none' : 'block',
+      badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       waLabel: (this.state.vw || 1280) < 860 ? 'BOOK' : 'WHATSAPP',
       groups,
       filters: [mk('ALL TREATMENTS', null)].concat(cats.map(c => mk(c.name.toUpperCase(), c.name))),

@@ -939,7 +939,7 @@ class Component extends DCLogic {
   }
   renderVals() {
     // Same thresholds as the two world pages, so the header folds identically.
-    const navMobile = (this.state.vw || 1280) < 1300;
+    const navMobile = (this.state.vw || 1280) < 1280;
     const heroMobile = (this.state.vw || 1280) < 860;
     const wa = '+971 58 548 0899';
     return {
@@ -953,7 +953,7 @@ class Component extends DCLogic {
       badgeSize: this.state.scrolled ? (heroMobile ? '34px' : '40px') : (heroMobile ? '46px' : '58px'),
       badgeWordSize: this.state.scrolled ? (heroMobile ? '17px' : '19px') : (heroMobile ? '19px' : '22px'),
       badgeSlotW: this.state.scrolled ? (heroMobile ? '150px' : '190px') : (heroMobile ? '54px' : '78px'),
-      badgeSubShow: this.state.scrolled ? 'none' : 'block',
+      badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       waLabel: heroMobile ? 'BOOK' : 'WHATSAPP',
       waHref: 'https://wa.me/' + wa.replace(/\D/g, ''),
     };

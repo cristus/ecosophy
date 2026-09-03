@@ -1410,7 +1410,7 @@ class Component extends DCLogic {
     const heroMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 860;
     // The links collide with the centred wordmark well before 860px, so the
     // burger has to take over earlier than the hero breakpoint.
-    const navMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 1400;
+    const navMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 1280;
     const IMGS = {
       paje: ['uploads/eco-her-hammam-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria','Steam, black soap and a full body scrub on heated marble.'],
       hume: ['uploads/eco-her-robe.jpg?q=80&w=700&auto=format&fit=crop','Photo by Christin Hume on Unsplash','https://unsplash.com/@christinhumephoto'],
@@ -1526,7 +1526,7 @@ class Component extends DCLogic {
       badgeSlotW: this.state.scrolled ? (heroMobile ? '150px' : '190px') : (heroMobile ? '54px' : '78px'),
       badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
       badgeSubSize: 'var(--fs-xxs)',
-      badgeSubShow: this.state.scrolled ? 'none' : 'block',
+      badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
       badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
       badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',

@@ -2,19 +2,23 @@
 
 Static site for Ecosophy Spa Dubai, deployed on Cloudflare Pages.
 
-## Cloudflare Pages settings
+## Deploying
 
-Connect this repo in the Cloudflare dashboard with:
+The Pages project (`ecosophy`, account `Webservices@turquoic.com`) is **direct
+upload — it is not connected to this repo**. Pushing to `main` deploys nothing.
+To publish:
 
-| Setting                | Value    |
-| ---------------------- | -------- |
-| Framework preset       | None     |
-| Build command          | *(empty)* |
-| Build output directory | `public` |
-| Root directory         | `/`      |
+```sh
+CLOUDFLARE_ACCOUNT_ID=bd249d898ce1822059b90ccb00734a5e \
+  npx wrangler pages deploy public --project-name=ecosophy --branch=main
+```
 
-`public/` is committed, so Cloudflare does not run a build — it just serves the
-folder. Push to `main` and the site redeploys.
+That uploads `public/` and bundles `functions/` (the content editor's backend)
+into the deployment. Push to `main` as well, so the repo matches what is live.
+
+Bindings — the `ECO_CONTENT` KV namespace and the `ECO_EDIT_PASSWORD` secret
+that the editor needs — live on the project in the dashboard and apply to each
+new deployment. See [EDITING.md](EDITING.md).
 
 ## Routes
 
