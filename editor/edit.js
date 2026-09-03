@@ -29,6 +29,12 @@
 
   var state = {
     doc: { pages: {} },
+    // Routes this browser has actually changed. Save sends only these, so a tab
+    // holding a stale copy of the doc can never wipe a page someone edited
+    // elsewhere in the meantime. Edit mode survives navigation, so this can hold
+    // several routes at once — that multi-page "fix the whole site, save once"
+    // flow still works, it just no longer carries the untouched pages with it.
+    touched: {},
     remote: false,
     edit: false,
     dirty: 0,
@@ -36,6 +42,13 @@
     applying: false,
     ready: false
   };
+
+  function touch(route) { state.touched[route || ROUTE] = 1; }
+  function touchedRoutes() {
+    var out = [];
+    for (var r in state.touched) if (Object.prototype.hasOwnProperty.call(state.touched, r)) out.push(r);
+    return out;
+  }
 
   // ── route key ───────────────────────────────────────────────────────────
   // service.html?s=<slug> renders a different treatment per slug, so the slug is
@@ -163,11 +176,28 @@
   }
 
   // ── storage ─────────────────────────────────────────────────────────────
+  // Stored as { v:2, doc, touched } so unsaved work keeps its "which routes did I
+  // change" list across a reload. A bare doc is the pre-v2 shape: treat every
+  // route in it as touched, since that is what it meant.
   function loadLocal() {
-    try { return JSON.parse(localStorage.getItem(LS_LOCAL) || 'null'); } catch (e) { return null; }
+    try {
+      var raw = JSON.parse(localStorage.getItem(LS_LOCAL) || 'null');
+      if (!raw || typeof raw !== 'object') return null;
+      if (raw.v === 2 && raw.doc && raw.doc.pages) {
+        return { doc: raw.doc, touched: raw.touched || {} };
+      }
+      if (raw.pages) {
+        var t = {};
+        for (var r in raw.pages) t[r] = 1;
+        return { doc: raw, touched: t };
+      }
+      return null;
+    } catch (e) { return null; }
   }
   function saveLocal() {
-    try { localStorage.setItem(LS_LOCAL, JSON.stringify(state.doc)); } catch (e) {}
+    try {
+      localStorage.setItem(LS_LOCAL, JSON.stringify({ v: 2, doc: state.doc, touched: state.touched }));
+    } catch (e) {}
   }
   function clearLocal() {
     try { localStorage.removeItem(LS_LOCAL); } catch (e) {}
@@ -194,9 +224,21 @@
     .then(function (doc) {
       state.doc = doc && typeof doc === 'object' && doc.pages ? doc : { pages: {} };
       var local = loadLocal();
-      if (local) { mergeDoc(state.doc, local); state.dirty = 1; }
+      if (local) {
+        mergeDoc(state.doc, local.doc);
+        for (var r in local.touched) {
+          state.touched[r] = 1;
+          // Touched but absent locally means it was reverted here and not yet
+          // saved; the copy that just came back from the server must not undo it.
+          if (!local.doc.pages[r]) delete state.doc.pages[r];
+        }
+        state.dirty = 1;
+      }
       state.ready = true;
       applyAll();
+      // The bar is built before this resolves, so its count starts at zero and
+      // reads "no changes" even on a page that has saved edits. Put that right.
+      refreshBar();
       return state.doc;
     });
 
@@ -349,6 +391,7 @@
     var m = pageMap(true);
     m[pathOf(el)] = { t: type, v: value, o: orig };
     state.dirty = 1;
+    touch();
     saveLocal();
     refreshBar();
   }
@@ -360,6 +403,7 @@
     var entry = m[p];
     delete m[p];
     state.dirty = 1;
+    touch();
     saveLocal();
     if (entry.t === 'text') el.textContent = entry.o;
     else el.setAttribute('src', entry.o);
@@ -490,19 +534,34 @@
       toast('No editor backend reachable — kept in this browser. Use Download and commit the file.', 6000);
       return;
     }
+    var routes = touchedRoutes();
+    if (!routes.length) { toast('Nothing to save — no changes made in this browser.'); return; }
+
+    // Send only what this browser changed. An empty map means "clear this page",
+    // which is what Undo all leaves behind.
+    var payload = { routes: {} };
+    for (var i = 0; i < routes.length; i++) {
+      var m = (state.doc.pages && state.doc.pages[routes[i]]) || null;
+      payload.routes[routes[i]] = m && Object.keys(m).length ? m : null;
+    }
+
     var btn = document.getElementById('eco-save');
     if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
     fetch(API_CONTENT, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: authHeaders({ 'content-type': 'application/json' }),
-      body: JSON.stringify(state.doc)
+      body: JSON.stringify(payload)
     }).then(function (r) {
       if (r.status === 401) {
         try { sessionStorage.removeItem(SS_KEY); } catch (e) {}
         throw new Error('password rejected — reload and sign in again');
       }
+      if (r.status === 404 || r.status === 405) {
+        throw new Error('this deployment predates per-page saving — redeploy the site');
+      }
       if (!r.ok) throw new Error('save failed (' + r.status + ')');
       state.dirty = 0;
+      state.touched = {};
       clearLocal();
       toast('Saved — it is live on the site now.');
     }).catch(function (e) {
@@ -524,6 +583,7 @@
     }
     delete state.doc.pages[ROUTE];
     state.dirty = 1;
+    touch();
     saveLocal();
     refreshBar();
     toast('Page reverted — press Save to publish that.');

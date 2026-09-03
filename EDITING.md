@@ -48,7 +48,8 @@ you come back and save them.
   | Route | Does |
   | --- | --- |
   | `GET /api/content` | the overrides every visitor reads |
-  | `PUT /api/content` | save (password required) |
+  | `PATCH /api/content` | save the pages this browser changed (password required) |
+  | `PUT /api/content` | replace the whole doc — restoring a `content.json` backup |
   | `POST /api/upload` | store one picture, returns its permanent URL |
   | `GET /api/img/<hash>.<ext>` | serve a stored picture, cached forever |
   | `POST /api/session` | password check, so edit mode can refuse entry early |
@@ -56,6 +57,11 @@ you come back and save them.
 - Everything lives in one KV namespace. Images are keyed by a hash of their
   bytes, so the same photo uploaded twice costs one copy. Every save also writes
   a 30-day backup copy under `content:v1:backup:<timestamp>`.
+- Save sends **only the pages you changed in that browser**, and the server
+  merges them into the stored doc. This matters with more than one tab open: a
+  tab that loaded before someone else's save holds an out-of-date copy of the
+  whole document, and sending all of it would silently delete their work. Two
+  people editing the *same* page at the same time is still last-write-wins.
 
 ## One-time Cloudflare setup
 
