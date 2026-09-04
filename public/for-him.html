@@ -20,6 +20,7 @@
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
 <script src="/edit.js"></script>
+<script src="/catalog.js" charset="utf-8"></script>
 <script src="/support.js"></script>
 </head>
 <body>
@@ -1170,56 +1171,15 @@ class Component extends DCLogic {
     };
   }
   drilldown() {
-    const P = ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','',''];
-    const B = ['uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png','',''];
-    const F = ['uploads/photo_2026-07-25_02-02-55.jpg','',''];
-    const D = (n, d, p, desc) => ({ name: n, duration: d, price: p, desc: desc || '' });
-    const CATS = [
-      { name: 'Massages', pic: P, blurb: 'Seventeen therapies from our Balinese team, from a focused half hour to full-body bodywork.', items: [
-        D('Relaxing Massage','60 min','200 AED','Light, flowing pressure to unwind the whole body.'),
-        D('Balinese Massage','60 min','200 AED','Slow oil-based bodywork with therapists from Bali.'),
-        D('Deep Tissue Massage','60 min','200 AED','Firm pressure that works into knots and tight muscle.'),
-        D('Swedish Massage','60 min','250 AED','Classic long strokes for circulation and tension relief.'),
-        D('Hot Stone Massage','60 min','300 AED','Warm basalt stones ease deep muscular tightness.'),
-        D('Aromatherapy Massage','60 min','200 AED','Essential-oil blends chosen for how you want to feel.'),
-        D('Lymphatic Drainage Massage','60 min','300 AED','Gentle rhythmic work to reduce fluid and puffiness.'),
-        D('Maderotherapy','60 min','250 AED','Wooden tools contour and stimulate the body.'),
-        D('Endospheres Therapy','60 min','400 AED','Compressive microvibration for skin tone and circulation.'),
-        D('RF Slimming Therapy','60 min','400 AED','Radiofrequency treatment targeting body contour.'),
-        D('Sports Recovery Ritual','60 min','380 AED','Stretch work, deep tissue and heat therapy in one session.'),
-        D('Feet Reflexology Massage','30 min','150 AED','Pressure-point work on the feet, felt everywhere.'),
-        D('Back Massage','30 min','100 AED','A focused half hour on shoulders, back and neck.'),
-        D('Head Massage','30 min','100 AED','Scalp and neck release for screen-tired heads.'),
-        D('Indian Head Massage','30 min','150 AED','Traditional scalp, neck and shoulder technique.'),
-        D('Endospheres Face','30 min','150 AED','Microvibration facial treatment for tone and lift.'),
-        D('Relaxing Jacuzzi Therapy','60 min','250 AED','Warm hydrotherapy to soothe muscles before or after treatment.'),
-      ] },
-      { name: 'Packages', pic: B, blurb: 'Two or three treatments combined into one visit, at a set price.', items: [
-        D('Moroccan Bath + Full Body Massage','90 min','300 AED','A Moroccan bath followed by a full-body massage.'),
-        D('Relaxing Jacuzzi Therapy + Full Body Massage','90 min','350 AED','Warm hydrotherapy paired with a full-body massage.'),
-        D('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy','120 min','450 AED','The full circuit: bath, massage and jacuzzi in one visit.'),
-      ] },
-      { name: 'Spa Club', pic: F, blurb: 'Bath, sauna, jacuzzi and facial rituals \u2014 our members\u2019 favourites.', items: [
-        D('Infrared Sauna Session','','157.50 AED','Gentle heat to support muscle recovery, improve circulation and ease tension.'),
-        D('Jacuzzi Therapy','','210.00 AED','Warm hydrotherapy that soothes muscles and promotes total body relaxation.'),
-        D('Classic Moroccan Bath','','157.50 AED','Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.'),
-        D('Jacuzzi Therapy + Full Body Massage','','367.50 AED','Warm hydrotherapy paired with a full-body massage for deep relaxation.'),
-        D('Royal Moroccan Bath','','262.50 AED','Steam, black soap, deep exfoliation and a nourishing body mask.'),
-        D('Moroccan Bath + 1-Hour Balinese Massage','','315.00 AED','A Moroccan bath followed by a 60-minute Balinese full-body massage.'),
-        D('Moroccan Bath + HydraFacial','','367.50 AED','Traditional Moroccan bath followed by a hydrating, cleansing facial.'),
-        D('Ecosophy Signature Facial + Full Body Balinese Massage','','472.50 AED','Our exclusive signature facial with a 60-minute Balinese full-body massage.'),
-        D('Men\u2019s Signature Facial','','290.00 AED','Deep cleanse and hydration built for beard-line and city skin.'),
-      ] },
-    ];
+    const CATS = window.ECO.homeCats('him');
     const priceNum = p => parseFloat(String(p).replace(/[^\d.]/g, '')) || 0;
     const { dCat, dSvc } = this.state;
     const dCategories = CATS.map(c => {
-      const cheapest = c.items.slice().sort((a, b) => priceNum(a.price) - priceNum(b.price))[0];
       return {
-        name: c.name.toUpperCase(), slot: 'dd-cat-' + c.name,
+        name: c.name.toUpperCase(), slot: c.slot,
         img: c.pic[0], credit: c.pic[1], chref: c.pic[2],
         countLabel: c.items.length + ' TREATMENTS',
-        fromLabel: 'from ' + cheapest.price,
+        fromLabel: window.ECO.fromLabel(c.items),
         pillBg: this.state.dCat === c.name ? '#14532D' : 'rgba(255,253,247,.9)',
         pillColor: this.state.dCat === c.name ? '#F1E7CC' : '#3A4136',
         pillBorder: this.state.dCat === c.name ? '#14532D' : '#DED4BD',
@@ -1290,7 +1250,9 @@ class Component extends DCLogic {
     }) : [];
     const money = (n) => (Math.round(n * 100) % 100 === 0 ? String(Math.round(n)) : n.toFixed(2)) + ' AED';
     const extraTotal = extraNames.reduce((sum, n) => sum + priceNum((allServices.find(s => s.name === n) || {}).price), 0);
-    const ddTotal = detail ? money(priceNum(detail.price) + extraTotal) : '';
+    const ddTotal = detail
+      ? (priceNum(detail.price) > 0 ? money(priceNum(detail.price) + extraTotal) : 'On request')
+      : '';
     const wa = (this.props.whatsapp ?? '').replace(/[^0-9]/g, '');
     const missing = [];
     if (!this.state.day || !chosenTime) missing.push('a day and time');

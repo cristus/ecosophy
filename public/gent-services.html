@@ -20,6 +20,7 @@
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
 <script src="/edit.js"></script>
+<script src="/catalog.js" charset="utf-8"></script>
 <script src="/support.js"></script>
 </head>
 <body>
@@ -479,7 +480,7 @@ a:hover { color:#B98F3E; }
     <div data-gy="-0.05" style="position:relative; max-width:1180px; margin:0 auto; text-align:center;">
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(24px,3vw,32px); color:#E4C778;">for him</div>
       <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,88px); color:#F1E7CC; margin:6px 0 0; letter-spacing:.02em;">THE GENTLEMEN'S MENU</h1>
-      <div style="font-size:14px; color:#B9C7B6; line-height:1.9; max-width:560px; margin:18px auto 0; text-wrap:pretty;">Twenty-nine treatments across massage, bath rituals, recovery and packages. Every price includes VAT.</div>
+      <div style="font-size:14px; color:#B9C7B6; line-height:1.9; max-width:560px; margin:18px auto 0; text-wrap:pretty;">{{ introLine }}</div>
       <div style="font-size:var(--fs-md); letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>
   </div>
@@ -576,53 +577,7 @@ a:hover { color:#B98F3E; }
 class Component extends DCLogic {
   state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, filter: null };
   cats() {
-    const D = (n, d, p, desc) => ({ name: n, duration: d, price: p, desc });
-    return [
-      { name: 'Massages', slot: 'gsvc-cat-massage',
-        img: 'uploads/eco-her-massage-1.jpg?q=80&w=1200&auto=format&fit=crop',
-        credit: 'Photo by alan caishan on Unsplash', chref: 'https://unsplash.com/@caishan119',
-        blurb: 'Seventeen therapies from our Balinese team, from a focused half hour to full-body bodywork.', items: [
-        D('Relaxing Massage','60 MIN','200 AED','Light, flowing pressure to unwind the whole body.'),
-        D('Balinese Massage','60 MIN','200 AED','Slow oil-based bodywork with therapists from Bali.'),
-        D('Deep Tissue Massage','60 MIN','200 AED','Firm pressure that works into knots and tight muscle.'),
-        D('Swedish Massage','60 MIN','250 AED','Classic long strokes for circulation and tension relief.'),
-        D('Hot Stone Massage','60 MIN','300 AED','Warm basalt stones ease deep muscular tightness.'),
-        D('Aromatherapy Massage','60 MIN','200 AED','Essential-oil blends chosen for how you want to feel.'),
-        D('Lymphatic Drainage Massage','60 MIN','300 AED','Gentle rhythmic work to reduce fluid and puffiness.'),
-        D('Maderotherapy','60 MIN','250 AED','Wooden tools contour and stimulate the body.'),
-        D('Endospheres Therapy','60 MIN','400 AED','Compressive microvibration for skin tone and circulation.'),
-        D('RF Slimming Therapy','60 MIN','400 AED','Radiofrequency treatment targeting body contour.'),
-        D('Sports Recovery Ritual','60 MIN','380 AED','Stretch work, deep tissue and heat therapy in one session.'),
-        D('Feet Reflexology Massage','30 MIN','150 AED','Pressure-point work on the feet, felt everywhere.'),
-        D('Back Massage','30 MIN','100 AED','A focused half hour on shoulders, back and neck.'),
-        D('Head Massage','30 MIN','100 AED','Scalp and neck release for screen-tired heads.'),
-        D('Indian Head Massage','30 MIN','150 AED','Traditional scalp, neck and shoulder technique.'),
-        D('Endospheres Face','30 MIN','150 AED','Microvibration facial treatment for tone and lift.'),
-        D('Relaxing Jacuzzi Therapy','60 MIN','250 AED','Warm hydrotherapy to soothe muscles before or after treatment.'),
-      ] },
-      { name: 'Packages', slot: 'gsvc-cat-pkg',
-        img: 'uploads/eco-her-facial-1.jpg?q=80&w=1200&auto=format&fit=crop',
-        credit: 'Photo by Rosa Rafael on Unsplash', chref: 'https://unsplash.com/@rosarafael',
-        blurb: 'Two or three treatments combined into one visit, at a set price.', items: [
-        D('Moroccan Bath + Full Body Massage','90 MIN','300 AED','A Moroccan bath followed by a full-body massage.'),
-        D('Relaxing Jacuzzi Therapy + Full Body Massage','90 MIN','350 AED','Warm hydrotherapy paired with a full-body massage.'),
-        D('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy','120 MIN','450 AED','The full circuit: bath, massage and jacuzzi in one visit.'),
-      ] },
-      { name: 'Spa Club', slot: 'gsvc-cat-spa',
-        img: 'uploads/eco-her-hammam-1.jpg?q=80&w=1200&auto=format&fit=crop',
-        credit: 'Photo by paje victoria on Unsplash', chref: 'https://unsplash.com/@pajevictoria',
-        blurb: 'Bath, sauna, jacuzzi and facial rituals \u2014 our members\u2019 favourites.', items: [
-        D('Infrared Sauna Session','30 MIN','157.50 AED','Gentle heat to support muscle recovery, improve circulation and ease tension.'),
-        D('Jacuzzi Therapy','45 MIN','210.00 AED','Warm hydrotherapy that soothes muscles and promotes total body relaxation.'),
-        D('Classic Moroccan Bath','45 MIN','157.50 AED','Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.'),
-        D('Jacuzzi Therapy + Full Body Massage','105 MIN','367.50 AED','Warm hydrotherapy paired with a full-body massage for deep relaxation.'),
-        D('Royal Moroccan Bath','75 MIN','262.50 AED','Steam, black soap, deep exfoliation and a nourishing body mask.'),
-        D('Moroccan Bath + 1-Hour Balinese Massage','105 MIN','315.00 AED','A Moroccan bath followed by a 60-minute Balinese full-body massage.'),
-        D('Moroccan Bath + HydraFacial','105 MIN','367.50 AED','Traditional Moroccan bath followed by a hydrating, cleansing facial.'),
-        D('Ecosophy Signature Facial + Full Body Balinese Massage','120 MIN','472.50 AED','Our exclusive signature facial with a 60-minute Balinese full-body massage.'),
-        D('Men\u2019s Signature Facial','60 MIN','290.00 AED','Deep cleanse and hydration built for beard-line and city skin.'),
-      ] },
-    ];
+    return window.ECO.menuCats('him');
   }
   componentDidMount() {
     this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
@@ -646,6 +601,8 @@ class Component extends DCLogic {
         border: on ? '#14532D' : '#DED4BD', pick: () => this.setState({ filter: key }) };
     };
     const total = groups.reduce((n, c) => n + c.items.length, 0);
+    const grand = cats.reduce((n, c) => n + c.items.length, 0);
+    const introLine = grand + ' treatments across massage, bath rituals, advanced aesthetic care and grooming. Every price includes VAT.';
     const wa = this.props.whatsapp ?? '+971 50 444 5566';
     return {
       navGap: (this.state.vw || 1280) < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
@@ -659,7 +616,7 @@ class Component extends DCLogic {
       badgeWordSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '17px' : '19px') : ((this.state.vw || 1280) < 860 ? '19px' : '22px'),
       badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       waLabel: (this.state.vw || 1280) < 860 ? 'BOOK' : 'WHATSAPP',
-      groups,
+      groups, introLine,
       filters: [mk('ALL TREATMENTS', null)].concat(cats.map(c => mk(c.name.toUpperCase(), c.name))),
       countLabel: total + ' shown',
       whatsapp: wa,

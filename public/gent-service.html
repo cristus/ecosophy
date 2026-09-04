@@ -20,6 +20,7 @@
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
 <script src="/edit.js"></script>
+<script src="/catalog.js" charset="utf-8"></script>
 <script src="/support.js"></script>
 </head>
 <body>
@@ -989,40 +990,6 @@ const TYPE = {
   },
 };
 
-const CATALOG = [
-  ['Relaxing Massage','Massages','massage','60 min','200 AED','Light, flowing pressure to unwind the whole body.','The gentlest thing on our massage menu. Long, unhurried strokes at light to medium pressure, designed to quiet the nervous system rather than work into deep tissue.'],
-  ['Balinese Massage','Massages','massage','60 min','200 AED','Slow oil-based bodywork with therapists from Bali.','Traditional Balinese technique — palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.'],
-  ['Deep Tissue Massage','Massages','massage','60 min','200 AED','Firm pressure that works into knots and tight muscle.','Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that a lighter massage never quite reaches.'],
-  ['Swedish Massage','Massages','massage','60 min','250 AED','Classic long strokes for circulation and tension relief.','The classic European technique: long gliding strokes, kneading and circular pressure that improve circulation and leave the whole body loose.'],
-  ['Hot Stone Massage','Massages','massage','60 min','300 AED','Warm basalt stones ease deep muscular tightness.','Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.'],
-  ['Aromatherapy Massage','Massages','massage','60 min','200 AED','Essential-oil blends chosen for how you want to feel.','You choose the blend at the start — calming, uplifting or clearing — and it is worked into the skin over a full-body massage at medium pressure.'],
-  ['Lymphatic Drainage Massage','Massages','massage','60 min','300 AED','Gentle rhythmic work to reduce fluid and puffiness.','Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after cosmetic procedures.'],
-  ['Maderotherapy','Massages','tech','60 min','250 AED','Wooden tools contour and stimulate the body.','Contoured wooden tools are rolled and pressed over the body to stimulate circulation and work on the appearance of cellulite. Firm, and most effective as a course.'],
-  ['Endospheres Therapy','Massages','tech','60 min','400 AED','Compressive microvibration for skin tone and circulation.','A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone.'],
-  ['RF Slimming Therapy','Massages','tech','60 min','400 AED','Radiofrequency treatment targeting body contour.','Radiofrequency heat applied to the deeper layers of the skin to support firmness and contour. Comfortable, warm, and best taken as a course.'],
-  ['Sports Recovery Ritual','Massages','massage','60 min','380 AED','Stretch work, deep tissue and heat therapy in one session.','Assisted stretching, deep tissue through the legs and back, and heat where it is needed. Built for training loads rather than general relaxation.'],
-  ['Feet Reflexology Massage','Massages','focused','30 min','150 AED','Pressure-point work on the feet, felt everywhere.','Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes, and most guests feel it well beyond their feet.'],
-  ['Back Massage','Massages','focused','30 min','100 AED','A focused half hour on shoulders, back and neck.','Half an hour spent entirely on the back, shoulders and neck. The most-booked short treatment on the menu.'],
-  ['Head Massage','Massages','focused','30 min','100 AED','Scalp and neck release for screen-tired heads.','Scalp, temples and neck, with or without oil. Good for tension headaches and the tightness that builds over a long day on screens.'],
-  ['Indian Head Massage','Massages','focused','30 min','150 AED','Traditional scalp, neck and shoulder technique.','The traditional champissage sequence across the upper back, shoulders, neck, scalp and face, done seated and fully clothed.'],
-  ['Endospheres Face','Massages','tech','30 min','150 AED','Microvibration facial treatment for tone and lift.','A smaller Endospheres handpiece worked over the face and neck to support drainage, tone and definition along the jaw.'],
-  ['Relaxing Jacuzzi Therapy','Massages','water','60 min','250 AED','Warm hydrotherapy to soothe muscles before or after treatment.','An hour in the private jacuzzi with warm jets on the back and legs. Excellent on its own, and even better booked before a massage.'],
-
-  ['Moroccan Bath + Full Body Massage','Packages','pkg','90 min','300 AED','A Moroccan bath followed by a full-body massage.','The bath opens and softens the skin, the massage takes over while muscles are still warm. The most popular combination we offer.'],
-  ['Relaxing Jacuzzi Therapy + Full Body Massage','Packages','pkg','90 min','350 AED','Warm hydrotherapy paired with a full-body massage.','Thirty minutes of warm water and jets, then a full-body massage on a heated table without leaving the suite.'],
-  ['Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy','Packages','pkg','120 min','450 AED','The full circuit: bath, massage and jacuzzi in one visit.','Two hours through the whole spa: hammam, massage table and jacuzzi, in the order that gets the most out of each one.'],
-
-  ['Infrared Sauna Session','Spa Club','water','30 min','157.50 AED','Gentle heat to support muscle recovery, improve circulation and ease tension.','Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna while still doing the work.'],
-  ['Jacuzzi Therapy','Spa Club','water','45 min','210.00 AED','Warm hydrotherapy that soothes muscles and promotes total body relaxation.','Forty-five private minutes in warm water with jets positioned along the back, hips and legs.'],
-  ['Classic Moroccan Bath','Spa Club','bath','45 min','157.50 AED','Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.','The essential version of the ritual: steam, beldi black soap and a full kessa exfoliation, finished with a warm rinse.'],
-  ['Jacuzzi Therapy + Full Body Massage','Spa Club','pkg','105 min','367.50 AED','Warm hydrotherapy paired with a full-body massage for deep relaxation.','Forty-five minutes of hydrotherapy followed by a full hour of massage, taken back to back in the same suite.'],
-  ['Royal Moroccan Bath','Spa Club','bath','75 min','262.50 AED','Steam, black soap, deep exfoliation and a nourishing body mask.','The full ritual, with a ghassoul clay mask and argan oil finish added to the classic bath. Skin comes out softer than it has felt in months.'],
-  ['Moroccan Bath + 1-Hour Balinese Massage','Spa Club','pkg','105 min','315.00 AED','A Moroccan bath followed by a 60-minute Balinese full-body massage.','The bath first, then a full hour of traditional Balinese bodywork while the skin is still warm and soft.'],
-  ['Moroccan Bath + HydraFacial','Spa Club','pkg','105 min','367.50 AED','Traditional Moroccan bath followed by a hydrating, cleansing facial.','Body first, face second: a full Moroccan bath, then a HydraFacial to cleanse, extract and hydrate.'],
-  ['Ecosophy Signature Facial + Full Body Balinese Massage','Spa Club','pkg','120 min','472.50 AED','Our exclusive signature facial with a 60-minute Balinese full-body massage.','Our own facial protocol paired with an hour of Balinese massage. Two hours, one suite, and the longest treatment on the menu.'],
-  ['Men\u2019s Signature Facial','Spa Club','facial','60 min','290.00 AED','Deep cleanse and hydration built for beard-line and city skin.','A facial built around the beard line: deep cleanse, steam, extraction where needed, and hydration that holds up against shaving and city air.'],
-];
-
 const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 const SHARED_FAQ = [
@@ -1032,19 +999,19 @@ const SHARED_FAQ = [
   ['Is the gent spa men-only?','Yes. Ecosophy Gent Spa is a men-only floor with its own entrance, lounge and treatment rooms.'],
 ];
 
-const TYPE_FAQ = {
+const TYPE_FAQ = Object.assign({}, window.ECO.him.faqs, {
   massage: [['Can I book on a training day?','Yes. Tell your therapist what you trained and they will keep the pressure clear of anything still inflamed.']],
   focused: [['Do I need to undress?','For the back and reflexology treatments, only partially. Head and Indian head massage are done fully clothed.']],
   bath: [['What do I wear during the bath?','Most guests wear the disposable underwear we provide. The room is fully private and used by one guest at a time.']],
   water: [['How hot does it get?','The jacuzzi runs around 38°C and the infrared cabin around 55°C. Both can be lowered — just ask.']],
   tech: [['How many sessions will I need?','Most guests see a real change over six to eight sessions. Your therapist will give you an honest estimate at the consultation.']],
   pkg: [['Can I split the package across two visits?','It is designed as one visit, because the treatments work better back to back. If you need to split it, message us and we will arrange it.']],
-};
+});
 
 class Component extends DCLogic {
   state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, day: 1, time: null, name: '', phone: '', booked: false, error: '', faq: 0, lb: null };
   svcList() {
-    return CATALOG.map(r => ({ name: r[0], cat: r[1], type: r[2], duration: r[3], price: r[4], desc: r[5], long: r[6], slug: slugify(r[0]) }));
+    return window.ECO.flat('him');
   }
   current(list) {
     let want = this.props.service;
@@ -1065,7 +1032,7 @@ class Component extends DCLogic {
   renderVals() {
     const list = this.svcList();
     const svc = this.current(list);
-    const t = TYPE[svc.type];
+    const t = TYPE[svc.type] || TYPE.massage;
     const wa = this.props.whatsapp ?? '+971 50 444 5566';
     const href = s => '/gent-service?s=' + s.slug;
 
@@ -1120,7 +1087,7 @@ class Component extends DCLogic {
 
     const related = list.filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
       href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST', price: s.price,
-      slot: 'gdet-' + svc.slug + '-rel' + i, img: IMG[TYPE[s.type].img][0], credit: IMG[TYPE[s.type].img][1], chref: IMG[TYPE[s.type].img][2],
+      slot: 'gdet-' + svc.slug + '-rel' + i, img: IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
     }));
 
     const ready = !!this.state.time && this.state.name.trim() && this.state.phone.trim();
