@@ -257,18 +257,33 @@
     return h;
   }
 
-  function signIn() {
+  // The sign-in lives in sessionStorage, so it lasts for this tab only. Getting it
+  // wrong used to drop you on a normal-looking page with nothing said and no way
+  // back in, which reads exactly like "edit mode switched itself off".
+  function signIn(tries) {
     var k = editKey();
     if (k) return Promise.resolve(true);
+    var left = tries == null ? 3 : tries;
     var pw = window.prompt('Ecosophy — editor password');
-    if (!pw) return Promise.resolve(false);
+    if (!pw) {
+      toast('Edit mode not started — press Ctrl+Shift+E to try the password again.', 6000);
+      return Promise.resolve(false);
+    }
     return fetch(API_SESSION, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-eco-key': pw }
     }).then(function (r) {
-      if (!r.ok) { alert('Wrong password (or the editor is not configured yet).'); return false; }
-      try { sessionStorage.setItem(SS_KEY, pw); } catch (e) {}
-      return true;
+      if (r.ok) {
+        try { sessionStorage.setItem(SS_KEY, pw); } catch (e) {}
+        return true;
+      }
+      if (r.status === 503) {
+        toast('The editor is not configured on this deployment yet.', 6000);
+        return false;
+      }
+      if (left > 1) return signIn(left - 1);
+      toast('Wrong password. Press Ctrl+Shift+E to try again.', 6000);
+      return false;
     }).catch(function () {
       // No backend reachable (local preview): allow offline editing.
       try { sessionStorage.setItem(SS_KEY, pw); } catch (e) {}
@@ -387,9 +402,45 @@
   }
 
   // ── edits ───────────────────────────────────────────────────────────────
-  function record(el, type, value, orig) {
+  // Which stored entry, if any, is the one already driving this element?
+  //
+  // Looking it up by DOM path alone is not enough: applyOne falls back to
+  // matching the original text when the path has shifted, so a live override can
+  // be filed under a path that no longer resolves. Re-editing such an element
+  // then found no previous entry, took the *overridden* text as the "original",
+  // and wrote a second entry — leaving two overrides fighting over one element on
+  // every render, and making Alt+click revert do nothing at all.
+  function entryFor(el) {
+    var m = pageMap(false);
+    var p = pathOf(el);
+    if (m[p]) return { path: p, entry: m[p] };
+    for (var k in m) {
+      if (!Object.prototype.hasOwnProperty.call(m, k)) continue;
+      var e = m[k];
+      if (elByPath(k) === el) return { path: k, entry: e };
+      // The entry is usually already applied by the time anyone clicks, so the
+      // element shows its new value, not the original — match on both.
+      if (e.t === 'text') {
+        if (e.v && isTextLeaf(el) && el.textContent.trim() === String(e.v).trim()) return { path: k, entry: e };
+      } else if (e.v && isImage(el) && imgSrc(el) === e.v) {
+        return { path: k, entry: e };
+      }
+      if (findFallback(e) === el) return { path: k, entry: e };
+    }
+    return null;
+  }
+
+  // prevPath must be captured *before* the element's text or src is changed —
+  // once it shows neither the original nor the stored value, entryFor cannot
+  // recognise it any more.
+  function record(el, type, value, orig, prevPath) {
     var m = pageMap(true);
-    m[pathOf(el)] = { t: type, v: value, o: orig };
+    var p = pathOf(el);
+    var stale = prevPath;
+    if (stale === undefined) { var pr = entryFor(el); stale = pr ? pr.path : null; }
+    // Re-file the edit under the element's current path, dropping the stale key.
+    if (stale != null && stale !== p) delete m[stale];
+    m[p] = { t: type, v: value, o: orig };
     state.dirty = 1;
     touch();
     saveLocal();
@@ -397,27 +448,29 @@
   }
 
   function forget(el) {
+    var prev = entryFor(el);
+    if (!prev) return;
     var m = pageMap(true);
-    var p = pathOf(el);
-    if (!m[p]) return;
-    var entry = m[p];
-    delete m[p];
+    var entry = prev.entry;
+    delete m[prev.path];
     state.dirty = 1;
     touch();
     saveLocal();
     if (entry.t === 'text') el.textContent = entry.o;
     else el.setAttribute('src', entry.o);
     refreshBar();
-    toast('Reverted to the original.');
+    toast('Reverted to the original — press Save to publish that.');
   }
 
   function beginText(el) {
     if (state.editingEl) commitText();
-    var m = pageMap(false);
-    var prev = m[pathOf(el)];
+    var prev = entryFor(el);
     state.editingEl = el;
     el._ecoBefore = el.textContent;
-    el._ecoOrig = prev && prev.o != null ? prev.o : el.textContent;
+    el._ecoPrevPath = prev ? prev.path : null;
+    // Keep the true original across repeat edits, so "o" never becomes an
+    // earlier edit of our own.
+    el._ecoOrig = prev && prev.entry.o != null ? prev.entry.o : el.textContent;
     el.setAttribute('contenteditable', 'true');
     el.focus();
     try {
@@ -437,7 +490,7 @@
     var v = (el.innerText != null ? el.innerText : el.textContent).replace(/ /g, ' ').trim();
     if (v === '') { el.textContent = el._ecoBefore; return; }
     el.textContent = v;
-    if (v !== String(el._ecoOrig).trim()) record(el, 'text', v, el._ecoOrig);
+    if (v !== String(el._ecoOrig).trim()) record(el, 'text', v, el._ecoOrig, el._ecoPrevPath);
     else forget(el);
   }
 
@@ -488,9 +541,9 @@
   }
 
   function replaceImage(el, file) {
-    var m = pageMap(false);
-    var prev = m[pathOf(el)];
-    var orig = prev ? prev.o : imgSrc(el);
+    var prev = entryFor(el);
+    var orig = prev ? prev.entry.o : imgSrc(el);
+    var prevPath = prev ? prev.path : null;
     toast('Uploading…', 8000);
     shrink(file)
       .then(function (blob) {
@@ -500,7 +553,7 @@
         });
       })
       .then(function (url) {
-        record(el, 'img', url, orig);
+        record(el, 'img', url, orig, prevPath);
         applyAll();
         toast('Picture replaced — press Save to publish it.');
       })
