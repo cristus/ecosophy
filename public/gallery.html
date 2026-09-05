@@ -513,7 +513,7 @@ img { display:block; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
         <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -545,7 +545,7 @@ img { display:block; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
       <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -630,7 +630,6 @@ img { display:block; }
           <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
             <div style="font-size:var(--fs-xxs); letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
             <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
-            <div style="font-size:11px; color:#C9A860; margin-top:6px;">{{ r.price }}</div>
           </div>
         </div>
       </sc-for>
@@ -810,7 +809,7 @@ img { display:block; }
         <div class="gv-storytext" key="{{ gCurrent.title }}" style="position:absolute; left:18px; right:18px; bottom:20px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#F4EFE3; line-height:1.2;">{{ gCurrent.title }}</div>
           <div style="font-size:12px; color:#C4CFC1; line-height:1.65; margin-top:7px;">{{ gCurrent.caption }}</div>
-          <a href="/for-her#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
+          <a href="/for-her#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }}</a>
         </div>
       </div>
       <span onClick="{{ gNext }}" style="cursor:pointer; flex:none; font-size:26px; color:#C9A860;">›</span>
@@ -844,25 +843,25 @@ class Component extends DCLogic {
     const rosa = I('uploads/eco-her-facial-1.jpg', 'Photo by Rosa Rafael on Unsplash', 'https://unsplash.com/@rosarafael');
     const nick = I('uploads/eco-her-jacuzzi-1.jpg', 'Photo by Roberto Nickson on Unsplash', 'https://unsplash.com/@rpnickson');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', price: '262 AED', length: '0:24', pic: rBathRoyal,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: rBathRoyal,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', price: '157 AED', length: '0:16', pic: rBathClassic,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', length: '0:16', pic: rBathClassic,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial', price: '390 AED', length: '0:18', pic: rHydra,
+      { type: 'FACIALS', title: 'HydraFacial', length: '0:18', pic: rHydra,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', price: '472 AED', length: '0:29', pic: rSignature,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', length: '0:29', pic: rSignature,
         caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
-      { type: 'MASSAGE', title: 'Balinese Massage', price: '200 AED', length: '0:31', pic: rBalinese,
+      { type: 'MASSAGE', title: 'Balinese Massage', length: '0:31', pic: rBalinese,
         caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
-      { type: 'MASSAGE', title: 'Hot Stone Massage', price: '300 AED', length: '0:26', pic: rHotStone,
+      { type: 'MASSAGE', title: 'Hot Stone Massage', length: '0:26', pic: rHotStone,
         caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', price: '220 AED', length: '0:15', pic: rManicure,
+      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', length: '0:15', pic: rManicure,
         caption: 'Long-lasting strength with a natural finish, by our top masters.', cta: 'BOOK NAILS' },
-      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', price: '180 AED', length: '0:14', pic: rBrow,
+      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', length: '0:14', pic: rBrow,
         caption: 'Shape and tint by our Top Brow Master.', cta: 'BOOK BROWS' },
-      { type: 'THE SPA', title: 'Jacuzzi Therapy', price: '210 AED', length: '0:22', pic: rJacuzzi,
+      { type: 'THE SPA', title: 'Jacuzzi Therapy', length: '0:22', pic: rJacuzzi,
         caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', price: '157 AED', length: '0:19', pic: rSauna,
+      { type: 'THE SPA', title: 'Infrared Sauna Session', length: '0:19', pic: rSauna,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
   }
@@ -893,13 +892,13 @@ class Component extends DCLogic {
       // same image.
       gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
         slot: 'her-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
-        title: it.title, price: it.price, length: it.length, type: it.type,
+        title: it.title, length: it.length, type: it.type,
         open: () => this.setState({ gIdx: i, gProgress: 0 }),
       }))),
       gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
       gOpen: gi != null,
       gCurrent: cur && { slot: 'her-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
-        title: cur.title, caption: cur.caption, cta: cur.cta, price: cur.price, type: cur.type },
+        title: cur.title, caption: cur.caption, cta: cur.cta, type: cur.type },
       gBars: list.map((_, i) => ({ w: gi != null && i < gi ? '100%' : (i === gi ? Math.round((this.state.gProgress || 0) * 100) + '%' : '0%') })),
       gClose: () => this.setState({ gIdx: null, gProgress: 0 }),
       gNext: () => this.setState(s => ({ gIdx: s.gIdx + 1 < list.length ? s.gIdx + 1 : 0, gProgress: 0 })),
