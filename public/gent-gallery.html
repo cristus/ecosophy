@@ -659,14 +659,29 @@ img { display:block; }
       <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(6,16,11,.2), rgba(6,16,11,.86));"></div>
 
       <!-- Shot vertically, so it starts as a portrait arch that echoes the
-           doorway in the clip, then grows out to full bleed. The build fills in
-           the source when the video file is present (see PAGES in build.mjs);
+           doorway in the clip, then grows out to full bleed.
+
+           cover, NOT contain. The panel ends at the viewport's 16:9 while the
+           clip is 9:16, so filling the width keeps only the middle third of the
+           picture and scales it up 2.7x -- this source is only 720 wide. That
+           is the whole deal: full bleed out of a portrait clip cannot be had
+           any other way, and it is the asked-for behaviour. contain leaves the
+           sides on the blurred backdrop instead, which is what this was before.
+
+           object-position aims the band that survives at what matters -- the
+           sign and the man walking toward it, rather than the back of his
+           shirt, which is where a centred crop lands. It only bites once the
+           panel is wider than 9:16, so the opening arch still shows the whole
+           frame.
+
+           The build fills in the source when the video file is present (see
+           PAGES in build.mjs);
            until then the poster frame stands in, and a <video> with no source
            requests nothing, so this never 404s. -->
       <div data-gexpand="0.12,0.62" class="gal-vid-frame"
            style="position:absolute; left:0; top:0; width:310px; height:551px; will-change:transform,width,height; contain:layout paint; overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
         <video src="uploads/gent-gal-video.mp4" data-grewind poster="uploads/gent-gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
-               style="width:100%; height:100%; object-fit:contain; display:block;"></video>
+               style="width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block;"></video>
       </div>
 
       <div class="gal-video-copy" data-go="0,1" data-gfadeout="0.14,0.34"
