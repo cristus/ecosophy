@@ -35,6 +35,35 @@ new deployment. See [EDITING.md](EDITING.md).
 The two detail pages are single templates driven by the `?s=` slug, so all ~30
 treatments per side are served by one file each.
 
+## The service menu
+
+Every treatment on the site comes from one file, `data/catalog.js` (copied to
+`public/catalog.js` by the build, and loaded by every page as `/catalog.js`).
+It holds both sides of the house:
+
+| | For her | For him |
+| --- | --- | --- |
+| Categories | 10 | 5 |
+| Treatments | 89 | 45 |
+
+The two home pages, the two services pages, the two menu & prices pages, the two
+booking pages and the two treatment-detail templates all read it, so:
+
+- **a price or a name** is changed once, and every page follows;
+- **a new treatment** is one `S(...)` row inside the right category;
+- **a new category** is one `C({...})` block. Give its treatments a `type` that
+  exists in the TYPES table lower down in the same file — that is what fills in
+  the detail page's steps, inclusions, benefits, reviews and FAQ.
+
+Duration and price may be left blank. The pages then show *BY REQUEST* and
+*On request* rather than a made-up number, and a category with nothing priced
+yet says "price on request" instead of "from On request".
+
+Note that `build.mjs` regenerates the pages from the Claude Design sources in
+`ref/`, which are **not** committed and do not know about `catalog.js`. A
+rebuild would put the old inline treatment lists back. Either re-apply the wiring
+to the regenerated pages, or bring the design sources in line first.
+
 ## Editing text and pictures
 
 Add `?edit=1` to any URL (or press Ctrl+Shift+E), type the editor password, and

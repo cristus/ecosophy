@@ -108,11 +108,14 @@ const LINK_MAP = Object.entries(PAGES)
 // hero fan's `width:{{ c.w }}` — the cards then render zero-width and collapse.
 // edit.js rides along here so it installs its MutationObserver *before* the
 // runtime's first render — it repaints the saved content overrides after every
-// render pass, and edit mode itself hangs off the same file.
+// render pass, and edit mode itself hangs off the same file. catalog.js rides
+// along for the same reason in reverse: every page's logic block reads
+// window.ECO, so it has to be defined before support.js boots and renders.
 const RESOURCES = `<script src="/vendor/react.production.min.js"></script>
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
-<script src="/edit.js"></script>`;
+<script src="/edit.js"></script>
+<script src="/catalog.js" charset="utf-8"></script>`;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
@@ -257,6 +260,10 @@ for (const f of ['support.js', 'image-slot.js']) copyFileSync(join(SRC, f), join
 // The live content editor is ours, not the design tool's — it lives in editor/
 // and is copied in, since this script wipes OUT on every run.
 copyFileSync(join('editor', 'edit.js'), join(OUT, 'edit.js'));
+
+// The service catalogue is ours too — every page's logic block reads it, and
+// this script wipes OUT on every run.
+copyFileSync(join('data', 'catalog.js'), join(OUT, 'catalog.js'));
 
 // The slot state pins images as embedded data URIs, which win over the `src`
 // attribute. `sw-him` is pinned to the men's door image; leave it alone — the

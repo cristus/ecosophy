@@ -990,6 +990,9 @@ const TYPE = {
   },
 };
 
+Object.assign(IMG, window.ECO.him.imgs);
+Object.assign(TYPE, window.ECO.him.types);
+
 const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 const SHARED_FAQ = [
