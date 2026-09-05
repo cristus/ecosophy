@@ -472,7 +472,7 @@ a:hover { color:#B98F3E; }
     <div class="r-split" style="max-width:1180px; margin:0 auto; display:grid; grid-template-columns:minmax(260px,0.85fr) minmax(300px,1.15fr); gap:clamp(40px,6vw,80px); align-items:center;">
       <div style="position:relative;">
         <div style="border-radius:28px 220px 28px 220px; overflow:hidden; height:clamp(340px,38vw,480px); border:1px solid rgba(201,168,96,.4);">
-          <image-slot id="him-about" src="uploads/photo_2026-08-02_15-49-56.jpg" shape="rect"></image-slot>
+          <image-slot id="him-about" src="uploads/photo_2026-08-02_19-37-25.jpg" shape="rect"></image-slot>
         </div>
         <div style="position:absolute; left:-18px; bottom:-18px; background:#14532D; color:#F4EFE3; border-radius:20px; padding:18px 22px; box-shadow:0 20px 40px -18px rgba(20,40,25,.4); max-width:200px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#E8CE8C;">Ajman</div>
@@ -757,7 +757,7 @@ a:hover { color:#B98F3E; }
           <div style="display:flex; gap:16px; flex-wrap:wrap;">
             <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="him-thumb-massage" src="uploads/775244964_18119167235477475_6941524398570787900_n.jpg" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">MASSAGE</div></div>
             <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="him-thumb-facial" src="uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">FACIAL</div></div>
-            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="him-thumb-body" src="uploads/photo_2026-08-02_19-37-20.jpg" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">BODY</div></div>
+            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="him-thumb-body" src="uploads/eco-him-machine.jpg" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">BODY</div></div>
           </div>
         </div>
       </div>
@@ -952,7 +952,7 @@ a:hover { color:#B98F3E; }
 
         <div style="position:relative;">
           <div style="position:relative; height:clamp(360px,44vw,540px); border-radius:220px 220px 28px 28px; overflow:hidden; border:1px solid rgba(201,168,96,.4);">
-            <image-slot id="him-book" src="./photo_2026-08-02_19-37-29-mth7y082-hu1f.jpg" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+            <image-slot id="him-book" src="uploads/photo_2026-08-02_19-37-29.jpg" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
             <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.1) 40%, rgba(11,31,22,.86) 100%);"></div>
           </div>
           <div style="margin-top:-58px; position:relative; margin-left:clamp(12px,2vw,26px); margin-right:clamp(12px,2vw,26px); background:rgba(11,31,22,.86); border:1px solid rgba(201,168,96,.4); border-radius:24px; padding:20px 22px;">
@@ -1077,21 +1077,19 @@ a:hover { color:#B98F3E; }
 class Component extends DCLogic {
   state = { name: '', phone: '', day: null, time: null, ritual: null, monthOffset: 0, booked: false, formError: false, dCat: null, dSvc: null, gFilter: null, gIdx: null, gProgress: 0 };
   reelItems() {
-    const I = (u, c, h) => [u + '?q=80&w=900&auto=format&fit=crop', c, h];
     const L = u => [u, '', ''];
+    // One distinct still per ritual, all from this page's own set — /gent-gallery
+    // runs its film strip off the photographs its own sections show.
     const paje = L('uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png');
-    const hume = L('uploads/imgi_33_man-getting-a-facial-treatment.jpg');
-    const shave = L('uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg');
-    const machine = L('uploads/photo_2026-07-24_03-51-31.jpg');
-    const caishan = L('uploads/775244964_18119167235477475_6941524398570787900_n.jpg');
-    const element = L('uploads/photo_2026-08-02_19-37-29.jpg');
-    const nico = L('uploads/photo_2026-08-02_19-37-20.jpg');
-    const rosa = L('uploads/photo_2026-07-25_02-02-55.jpg');
-    const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
     const stone = L('uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg');
-    const room = L('uploads/photo_2026-08-02_15-49-56.jpg');
-    const lounge = L('uploads/photo_2026-08-02_19-37-25.jpg');
+    const hume = L('uploads/imgi_33_man-getting-a-facial-treatment.jpg');
     const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
+    const caishan = L('uploads/775244964_18119167235477475_6941524398570787900_n.jpg');
+    const room = L('uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg');
+    const element = L('uploads/photo_2026-08-02_19-37-29.jpg');
+    const shave = L('uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg');
+    const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
+    const machine = L('uploads/eco-him-machine.jpg');
     return [
       { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: paje,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
@@ -1346,10 +1344,10 @@ class Component extends DCLogic {
     const IMGS = {
       paje: ['uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png','','','Steam, black soap and a full body scrub on heated marble.'],
       hume: ['uploads/imgi_26_mens-beauty-treatment.jpg','',''],
-      rosa: ['uploads/photo_2026-07-25_02-02-55.jpg','','','Deep cleansing, extraction and hydration in one session.'],
+      rosa: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','','','Deep cleansing, extraction and hydration in one session.'],
       caishan: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','','','Slow oil-based bodywork with therapists from Bali.'],
       element: ['uploads/photo_2026-08-02_19-37-25.jpg','','','Cut, beard sculpt and hot-towel shave by our master barbers.'],
-      nico: ['uploads/photo_2026-08-02_19-37-20.jpg','',''],
+      nico: ['uploads/imgi_8_young-man-receiving-cosmetic-treatment-at-the-spa.jpg','',''],
     };
 
     const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -1481,6 +1479,9 @@ class Component extends DCLogic {
       setEn: () => this.setState({ lang: 'en' }),
       setAr: () => this.setState({ lang: 'ar' }),
       fanCards: (() => {
+        // This page's photo set. /gent-gallery holds the treatment stills, the
+        // rooms and the product shots; none of them appear here, so the two
+        // pages share no photograph at all.
         const P = {
           mroom: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','',''],
           lounge1: ['uploads/photo_2026-08-02_19-37-29.jpg','',''],
@@ -1488,21 +1489,21 @@ class Component extends DCLogic {
           hammam: ['uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png','',''],
           stone: ['uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg','',''],
           leaf: ['uploads/bart-zimny-W5XTTLpk1-I-unsplash.jpg','',''],
-          fman: ['uploads/photo_2026-07-25_02-02-55.jpg','',''],
-          machine: ['uploads/photo_2026-07-24_03-51-31.jpg','',''],
+          fman: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','',''],
+          shave: ['uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg','',''],
           sauna: ['uploads/748718184_18114511022477475_8211076763529339827_n.jpg','',''],
-          room: ['uploads/photo_2026-08-02_15-49-56.jpg','',''],
+          bed: ['uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg','',''],
           fac1: ['uploads/imgi_8_young-man-receiving-cosmetic-treatment-at-the-spa.jpg','',''],
-          product: ['uploads/photo_2026-08-02_19-37-20.jpg','',''],
+          machine: ['uploads/eco-him-machine.jpg','',''],
         };
         const u = p => (p[0].charAt(0) === '.' || p[0].indexOf('uploads/') === 0) ? p[0] : 'https://images.unsplash.com/photo-' + p[0] + '?q=75&w=440&auto=format&fit=crop';
         const base = [
-          ['massage','MASSAGE','massage room','Slow oil-based bodywork with therapists from Bali.',[P.mroom,P.lounge2]],
+          ['massage','MASSAGE','massage room','Slow oil-based bodywork with therapists from Bali.',[P.mroom,P.bed]],
           ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam,P.stone]],
-          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.fman,P.machine]],
-          ['centre','THE CENTRE','reception & lounge','Where every visit begins: reception, tea and the quiet lounge.',[P.lounge1,P.leaf]],
-          ['skin','SKIN & GROOMING','mens facial','Purifying masks and beard-line skin care.',[P.fac1,P.product]],
-          ['sauna','SAUNA & JACUZZI','infrared sauna','Infrared heat and warm hydrotherapy for muscle recovery.',[P.sauna,P.room]],
+          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.fman,P.shave]],
+          ['centre','THE CENTRE','reception & lounge','Where every visit begins: reception, tea and the quiet lounge.',[P.lounge1,P.lounge2]],
+          ['skin','SKIN & GROOMING','mens facial','Purifying masks and beard-line skin care.',[P.fac1,P.machine]],
+          ['sauna','SAUNA & JACUZZI','infrared sauna','Infrared heat and warm hydrotherapy for muscle recovery.',[P.sauna,P.leaf]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';

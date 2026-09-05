@@ -85,7 +85,7 @@
     ] }),
 
     C({ key: 'lashes', name: 'Eyelashes', slot: 'svc-cat-lashes', ddSlot: 'dd-cat-Eyelashes',
-      img: 'eco-her-makeup-1.jpg',
+      img: 'eco-her-bridal.jpg',
       blurb: 'Russian-speaking lash masters. Extensions mapped to your eye shape, your features and the look you actually want.',
       items: [
       S('Classic, 2D & 3D Volume', 'lashes', '', '',
@@ -259,7 +259,7 @@
     ] }),
 
     C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'svc-cat-massage', ddSlot: 'dd-cat-Massages',
-      img: 'eco-her-massage-1.jpg',
+      img: 'eco-her-room-1.jpg',
       blurb: 'Massage expertise from therapists trained in Bali, Indonesia and Kerala, India, from a focused half hour to full-body bodywork.',
       items: [
       S('Relaxing Massage', 'massage', '60 min', '',
@@ -537,7 +537,7 @@
     ] }),
 
     C({ key: 'pkg', name: 'Packages', slot: 'gsvc-cat-pkg', ddSlot: 'dd-cat-Packages',
-      img: 'photo_2026-07-25_02-02-55.jpg',
+      img: '748718184_18114511022477475_8211076763529339827_n.jpg',
       blurb: 'Two or three treatments combined into one visit.',
       items: [
       S('Moroccan Bath + Full Body Massage', 'pkg', '90 min', '',
@@ -628,7 +628,7 @@
     bath:     [UP + 'hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png', '', ''],
     facial:   [UP + 'imgi_33_man-getting-a-facial-treatment.jpg', '', ''],
     water:    [UP + '748718184_18114511022477475_8211076763529339827_n.jpg', '', ''],
-    tech:     [UP + 'photo_2026-07-24_03-51-31.jpg', '', ''],
+    tech:     [UP + 'gent-gal-detail-2.jpg', '', ''],
     grooming: [UP + 'photo_2026-08-02_19-37-29.jpg', '', ''],
   };
 

@@ -626,9 +626,10 @@ img { display:block; }
       <div class="gal-frame" style="flex:1.35 1 0; aspect-ratio:4/5;"><img src="uploads/gent-gal-room-3.jpg" alt="Jacuzzi suite"></div>
       <div class="gal-frame" style="flex:1 1 0; aspect-ratio:4/5;"><img src="uploads/gent-gal-room-5.jpg" alt="Infrared sauna"></div>
     </div>
+    <!-- One wide frame, not two: the shower room that used to sit here now
+         backs section 02, which had been showing a second copy of the hero. -->
     <div class="gal-rooms-row" style="display:flex; gap:clamp(16px,2vw,28px); margin-top:clamp(16px,2vw,28px); padding:0 clamp(20px,3vw,44px);" data-gx="-0.055">
-      <div class="gal-frame" style="flex:1.5 1 0; aspect-ratio:16/9;"><img src="uploads/gent-gal-room-4.jpg" alt="Jacuzzi room"></div>
-      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:16/9;"><img src="uploads/gent-gal-room-2.jpg" alt="Massage room"></div>
+      <div class="gal-frame" style="flex:1 1 0; aspect-ratio:21/9;"><img src="uploads/gent-gal-room-4.jpg" alt="Treatment bed and mirror"></div>
     </div>
     </div>
   </div>
@@ -637,7 +638,7 @@ img { display:block; }
   <div data-gsection style="position:relative; height:380vh;">
     <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B;">
       <div data-gs="1.22,1.0" style="position:absolute; inset:0; will-change:transform;">
-        <img src="uploads/gent-gal-video-poster.jpg" alt="The hammam at Ecosophy Gent Spa" style="width:100%; height:100%; object-fit:cover;">
+        <img src="uploads/gent-gal-room-2.jpg" alt="The shower room at Ecosophy Gent Spa" style="width:100%; height:100%; object-fit:cover;">
       </div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,16,11,.62),rgba(6,16,11,.24) 42%,rgba(6,16,11,.78));"></div>
       <div data-go="0,1" style="position:absolute; left:0; right:0; bottom:clamp(48px,10vh,120px); text-align:center; padding:0 22px;">
@@ -681,7 +682,7 @@ img { display:block; }
       <div data-gexpand="0.12,0.62" class="gal-vid-frame"
            style="position:absolute; left:0; top:0; width:310px; height:551px; will-change:transform,width,height; contain:layout paint; overflow:hidden; border:1px solid rgba(201,168,96,.5); box-shadow:0 44px 96px -30px rgba(0,0,0,.95); z-index:2;">
         <video src="uploads/gent-gal-video.mp4" data-grewind poster="uploads/gent-gal-video-still.jpg" autoplay muted loop playsinline preload="auto"
-               style="width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block;"></video>
+               style="width:100%; height:100%; object-fit:contain; display:block;"></video>
       </div>
 
       <div class="gal-video-copy" data-go="0,1" data-gfadeout="0.14,0.34"
@@ -725,8 +726,9 @@ img { display:block; }
       <div class="gal-lead">Facials, deep tissue, recovery therapy and beard work — the treatments our regulars come back for.</div>
       <div class="gal-art-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,1.8vw,26px); margin-top:clamp(38px,5vw,64px); align-items:start;">
         <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="0.045">
+          <!-- art-4 was a second crop of art-1, the same moment twice in one
+               column; the column runs two frames now rather than repeat it. -->
           <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-1.jpg" alt="Facial treatment"></div>
-          <div class="gal-frame" style="aspect-ratio:1/1;"><img src="uploads/gent-gal-art-4.jpg" alt="Massage"></div>
           <div class="gal-frame" style="aspect-ratio:3/4;"><img src="uploads/gent-gal-art-7.jpg" alt="Recovery therapy"></div>
         </div>
         <div style="display:flex; flex-direction:column; gap:clamp(14px,1.8vw,26px);" data-gy="-0.075">
@@ -818,21 +820,20 @@ img { display:block; }
 class Component extends DCLogic {
   state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, gFilter: null, gIdx: null, gProgress: 0 };
   reelItems() {
-    const I = (u, c, h) => [u + '?q=80&w=900&auto=format&fit=crop', c, h];
     const L = u => [u, '', ''];
-    const paje = L('uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png');
-    const hume = L('uploads/imgi_33_man-getting-a-facial-treatment.jpg');
-    const shave = L('uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg');
-    const machine = L('uploads/photo_2026-07-24_03-51-31.jpg');
-    const caishan = L('uploads/775244964_18119167235477475_6941524398570787900_n.jpg');
-    const element = L('uploads/photo_2026-08-02_19-37-29.jpg');
-    const nico = L('uploads/photo_2026-08-02_19-37-20.jpg');
-    const rosa = L('uploads/photo_2026-07-25_02-02-55.jpg');
-    const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
-    const stone = L('uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg');
-    const room = L('uploads/photo_2026-08-02_15-49-56.jpg');
-    const lounge = L('uploads/photo_2026-08-02_19-37-25.jpg');
-    const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
+    // One distinct still per ritual, all of them photographs this page's own
+    // sections already show. /for-him keeps a separate set, so the two pages
+    // no longer stage the same pictures.
+    const paje = L('uploads/gent-gal-hero.jpg');
+    const stone = L('uploads/gent-gal-room-2.jpg');
+    const hume = L('uploads/gent-gal-art-6.jpg');
+    const fac = L('uploads/gent-gal-art-2.jpg');
+    const caishan = L('uploads/gent-gal-art-5.jpg');
+    const room = L('uploads/gent-gal-art-3.jpg');
+    const element = L('uploads/gent-gal-art-1.jpg');
+    const shave = L('uploads/gent-gal-detail-1.jpg');
+    const nick = L('uploads/gent-gal-art-8.jpg');
+    const machine = L('uploads/gent-gal-room-3.jpg');
     return [
       { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: paje,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },

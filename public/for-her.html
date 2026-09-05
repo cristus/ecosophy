@@ -472,7 +472,7 @@ a:hover { color:#B98F3E; }
     <div class="r-split" style="max-width:1180px; margin:0 auto; display:grid; grid-template-columns:minmax(260px,0.85fr) minmax(300px,1.15fr); gap:clamp(40px,6vw,80px); align-items:center;">
       <div style="position:relative;">
         <div style="border-radius:28px 220px 28px 220px; overflow:hidden; height:clamp(340px,38vw,480px); border:1px solid rgba(201,168,96,.4);">
-          <image-slot id="her-about" src="uploads/eco-her-massage-2.jpg?q=80&w=1200&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot>
+          <image-slot id="her-about" src="uploads/eco-her-room-2.jpg?q=80&w=1200&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot>
         </div>
         <div style="position:absolute; left:-18px; bottom:-18px; background:#14532D; color:#F4EFE3; border-radius:20px; padding:18px 22px; box-shadow:0 20px 40px -18px rgba(20,40,25,.4); max-width:200px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#E8CE8C;">Ajman</div>
@@ -755,9 +755,9 @@ a:hover { color:#B98F3E; }
             <a href="#book" style="display:inline-block; margin-top:18px; background:#14532D; color:#F4EFE3; border-radius:24px; padding:12px 30px; font-size:11.5px; letter-spacing:3px; white-space:nowrap;">CLAIM THE OFFER</a>
           </div>
           <div style="display:flex; gap:16px; flex-wrap:wrap;">
-            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-massage" src="uploads/eco-her-massage-1.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">MASSAGE</div></div>
-            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-facial" src="uploads/eco-her-robe.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">FACIAL</div></div>
-            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-body" src="uploads/eco-her-products-1.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">BODY</div></div>
+            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-massage" src="uploads/eco-her-room-1.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">MASSAGE</div></div>
+            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-facial" src="uploads/eco-her-facial-1.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">FACIAL</div></div>
+            <div style="width:88px;"><div style="height:88px; border-radius:18px; overflow:hidden;"><image-slot id="her-thumb-body" src="uploads/eco-her-products-2.jpg?q=80&w=400&auto=format&fit=crop" credit="" credit-href="" shape="rect"></image-slot></div><div style="font-size:var(--fs-xs); letter-spacing:1.5px; color:#14532D; margin-top:8px; text-align:center;">BODY</div></div>
           </div>
         </div>
       </div>
@@ -952,7 +952,7 @@ a:hover { color:#B98F3E; }
 
         <div style="position:relative;">
           <div style="position:relative; height:clamp(360px,44vw,540px); border-radius:220px 220px 28px 28px; overflow:hidden; border:1px solid rgba(201,168,96,.4);">
-            <image-slot id="her-book" src="uploads/eco-her-jacuzzi-1.jpg?q=80&w=1200&auto=format&fit=crop" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+            <image-slot id="her-book" src="uploads/eco-her-sauna-2.jpg?q=80&w=1200&auto=format&fit=crop" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
             <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.1) 40%, rgba(11,31,22,.86) 100%);"></div>
           </div>
           <div style="margin-top:-58px; position:relative; margin-left:clamp(12px,2vw,26px); margin-right:clamp(12px,2vw,26px); background:rgba(11,31,22,.86); border:1px solid rgba(201,168,96,.4); border-radius:24px; padding:20px 22px;">
@@ -1082,23 +1082,18 @@ class Component extends DCLogic {
     // One distinct still per ritual. The reels render three times over for the
     // marquee, so any photo shared between two rituals shows up twice on screen
     // at once — which is exactly what a shared constant used to cause.
+    // Drawn from this page's own set, the same one the hero rail uses, so the
+    // reels here do not restage /gallery's film strip.
     const rBathRoyal   = L('uploads/eco-her-hammam-1.jpg');
     const rBathClassic = L('uploads/eco-her-hammam-2.jpg');
     const rHydra       = L('uploads/eco-her-facial-1.jpg');
-    const rSignature   = L('uploads/eco-her-robe.jpg');
-    const rBalinese    = L('uploads/eco-her-massage-1.jpg');
-    const rHotStone    = L('uploads/eco-her-massage-2.jpg');
+    const rSignature   = L('uploads/eco-her-portrait-2.jpg');
+    const rBalinese    = L('uploads/eco-her-room-1.jpg');
+    const rHotStone    = L('uploads/eco-her-room-2.jpg');
     const rManicure    = L('uploads/eco-her-nails-1.jpg');
-    const rBrow        = L('uploads/eco-her-nails-2.jpg');
+    const rBrow        = L('uploads/eco-her-makeup-2.jpg');
     const rJacuzzi     = L('uploads/eco-her-jacuzzi-1.jpg');
-    const rSauna       = L('uploads/eco-her-sauna.jpg');
-    const paje = I('uploads/eco-her-hammam-1.jpg', 'Photo by paje victoria on Unsplash', 'https://unsplash.com/@pajevictoria');
-    const hume = I('uploads/eco-her-robe.jpg', 'Photo by Christin Hume on Unsplash', 'https://unsplash.com/@christinhumephoto');
-    const caishan = I('uploads/eco-her-massage-1.jpg', 'Photo by alan caishan on Unsplash', 'https://unsplash.com/@caishan119');
-    const element = I('uploads/eco-her-nails-1.jpg', 'Photo by Element5 Digital on Unsplash', 'https://unsplash.com/@element5digital');
-    const nico = I('uploads/eco-her-products-1.jpg', 'Photo by Nico on Unsplash', 'https://unsplash.com/@nicobaby');
-    const rosa = I('uploads/eco-her-facial-1.jpg', 'Photo by Rosa Rafael on Unsplash', 'https://unsplash.com/@rosarafael');
-    const nick = I('uploads/eco-her-jacuzzi-1.jpg', 'Photo by Roberto Nickson on Unsplash', 'https://unsplash.com/@rpnickson');
+    const rSauna       = L('uploads/eco-her-sauna-2.jpg');
     return [
       { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: rBathRoyal,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
@@ -1351,12 +1346,15 @@ class Component extends DCLogic {
     // burger has to take over earlier than the hero breakpoint.
     const navMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 1280;
     const IMGS = {
-      paje: ['uploads/eco-her-hammam-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria','Steam, black soap and a full body scrub on heated marble.'],
-      hume: ['uploads/eco-her-robe.jpg?q=80&w=700&auto=format&fit=crop','Photo by Christin Hume on Unsplash','https://unsplash.com/@christinhumephoto'],
-      rosa: ['uploads/eco-her-facial-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by Rosa Rafael on Unsplash','https://unsplash.com/@rosarafael','Deep cleansing, extraction and hydration in one session.'],
-      caishan: ['uploads/eco-her-massage-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by alan caishan on Unsplash','https://unsplash.com/@caishan119','Slow oil-based bodywork with therapists from Bali.'],
-      element: ['uploads/eco-her-nails-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by Element5 Digital on Unsplash','https://unsplash.com/@element5digital','Shaping, tint and long-wear manicures by our top masters.'],
-      nico: ['uploads/eco-her-products-1.jpg?q=80&w=700&auto=format&fit=crop','Photo by Nico on Unsplash','https://unsplash.com/@nicobaby'],
+      // Ecosophy's own photography, from this page's set. Credit/href are
+      // empty for the same reason they are on the hero rail: these are the
+      // centre's images, so no third-party attribution belongs on them.
+      paje: ['uploads/eco-her-hammam-1.jpg?q=80&w=700&auto=format&fit=crop','','','Steam, black soap and a full body scrub on heated marble.'],
+      hume: ['uploads/eco-her-portrait-2.jpg?q=80&w=700&auto=format&fit=crop','',''],
+      rosa: ['uploads/eco-her-facial-1.jpg?q=80&w=700&auto=format&fit=crop','','','Deep cleansing, extraction and hydration in one session.'],
+      caishan: ['uploads/eco-her-room-1.jpg?q=80&w=700&auto=format&fit=crop','','','Slow oil-based bodywork with therapists from Bali.'],
+      element: ['uploads/eco-her-nails-1.jpg?q=80&w=700&auto=format&fit=crop','','','Shaping, tint and long-wear manicures by our top masters.'],
+      nico: ['uploads/eco-her-products-2.jpg?q=80&w=700&auto=format&fit=crop','',''],
     };
 
     const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -1490,26 +1488,29 @@ class Component extends DCLogic {
       fanCards: (() => {
         // Ecosophy's own photography. Credit/href are intentionally empty: these
         // are the centre's images, so no third-party attribution belongs on them.
+        // The rail is this page's photo set. /gallery has its own, and the two
+        // are kept apart on purpose — every photograph below is either unique to
+        // the home page or belongs to a category with only one usable frame
+        // (the hammam, the facial room, nails, the jacuzzi and the trolley),
+        // where both pages have no choice but to show the same picture.
         const P = {
-          massage1: ['uploads/eco-her-massage-1.jpg','',''],
-          massage2: ['uploads/eco-her-massage-2.jpg','',''],
+          room1: ['uploads/eco-her-room-1.jpg','',''],
+          room2: ['uploads/eco-her-room-2.jpg','',''],
           hammam1: ['uploads/eco-her-hammam-1.jpg','',''],
           hammam2: ['uploads/eco-her-hammam-2.jpg','',''],
           facial1: ['uploads/eco-her-facial-1.jpg','',''],
-          robe: ['uploads/eco-her-robe.jpg','',''],
+          portrait2: ['uploads/eco-her-portrait-2.jpg','',''],
           nails1: ['uploads/eco-her-nails-1.jpg','',''],
           nails2: ['uploads/eco-her-nails-2.jpg','',''],
           jacuzzi1: ['uploads/eco-her-jacuzzi-1.jpg','',''],
-          jacuzzi2: ['uploads/eco-her-jacuzzi-2.jpg','',''],
-          sauna: ['uploads/eco-her-sauna.jpg','',''],
+          sauna2: ['uploads/eco-her-sauna-2.jpg','',''],
           products1: ['uploads/eco-her-products-1.jpg','',''],
           products2: ['uploads/eco-her-products-2.jpg','',''],
           hair1: ['uploads/eco-her-hair-1.jpg','',''],
           hair2: ['uploads/eco-her-hair-2.jpg','',''],
           bridal: ['uploads/eco-her-bridal.jpg','',''],
-          exterior1: ['uploads/eco-her-exterior-1.jpg','',''],
-          exterior2: ['uploads/eco-her-exterior-2.jpg','',''],
-          makeup1: ['uploads/eco-her-makeup-1.jpg','',''],
+          exterior3: ['uploads/eco-her-exterior-3.jpg','',''],
+          exterior4: ['uploads/eco-her-exterior-4.jpg','',''],
           makeup2: ['uploads/eco-her-makeup-2.jpg','',''],
         };
         // Matches the For Him resolver: a local path is used as-is, anything else
@@ -1522,15 +1523,15 @@ class Component extends DCLogic {
         // what twenty distinct photos allows; the standalone SAUNA card is folded
         // into THE SPA, whose copy already covers infrared heat.
         const base = [
-          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.massage1,P.massage2]],
+          ['massage','MASSAGE','massage','Slow oil-based bodywork with therapists from Bali.',[P.room1,P.room2]],
           ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam1,P.hammam2]],
-          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facial1,P.robe]],
+          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facial1,P.portrait2]],
           ['nails','NAILS & BROWS','nails','Shaping, tint and long-wear manicures by our top masters.',[P.nails1,P.nails2]],
-          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.jacuzzi1,P.sauna]],
-          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.products1,P.products2]],
+          ['spa','THE SPA','pool & sauna','Jacuzzi, infrared sauna and a quiet hour to yourself.',[P.sauna2,P.jacuzzi1]],
+          ['scrub','BODY SCRUB','body scrub','Full-body polish sealed with a warm nourishing wrap.',[P.products2,P.products1]],
           ['hair','HAIR & STYLING','hair salon','Cut, colour and styling by our senior stylists.',[P.hair1,P.hair2]],
-          ['makeup','MAKE-UP','make-up artistry','Bridal and evening make-up by our senior artists.',[P.makeup1,P.makeup2]],
-          ['lounge','THE CENTRE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.exterior1,P.exterior2]],
+          ['makeup','MAKE-UP','make-up artistry','Bridal and evening make-up by our senior artists.',[P.makeup2,P.bridal]],
+          ['lounge','THE CENTRE','reception & tea','Where every visit begins: reception, tea and quiet.',[P.exterior3,P.exterior4]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';
