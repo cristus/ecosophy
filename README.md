@@ -72,10 +72,11 @@ prices back means restoring that field in `S()`, in `flat()`, `menuCats()` and
 
 Note that `build.mjs` regenerates the pages from the Claude Design sources in
 `ref/`, which are **not** committed and do not know about `catalog.js` — nor
-about the price removal or the inside-page hero polish, both applied to
-`public/` directly for the same reason. A rebuild would put the old inline
-treatment lists, the prices *and* the old heroes back. Either re-apply all
-three to the regenerated pages, or bring the design sources in line first.
+about the price removal, the inside-page hero polish or the photo split below,
+all applied to `public/` directly for the same reason. A rebuild would put the
+old inline treatment lists, the prices, the old heroes *and* the duplicated
+photography back. Either re-apply all four to the regenerated pages, or bring
+the design sources in line first.
 
 ### The inside-page heroes
 
@@ -137,6 +138,43 @@ those from unpkg.com on every page view.
 override so it loads them from this origin. The site therefore has **no
 third-party runtime dependency** — an unpkg outage cannot take it down.
 
+## The photography
+
+Each side of the house has two photo-heavy pages — a home page (the parallax
+hero rail, the ritual reels, the menu cards) and a gallery — and they are kept
+on **separate photo sets** on purpose. The gallery used to be a straight re-run
+of the home page: the same twenty photographs saved a second time under
+`gal-*` / `photo_*` names, so a visitor scrolling from `/for-her` to `/gallery`
+saw the same pictures twice.
+
+Now every photograph has **one canonical filename** and belongs to one page:
+
+| | Home page | Gallery |
+| --- | --- | --- |
+| For her | `eco-her-room-*`, `-robe`… (18) | `eco-her-massage-*`, `-portrait-*`… (20) |
+| For him | `775244964`, `imgi_*`, `eco-him-machine`… (14) | `gent-gal-*` (20) |
+
+**For him the two sets are completely disjoint**, and `/index` uses a third
+photo (`eco-him-reception.jpg`) that neither page shows.
+
+**For her nine photographs still appear on both pages** — the two hammam
+angles, the facial room, both nails, both hair, the jacuzzi and the trolley.
+That is not an oversight: those categories have exactly one usable frame each
+in the whole library, and both pages need to show the category. Closing the
+last nine needs new photography, not re-shuffling. The `images/` folders are
+fully deployed; the only unused frames left are a near-identical second
+exterior and three stock Unsplash shots the site otherwise avoids.
+
+Rules to keep it that way:
+
+- **A photo belongs to one page.** Before adding one to a home page, check it
+  is not in that side's gallery, and vice versa.
+- **No two frames of the same shoot side by side.** Pixel comparison will not
+  catch these — the same client in the same outfit scores as low as `r=0.25`.
+  Look at the grid.
+- **One file per photograph.** Re-saving the same shot under a new name is how
+  the duplication happened in the first place.
+
 ## Known follow-ups
 
 - The site is client-rendered: the HTML is a template until JS runs, so search
@@ -146,6 +184,8 @@ third-party runtime dependency** — an unpkg outage cannot take it down.
   Precompiling at build time would remove it entirely and cut load time sharply.
 - Hero images are large (up to 7 MB PNG). Converting to WebP/AVIF would be the
   single biggest speed win.
-- 13 images are hot-linked from images.unsplash.com rather than served locally.
+- The For Her home page and gallery still share nine photographs, in the
+  categories that only have one frame each. See **The photography** above —
+  this needs a shoot, not code.
 - No Open Graph share image yet, so WhatsApp and Instagram link previews show no
   picture — worth adding since WhatsApp is the booking channel.
