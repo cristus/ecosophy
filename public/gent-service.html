@@ -122,6 +122,34 @@ a:hover { color:#B98F3E; }
       t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
       if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
     }
+
+    // Hero copy: the heading and its line sit under the gold louvres, so the
+    // closing shutter used to swallow them whole the moment the page moved.
+    // They now ride above it (z-index on the element), drift DOWNWARD as the
+    // hero scrolls away, and fade only once that travel is nearly done.
+    //
+    // Driven by the hero's OWN rect rather than section progress, like the
+    // louvres above: an 88vh hero has no travel of its own, so
+    // sectionProgress() falls back to a ramp that already reads 0.5 before a
+    // wheel is touched and the copy would load half faded.
+    //
+    //   data-gherocopy="drift,window,fade_start"
+    //     drift  - how far down it travels, in viewport heights
+    //     window - the scroll it spans, in viewport heights. Kept level with
+    //              the louvres (~0.5vh), so the copy is gone as the gold shuts.
+    //     fade_start - where in that window the fade begins, 0..1.
+    var ghc = nums(el, 'data-gherocopy', null);
+    if (ghc) {
+      var hp = el.parentNode;
+      var hr = (hp && hp.getBoundingClientRect) ? hp.getBoundingClientRect()
+                                                : el.getBoundingClientRect();
+      var q5 = clamp(-hr.top / (vh * (ghc[1] || 0.55)), 0, 1);
+      // Smoothstep, so it eases away instead of tracking the wheel one to one.
+      var e5 = q5 * q5 * (3 - 2 * q5);
+      t += 'translate3d(0,' + (vh * (ghc[0] || 0) * e5).toFixed(1) + 'px,0) ';
+      var fs5 = (ghc[2] == null || isNaN(ghc[2])) ? 0.45 : ghc[2];
+      el.style.opacity = (1 - clamp((q5 - fs5) / (1 - fs5), 0, 1)).toFixed(3);
+    }
     if (p != null) {
       var gs = nums(el, 'data-gs', null);
       if (gs) t += 'scale(' + (gs[0] + (gs[1] - gs[0]) * p).toFixed(4) + ') ';
@@ -406,7 +434,7 @@ a:hover { color:#B98F3E; }
       for (var i = 0; i < secs.length; i++) {
         var p = sectionProgress(secs[i], vh);
         secs[i].__p = p;
-        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout]');
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout],[data-gherocopy]');
         for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
       var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
@@ -485,11 +513,12 @@ a:hover { color:#B98F3E; }
         <image-slot id="{{ heroSlot }}" sc-camel-src="{{ heroImg }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
       </div>
       </div>
+      <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(90deg,#0E271C 0%,rgba(14,39,28,.94) 8%,rgba(14,39,28,.72) 20%,rgba(14,39,28,.4) 34%,rgba(14,39,28,.14) 50%,rgba(14,39,28,0) 66%);"></div>
       <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; height:48%; background:linear-gradient(180deg,rgba(14,39,28,0) 0%,rgba(14,39,28,.14) 30%,rgba(14,39,28,.44) 58%,rgba(14,39,28,.82) 82%,#0E271C 100%);"></div>
       <div style="pointer-events:none; position:absolute; left:0; right:0; top:0; height:34%; background:linear-gradient(180deg,#0E271C 0%,rgba(14,39,28,.7) 26%,rgba(14,39,28,.28) 60%,rgba(14,39,28,0) 100%);"></div>
     </div>
-    <div class="d-hero-text" style="position:relative; grid-column:1; grid-row:1; display:flex; flex-direction:column; justify-content:center; padding:clamp(106px,12vw,140px) clamp(22px,4.5vw,64px) clamp(56px,7vw,92px) max(20px,calc((100vw - 1180px) / 2));">
+    <div class="d-hero-text" data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; grid-column:1; grid-row:1; display:flex; flex-direction:column; justify-content:center; padding:clamp(106px,12vw,140px) clamp(22px,4.5vw,64px) clamp(56px,7vw,92px) max(20px,calc((100vw - 1180px) / 2));">
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; font-size:var(--fs-lg); letter-spacing:1.6px; color:rgba(215,222,207,.7);">
         <a href="/gent-services" style="white-space:nowrap; color:rgba(215,222,207,.7);" style-hover="color:#E4C778;">ALL SERVICES</a>
         <span style="color:#C9A860;">/</span>
@@ -498,7 +527,7 @@ a:hover { color:#B98F3E; }
         <span style="white-space:nowrap; color:#E4C778;">{{ nameUpper }}</span>
       </div>
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(24px,3vw,34px); color:#E4C778; margin-top:18px;">{{ kicker }}</div>
-      <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(34px,4.6vw,64px); color:#F5EDD8; margin:0; line-height:1.06; letter-spacing:.01em; max-width:14ch; text-wrap:balance;">{{ nameUpper }}</h1>
+      <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(34px,4.6vw,64px); color:#E4C778; margin:0; line-height:1.06; letter-spacing:.01em; max-width:14ch; text-wrap:balance;">{{ nameUpper }}</h1>
       <div style="font-size:15px; color:#CBD6C4; line-height:1.85; max-width:480px; margin-top:16px; text-wrap:pretty;">{{ intro }}</div>
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(16px,3vw,38px); margin-top:30px;">
         <div style="flex:0 0 auto;">

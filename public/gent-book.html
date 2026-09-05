@@ -118,6 +118,34 @@ img { display:block; }
       t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
       if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
     }
+
+    // Hero copy: the heading and its line sit under the gold louvres, so the
+    // closing shutter used to swallow them whole the moment the page moved.
+    // They now ride above it (z-index on the element), drift DOWNWARD as the
+    // hero scrolls away, and fade only once that travel is nearly done.
+    //
+    // Driven by the hero's OWN rect rather than section progress, like the
+    // louvres above: an 88vh hero has no travel of its own, so
+    // sectionProgress() falls back to a ramp that already reads 0.5 before a
+    // wheel is touched and the copy would load half faded.
+    //
+    //   data-gherocopy="drift,window,fade_start"
+    //     drift  - how far down it travels, in viewport heights
+    //     window - the scroll it spans, in viewport heights. Kept level with
+    //              the louvres (~0.5vh), so the copy is gone as the gold shuts.
+    //     fade_start - where in that window the fade begins, 0..1.
+    var ghc = nums(el, 'data-gherocopy', null);
+    if (ghc) {
+      var hp = el.parentNode;
+      var hr = (hp && hp.getBoundingClientRect) ? hp.getBoundingClientRect()
+                                                : el.getBoundingClientRect();
+      var q5 = clamp(-hr.top / (vh * (ghc[1] || 0.55)), 0, 1);
+      // Smoothstep, so it eases away instead of tracking the wheel one to one.
+      var e5 = q5 * q5 * (3 - 2 * q5);
+      t += 'translate3d(0,' + (vh * (ghc[0] || 0) * e5).toFixed(1) + 'px,0) ';
+      var fs5 = (ghc[2] == null || isNaN(ghc[2])) ? 0.45 : ghc[2];
+      el.style.opacity = (1 - clamp((q5 - fs5) / (1 - fs5), 0, 1)).toFixed(3);
+    }
     if (p != null) {
       var gs = nums(el, 'data-gs', null);
       if (gs) t += 'scale(' + (gs[0] + (gs[1] - gs[0]) * p).toFixed(4) + ') ';
@@ -402,7 +430,7 @@ img { display:block; }
       for (var i = 0; i < secs.length; i++) {
         var p = sectionProgress(secs[i], vh);
         secs[i].__p = p;
-        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout]');
+        var kids = secs[i].querySelectorAll('[data-gs],[data-gw],[data-go],[data-garch],[data-gslats],[data-gblinds],[data-gsnapx],[data-gexpand],[data-gfadeout],[data-gherocopy]');
         for (var j = 0; j < kids.length; j++) apply(kids[j], vh, p);
       }
       var drift = document.querySelectorAll('[data-gy],[data-gx],[data-gr]');
@@ -469,17 +497,17 @@ img { display:block; }
   </div>
 
   <!-- Hero · the gallery drift and push-in -->
-  <div data-gsection style="position:relative; height:132vh; min-height:640px; overflow:hidden;">
+  <div data-gsection style="position:relative; height:132vh; min-height:640px; background:#0E271C; overflow:hidden;">
     <!-- Louvres that swing shut as the hero scrolls away, so the section below
          rises through a closed shutter rather than the hero just sliding off. -->
     <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
-    <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
+    <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.42; will-change:transform;">
       <img src="uploads/gent-gal-hero.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
     </div>
-    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 44%, rgba(6,16,11,.36) 0%, rgba(6,16,11,.68) 60%, rgba(6,16,11,.92) 100%);"></div>
-    <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
+    <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
+    <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
       <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
-      <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">BOOK YOUR VISIT</h1>
+      <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#E4C778; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">BOOK YOUR VISIT</h1>
       <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:44ch; margin-top:16px;">Tell us the ritual and when suits you. The request opens in WhatsApp and our team confirms the slot.</div>
       <div class="bk-rise" style="animation-delay:.55s; font-size:var(--fs-md); letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>

@@ -72,10 +72,29 @@ prices back means restoring that field in `S()`, in `flat()`, `menuCats()` and
 
 Note that `build.mjs` regenerates the pages from the Claude Design sources in
 `ref/`, which are **not** committed and do not know about `catalog.js` — nor
-about the price removal, which was applied to `public/` directly for the same
-reason. A rebuild would put the old inline treatment lists *and* the prices
-back. Either re-apply both to the regenerated pages, or bring the design
-sources in line first.
+about the price removal or the inside-page hero polish, both applied to
+`public/` directly for the same reason. A rebuild would put the old inline
+treatment lists, the prices *and* the old heroes back. Either re-apply all
+three to the regenerated pages, or bring the design sources in line first.
+
+### The inside-page heroes
+
+Every page but the two homes and the two galleries shares one hero treatment,
+applied to `public/` by hand:
+
+- the photo sits under the same top-to-bottom green wash `/services` wears,
+  `linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95))`;
+- the `<h1>` is gold, `#E4C778`;
+- the copy carries `data-gherocopy="drift,window,fade_start"` and `z-index:4`.
+  It used to sit *under* the gold louvres, so the closing shutter swallowed the
+  heading whole the moment the page moved. It now rides above them, drifts
+  downward as the hero scrolls away, and fades only at the end of that travel.
+  The effect lives in the per-page scroll engine, beside the louvres.
+
+`/services` and `/gent-services` also open their arch panel on a shallower
+curve (`data-garch="40,21"`) and give the catalogue a top padding it never had:
+the filter bubbles sat flush against the top edge of the panel, where a 66vw
+dome cut the first of them — and the first category — off at the left.
 
 ## Editing text and pictures
 
