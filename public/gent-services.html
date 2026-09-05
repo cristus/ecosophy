@@ -46,6 +46,43 @@ a:hover { color:#B98F3E; }
 @media (max-width: 760px) {
   :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
 }
+/* The catalogue filter.
+   Search first: the menu runs to 45 treatments, which is more than anyone
+   scans, and a customer usually arrives with a word in mind ("massage",
+   "hammam") rather than a category. */
+.svc-search {
+  width:100%; box-sizing:border-box; font-family:'Manrope',sans-serif;
+  font-size:13.5px; letter-spacing:.3px; color:#2A332C; background:#FFFDF7;
+  border:1px solid #DED4BD; border-radius:22px; padding:11px 36px 11px 16px;
+  outline:none; transition:border-color .2s;
+}
+.svc-search:focus { border-color:#14532D; }
+.svc-search::placeholder { color:#A79E86; }
+.svc-chipwrap { position:relative; }
+.svc-chips { display:flex; flex-wrap:wrap; gap:8px; }
+/* The bubbles wrap onto two tidy rows on a desktop, where there is room for
+   every one. On a phone they wrapped into a six-row ragged stack that filled
+   the screen before a single treatment showed, so there they are swapped for a
+   native picker: one row, every category reachable, and a control built for a
+   thumb. A scrolling bubble row was tried first and cannot be used here -- a
+   nowrap flex row sets this panel's min-content width to the whole row, and
+   since the arch panel is a column flex container the entire catalogue then
+   laid out 1220px wide inside a 412px phone. */
+.svc-catsel { display:none; }
+@media (max-width: 760px) {
+  .svc-chipwrap { display:none; }
+  .svc-catsel { display:block; }
+}
+.svc-select {
+  width:100%; box-sizing:border-box; appearance:none; -webkit-appearance:none;
+  font-family:'Manrope',sans-serif; font-size:12.5px; letter-spacing:1.4px;
+  color:#14532D; background-color:#FFFDF7; border:1px solid #DED4BD;
+  border-radius:22px; padding:12px 38px 12px 16px; outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23B98F3E' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center;
+  background-size:12px 8px;
+}
+.svc-select:focus { border-color:#14532D; }
 /* Phones: footer links are stacked text at ~14-26px tall, well under a
    comfortable thumb target, so give each one a 40px row of its own. */
 @media (max-width: 760px) {
@@ -522,11 +559,31 @@ a:hover { color:#B98F3E; }
       <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; left:1%; top:48%; width:min(12vw,135px); opacity:.05;">
       <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; right:4%; bottom:8%; width:min(11vw,120px); opacity:.055;">
 
-      <div style="position:sticky; top:66px; z-index:30; background:rgba(246,241,230,.95); backdrop-filter:blur(8px); margin:0 -12px; padding:16px 12px 14px; border-bottom:1px solid #E3D9C2; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
-          <div onClick="{{ f.pick }}" style="cursor:pointer; font-size:var(--fs-lg); letter-spacing:1.6px; padding:9px 18px; border-radius:20px; background:{{ f.bg }}; color:{{ f.color }}; border:1px solid {{ f.border }}; transition:background .25s;">{{ f.label }}</div>
-        </sc-for>
-        <div style="margin-left:auto; font-size:11px; color:#9A917A; letter-spacing:1px;">{{ countLabel }}</div>
+      <div style="position:sticky; top:66px; z-index:30; background:rgba(246,241,230,.95); backdrop-filter:blur(8px); margin:0 -12px; padding:14px 12px 13px; border-bottom:1px solid #E3D9C2;">
+        <!-- Search across every category, by name and by description. The count
+             sits here rather than in the bubble row, where on a phone it ended
+             up wedged against the last bubble. -->
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div style="position:relative; flex:1 1 auto; min-width:0;">
+            <input class="svc-search" value="{{ q }}" onInput="{{ setQ }}" placeholder="{{ searchHint }}" aria-label="Search treatments">
+            <div onClick="{{ clearQ }}" title="Clear" style="display:{{ clearShow }}; position:absolute; right:7px; top:50%; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; align-items:center; justify-content:center; cursor:pointer; color:#77704F; font-size:17px; line-height:1;">&times;</div>
+          </div>
+          <div style="flex:0 0 auto; font-size:11px; color:#9A917A; letter-spacing:1px; white-space:nowrap;">{{ countLabel }}</div>
+        </div>
+        <div class="svc-chipwrap" style="margin-top:11px;">
+          <div class="svc-chips">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+              <div class="svc-chip" onClick="{{ f.pick }}" style="cursor:pointer; white-space:nowrap; font-size:var(--fs-lg); letter-spacing:1.6px; padding:9px 18px; border-radius:20px; background:{{ f.bg }}; color:{{ f.color }}; border:1px solid {{ f.border }}; transition:background .25s;">{{ f.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="svc-catsel" style="margin-top:10px;">
+          <select class="svc-select" value="{{ filterValue }}" onChange="{{ pickCat }}" aria-label="Category">
+            <sc-for list="{{ catOptions }}" as="o" hint-placeholder-count="6">
+              <option value="{{ o.v }}">{{ o.label }}</option>
+            </sc-for>
+          </select>
+        </div>
       </div>
 
       <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
@@ -553,6 +610,13 @@ a:hover { color:#B98F3E; }
           </div>
         </div>
       </sc-for>
+
+      <!-- Search can land on nothing; say so rather than showing a blank page. -->
+      <div style="display:{{ emptyShow }}; text-align:center; padding:clamp(56px,9vw,110px) 0 clamp(16px,3vw,36px);">
+        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(23px,3.2vw,34px); color:#14532D;">{{ emptyTitle }}</div>
+        <div style="font-size:13.5px; color:#77704F; line-height:1.8; margin-top:12px;">Try a shorter word, or clear the filter and browse the whole menu.</div>
+        <div onClick="{{ resetAll }}" style="cursor:pointer; display:inline-block; margin-top:22px; border:1px solid #C9A860; color:#14532D; border-radius:24px; padding:12px 28px; font-size:11.5px; letter-spacing:2.6px;">SHOW EVERYTHING</div>
+      </div>
     </div>
     </div>
   </div>
@@ -602,7 +666,7 @@ a:hover { color:#B98F3E; }
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 50 444 5566&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
-  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, filter: null };
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, filter: null, q: '' };
   cats() {
     return window.ECO.menuCats('him');
   }
@@ -617,11 +681,19 @@ class Component extends DCLogic {
   renderVals() {
     const cats = this.cats();
     const f = this.state.filter;
-    const groups = cats.filter(c => !f || c.name === f).map(c => ({
-      ...c,
-      meta: c.items.length + ' TREATMENTS',
-      items: c.items.map(it => ({ ...it, href: '/gent-service?s=' + it.name.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') })),
-    }));
+    // Name and description both, so "hot stone" or "beard" find their treatment
+    // even when the word is not in the title. A category whose matches all fall
+    // away drops out rather than showing an empty header.
+    const q = (this.state.q || '').trim().toLowerCase();
+    const hit = it => !q || ((it.name || '') + ' ' + (it.desc || '')).toLowerCase().includes(q);
+    const groups = cats.filter(c => !f || c.name === f)
+      .map(c => ({ ...c, items: c.items.filter(hit) }))
+      .filter(c => c.items.length)
+      .map(c => ({
+        ...c,
+        meta: c.items.length + ' TREATMENTS',
+        items: c.items.map(it => ({ ...it, href: '/gent-service?s=' + it.name.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') })),
+      }));
     const mk = (label, key) => {
       const on = f === key;
       return { label, bg: on ? '#14532D' : 'transparent', color: on ? '#F1E7CC' : '#5A5340',
@@ -646,6 +718,17 @@ class Component extends DCLogic {
       groups, introLine,
       filters: [mk('ALL TREATMENTS', null)].concat(cats.map(c => mk(c.name.toUpperCase(), c.name))),
       countLabel: total + ' shown',
+      q: this.state.q || '',
+      setQ: e => this.setState({ q: e.target.value }),
+      clearQ: () => this.setState({ q: '' }),
+      clearShow: (this.state.q || '') ? 'flex' : 'none',
+      searchHint: 'Search ' + grand + ' treatments',
+      emptyShow: groups.length ? 'none' : 'block',
+      emptyTitle: q ? 'Nothing matches that' : 'Nothing to show',
+      resetAll: () => this.setState({ q: '', filter: null }),
+      catOptions: [{ v: '', label: 'ALL TREATMENTS' }].concat(cats.map(c => ({ v: c.name, label: c.name.toUpperCase() }))),
+      filterValue: f || '',
+      pickCat: e => this.setState({ filter: e.target.value || null }),
       whatsapp: wa,
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''),
     };
