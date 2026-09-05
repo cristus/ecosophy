@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Treatment — Ecosophy Spa for Her</title>
-<meta name="description" content="Treatment details, duration and pricing at Ecosophy Spa Dubai.">
+<meta name="description" content="Treatment details and duration at Ecosophy Spa Dubai.">
 <link rel="icon" type="image/png" href="/favicons/mark-woman-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-woman-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Ecosophy Spa">
 <meta property="og:locale" content="en_AE">
 <meta property="og:title" content="Treatment — Ecosophy Spa for Her">
-<meta property="og:description" content="Treatment details, duration and pricing at Ecosophy Spa Dubai.">
+<meta property="og:description" content="Treatment details and duration at Ecosophy Spa Dubai.">
 <meta property="og:url" content="https://ecosophy.pages.dev/service">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://ecosophy.pages.dev/service">
@@ -437,7 +437,7 @@ a:hover { color:#B98F3E; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -465,7 +465,7 @@ a:hover { color:#B98F3E; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -501,11 +501,6 @@ a:hover { color:#B98F3E; }
       <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(34px,4.6vw,64px); color:#F5EDD8; margin:0; line-height:1.06; letter-spacing:.01em; max-width:14ch; text-wrap:balance;">{{ nameUpper }}</h1>
       <div style="font-size:15px; color:#CBD6C4; line-height:1.85; max-width:480px; margin-top:16px; text-wrap:pretty;">{{ intro }}</div>
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(16px,3vw,38px); margin-top:30px;">
-        <div style="flex:0 0 auto;">
-          <div style="font-family:'Prata',serif; font-size:clamp(28px,3.4vw,38px); color:#E4C778; line-height:1.1; white-space:nowrap;">{{ price }}</div>
-          <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">VAT INCLUDED</div>
-        </div>
-        <div style="width:1px; height:44px; background:rgba(201,168,96,.32);"></div>
         <div style="flex:0 0 auto;">
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">{{ durationLong }}</div>
           <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ roomLabel }}</div>
@@ -747,7 +742,6 @@ a:hover { color:#B98F3E; }
             <div style="font-size:12.5px; color:#77704F; line-height:1.65; margin-top:7px;">{{ r.desc }}</div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:14px;">
               <span style="font-size:var(--fs-md); letter-spacing:1.6px; color:#9A917A;">{{ r.duration }}</span>
-              <span style="font-size:14px; color:#B98F3E;">{{ r.price }}</span>
             </div>
           </div>
         </a>
@@ -1062,7 +1056,7 @@ class Component extends DCLogic {
     const count = 60 + (svc.slug.length * 17) % 180;
 
     const related = list.filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
-      href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST', price: s.price,
+      href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST',
       slot: 'det-' + svc.slug + '-rel' + i, img: IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
     }));
 
@@ -1083,7 +1077,7 @@ class Component extends DCLogic {
       waLabel: (this.state.vw || 1280) < 860 ? 'BOOK' : 'WHATSAPP',
       whatsapp: wa, waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent('Hello Ecosophy, I would like to book the ' + svc.name + '.'),
       nameUpper: svc.name.toUpperCase(), catUpper: svc.cat.toUpperCase(), catHref: '/services',
-      kicker: t.kicker, intro: svc.long, price: svc.price, durationLong: durLong, roomLabel: t.room,
+      kicker: t.kicker, intro: svc.long, durationLong: durLong, roomLabel: t.room,
       rating, reviewCountLabel: count + ' GUEST REVIEWS',
       heroSlot: 'det-' + svc.slug + '-hero', heroImg: IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
       overviewHeading: t.heading, overviewBody: svc.long + ' ' + (svc.type === 'pkg' ? 'Both stages run back to back in the same private suite.' : 'Your therapist stays with you for the whole session.'),
@@ -1099,7 +1093,7 @@ class Component extends DCLogic {
       gallery, galleryHeading: t.galleryHeading, galleryNote: t.galleryNote,
       lightboxOpen: !!lb, lightbox: lb || {}, closeLightbox: () => this.setState({ lb: null }),
       days, times, name: this.state.name, phone: this.state.phone,
-      bookingLine: svc.name + ' · ' + durLong + ' · ' + svc.price,
+      bookingLine: svc.name + ' · ' + durLong,
       setName: e => this.setState({ name: e.target.value }),
       setPhone: e => this.setState({ phone: e.target.value }),
       summary: this.state.time ? chosenDay.label + ' at ' + this.state.time : 'Select a day and time to continue',

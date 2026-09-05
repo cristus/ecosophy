@@ -4,8 +4,8 @@
  * pages (inside drilldown()), the two services pages, the two menu & prices
  * pages, the two booking pages and the two treatment-detail templates. Ten
  * copies of the same data, which is why they had already drifted apart. They
- * all read this file now, so a price, a name, or a whole new category is
- * edited in one place and every page follows.
+ * all read this file now, so a name, a description, or a whole new category
+ * is edited in one place and every page follows.
  *
  * Loaded as a plain script in <head>, before support.js boots, so window.ECO
  * is there by the time any page's logic block runs.
@@ -13,20 +13,22 @@
  * Adding a treatment: add an S(...) row to the right category below.
  * Adding a category: add a C({...}) block, and give it a `type` that exists in
  * the TYPES table further down - that is what drives its detail page.
- * Filling in a price: replace the empty string in the S(...) row. Blank means
- * "On request", which is what the pages show until a real figure is known.
+ * Prices are deliberately not published: no figure is stored here and no page
+ * renders one. Every S(...) row keeps an empty price slot, so putting prices
+ * back is a matter of filling them in and restoring the render sites.
  */
 (function (w) {
   'use strict';
 
   var UP = 'uploads/';
 
-  // One treatment. Duration and price may be blank: the pages fall back to
-  // "BY REQUEST" and "On request" rather than inventing a number.
+  // One treatment. Duration may be blank: the pages fall back to "BY REQUEST".
+  // The fourth argument is the old price slot. It is deliberately not read: no
+  // page renders a price, so filling one in here would do nothing on its own.
   function S(name, type, duration, price, desc, long) {
     return {
       name: name, type: type,
-      duration: duration || '', price: price || 'On request',
+      duration: duration || '',
       desc: desc, long: long,
     };
   }
@@ -47,7 +49,6 @@
     return String(s).toLowerCase().replace(/\+/g, ' plus ')
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   };
-  var priceNum = function (p) { return parseFloat(String(p).replace(/[^\d.]/g, '')) || 0; };
 
   // ------------------------------------------------------------------ for her
 
@@ -228,7 +229,7 @@
       S('Customized Skin Program', 'facial', '', '',
         'A planned course, built at consultation.',
         'A full skin consultation and a written plan across several visits, combining the devices, peels and protocols that suit your skin, in the right order.'),
-      S('Endospheres Face', 'tech', '30 min', '150 AED',
+      S('Endospheres Face', 'tech', '30 min', '',
         'Microvibration facial treatment for tone and lift.',
         'A smaller Endospheres handpiece worked over the face and neck to support drainage, tone and definition along the jaw.'),
     ] }),
@@ -240,13 +241,13 @@
       S('EMSCULPT', 'tech', '', '',
         'Targeted muscle stimulation for tone and definition.',
         'Non-invasive electromagnetic stimulation contracts the muscle far beyond what voluntary effort can reach, building tone through the abdomen, buttocks, arms and legs. No downtime, and best taken as a course.'),
-      S('Endospheres Therapy', 'tech', '60 min', '400 AED',
+      S('Endospheres Therapy', 'tech', '60 min', '',
         'Compressive microvibration for skin tone and circulation.',
         'A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone. Used on the abdomen, thighs, hips, buttocks, arms and legs.'),
-      S('Maderotherapy', 'tech', '60 min', '250 AED',
+      S('Maderotherapy', 'tech', '60 min', '',
         'Wooden tools contour and stimulate the body.',
         'Contoured wooden tools are rolled and pressed over the body to stimulate lymphatic drainage and work on the appearance of cellulite. Firm, and most effective as a course.'),
-      S('RF Slimming Therapy', 'tech', '60 min', '400 AED',
+      S('RF Slimming Therapy', 'tech', '60 min', '',
         'Radiofrequency treatment targeting body contour.',
         'Radiofrequency heat applied to the deeper layers of the skin to support firmness and contour. Comfortable, warm, and best taken as a course.'),
       S('Anti-Cellulite Body Treatment', 'tech', '', '',
@@ -254,50 +255,50 @@
         'Deep manual work, wooden tools and mechanical stimulation combined over the areas that hold cellulite. Firm by design, and taken as a course of six to twelve sessions.'),
       S('Customized Slimming Package', 'tech', '', '',
         'A programme built from EMSCULPT, Endospheres, wood therapy and heat.',
-        'Your therapist plans a course around your goals and target areas, drawing on EMSCULPT, Endospheres, maderotherapy, infrared sauna, lymphatic drainage, RF body treatments, anti-cellulite work and massage. Priced as a package once the plan is agreed.'),
+        'Your therapist plans a course around your goals and target areas, drawing on EMSCULPT, Endospheres, maderotherapy, infrared sauna, lymphatic drainage, RF body treatments, anti-cellulite work and massage. Put together as a package once the plan is agreed.'),
     ] }),
 
     C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'svc-cat-massage', ddSlot: 'dd-cat-Massages',
       img: 'eco-her-massage-1.jpg',
       blurb: 'Massage expertise from therapists trained in Bali, Indonesia and Kerala, India, from a focused half hour to full-body bodywork.',
       items: [
-      S('Relaxing Massage', 'massage', '60 min', '200 AED',
+      S('Relaxing Massage', 'massage', '60 min', '',
         'Light, flowing pressure to unwind the whole body.',
         'The gentlest thing on our massage menu. Long, unhurried strokes at light to medium pressure, designed to quiet the nervous system rather than work into deep tissue.'),
-      S('Balinese Massage', 'massage', '60 min', '200 AED',
+      S('Balinese Massage', 'massage', '60 min', '',
         'Slow oil-based bodywork with therapists from Bali.',
         'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.'),
-      S('Deep Tissue Massage', 'massage', '60 min', '200 AED',
+      S('Deep Tissue Massage', 'massage', '60 min', '',
         'Firm pressure that works into knots and tight muscle.',
         'Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that a lighter massage never quite reaches.'),
-      S('Swedish Massage', 'massage', '60 min', '250 AED',
+      S('Swedish Massage', 'massage', '60 min', '',
         'Classic long strokes for circulation and tension relief.',
         'The classic European technique: long gliding strokes, kneading and circular pressure that improve circulation and leave the whole body loose.'),
-      S('Hot Stone Massage', 'massage', '60 min', '300 AED',
+      S('Hot Stone Massage', 'massage', '60 min', '',
         'Warm basalt stones ease deep muscular tightness.',
         'Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.'),
-      S('Aromatherapy Massage', 'massage', '60 min', '200 AED',
+      S('Aromatherapy Massage', 'massage', '60 min', '',
         'Essential-oil blends chosen for how you want to feel.',
         'You choose the blend at the start, calming, uplifting or clearing, and it is worked into the skin over a full-body massage at medium pressure.'),
-      S('Lymphatic Drainage Massage', 'massage', '60 min', '300 AED',
+      S('Lymphatic Drainage Massage', 'massage', '60 min', '',
         'Gentle rhythmic work to reduce fluid and puffiness.',
         'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after cosmetic procedures.'),
-      S('Prenatal Massage', 'massage', '60 min', '300 AED',
+      S('Prenatal Massage', 'massage', '60 min', '',
         'Side-lying, pregnancy-safe massage for aching hips and back.',
         'Side-lying and fully supported with cushions, focusing on the lower back, hips and legs. Available from the second trimester with your doctor\u2019s clearance.'),
-      S('Postpartum Massage', 'massage', '60 min', '300 AED',
+      S('Postpartum Massage', 'massage', '60 min', '',
         'Recovery-focused bodywork for the weeks after birth.',
         'Gentle recovery bodywork for the weeks after birth, working on the back, shoulders and hips that carry most of the load in early motherhood.'),
-      S('Feet Reflexology Massage', 'focused', '30 min', '150 AED',
+      S('Feet Reflexology Massage', 'focused', '30 min', '',
         'Pressure-point work on the feet, felt everywhere.',
         'Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes, and most guests feel it well beyond their feet.'),
-      S('Back Massage', 'focused', '30 min', '100 AED',
+      S('Back Massage', 'focused', '30 min', '',
         'A focused half hour on shoulders, back and neck.',
         'Half an hour spent entirely on the back, shoulders and neck. The most-booked short treatment on the menu.'),
-      S('Head Massage', 'focused', '30 min', '100 AED',
+      S('Head Massage', 'focused', '30 min', '',
         'Scalp and neck release for screen-tired heads.',
         'Scalp, temples and neck, with or without oil. Good for tension headaches and the tightness that builds over a long day on screens.'),
-      S('Indian Head Massage', 'focused', '30 min', '150 AED',
+      S('Indian Head Massage', 'focused', '30 min', '',
         'Traditional scalp, neck and shoulder technique.',
         'The traditional champissage sequence across the upper back, shoulders, neck, scalp and face, done seated and fully clothed.'),
     ] }),
@@ -306,34 +307,34 @@
       img: 'eco-her-hammam-1.jpg',
       blurb: 'Moroccan bath, infrared sauna, jacuzzi and scrub rituals, taken singly or built into a wellness programme.',
       items: [
-      S('Royal Moroccan Bath', 'bath', '75 min', '262.50 AED',
+      S('Royal Moroccan Bath', 'bath', '75 min', '',
         'Steam, black soap, deep exfoliation and a nourishing body mask.',
         'The full ritual, with a ghassoul clay mask and an argan oil finish added to the classic bath. Skin comes out softer than it has felt in months.'),
-      S('Classic Moroccan Bath', 'bath', '45 min', '157.50 AED',
+      S('Classic Moroccan Bath', 'bath', '45 min', '',
         'Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.',
         'The essential version of the ritual: steam, beldi black soap and a full kessa exfoliation, finished with a warm rinse.'),
       S('Body Scrub Ritual', 'bath', '', '',
         'A full-body scrub that leaves skin polished and soft.',
         'A warm room, a scrub chosen for your skin, and a full-body exfoliation followed by oil. Short, simple, and the best possible preparation for a massage.'),
-      S('Infrared Sauna Session', 'water', '30 min', '157.50 AED',
+      S('Infrared Sauna Session', 'water', '30 min', '',
         'Gentle heat to support muscle recovery, improve circulation and ease tension.',
         'Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna while still doing the work.'),
-      S('Jacuzzi Therapy', 'water', '45 min', '210.00 AED',
+      S('Jacuzzi Therapy', 'water', '45 min', '',
         'Warm hydrotherapy that soothes muscles and promotes total body relaxation.',
         'Forty-five private minutes in warm water with jets positioned along the back, hips and legs.'),
-      S('Relaxing Jacuzzi Therapy', 'water', '60 min', '250 AED',
+      S('Relaxing Jacuzzi Therapy', 'water', '60 min', '',
         'Warm hydrotherapy to soothe muscles before or after treatment.',
         'An hour in the private jacuzzi with warm jets on the back and legs. Excellent on its own, and even better booked before a massage.'),
-      S('Jacuzzi Therapy + Full Body Massage', 'pkg', '105 min', '367.50 AED',
+      S('Jacuzzi Therapy + Full Body Massage', 'pkg', '105 min', '',
         'Warm hydrotherapy paired with a full-body massage for deep relaxation.',
         'Forty-five minutes of hydrotherapy followed by a full hour of massage, taken back to back in the same suite.'),
-      S('Moroccan Bath + 1-Hour Balinese Massage', 'pkg', '105 min', '315.00 AED',
+      S('Moroccan Bath + 1-Hour Balinese Massage', 'pkg', '105 min', '',
         'A Moroccan bath followed by a 60-minute Balinese full-body massage.',
         'The bath first, then a full hour of traditional Balinese bodywork while the skin is still warm and soft.'),
-      S('Moroccan Bath + HydraFacial', 'pkg', '105 min', '367.50 AED',
+      S('Moroccan Bath + HydraFacial', 'pkg', '105 min', '',
         'Traditional Moroccan bath followed by a hydrating, cleansing facial.',
         'Body first, face second: a full Moroccan bath, then a HydraFacial to cleanse, extract and hydrate.'),
-      S('Ecosophy Signature Facial + Full Body Balinese Massage', 'pkg', '120 min', '472.50 AED',
+      S('Ecosophy Signature Facial + Full Body Balinese Massage', 'pkg', '120 min', '',
         'Our exclusive signature facial with a 60-minute Balinese full-body massage.',
         'Our own facial protocol paired with an hour of Balinese massage. Two hours, one suite, and the longest treatment on the menu.'),
       S('Customized Wellness Program', 'pkg', '', '',
@@ -367,15 +368,15 @@
 
     C({ key: 'pkg', name: 'Packages', slot: 'svc-cat-pkg', ddSlot: 'dd-cat-Packages',
       img: 'eco-her-jacuzzi-1.jpg',
-      blurb: 'Two or three treatments combined into one visit, at a set price.',
+      blurb: 'Two or three treatments combined into one visit.',
       items: [
-      S('Moroccan Bath + Full Body Massage', 'pkg', '90 min', '300 AED',
+      S('Moroccan Bath + Full Body Massage', 'pkg', '90 min', '',
         'A Moroccan bath followed by a full-body massage.',
         'The bath opens and softens the skin, the massage takes over while muscles are still warm. The most popular combination we offer.'),
-      S('Relaxing Jacuzzi Therapy + Full Body Massage', 'pkg', '90 min', '350 AED',
+      S('Relaxing Jacuzzi Therapy + Full Body Massage', 'pkg', '90 min', '',
         'Warm hydrotherapy paired with a full-body massage.',
         'Thirty minutes of warm water and jets, then a full-body massage on a heated table without leaving the suite.'),
-      S('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy', 'pkg', '120 min', '450 AED',
+      S('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy', 'pkg', '120 min', '',
         'The full circuit: bath, massage and jacuzzi in one visit.',
         'Two hours through the whole spa: hammam, massage table and jacuzzi, in the order that gets the most out of each one.'),
     ] }),
@@ -389,31 +390,31 @@
       img: '775244964_18119167235477475_6941524398570787900_n.jpg',
       blurb: 'Sports recovery, deep tissue and full body wellness, with therapists trained in Bali and Kerala.',
       items: [
-      S('Sports Recovery Ritual', 'massage', '60 min', '380 AED',
+      S('Sports Recovery Ritual', 'massage', '60 min', '',
         'Stretch work, deep tissue and heat therapy in one session.',
         'Assisted stretching, deep tissue through the legs and back, and heat where it is needed. Built for training loads rather than for general relaxation.'),
-      S('Relaxing Massage', 'massage', '60 min', '200 AED',
+      S('Relaxing Massage', 'massage', '60 min', '',
         'Light, flowing pressure to unwind the whole body.',
         'The gentlest thing on our massage menu. Long, unhurried strokes at light to medium pressure, designed to quiet the nervous system rather than work into deep tissue.'),
-      S('Balinese Massage', 'massage', '60 min', '200 AED',
+      S('Balinese Massage', 'massage', '60 min', '',
         'Slow oil-based bodywork with therapists from Bali.',
         'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.'),
-      S('Deep Tissue Massage', 'massage', '60 min', '200 AED',
+      S('Deep Tissue Massage', 'massage', '60 min', '',
         'Firm pressure that works into knots and tight muscle.',
         'Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that a lighter massage never quite reaches.'),
-      S('Swedish Massage', 'massage', '60 min', '250 AED',
+      S('Swedish Massage', 'massage', '60 min', '',
         'Classic long strokes for circulation and tension relief.',
         'The classic European technique: long gliding strokes, kneading and circular pressure that improve circulation and leave the whole body loose.'),
-      S('Hot Stone Massage', 'massage', '60 min', '300 AED',
+      S('Hot Stone Massage', 'massage', '60 min', '',
         'Warm basalt stones ease deep muscular tightness.',
         'Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.'),
-      S('Aromatherapy Massage', 'massage', '60 min', '200 AED',
+      S('Aromatherapy Massage', 'massage', '60 min', '',
         'Essential-oil blends chosen for how you want to feel.',
         'You choose the blend at the start, calming, uplifting or clearing, and it is worked into the skin over a full-body massage at medium pressure.'),
-      S('Lymphatic Drainage Massage', 'massage', '60 min', '300 AED',
+      S('Lymphatic Drainage Massage', 'massage', '60 min', '',
         'Gentle rhythmic work to reduce fluid and puffiness.',
         'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after training.'),
-      S('Maderotherapy', 'tech', '60 min', '250 AED',
+      S('Maderotherapy', 'tech', '60 min', '',
         'Wooden tools contour and stimulate the body.',
         'Contoured wooden tools are rolled and pressed over the body to stimulate circulation and lymphatic drainage. Firm, and most effective taken as a course.'),
       S('Anti-Cellulite Body Treatment', 'tech', '', '',
@@ -425,16 +426,16 @@
       S('Customized Body Wellness Program', 'tech', '', '',
         'Massage, heat and recovery arranged into a plan.',
         'Massage, sauna, drainage and body treatments arranged into a schedule across a month, planned with you rather than sold as a fixed package.'),
-      S('Feet Reflexology Massage', 'focused', '30 min', '150 AED',
+      S('Feet Reflexology Massage', 'focused', '30 min', '',
         'Pressure-point work on the feet, felt everywhere.',
         'Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes, and most guests feel it well beyond their feet.'),
-      S('Back Massage', 'focused', '30 min', '100 AED',
+      S('Back Massage', 'focused', '30 min', '',
         'A focused half hour on shoulders, back and neck.',
         'Half an hour spent entirely on the back, shoulders and neck. The most-booked short treatment on the menu.'),
-      S('Head Massage', 'focused', '30 min', '100 AED',
+      S('Head Massage', 'focused', '30 min', '',
         'Scalp and neck release for screen-tired heads.',
         'Scalp, temples and neck, with or without oil. Good for tension headaches and the tightness that builds over a long day on screens.'),
-      S('Indian Head Massage', 'focused', '30 min', '150 AED',
+      S('Indian Head Massage', 'focused', '30 min', '',
         'Traditional scalp, neck and shoulder technique.',
         'The traditional champissage sequence across the upper back, shoulders, neck, scalp and face, done seated and fully clothed.'),
     ] }),
@@ -443,37 +444,37 @@
       img: 'hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png',
       blurb: 'Moroccan bath, infrared sauna, jacuzzi and the packages that combine them.',
       items: [
-      S('Classic Moroccan Bath', 'bath', '45 min', '157.50 AED',
+      S('Classic Moroccan Bath', 'bath', '45 min', '',
         'Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.',
         'The essential version of the ritual: steam, beldi black soap and a full kessa exfoliation, finished with a warm rinse.'),
-      S('Royal Moroccan Bath', 'bath', '75 min', '262.50 AED',
+      S('Royal Moroccan Bath', 'bath', '75 min', '',
         'Steam, black soap, deep exfoliation and a nourishing body mask.',
         'The full ritual, with a ghassoul clay mask and an argan oil finish added to the classic bath. Skin comes out softer than it has felt in months.'),
       S('Body Cleansing & Exfoliation Ritual', 'bath', '', '',
         'A full cleanse and exfoliation, without the full bath.',
         'Black soap, a kessa glove and a warm rinse, taken as a shorter ritual on its own. The quickest way to reset skin that has spent a week in air conditioning.'),
-      S('Infrared Sauna Session', 'water', '30 min', '157.50 AED',
+      S('Infrared Sauna Session', 'water', '30 min', '',
         'Gentle heat to support muscle recovery, improve circulation and ease tension.',
         'Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna while still doing the work.'),
-      S('Jacuzzi Therapy', 'water', '45 min', '210.00 AED',
+      S('Jacuzzi Therapy', 'water', '45 min', '',
         'Warm hydrotherapy that soothes muscles and promotes total body relaxation.',
         'Forty-five private minutes in warm water with jets positioned along the back, hips and legs.'),
-      S('Relaxing Jacuzzi Therapy', 'water', '60 min', '250 AED',
+      S('Relaxing Jacuzzi Therapy', 'water', '60 min', '',
         'Warm hydrotherapy to soothe muscles before or after treatment.',
         'An hour in the private jacuzzi with warm jets on the back and legs. Excellent on its own, and even better booked before a massage.'),
       S('Sauna & Massage Program', 'pkg', '', '',
         'Infrared heat, followed by bodywork.',
         'Time in the infrared cabin to open the muscle, then a massage while it is still warm. The combination most of our regulars settle on.'),
-      S('Jacuzzi Therapy + Full Body Massage', 'pkg', '105 min', '367.50 AED',
+      S('Jacuzzi Therapy + Full Body Massage', 'pkg', '105 min', '',
         'Warm hydrotherapy paired with a full-body massage for deep relaxation.',
         'Forty-five minutes of hydrotherapy followed by a full hour of massage, taken back to back in the same suite.'),
-      S('Moroccan Bath + 1-Hour Balinese Massage', 'pkg', '105 min', '315.00 AED',
+      S('Moroccan Bath + 1-Hour Balinese Massage', 'pkg', '105 min', '',
         'A Moroccan bath followed by a 60-minute Balinese full-body massage.',
         'The bath first, then a full hour of traditional Balinese bodywork while the skin is still warm and soft.'),
-      S('Moroccan Bath + HydraFacial', 'pkg', '105 min', '367.50 AED',
+      S('Moroccan Bath + HydraFacial', 'pkg', '105 min', '',
         'Traditional Moroccan bath followed by a hydrating, cleansing facial.',
         'Body first, face second: a full Moroccan bath, then a HydraFacial to cleanse, extract and hydrate.'),
-      S('Ecosophy Signature Facial + Full Body Balinese Massage', 'pkg', '120 min', '472.50 AED',
+      S('Ecosophy Signature Facial + Full Body Balinese Massage', 'pkg', '120 min', '',
         'Our exclusive signature facial with a 60-minute Balinese full-body massage.',
         'Our own facial protocol paired with an hour of Balinese massage. Two hours, one suite, and the longest treatment on the menu.'),
       S('Wellness Package', 'pkg', '', '',
@@ -500,19 +501,19 @@
       S('Anti-Aging Skin Program', 'facial', '', '',
         'A planned course for lines, laxity and tone.',
         'A course rather than a single visit, combining microneedling, radiofrequency, peels and boosters in a sequence built around your skin.'),
-      S('Men\u2019s Signature Facial', 'facial', '60 min', '290.00 AED',
+      S('Men\u2019s Signature Facial', 'facial', '60 min', '',
         'Deep cleanse and hydration built for beard-line and city skin.',
         'A facial built around the beard line: deep cleanse, steam, extraction where it is needed, and hydration that holds up against shaving and city air.'),
       S('Customized Facial Program', 'facial', '', '',
         'A written plan across several appointments.',
         'A full consultation and a written plan across several visits, so each appointment builds on the last instead of starting again.'),
-      S('Endospheres Therapy', 'tech', '60 min', '400 AED',
+      S('Endospheres Therapy', 'tech', '60 min', '',
         'Compressive microvibration for skin tone and circulation.',
         'A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone.'),
-      S('RF Slimming Therapy', 'tech', '60 min', '400 AED',
+      S('RF Slimming Therapy', 'tech', '60 min', '',
         'Radiofrequency body treatment targeting firmness and contour.',
         'Radiofrequency heat applied to the deeper layers of the skin to support firmness and contour. Comfortable, warm, and best taken as a course.'),
-      S('Endospheres Face', 'tech', '30 min', '150 AED',
+      S('Endospheres Face', 'tech', '30 min', '',
         'Microvibration facial treatment for tone and lift.',
         'A smaller Endospheres handpiece worked over the face and neck to support drainage, tone and definition along the jaw.'),
     ] }),
@@ -537,15 +538,15 @@
 
     C({ key: 'pkg', name: 'Packages', slot: 'gsvc-cat-pkg', ddSlot: 'dd-cat-Packages',
       img: 'photo_2026-07-25_02-02-55.jpg',
-      blurb: 'Two or three treatments combined into one visit, at a set price.',
+      blurb: 'Two or three treatments combined into one visit.',
       items: [
-      S('Moroccan Bath + Full Body Massage', 'pkg', '90 min', '300 AED',
+      S('Moroccan Bath + Full Body Massage', 'pkg', '90 min', '',
         'A Moroccan bath followed by a full-body massage.',
         'The bath opens and softens the skin, the massage takes over while muscles are still warm. The most popular combination we offer.'),
-      S('Relaxing Jacuzzi Therapy + Full Body Massage', 'pkg', '90 min', '350 AED',
+      S('Relaxing Jacuzzi Therapy + Full Body Massage', 'pkg', '90 min', '',
         'Warm hydrotherapy paired with a full-body massage.',
         'Thirty minutes of warm water and jets, then a full-body massage on a heated table without leaving the suite.'),
-      S('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy', 'pkg', '120 min', '450 AED',
+      S('Moroccan Bath + Full Body Massage + Relaxing Jacuzzi Therapy', 'pkg', '120 min', '',
         'The full circuit: bath, massage and jacuzzi in one visit.',
         'Two hours through the whole spa: hammam, massage table and jacuzzi, in the order that gets the most out of each one.'),
     ] }),
@@ -555,7 +556,6 @@
     her: { cats: HER_CATS },
     him: { cats: HIM_CATS },
     slugify: slugify,
-    priceNum: priceNum,
 
     // Every treatment on one side, flattened, with its category and slug -
     // what the detail-page templates iterate over.
@@ -565,7 +565,7 @@
         c.items.forEach(function (it) {
           out.push({
             name: it.name, cat: c.name, catKey: c.key, type: it.type,
-            duration: it.duration, price: it.price, desc: it.desc, long: it.long,
+            duration: it.duration, desc: it.desc, long: it.long,
             slug: slugify(it.name),
           });
         });
@@ -581,7 +581,7 @@
           name: c.name, slot: c.slot, img: c.img, credit: '', chref: '', blurb: c.blurb,
           items: c.items.map(function (it) {
             return {
-              name: it.name, price: it.price, desc: it.desc,
+              name: it.name, desc: it.desc,
               duration: it.duration ? it.duration.toUpperCase() : 'BY REQUEST',
             };
           }),
@@ -596,18 +596,10 @@
         return {
           name: c.name, slot: c.ddSlot, pic: [c.img, '', ''], blurb: c.blurb,
           items: c.items.map(function (it) {
-            return { name: it.name, duration: it.duration, price: it.price, desc: it.desc };
+            return { name: it.name, duration: it.duration, desc: it.desc };
           }),
         };
       });
-    },
-
-    // "from 157.50 AED", ignoring anything that has no price yet. Categories
-    // where nothing is priced say so instead of claiming "from On request".
-    fromLabel: function (items) {
-      var priced = items.filter(function (it) { return priceNum(it.price) > 0; })
-        .sort(function (a, b) { return priceNum(a.price) - priceNum(b.price); });
-      return priced.length ? 'from ' + priced[0].price : 'price on request';
     },
   };
 

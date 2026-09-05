@@ -433,7 +433,7 @@ img { display:block; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/gent-book" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">BOOK</a>
@@ -460,7 +460,7 @@ img { display:block; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-him" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">BOOK</a>
@@ -556,7 +556,7 @@ class Component extends DCLogic {
     const vw = this.state.vw || 1280;
     // Ritual list comes from the same cats() the menu and services pages use.
     const rituals = [{ v: 'Choose a ritual' }];
-    this.cats().forEach(c => c.items.forEach(it => rituals.push({ v: it.name + ' · ' + it.price })));
+    this.cats().forEach(c => c.items.forEach(it => rituals.push({ v: it.name })));
     const days = [{ v: 'Choose a day' }];
     const fmt = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

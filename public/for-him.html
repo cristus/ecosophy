@@ -381,7 +381,7 @@ a:hover { color:#B98F3E; }
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
-        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">MENU &amp; PRICES</a>
+        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/gent-book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -407,7 +407,7 @@ a:hover { color:#B98F3E; }
     </div>
     <div style="position:relative; z-index:3; display:{{ drawerShow }}; flex-direction:column; gap:2px; padding:{{ drawerPadTop }} 20px 18px; border-top:1px solid rgba(201,168,96,.2); background:rgba(9,24,17,.97);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
-      <a href="/gent-menu-prices" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">MENU &amp; PRICES</a>
+      <a href="/gent-menu-prices" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/gent-book" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -530,7 +530,6 @@ a:hover { color:#B98F3E; }
     <div style="text-align:center;">
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,3vw,28px); color:#B98F3E;">for him</div>
       <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:2px;">SIGNATURE RITUALS</div>
-      <div style="font-size:11px; letter-spacing:3px; color:#9A917A; margin-top:8px;">ALL PRICES INCLUDE VAT</div>
     </div>
     <div style="margin-top:clamp(28px,3.4vw,44px);">
       <div style="position:sticky; top:67px; z-index:30; background:rgba(246,241,230,.94); backdrop-filter:blur(8px); padding:13px 0 11px; border-bottom:1px solid #E3D9C2;">
@@ -570,7 +569,6 @@ a:hover { color:#B98F3E; }
                 <div style="font-family:'Italiana','Prata',serif; font-size:22px; color:#F1E7CC; line-height:1.15;">{{ cat.name }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:7px;">
                   <span style="font-size:var(--fs-lg); letter-spacing:1.5px; color:rgba(241,231,204,.72);">{{ cat.countLabel }}</span>
-                  <span style="font-size:12px; color:#C9A860;">{{ cat.fromLabel }}</span>
                 </div>
               </div>
             </div>
@@ -588,7 +586,6 @@ a:hover { color:#B98F3E; }
                 <div style="font-size:12.5px; color:#77704F; line-height:1.6; margin-top:6px;">{{ item.desc }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:auto; padding-top:12px;">
                   <span style="font-size:var(--fs-md); letter-spacing:1.5px; color:#9A917A;">{{ item.durationLabel }}</span>
-                  <span style="font-size:13px; color:#B98F3E; white-space:nowrap;">{{ item.price }}</span>
                 </div>
               </div>
             </a>
@@ -603,7 +600,6 @@ a:hover { color:#B98F3E; }
               <image-slot id="{{ detail.heroSlot }}" placeholder="{{ detail.photoHint }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:20px;">
-              <span style="font-family:'Prata',serif; font-size:26px; color:#B98F3E;">{{ detail.price }}</span>
               <span style="font-size:11px; letter-spacing:2px; color:#77704F;">{{ detail.durationLabel }}</span>
             </div>
             <div style="font-size:14px; color:#5A5340; line-height:1.85; margin-top:12px;">{{ detail.desc }}</div>
@@ -624,7 +620,6 @@ a:hover { color:#B98F3E; }
               <sc-for list="{{ detailSiblings }}" as="sib" hint-placeholder-count="5">
                 <div onClick="{{ sib.open }}" style="cursor:pointer; display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:12px 12px; border-top:1px solid #E3D9C2; border-radius:9px;" style-hover="background:rgba(201,168,96,.1);">
                   <span style="flex:1; min-width:0; font-size:13px; color:#14532D;">{{ sib.name }}</span>
-                  <span style="font-size:12.5px; color:#B98F3E; white-space:nowrap;">{{ sib.price }}</span>
                 </div>
               </sc-for>
             </div>
@@ -671,7 +666,6 @@ a:hover { color:#B98F3E; }
                     <span style="flex:none; width:17px; height:17px; border-radius:5px; border:1px solid {{ x.boxBorder }}; background:{{ x.boxBg }}; color:#F1E7CC; font-size:var(--fs-md); line-height:17px; text-align:center;">{{ x.mark }}</span>
                     <span style="flex:1; min-width:0; font-size:12.5px; color:#3A4136;">{{ x.name }}</span>
                     <span style="font-size:var(--fs-sm); letter-spacing:1px; color:#9A917A;">{{ x.catLabel }}</span>
-                    <span style="font-size:12px; color:#B98F3E; white-space:nowrap; width:62px; text-align:right;">{{ x.price }}</span>
                   </div>
                 </sc-for>
               </div>
@@ -682,14 +676,12 @@ a:hover { color:#B98F3E; }
               <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#14532D; line-height:1.2; margin-top:10px;">{{ crumbSvc }}</div>
               <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline; margin-top:6px;">
                 <span style="font-size:11px; letter-spacing:1.5px; color:#9A917A;">{{ ddBaseDuration }}</span>
-                <span style="font-size:13px; color:#B98F3E;">{{ ddBasePrice }}</span>
               </div>
               <sc-if value="{{ ddHasExtras }}" hint-placeholder-val="{{ false }}">
                 <div style="border-top:1px solid #EDE6D5; margin-top:16px; padding-top:14px; display:flex; flex-direction:column; gap:9px;">
                   <sc-for list="{{ ddChosenExtras }}" as="x" hint-placeholder-count="2">
                     <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
                       <span style="flex:1; min-width:0; font-size:12.5px; color:#5A5340;">{{ x.name }}</span>
-                      <span style="font-size:12px; color:#B98F3E; white-space:nowrap;">{{ x.price }}</span>
                       <span onClick="{{ x.toggle }}" style="cursor:pointer; font-size:13px; color:#B0592F;">×</span>
                     </div>
                   </sc-for>
@@ -702,10 +694,6 @@ a:hover { color:#B98F3E; }
               <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline; margin-top:10px;">
                 <span style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">GUEST</span>
                 <span style="font-size:12.5px; color:#3A4136; text-align:right;">{{ ddGuest }}</span>
-              </div>
-              <div style="border-top:1px solid #E3D9C2; margin-top:18px; padding-top:16px; display:flex; justify-content:space-between; align-items:baseline;">
-                <span style="font-size:var(--fs-sm); letter-spacing:2px; color:#9A917A;">ESTIMATED TOTAL</span>
-                <span style="font-family:'Prata',serif; font-size:24px; color:#B98F3E;">{{ ddTotal }}</span>
               </div>
               <div onClick="{{ ddSubmit }}" style="cursor:pointer; text-align:center; background:#14532D; color:#F4EFE3; border-radius:26px; padding:15px; font-size:11px; letter-spacing:2.5px; font-weight:600; margin-top:18px;">{{ ddSubmitLabel }}</div>
               <sc-if value="{{ ddError }}" hint-placeholder-val="{{ false }}">
@@ -764,7 +752,6 @@ a:hover { color:#B98F3E; }
         <div class="r-offer" style="position:relative; margin:-70px clamp(16px,4vw,56px) 0; background:#FFFDF7; border:1px solid #E3D9C2; border-radius:28px; padding:clamp(26px,3.5vw,40px); display:grid; grid-template-columns:minmax(220px,1fr) auto; gap:clamp(24px,4vw,48px); align-items:center; box-shadow:0 30px 60px -30px rgba(60,50,20,.25);">
           <div>
             <div style="font-size:13px; color:#77704F; line-height:1.9; max-width:420px;">Moroccan bath and HydraFacial, together — deep exfoliation, warm steam and a nourishing mask, sealed with a hydrating facial finish.</div>
-            <div style="display:flex; align-items:baseline; gap:12px; margin-top:20px;"><span style="font-family:'Prata',serif; font-size:26px; color:#B98F3E;">399 AED</span><span style="font-size:12px; color:#9A917A; text-decoration:line-through;">560 AED</span></div>
             <a href="#book" style="display:inline-block; margin-top:18px; background:#14532D; color:#F4EFE3; border-radius:24px; padding:12px 30px; font-size:11.5px; letter-spacing:3px; white-space:nowrap;">CLAIM THE OFFER</a>
           </div>
           <div style="display:flex; gap:16px; flex-wrap:wrap;">
@@ -834,7 +821,6 @@ a:hover { color:#B98F3E; }
           <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
             <div style="font-size:var(--fs-xxs); letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
             <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
-            <div style="font-size:11px; color:#C9A860; margin-top:6px;">{{ r.price }}</div>
           </div>
         </div>
       </sc-for>
@@ -866,7 +852,7 @@ a:hover { color:#B98F3E; }
         <div class="gv-storytext" key="{{ gCurrent.title }}" style="position:absolute; left:18px; right:18px; bottom:20px;">
           <div style="font-family:'Italiana','Prata',serif; font-size:23px; color:#F4EFE3; line-height:1.2;">{{ gCurrent.title }}</div>
           <div style="font-size:12px; color:#C4CFC1; line-height:1.65; margin-top:7px;">{{ gCurrent.caption }}</div>
-          <a href="#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }} · {{ gCurrent.price }}</a>
+          <a href="#book" onClick="{{ gClose }}" style="display:inline-block; margin-top:14px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:11px 22px; font-size:var(--fs-md); letter-spacing:2px; font-weight:600;">{{ gCurrent.cta }}</a>
         </div>
       </div>
       <span onClick="{{ gNext }}" style="cursor:pointer; flex:none; font-size:26px; color:#C9A860;">›</span>
@@ -974,7 +960,6 @@ a:hover { color:#B98F3E; }
             <div style="font-family:'Italiana','Prata',serif; font-size:19px; letter-spacing:.05em; color:#F1E7CC; margin-top:8px;">{{ summaryRitual }}</div>
             <div style="display:flex; justify-content:space-between; gap:14px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(244,239,227,.16); font-size:12.5px; color:#BFCBBB;">
               <span>{{ summaryWhen }}</span>
-              <span style="color:#E4C778; white-space:nowrap;">{{ summaryPrice }}</span>
             </div>
           </div><div>
           <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
@@ -1108,25 +1093,25 @@ class Component extends DCLogic {
     const lounge = L('uploads/photo_2026-08-02_19-37-25.jpg');
     const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', price: '262 AED', length: '0:24', pic: paje,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: paje,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', price: '157 AED', length: '0:16', pic: stone,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', length: '0:16', pic: stone,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial', price: '390 AED', length: '0:18', pic: hume,
+      { type: 'FACIALS', title: 'HydraFacial', length: '0:18', pic: hume,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', price: '472 AED', length: '0:29', pic: fac,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', length: '0:29', pic: fac,
         caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
-      { type: 'MASSAGE', title: 'Balinese Massage', price: '200 AED', length: '0:31', pic: caishan,
+      { type: 'MASSAGE', title: 'Balinese Massage', length: '0:31', pic: caishan,
         caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
-      { type: 'MASSAGE', title: 'Hot Stone Massage', price: '300 AED', length: '0:26', pic: room,
+      { type: 'MASSAGE', title: 'Hot Stone Massage', length: '0:26', pic: room,
         caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'BARBER & BEARD', title: 'Cut & Beard Sculpt', price: '150 AED', length: '0:15', pic: element,
+      { type: 'BARBER & BEARD', title: 'Cut & Beard Sculpt', length: '0:15', pic: element,
         caption: 'Scissor cut and beard shaping by our master barbers.', cta: 'BOOK THE BARBER' },
-      { type: 'BARBER & BEARD', title: 'Hot Towel Shave', price: '120 AED', length: '0:14', pic: shave,
+      { type: 'BARBER & BEARD', title: 'Hot Towel Shave', length: '0:14', pic: shave,
         caption: 'Steamed towels, straight razor and a cooling finish.', cta: 'BOOK A SHAVE' },
-      { type: 'THE SPA', title: 'Jacuzzi Therapy', price: '210 AED', length: '0:22', pic: nick,
+      { type: 'THE SPA', title: 'Jacuzzi Therapy', length: '0:22', pic: nick,
         caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', price: '157 AED', length: '0:19', pic: machine,
+      { type: 'THE SPA', title: 'Infrared Sauna Session', length: '0:19', pic: machine,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
   }
@@ -1157,13 +1142,13 @@ class Component extends DCLogic {
       // same image.
       gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
         slot: 'him-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
-        title: it.title, price: it.price, length: it.length, type: it.type,
+        title: it.title, length: it.length, type: it.type,
         open: () => this.setState({ gIdx: i, gProgress: 0 }),
       }))),
       gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
       gOpen: gi != null,
       gCurrent: cur && { slot: 'him-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
-        title: cur.title, caption: cur.caption, cta: cur.cta, price: cur.price, type: cur.type },
+        title: cur.title, caption: cur.caption, cta: cur.cta, type: cur.type },
       gBars: list.map((_, i) => ({ w: gi != null && i < gi ? '100%' : (i === gi ? Math.round((this.state.gProgress || 0) * 100) + '%' : '0%') })),
       gClose: () => this.setState({ gIdx: null, gProgress: 0 }),
       gNext: () => this.setState(s => ({ gIdx: s.gIdx + 1 < list.length ? s.gIdx + 1 : 0, gProgress: 0 })),
@@ -1172,14 +1157,12 @@ class Component extends DCLogic {
   }
   drilldown() {
     const CATS = window.ECO.homeCats('him');
-    const priceNum = p => parseFloat(String(p).replace(/[^\d.]/g, '')) || 0;
     const { dCat, dSvc } = this.state;
     const dCategories = CATS.map(c => {
       return {
         name: c.name.toUpperCase(), slot: c.slot,
         img: c.pic[0], credit: c.pic[1], chref: c.pic[2],
         countLabel: c.items.length + ' TREATMENTS',
-        fromLabel: window.ECO.fromLabel(c.items),
         pillBg: this.state.dCat === c.name ? '#14532D' : 'rgba(255,253,247,.9)',
         pillColor: this.state.dCat === c.name ? '#F1E7CC' : '#3A4136',
         pillBorder: this.state.dCat === c.name ? '#14532D' : '#DED4BD',
@@ -1188,7 +1171,7 @@ class Component extends DCLogic {
     });
     const allServices = [];
     CATS.forEach(c => c.items.forEach((it, i) => allServices.push({
-      name: it.name, price: it.price, catLabel: c.name.toUpperCase(),
+      name: it.name, catLabel: c.name.toUpperCase(),
       open: () => this.setState({ dCat: c.name, dSvc: i, ddOpen: false, ddBooked: false }),
     })));
     const cat = CATS.find(c => c.name === dCat);
@@ -1242,17 +1225,12 @@ class Component extends DCLogic {
     const ddExtras = detail ? allServices.filter(s => s.name !== detail.name).map(s => {
       const on = extraNames.indexOf(s.name) >= 0;
       return {
-        name: s.name, price: s.price, catLabel: s.catLabel, mark: on ? '✓' : '',
+        name: s.name, catLabel: s.catLabel, mark: on ? '✓' : '',
         bg: on ? 'rgba(20,83,45,.08)' : 'transparent',
         boxBg: on ? '#14532D' : 'transparent', boxBorder: on ? '#14532D' : '#C9BFA6',
         toggle: () => this.setState({ ddExtras: on ? extraNames.filter(n => n !== s.name) : extraNames.concat([s.name]) }),
       };
     }) : [];
-    const money = (n) => (Math.round(n * 100) % 100 === 0 ? String(Math.round(n)) : n.toFixed(2)) + ' AED';
-    const extraTotal = extraNames.reduce((sum, n) => sum + priceNum((allServices.find(s => s.name === n) || {}).price), 0);
-    const ddTotal = detail
-      ? (priceNum(detail.price) > 0 ? money(priceNum(detail.price) + extraTotal) : 'On request')
-      : '';
     const wa = (this.props.whatsapp ?? '').replace(/[^0-9]/g, '');
     const missing = [];
     if (!this.state.day || !chosenTime) missing.push('a day and time');
@@ -1263,21 +1241,20 @@ class Component extends DCLogic {
     const ddSubmit = () => {
       if (!detail || missing.length) return this.setState({ ddError: true });
       const lines = ['Hello Ecosophy, I would like to book:', '',
-        'Treatment: ' + detail.name + ' (' + detail.price + ')'];
+        'Treatment: ' + detail.name];
       if (extraNames.length) lines.push('Also interested in: ' + extraNames.join(', '));
-      lines.push('Estimated total: ' + ddTotal, 'Date & time: ' + whenText,
+      lines.push('Date & time: ' + whenText,
         'Name: ' + this.state.name, 'Phone: ' + this.state.phone);
       if (wa) window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
       this.setState({ ddBooked: true, ddError: false, ritual: detail.name });
     };
 
     return {
-      ddDays, ddTimes, ddExtras, ddTotal,
+      ddDays, ddTimes, ddExtras,
       atBooking: !!detail && !!this.state.ddOpen && !this.state.ddBooked,
       ddBooked: !!this.state.ddBooked,
       ddError: !!this.state.ddError && missing.length > 0,
       ddErrorMsg: missingMsg,
-      ddBasePrice: detail ? detail.price : '',
       ddBaseDuration: detail ? detail.durationLabel : '',
       ddGuest: this.state.name.trim() ? (this.state.name + (this.state.phone.trim() ? ' · ' + this.state.phone : '')) : 'Add your name and phone',
       ddHasExtras: extraNames.length > 0,
@@ -1413,14 +1390,14 @@ class Component extends DCLogic {
     const chosen = slots.find(s2 => s2.value === this.state.time);
     const validTime = chosen && !chosen.taken ? chosen.label : null;
     const slotText = picked && validTime ? picked.dow + ' ' + picked.num + ' ' + picked.mon + ' · ' + validTime : '';
-    const C = (slot,k,name,price,desc) => ({ slot, img: IMGS[k][0], credit: IMGS[k][1], chref: IMGS[k][2], name, price, desc });
+    const C = (slot,k,name,desc) => ({ slot, img: IMGS[k][0], credit: IMGS[k][1], chref: IMGS[k][2], name, desc });
     const cards = [
-        C('him-m1','paje','Royal Moroccan Bath','262 AED','Steam, black soap, deep exfoliation and a nourishing body mask.'),
-        C('him-m2','rosa','Signature Facial + Massage','472 AED','Our signature facial followed by a full-body Balinese massage.'),
-        C('him-m3','hume','HydraFacial','390 AED','Deep cleansing, extraction and hydration in one session.'),
-        C('him-m4','element','Cut & Beard Sculpt','150 AED','Scissor cut and beard shaping by our master barbers.'),
-        C('him-m5','caishan','Balinese Massage','200 AED','60 minutes with therapists from Bali, Indonesia.'),
-        C('him-m6','nico','Body Scrub + Wrap','280 AED','Full-body polish sealed with a warm nourishing wrap.'),
+        C('him-m1','paje','Royal Moroccan Bath','Steam, black soap, deep exfoliation and a nourishing body mask.'),
+        C('him-m2','rosa','Signature Facial + Massage','Our signature facial followed by a full-body Balinese massage.'),
+        C('him-m3','hume','HydraFacial','Deep cleansing, extraction and hydration in one session.'),
+        C('him-m4','element','Cut & Beard Sculpt','Scissor cut and beard shaping by our master barbers.'),
+        C('him-m5','caishan','Balinese Massage','60 minutes with therapists from Bali, Indonesia.'),
+        C('him-m6','nico','Body Scrub + Wrap','Full-body polish sealed with a warm nourishing wrap.'),
     ];
     const RATINGS = [{ star: 5, count: 114 }, { star: 4, count: 10 }, { star: 3, count: 3 }, { star: 2, count: 1 }, { star: 1, count: 0 }];
     const rTotal = RATINGS.reduce((s, r) => s + r.count, 0);
@@ -1449,7 +1426,6 @@ class Component extends DCLogic {
       pick: () => { this.setState({ tIndex: i }); this.startTesti(); },
     }));
     const dd = this.drilldown();
-    const priceOf = (n) => (dd.allServices.find(x => x.name === n) || {}).price || '';
     return {
       ...this.reelVals(),
       tDots,
@@ -1464,12 +1440,11 @@ class Component extends DCLogic {
       cards, featuredCard: cards[0], listCards: cards.slice(1),
       ...dd,
       rituals: dd.allServices.map((c) => ({
-        name: c.name, price: c.price, label: c.name + ' — ' + c.price,
+        name: c.name, label: c.name,
         selected: this.state.ritual === c.name,
       })),
       summaryRitual: this.state.ritual || 'Choose a ritual',
       summaryWhen: slotText || (picked ? picked.dow + ' ' + picked.num + ' ' + picked.mon + ' · pick a time' : 'No date selected yet'),
-      summaryPrice: priceOf(this.state.ritual) || '—',
       showOffer: this.props.showOffer ?? true,
       whatsapp: wa,
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g,''),
@@ -1592,9 +1567,8 @@ class Component extends DCLogic {
       setPhone: (e) => this.setState({ phone: e.target.value, formError: false }),
       submitBooking: () => {
         if (!this.state.name.trim() || !this.state.phone.trim() || !this.state.day || !validTime || !this.state.ritual) return this.setState({ formError: true });
-        const price = priceOf(this.state.ritual);
         const msg = 'Hello Ecosophy Beauty & Spa, I would like to book:\n\n' +
-          'Ritual: ' + this.state.ritual + (price ? ' (' + price + ')' : '') + '\n' +
+          'Ritual: ' + this.state.ritual + '\n' +
           'Date & time: ' + slotText + '\n' +
           'Name: ' + this.state.name + '\n' +
           'Phone: ' + this.state.phone;

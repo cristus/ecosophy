@@ -29,20 +29,20 @@ const PAGES = {
   },
   'Ecosophy Services.dc.html': {
     route: 'services.html',
-    title: 'Spa Menu & Prices — Ecosophy for Her',
-    description: 'Full treatment menu and prices for Ecosophy Spa Dubai — massage, hammam, facials and body rituals.',
+    title: 'Spa Treatment Menu — Ecosophy for Her',
+    description: 'The full treatment menu for Ecosophy Spa Dubai — massage, hammam, facials and body rituals.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Service Detail.dc.html': {
     route: 'service.html',
     title: 'Treatment — Ecosophy Spa for Her',
-    description: 'Treatment details, duration and pricing at Ecosophy Spa Dubai.',
+    description: 'Treatment details and duration at Ecosophy Spa Dubai.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Services.dc.html': {
     route: 'gent-services.html',
-    title: 'Menu & Prices — Ecosophy Gent Spa',
-    description: 'Full treatment menu and prices for Ecosophy Gent Spa Dubai — massage, hammam, skin and grooming.',
+    title: 'Treatment Menu — Ecosophy Gent Spa',
+    description: 'The full treatment menu for Ecosophy Gent Spa Dubai — massage, hammam, skin and grooming.',
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Gallery.dc.html': {
@@ -61,14 +61,14 @@ const PAGES = {
   },
   'Ecosophy Menu Prices.dc.html': {
     route: 'menu-prices.html',
-    title: 'Menu & Prices — Ecosophy Spa for Her, Dubai',
-    description: 'Every treatment at Ecosophy Spa Dubai with its length and price — massage, hammam, facials, nails and packages.',
+    title: 'Treatment Menu — Ecosophy Spa for Her, Dubai',
+    description: 'Every treatment at Ecosophy Spa Dubai with its length — massage, hammam, facials, nails and packages.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Menu Prices.dc.html': {
     route: 'gent-menu-prices.html',
-    title: 'Menu & Prices — Ecosophy Gent Spa, Dubai',
-    description: "Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.",
+    title: 'Treatment Menu — Ecosophy Gent Spa, Dubai',
+    description: "Every treatment at Ecosophy Gent Spa Dubai with its length — massage, hammam, skin and grooming.",
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Book.dc.html': {
@@ -86,7 +86,7 @@ const PAGES = {
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
     title: 'Treatment — Ecosophy Gent Spa',
-    description: 'Treatment details, duration and pricing at Ecosophy Gent Spa Dubai.',
+    description: 'Treatment details and duration at Ecosophy Gent Spa Dubai.',
     mark: 'favicons/mark-man-gold-180.png',
   },
 };

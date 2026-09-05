@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Menu &amp; Prices — Ecosophy Gent Spa, Dubai</title>
-<meta name="description" content="Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.">
+<title>Treatment Menu — Ecosophy Gent Spa, Dubai</title>
+<meta name="description" content="Every treatment at Ecosophy Gent Spa Dubai with its length — massage, hammam, skin and grooming.">
 <link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy Spa">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Menu &amp; Prices — Ecosophy Gent Spa, Dubai">
-<meta property="og:description" content="Every treatment at Ecosophy Gent Spa Dubai with its length and price — massage, hammam, skin and grooming.">
+<meta property="og:title" content="Treatment Menu — Ecosophy Gent Spa, Dubai">
+<meta property="og:description" content="Every treatment at Ecosophy Gent Spa Dubai with its length — massage, hammam, skin and grooming.">
 <meta property="og:url" content="https://ecosophy.pages.dev/gent-menu-prices">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://ecosophy.pages.dev/gent-menu-prices">
@@ -36,12 +36,11 @@ img { display:block; }
 .mp-rise { animation:mpRise 1s cubic-bezier(.2,.8,.3,1) both; }
 .mp-eyebrow { font-size:var(--fs-lg); letter-spacing:3.4px; color:#C9A860; }
 .mp-cat { font-family:'Italiana','Prata',serif; font-size:clamp(26px,3.6vw,44px); letter-spacing:.05em; color:#F4EFE3; }
-.mp-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:clamp(12px,2vw,28px); align-items:baseline; padding:16px 0; border-bottom:1px solid rgba(201,168,96,.16); }
+.mp-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(12px,2vw,28px); align-items:baseline; padding:16px 0; border-bottom:1px solid rgba(201,168,96,.16); }
 .mp-name { font-family:'Cormorant Garamond',serif; font-size:clamp(17px,1.7vw,22px); color:#F1E7CC; }
 .mp-desc { font-size:12px; color:#93A395; line-height:1.7; margin-top:4px; max-width:62ch; }
 .mp-dur { font-size:var(--fs-md); letter-spacing:2.2px; color:#9FB0A0; white-space:nowrap; }
-.mp-price { font-size:13px; letter-spacing:1.4px; color:#E4C778; white-space:nowrap; }
-@media (max-width:620px){ .mp-row { grid-template-columns:minmax(0,1fr) auto; } .mp-dur { grid-column:1; } }
+@media (max-width:620px){ .mp-row { grid-template-columns:minmax(0,1fr); } .mp-dur { grid-column:1; } }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
@@ -434,7 +433,7 @@ img { display:block; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">MENU &amp; PRICES</a>
+        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">TREATMENT MENU</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/gent-book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -461,7 +460,7 @@ img { display:block; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-him" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">MENU &amp; PRICES</a>
+      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">TREATMENT MENU</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -480,8 +479,8 @@ img { display:block; }
     <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 44%, rgba(6,16,11,.34) 0%, rgba(6,16,11,.66) 60%, rgba(6,16,11,.9) 100%);"></div>
     <div data-gy="-0.05" style="position:relative; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
       <div class="mp-rise mp-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
-      <h1 class="mp-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(38px,6.6vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">MENU &amp; PRICES</h1>
-      <div class="mp-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">Every treatment we offer, with its length and its price. No packages hidden behind an enquiry.</div>
+      <h1 class="mp-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(38px,6.6vw,92px); letter-spacing:.05em; color:#F4EFE3; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">THE TREATMENT MENU</h1>
+      <div class="mp-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">Every treatment we offer, with its length and what it involves. Nothing hidden behind an enquiry.</div>
     </div>
   </div>
 
@@ -499,7 +498,6 @@ img { display:block; }
         <div class="mp-row" style="display:{{ r.itemShow }};">
           <div><div class="mp-name">{{ r.name }}</div><div class="mp-desc">{{ r.desc }}</div></div>
           <div class="mp-dur">{{ r.duration }}</div>
-          <div class="mp-price">{{ r.price }}</div>
         </div>
       </sc-for>
       <div style="margin-top:clamp(50px,7vw,90px); text-align:center;">
@@ -546,10 +544,10 @@ class Component extends DCLogic {
     const rows = [];
     this.cats().forEach((c, ci) => {
       rows.push({ headShow: 'block', itemShow: 'none', kicker: String(ci + 1).padStart(2, '0') + ' — ' + c.name.toUpperCase(),
-        cat: c.name, blurb: c.blurb, name: '', desc: '', duration: '', price: '' });
+        cat: c.name, blurb: c.blurb, name: '', desc: '', duration: '' });
       c.items.forEach(it => rows.push({
         headShow: 'none', itemShow: 'grid', kicker: '', cat: '', blurb: '',
-        name: it.name, desc: it.desc, duration: it.duration, price: it.price }));
+        name: it.name, desc: it.desc, duration: it.duration }));
     });
     return {
       menuRows: rows,

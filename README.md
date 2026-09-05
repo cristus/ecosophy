@@ -27,8 +27,8 @@ new deployment. See [EDITING.md](EDITING.md).
 | `/`                        | Switcher — "Choose your world" |
 | `/for-her`                 | Ecosophy Spa (women)          |
 | `/for-him`                 | Ecosophy Gent Spa (men)       |
-| `/services`                | Full menu & prices, for her   |
-| `/gent-services`           | Full menu & prices, for him   |
+| `/services`                | Full treatment menu, for her  |
+| `/gent-services`           | Full treatment menu, for him  |
 | `/service?s=<slug>`        | One treatment, for her        |
 | `/gent-service?s=<slug>`   | One treatment, for him        |
 
@@ -49,20 +49,33 @@ It holds both sides of the house:
 The two home pages, the two services pages, the two menu & prices pages, the two
 booking pages and the two treatment-detail templates all read it, so:
 
-- **a price or a name** is changed once, and every page follows;
+- **a name or a description** is changed once, and every page follows;
 - **a new treatment** is one `S(...)` row inside the right category;
 - **a new category** is one `C({...})` block. Give its treatments a `type` that
   exists in the TYPES table lower down in the same file — that is what fills in
   the detail page's steps, inclusions, benefits, reviews and FAQ.
 
-Duration and price may be left blank. The pages then show *BY REQUEST* and
-*On request* rather than a made-up number, and a category with nothing priced
-yet says "price on request" instead of "from On request".
+Duration may be left blank; the pages then show *BY REQUEST* rather than a
+made-up number.
+
+### No prices
+
+The site does not publish prices. No figure is stored in `catalog.js` and no
+page renders one, so the services lists, the treatment pages, the menu pages,
+the home-page ritual menus and the WhatsApp messages the booking forms compose
+all go out without a number. WhatsApp is where a price is quoted.
+
+`S(...)` still takes a fourth argument, the old price slot, and it is
+deliberately not read — filling one in would do nothing on its own. Putting
+prices back means restoring that field in `S()`, in `flat()`, `menuCats()` and
+`homeCats()`, and re-adding the render sites the pages used to have.
 
 Note that `build.mjs` regenerates the pages from the Claude Design sources in
-`ref/`, which are **not** committed and do not know about `catalog.js`. A
-rebuild would put the old inline treatment lists back. Either re-apply the wiring
-to the regenerated pages, or bring the design sources in line first.
+`ref/`, which are **not** committed and do not know about `catalog.js` — nor
+about the price removal, which was applied to `public/` directly for the same
+reason. A rebuild would put the old inline treatment lists *and* the prices
+back. Either re-apply both to the regenerated pages, or bring the design
+sources in line first.
 
 ## Editing text and pictures
 
