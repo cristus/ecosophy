@@ -200,6 +200,21 @@ viewport width at 1920, 1280, 768 and 390.
 If you change the start value, changing it *up* does nothing visible. Down is
 the only direction with an effect, and it costs you the half circle.
 
+**The bed underneath (`.arch-bed`).** A full-width half circle is about 50vw
+tall, but the louvres it rises through live inside the hero, which ends only
+20vh below the panel top. So the green ran out partway through the sweep and
+the arc turned into a hard horizontal line at the hero's bottom edge — which
+read as two empty wedges in the bottom corners, the arc apparently stopping in
+mid-air. The wrapper holding the arch now repeats the shut-louvre gradient
+behind the panel. The panel is opaque, so the only place it shows is inside
+those rounded corners, and the curve completes on an unbroken backdrop.
+
+The stripe period has to track the engine, which thins the louvre count on
+small screens: 52, x0.68 under 1100px, x0.46 under 700px. `.arch-bed` mirrors
+those three counts in media queries. If the count in the engine ever changes,
+change the bed to match or the wedges will show a different stripe width to the
+louvres directly above them.
+
 `/services` and `/gent-services` used to open their arch panel on a shallower
 curve (`data-garch="40,21"`) because the filter bubbles sat flush against the
 top edge of the panel, where a 66vw dome cut the first of them — and the first
