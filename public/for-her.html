@@ -904,7 +904,7 @@ a:hover { color:#B98F3E; }
 
       <div class="r-split" style="display:grid; grid-template-columns:minmax(260px,0.85fr) minmax(300px,1.15fr); gap:clamp(32px,5vw,64px); align-items:center; margin-top:clamp(44px,5.5vw,68px);">
         <div key="{{ tKey }}" style="position:relative; height:clamp(320px,34vw,440px); border-radius:24px; overflow:hidden; border:1px solid #DED4BD; animation:tFade .7s ease both;">
-          <image-slot id="{{ tPhotoA }}" placeholder="{{ tPhotoHintA }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+          <image-slot id="{{ tPhotoA }}" sc-camel-src="{{ tPhotoSrcA }}" placeholder="{{ tPhotoHintA }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:16px 18px; background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.75) 100%);">
             <div style="font-size:var(--fs-sm); letter-spacing:2px; color:#EBD9A6;">{{ tService }}</div>
           </div>
@@ -1408,10 +1408,10 @@ class Component extends DCLogic {
     const rTotal = RATINGS.reduce((s, r) => s + r.count, 0);
     const ratingBars = RATINGS.map(r => ({ star: r.star, count: r.count, w: Math.round((r.count / rTotal) * 100) + '%' }));
     const TESTI = [
-      { name: 'Amina R.', date: '2 weeks ago', service: 'Royal Moroccan Bath', quote: 'The Moroccan bath left my skin softer than it has been in years, and the room was so quiet I almost fell asleep. I have already booked my next visit.' },
-      { name: 'Olga K.', date: 'a month ago', service: 'BIAB Builder Manicure', quote: 'Finally a nail master in Ajman who understands shape. Three weeks later and my BIAB still looks like it was done yesterday.' },
-      { name: 'Fatima S.', date: 'a month ago', service: 'Balinese Massage', quote: 'Sixty minutes with their Balinese therapist undid months of desk work. The pressure was exactly right and nobody rushed me out afterwards.' },
-      { name: 'Layla M.', date: '3 months ago', service: 'Signature Facial + Massage', quote: 'A calm, women-only space that feels far away from the city. The signature facial and massage together is the best two hours of my month.' },
+      { name: 'Amina R.', date: '2 weeks ago', service: 'Royal Moroccan Bath', pic: 'uploads/eco-her-hammam-2.jpg', quote: 'The Moroccan bath left my skin softer than it has been in years, and the room was so quiet I almost fell asleep. I have already booked my next visit.' },
+      { name: 'Olga K.', date: 'a month ago', service: 'BIAB Builder Manicure', pic: 'uploads/eco-her-nails-1.jpg', quote: 'Finally a nail master in Ajman who understands shape. Three weeks later and my BIAB still looks like it was done yesterday.' },
+      { name: 'Fatima S.', date: 'a month ago', service: 'Balinese Massage', pic: 'uploads/eco-her-room-1.jpg', quote: 'Sixty minutes with their Balinese therapist undid months of desk work. The pressure was exactly right and nobody rushed me out afterwards.' },
+      { name: 'Layla M.', date: '3 months ago', service: 'Signature Facial + Massage', pic: 'uploads/eco-her-facial-1.jpg', quote: 'A calm, women-only space that feels far away from the city. The signature facial and massage together is the best two hours of my month.' },
     ];
     this._testiCount = TESTI.length;
     window.__ecoTestiHost = this;
@@ -1439,6 +1439,7 @@ class Component extends DCLogic {
       tDate: TESTI[tIdx].date, tInitial: TESTI[tIdx].name.slice(0, 1),
       tKey: 'testi-' + tIdx,
       tPhotoA: 'her-rev-a-' + tIdx,
+      tPhotoSrcA: TESTI[tIdx].pic,
       tPhotoHintA: TESTI[tIdx].service + ' — the work',
       aboutTags: ['RUSSIAN NAIL & LASH MASTERS','TOP BROW MASTER','SEMI-PERMANENT MAKEUP','DERMAPEN 4','ADVANCED FACIALS','CUSTOMIZED SLIMMING','MASSAGE & SPA'],
       aboutCategories: ['NAILS','LASHES','BROWS','FACIALS','BODY','MASSAGE'],
