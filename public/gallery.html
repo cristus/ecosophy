@@ -554,11 +554,21 @@ img { display:block; }
   </div>
 
   <!-- ── 1. Hero · deep vertical drift + slow push-in ────────────────────── -->
-  <div data-gsection style="position:relative; height:155vh; min-height:560px; overflow:hidden;">
+  <!-- Same proportions as the /book hero (132vh over a 640px floor) so the two
+       inside pages open at the same height rather than one running 23vh taller. -->
+  <div data-gsection style="position:relative; height:132vh; min-height:640px; background:#0E271C; overflow:hidden;">
     <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; will-change:transform;">
-      <img src="uploads/eco-her-hammam-1.jpg" alt="The hammam at Ecosophy" style="width:100%; height:100%; object-fit:cover;">
+      <!-- Shot on a phone, so it is 9:16: left to centre itself the wide crop
+           lands on bare tile. 62% pulls the band down onto the arch, the brass
+           taps and the candles on the marble. -->
+      <img src="uploads/eco-her-hammam-3.jpg" alt="The lit arch, brass taps and candlelit marble of the hammam" style="width:100%; height:100%; object-fit:cover; object-position:50% 62%;">
     </div>
-    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 42%, rgba(6,16,11,.30) 0%, rgba(6,16,11,.62) 60%, rgba(6,16,11,.88) 100%);"></div>
+    <!-- Green wash, not the old near-black one. The vertical pass grounds the
+         hero into the nav above and the arch panel below; the ellipse lays a
+         soft pool behind the copy only, so the heading holds without the lit
+         arch being blacked out — this is the photography page, after all. -->
+    <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.78) 0%,rgba(14,39,28,.22) 26%,rgba(14,39,28,.26) 60%,rgba(11,31,22,.88) 100%);"></div>
+    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(ellipse 78% 40% at 50% 42%, rgba(11,31,22,.62) 0%, rgba(11,31,22,.34) 62%, rgba(11,31,22,0) 100%);"></div>
     <!-- The shutter. Sits over the photo and under the copy, so the heading
          stays legible while the louvres close behind it. -->
     <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
@@ -571,7 +581,9 @@ img { display:block; }
   </div>
 
   <!-- ── 2. The Rooms · opposed horizontal drift ─────────────────────────── -->
-  <div data-gsection style="position:relative; margin-top:-70vh; z-index:2;">
+  <!-- -47vh against a 132vh hero leaves the same 85vh of hero standing as the
+       old -70vh did against 155vh, so the arch hand-off is unchanged. -->
+  <div data-gsection style="position:relative; margin-top:-47vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
     <div data-garch="66,21" style="background:#0B1F16; padding:clamp(50px,6vw,90px) 0 clamp(70px,10vw,130px); overflow:hidden; display:flex; flex-direction:column;">
   <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(24px,3vw,44px) 0 clamp(100px,12vw,180px);">
