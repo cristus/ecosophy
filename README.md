@@ -133,7 +133,7 @@ the template:
 | Heading | Italiana 400, `clamp(40px,7vw,92px)`, `.05em`, `#E4C778`, `line-height:1.06`, `margin:16px 0 0`, `text-shadow:0 8px 34px rgba(0,0,0,.7)` |
 | Lead | `13.5px/1.95`, `#A9B8AB`, `max-width:46ch`, `margin-top:16px` |
 | Scroll cue | `var(--fs-md)`, `2.6px`, `#9FB0A0`, `margin-top:22px` |
-| Arch below | `data-garch="66,21"`, `margin-top:-20vh` |
+| Arch below | `data-garch="50,21"`, `margin-top:-20vh` |
 
 The `<p>` prefix is per page (`mp-`, `svc-`, `gal-`, `bk-`); the three classes
 behind it are byte-identical, so the rise animation and eyebrow are the same
@@ -162,12 +162,38 @@ heading whole the moment the page moved. It now rides above them, drifts
 downward as the hero scrolls away, and fades only at the end of that travel.
 The effect lives in the per-page scroll engine, beside the louvres.
 
+### The arch, and why it is 50 and not 66
+
+The panel below the hero rises through the shut louvres as a dome that flattens
+into a shallow arc. Two numbers drive it, and both matter:
+
+- **`data-garch="50,21"`** — the top-corner radius as a percentage of viewport
+  width, start to end. **50 is the ceiling, not a taste choice.** The radius is
+  applied to both top corners, so at 50% the pair spans the whole width and the
+  panel is a *true half circle*. Anything above that the browser scales back
+  down to fit, so `66` and `50` render the identical semicircle — the extra 16
+  points were pure dead travel. The old ramp spent its first third there, which
+  is why the arch appeared to sit still and then collapse: it read as a jump,
+  not a transition.
+- **`clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1)`** — the ramp window,
+  measured on the panel's own top edge. It starts once the panel is 14vh onto
+  the screen, not at `1.05vh` where it used to: above the fold nobody can see
+  the dome, so that travel was wasted too.
+
+Together: the panel enters the viewport as an exact half circle, holds it while
+it rises (about a quarter-screen of scroll), then eases to the shallow arc by
+the time it takes the centre line. Verified on all ten pages — entry radius is
+exactly half the viewport width at 1920, 1280, 768 and 390.
+
+If you change the start value, changing it *up* does nothing visible. Down is
+the only direction with an effect, and it costs you the half circle.
+
 `/services` and `/gent-services` used to open their arch panel on a shallower
 curve (`data-garch="40,21"`) because the filter bubbles sat flush against the
 top edge of the panel, where a 66vw dome cut the first of them — and the first
 category — off at the left. The top padding added to the catalogue at the same
 time is what actually fixed that, so the shallow curve is no longer needed:
-both pages are back on the shared `66,21`. Measured across a scroll sweep at
+both pages are back on the shared arch value. Measured across a scroll sweep at
 1280/768/390 the widest dome and the clearance over the bubbles are the same
 either way. Keep the catalogue's top padding — that is the load-bearing half.
 

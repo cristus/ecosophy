@@ -303,11 +303,13 @@ a:hover { color:#B98F3E; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      // Runs from the top edge entering the bottom of the screen to the moment
-      // it reaches the middle, where the dome settles and holds. Ending on the
-      // centre line is the point: the arch is finished flattening exactly when
-      // the panel takes the middle of the screen, and nothing moves after that.
-      var qa = clamp((vh * 1.05 - rg.top) / (vh * 0.55), 0, 1);
+      // Hold the half circle until the panel is properly on screen, then flatten
+      // to the centre line. The travel used to start at 1.05vh - above the fold -
+      // so the dome was already collapsing before anyone could see it, and the
+      // first third of the ramp was spent between 66% and 50% where the browser
+      // renders the same semicircle either way. Starting at 0.86vh means the
+      // arch arrives as a true half circle, rises as one, and only then eases.
+      var qa = clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1);
       // Smoothstep, so it eases in and out instead of starting and stopping
       // dead at both ends of the travel.
       qa = qa * qa * (3 - 2 * qa);
@@ -569,7 +571,7 @@ a:hover { color:#B98F3E; }
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
          arc once it owns the screen. Same hand-off as the gallery. -->
-    <div data-garch="66,21" style="background:#F6F1E6; overflow:hidden; display:flex; flex-direction:column;">
+    <div data-garch="50,21" style="background:#F6F1E6; overflow:hidden; display:flex; flex-direction:column;">
     <div id="catalogue" data-screen-label="Catalogue" style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(84px,10vw,150px) 20px clamp(90px,11vw,150px); overflow:clip;">
       <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; right:1%; top:16%; width:min(14vw,155px); opacity:.055;">
       <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; left:1%; top:48%; width:min(12vw,135px); opacity:.05;">

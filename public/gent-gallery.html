@@ -270,7 +270,7 @@ img { display:block; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      var qa = clamp((vh * 0.95 - rg.top) / (vh * 0.7), 0, 1);
+      var qa = clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1);
       var arch = ga[0] + (ga[1] - ga[0]) * qa;
       var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
       el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
@@ -568,7 +568,7 @@ img { display:block; }
        inside page. -->
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
-    <div data-garch="66,21" style="background:#0B1F16; padding:clamp(50px,6vw,90px) 0 clamp(70px,10vw,130px); overflow:hidden; display:flex; flex-direction:column;">
+    <div data-garch="50,21" style="background:#0B1F16; padding:clamp(50px,6vw,90px) 0 clamp(70px,10vw,130px); overflow:hidden; display:flex; flex-direction:column;">
   <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(24px,3vw,44px) 0 clamp(100px,12vw,180px);">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:3%; top:50%; transform:translateY(-50%); width:min(18vw,200px); opacity:.045;">
     <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:-4%; top:4%; width:min(20vw,220px); opacity:.05;">

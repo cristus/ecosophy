@@ -263,11 +263,13 @@ img { display:block; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      // Runs from the top edge entering the bottom of the screen to the moment
-      // it reaches the middle, where the dome settles and holds. Ending on the
-      // centre line is the point: the arch is finished flattening exactly when
-      // the panel takes the middle of the screen, and nothing moves after that.
-      var qa = clamp((vh * 1.05 - rg.top) / (vh * 0.55), 0, 1);
+      // Hold the half circle until the panel is properly on screen, then flatten
+      // to the centre line. The travel used to start at 1.05vh - above the fold -
+      // so the dome was already collapsing before anyone could see it, and the
+      // first third of the ramp was spent between 66% and 50% where the browser
+      // renders the same semicircle either way. Starting at 0.86vh means the
+      // arch arrives as a true half circle, rises as one, and only then eases.
+      var qa = clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1);
       // Smoothstep, so it eases in and out instead of starting and stopping
       // dead at both ends of the travel.
       qa = qa * qa * (3 - 2 * qa);
@@ -521,7 +523,7 @@ img { display:block; }
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
          arc once it owns the screen. Same hand-off as the gallery. -->
-    <div data-garch="66,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
+    <div data-garch="50,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
     <div style="max-width:1080px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
       <sc-for list="{{ menuRows }}" as="r" hint-placeholder-count="6">
         <div style="display:{{ r.headShow }}; margin:clamp(34px,5vw,64px) 0 6px;">
