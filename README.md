@@ -88,6 +88,36 @@ old inline treatment lists, the prices, the old heroes *and* the duplicated
 photography back. Either re-apply all four to the regenerated pages, or bring
 the design sources in line first.
 
+### The footer
+
+Every page in a world carries the same footer, taken verbatim from that world's
+home page: four columns — brand and address, CONTACT, HOURS, and a cross-link
+to the other world — over the `#0B1F16` band with two faint marks behind it.
+Byte-identical across all five pages on each side, so change `/for-her` or
+`/for-him` and copy it out rather than editing one page in isolation.
+
+`/gallery`, `/book` and both gent twins used to end on a slim one-line strip
+(`.r-foot`) instead. Replacing it turned up two things the strip had been
+hiding:
+
+- **the opening hours contradicted themselves.** The strip said *Daily ·
+  10:00 – 22:00*; every full footer said *Daily · 11:00 AM – 12:00 Midnight*.
+  The whole site now says the latter, because that is what the home pages say —
+  but nobody has confirmed which is actually right, so check it.
+- **the men's gallery and booking pages carried the women's WhatsApp number.**
+  `/gent-gallery` hardcoded `+971 58 548 0899` and `/gent-book` defaulted to it.
+  Both now use `+971 50 444 5566`. The numbers are per world and easy to get
+  wrong when a page is copied: her is `+971 58 548 0899`, him is
+  `+971 50 444 5566`.
+
+The footer prints `{{ whatsapp }}`, so a page that carries it has to expose that
+binding — `/gallery` and `/gent-gallery` only had `waHref` and needed
+`whatsapp: wa` adding beside it.
+
+`/index` is the world switcher and keeps its own slim strip: it belongs to
+neither side, and its links are the two worlds. Only its hours were brought in
+line.
+
 ### The inside-page heroes
 
 All ten inside pages — both galleries, both books, both menus, both service

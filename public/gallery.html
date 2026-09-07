@@ -810,18 +810,36 @@ img { display:block; }
     </div>
   </div>
 
-  <div class="r-foot" style="background:#081711; border-top:1px solid rgba(201,168,96,.2); padding:26px 22px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; max-width:1520px; margin:0 auto;">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px; object-fit:contain;">
-      <span style="font-family:'Great Vibes',cursive; font-size:20px; color:#EBD9A6;">Ecosophy</span>
-      <span style="font-size:var(--fs-sm); letter-spacing:2.4px; color:#9FB0A0;">DUBAI, UAE</span>
+  <div data-screen-label="Footer" style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:clamp(72px,9vw,120px) 20px 72px; overflow:hidden;">
+    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:44%; top:50%; transform:translate(-50%,-50%); width:min(16vw,170px); opacity:.045;">
+    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:2%; top:10%; width:min(8vw,80px); opacity:.05;">
+    <div style="max-width:1180px; margin:0 auto; display:flex; gap:36px; flex-wrap:wrap; justify-content:space-between;">
+      <div style="min-width:220px;">
+        <div style="display:flex; align-items:center; gap:11px;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:38px; height:38px;">
+          <span style="font-family:'Great Vibes',cursive; font-size:30px; color:#EBD9A6; line-height:1;">Ecosophy</span>
+        </div>
+        <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Beauty lounge for women. Al Rawda 2, Ajman, UAE.</div>
+      </div>
+      <div style="min-width:170px;">
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">CONTACT</div>
+        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
+          <a href="https://www.instagram.com/ecosophy.ae/" style="color:#D7DECF;">@ecosophy.ae</a>
+          <a href="{{ waHref }}" style="color:#D7DECF;">{{ whatsapp }}</a>
+        </div>
+      </div>
+      <div style="min-width:170px;">
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
+        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 11:00 AM – 12:00 Midnight</div>
+      </div>
+      <div style="min-width:170px;">
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HIM</div>
+        <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
+          <a href="/for-him" style="color:#D7DECF;">Ecosophy Aesthetic Spa</a>
+          <a href="/" style="color:#D7DECF;">Switch world</a>
+        </div>
+      </div>
     </div>
-    <div style="display:flex; gap:18px; font-size:var(--fs-lg); letter-spacing:2.4px;">
-      <a href="/for-her" style="color:#D7DECF;">FOR HER</a>
-      <a href="/for-him" style="color:#D7DECF;">FOR HIM</a>
-      <a href="https://www.instagram.com/ecosophy.ae/" style="color:#C9A860;">INSTAGRAM</a>
-    </div>
-    <div style="font-size:var(--fs-lg); letter-spacing:2px; color:#9FB0A0;">Daily · 10:00 – 22:00</div>
   </div>
 </div>
 
@@ -993,6 +1011,7 @@ class Component extends DCLogic {
       badgeSlotW: this.state.scrolled ? (heroMobile ? '150px' : '190px') : (heroMobile ? '54px' : '78px'),
       badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       waLabel: heroMobile ? 'BOOK' : 'WHATSAPP',
+      whatsapp: wa,
       waHref: 'https://wa.me/' + wa.replace(/\D/g, ''),
     };
   }
