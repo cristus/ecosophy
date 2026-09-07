@@ -1,6 +1,7 @@
 # Ecosophy Spa — website
 
-Static site for Ecosophy Spa Dubai, deployed on Cloudflare Pages.
+Static site for Ecosophy Dubai — Beauty Lounge for her, Aesthetic Spa for him
+— deployed on Cloudflare Pages.
 
 ## Deploying
 
@@ -25,8 +26,8 @@ new deployment. See [EDITING.md](EDITING.md).
 | URL                        | Page                          |
 | -------------------------- | ----------------------------- |
 | `/`                        | Switcher — "Choose your world" |
-| `/for-her`                 | Ecosophy Spa (women)          |
-| `/for-him`                 | Ecosophy Gent Spa (men)       |
+| `/for-her`                 | Ecosophy Beauty Lounge (women)|
+| `/for-him`                 | Ecosophy Aesthetic Spa (men)  |
 | `/services`                | Full treatment menu, for her  |
 | `/gent-services`           | Full treatment menu, for him  |
 | `/service?s=<slug>`        | One treatment, for her        |

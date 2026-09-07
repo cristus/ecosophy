@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ecosophy Aesthetic Spa Men Care Center — Dubai</title>
+<title>Ecosophy Aesthetic Spa — Dubai</title>
 <meta name="description" content="The gentlemen's retreat. Moroccan bath, deep tissue massage, skin and grooming rituals for men in Dubai.">
 <link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Ecosophy Aesthetic Spa Men Care Center — Dubai">
+<meta property="og:title" content="Ecosophy Aesthetic Spa — Dubai">
 <meta property="og:description" content="The gentlemen's retreat. Moroccan bath, deep tissue massage, skin and grooming rituals for men in Dubai.">
 <meta property="og:url" content="https://ecosophy.pages.dev/for-him">
 <meta name="twitter:card" content="summary_large_image">
@@ -393,7 +393,7 @@ a:hover { color:#B98F3E; }
         </span>
         <span style="display:flex; flex-direction:column; align-items:{{ badgeWordAlign }}; line-height:1; opacity:{{ badgeWordOpacity }}; transition:opacity .3s ease; pointer-events:none;">
           <span style="font-family:'Great Vibes',cursive; font-size:{{ badgeWordSize }}; color:#EBD9A6; white-space:nowrap; text-shadow:0 2px 14px rgba(0,0,0,.75); transition:font-size .35s ease;">Ecosophy</span>
-          <span style="display:{{ badgeSubShow }}; font-size:{{ badgeSubSize }}; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,.8);">GENT SPA · FOR HIM</span>
+          <span style="display:{{ badgeSubShow }}; font-size:{{ badgeSubSize }}; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,.8);">AESTHETIC SPA</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:12px; white-space:nowrap;">
@@ -484,7 +484,7 @@ a:hover { color:#B98F3E; }
           <span style="width:44px; height:1px; background:rgba(20,83,45,.3);"></span>
           <span style="font-size:11px; letter-spacing:3px; color:#9A917A;">GROOMING · BARBER · BODY · WELLNESS</span>
         </div>
-        <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:26px;">Welcome to Ecosophy Aesthetic Spa Men Care Center, a premium gentlemen’s grooming, body and wellness destination in Ajman, UAE.</div>
+        <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:26px;">Welcome to Ecosophy Aesthetic Spa, a premium gentlemen’s grooming, body and wellness destination in Ajman, UAE.</div>
         <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:16px;">From master barbers and beard specialists to advanced facials, Dermapen 4 microneedling, sports recovery and body contouring, Moroccan bath and Balinese massage, Ecosophy brings a full gentlemen’s grooming and wellness menu together under one roof.</div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:28px;">
           <sc-for list="{{ aboutTags }}" as="tag" hint-placeholder-count="7">
@@ -1047,7 +1047,7 @@ a:hover { color:#B98F3E; }
           <img src="assets/mark-man-gold.png" alt="" style="width:38px; height:38px;">
           <span style="font-family:'Great Vibes',cursive; font-size:30px; color:#EBD9A6; line-height:1;">Ecosophy</span>
         </div>
-        <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Gent spa and grooming studio. Al Rawda 2, Ajman, UAE.</div>
+        <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Aesthetic spa and grooming studio. Al Rawda 2, Ajman, UAE.</div>
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">CONTACT</div>
@@ -1063,7 +1063,7 @@ a:hover { color:#B98F3E; }
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>
         <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
-          <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty &amp; Spa</a>
+          <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty Lounge</a>
           <a href="/" style="color:#D7DECF;">Switch world</a>
         </div>
       </div>
@@ -1637,7 +1637,7 @@ class Component extends DCLogic {
       setPhone: (e) => this.setState({ phone: e.target.value, formError: false }),
       submitBooking: () => {
         if (!this.state.name.trim() || !this.state.phone.trim() || !this.state.day || !validTime || !this.state.ritual) return this.setState({ formError: true });
-        const msg = 'Hello Ecosophy Beauty & Spa, I would like to book:\n\n' +
+        const msg = 'Hello Ecosophy Aesthetic Spa, I would like to book:\n\n' +
           'Ritual: ' + this.state.ritual + '\n' +
           'Date & time: ' + slotText + '\n' +
           'Name: ' + this.state.name + '\n' +
