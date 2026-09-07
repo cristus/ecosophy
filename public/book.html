@@ -44,16 +44,6 @@ img { display:block; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
-/* The bed the arch sits on. The louvres live inside the hero, which ends 20vh
-   below the panel top, but a half-circle dome is ~50vw tall - so the green ran
-   out mid-sweep and the arc turned into a hard horizontal line at the hero
-   edge, leaving what looked like empty wedges in the two bottom corners. This
-   repeats the shut-louvre gradient behind the panel, where only those wedges
-   can see it, so the curve completes on an unbroken backdrop. Counts match the
-   engine: 52 louvres, x0.68 under 1100px, x0.46 under 700px. */
-.arch-bed { background-image:linear-gradient(90deg,#1B4230 0%,#2E6B4A 38%,#3A7F58 72%,#183B2B 100%); background-size:calc(100% / 52) 100%; }
-@media (max-width:1100px) { .arch-bed { background-size:calc(100% / 35) 100%; } }
-@media (max-width:700px)  { .arch-bed { background-size:calc(100% / 24) 100%; } }
 :root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
   :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
@@ -513,12 +503,23 @@ img { display:block; }
        to the panel below, the same louvres, the same parallax on the photo,
        the same green wash, the same heading and the same padding. Only the
        photograph and the words change from page to page. -->
-  <div data-gsection style="position:relative; isolation:isolate; height:132vh; min-height:640px; background:#0E271C; overflow:hidden;">
+  <div data-gsection style="position:relative; isolation:isolate; height:132vh; min-height:640px; background:#0E271C;">
     <!-- Louvres that swing shut as the hero scrolls away, so the section below
-         rises through a closed shutter rather than the hero just sliding off. -->
-    <div data-gblinds="52" style="position:absolute; inset:0; z-index:1; pointer-events:none;"></div>
-    <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.42; will-change:transform;">
-      <img src="uploads/eco-her-hammam-1.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+         rises through a closed shutter rather than the hero just sliding off.
+         They run 220vh rather than the hero's height on purpose: the arch below
+         rises through them and its half-circle corners have to finish their
+         sweep on this same surface. Painting a second, static copy behind the
+         arch instead only matched while the louvres were shut - the moment they
+         were mid-swing the two bands moved differently and read as two
+         sections. The hero drops its own overflow clip so these can escape it;
+         the photo below carries a clip of its own instead. -->
+    <div data-gblinds="52" style="position:absolute; top:0; left:0; right:0; height:220vh; z-index:1; pointer-events:none;"></div>
+    <!-- The photo is inset -14% and scales to 1.18, so it needs the clip the
+         hero no longer carries. -->
+    <div style="position:absolute; inset:0; overflow:hidden;">
+      <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.42; will-change:transform;">
+        <img src="uploads/eco-her-hammam-1.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+      </div>
     </div>
     <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
     <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
@@ -529,7 +530,7 @@ img { display:block; }
     </div>
   </div>
 
-  <div data-gsection class="arch-bed" style="position:relative; margin-top:-20vh; z-index:2;">
+  <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
          arc once it owns the screen. Same hand-off as the gallery. -->
     <div data-garch="50,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">

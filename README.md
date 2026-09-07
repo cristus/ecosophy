@@ -200,20 +200,26 @@ viewport width at 1920, 1280, 768 and 390.
 If you change the start value, changing it *up* does nothing visible. Down is
 the only direction with an effect, and it costs you the half circle.
 
-**The bed underneath (`.arch-bed`).** A full-width half circle is about 50vw
-tall, but the louvres it rises through live inside the hero, which ends only
-20vh below the panel top. So the green ran out partway through the sweep and
-the arc turned into a hard horizontal line at the hero's bottom edge — which
-read as two empty wedges in the bottom corners, the arc apparently stopping in
-mid-air. The wrapper holding the arch now repeats the shut-louvre gradient
-behind the panel. The panel is opaque, so the only place it shows is inside
-those rounded corners, and the curve completes on an unbroken backdrop.
+**One louvre surface, not two.** A full-width half circle is about 50vw tall,
+but the louvres it rises through sit inside the hero, and the hero ends only
+20vh below the panel top. So the green ran out partway through the sweep: the
+arc met the hero's bottom edge, turned into a hard horizontal line, and left
+what looked like two empty wedges in the bottom corners.
 
-The stripe period has to track the engine, which thins the louvre count on
-small screens: 52, x0.68 under 1100px, x0.46 under 700px. `.arch-bed` mirrors
-those three counts in media queries. If the count in the engine ever changes,
-change the bed to match or the wedges will show a different stripe width to the
-louvres directly above them.
+Painting a second, static copy of the shut-louvre gradient behind the arch
+fixed the wedges and introduced a worse problem. It matched only while the
+louvres were shut; the moment they were mid-swing the hero band was moving and
+the band below it was not, and the two read as separate sections. Do not go
+back to that.
+
+Instead the louvres themselves run past the hero: `height:220vh` on the
+`[data-gblinds]` element rather than `inset:0`, and the hero drops its own
+`overflow:hidden` so they can escape it. The photo, which is inset -14% and
+scales to 1.18, gets a clip of its own instead; on the two detail templates the
+watermarks get one too, since the lower one is offset past the bottom edge. The
+arch panel is opaque and sits in a later sibling at `z-index:2`, so the extra
+louvre length shows in exactly one place — inside the panel's rounded corners —
+and the curve completes on the same surface it started on.
 
 `/services` and `/gent-services` used to open their arch panel on a shallower
 curve (`data-garch="40,21"`) because the filter bubbles sat flush against the
