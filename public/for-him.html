@@ -529,7 +529,7 @@ a:hover { color:#B98F3E; }
       <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,3vw,28px); color:#B98F3E;">for him</div>
       <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:2px;">SIGNATURE RITUALS</div>
     </div>
-    <div style="margin-top:clamp(28px,3.4vw,44px);">
+    <div id="dd-panel" style="margin-top:clamp(28px,3.4vw,44px);">
       <div style="position:sticky; top:67px; z-index:30; background:rgba(246,241,230,.94); backdrop-filter:blur(8px); padding:13px 0 11px; border-bottom:1px solid #E3D9C2;">
         <div style="display:flex; align-items:center; gap:9px; font-size:var(--fs-lg); letter-spacing:1.5px; min-height:20px;">
           <span onClick="{{ goHome }}" style="cursor:pointer; color:{{ crumbHomeColor }};">ALL SERVICES</span>
@@ -1154,6 +1154,21 @@ class Component extends DCLogic {
   drilldown() {
     const CATS = window.ECO.homeCats('him');
     const { dCat, dSvc } = this.state;
+    // Selecting a category swaps the list under a sticky filter bar. Without
+    // this the viewport stays where it was and the new list opens mid-way
+    // down. Scroll the panel back under the nav so it starts at its first card.
+    // rAF: let the runtime paint the new list before measuring.
+    const NAV_H = 67;
+    const toPanel = () => {
+      if (typeof window === 'undefined') return;
+      requestAnimationFrame(() => {
+        const el = document.getElementById('dd-panel');
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - NAV_H;
+        if (Math.abs(window.scrollY - top) < 2) return;
+        try { window.scrollTo({ top, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, top); }
+      });
+    };
     const dCategories = CATS.map(c => {
       return {
         name: c.name.toUpperCase(), slot: c.slot,
@@ -1162,13 +1177,13 @@ class Component extends DCLogic {
         pillBg: this.state.dCat === c.name ? '#14532D' : 'rgba(255,253,247,.9)',
         pillColor: this.state.dCat === c.name ? '#F1E7CC' : '#3A4136',
         pillBorder: this.state.dCat === c.name ? '#14532D' : '#DED4BD',
-        open: () => this.setState({ dCat: c.name, dSvc: null, ddOpen: false, ddBooked: false }),
+        open: () => { this.setState({ dCat: c.name, dSvc: null, ddOpen: false, ddBooked: false }); toPanel(); },
       };
     });
     const allServices = [];
     CATS.forEach(c => c.items.forEach((it, i) => allServices.push({
       name: it.name, catLabel: c.name.toUpperCase(),
-      open: () => this.setState({ dCat: c.name, dSvc: i, ddOpen: false, ddBooked: false }),
+      open: () => { this.setState({ dCat: c.name, dSvc: i, ddOpen: false, ddBooked: false }); toPanel(); },
     })));
     const cat = CATS.find(c => c.name === dCat);
     const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -1248,7 +1263,7 @@ class Component extends DCLogic {
       photoHint: it.name + ' photo',
       href: '/gent-service?s=' + slugify(it.name),
       durationLabel: it.duration || 'BY REQUEST',
-      open: () => this.setState({ dSvc: i, ddOpen: false, ddBooked: false }),
+      open: () => { this.setState({ dSvc: i, ddOpen: false, ddBooked: false }); toPanel(); },
     })) : [];
     const detail = dSvc != null && items[dSvc] ? items[dSvc] : null;
 
@@ -1357,8 +1372,8 @@ class Component extends DCLogic {
       dHeading: this.state.ddBooked ? 'Booking requested' : (this.state.ddOpen && detail ? 'Reserve your session' : (detail ? detail.name : (dCat || 'Browse by category'))),
       dSubheading: detail ? '' : (dCat ? (CATS.find(c => c.name === dCat) || {}).blurb : 'Pick a category to see the treatments inside it, then open any treatment for the full detail.'),
       showPills: !!dCat,
-      goHome: () => this.setState({ dCat: null, dSvc: null, ddOpen: false, ddBooked: false }),
-      goCat: () => this.setState({ dSvc: null, ddOpen: false, ddBooked: false }),
+      goHome: () => { this.setState({ dCat: null, dSvc: null, ddOpen: false, ddBooked: false }); toPanel(); },
+      goCat: () => { this.setState({ dSvc: null, ddOpen: false, ddBooked: false }); toPanel(); },
     };
   }
   componentDidMount() {
