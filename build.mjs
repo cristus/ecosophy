@@ -292,7 +292,9 @@ writeFileSync(join(OUT, '_redirects'), `# The treatment-menu pages were removed;
 writeFileSync(join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 
 const urls = Object.values(PAGES)
-  .filter((p) => !p.route.startsWith('service') && !p.route.startsWith('gent-service.'))
+    // The dots matter: without them "services.html" and "gent-services.html" are
+  // swept out too, and the catalogue pages vanish from the sitemap.
+  .filter((p) => !p.route.startsWith('service.') && !p.route.startsWith('gent-service.'))
   .map((p) => `  <url><loc>${SITE}/${p.route.replace(/index\.html$/, '').replace(/\.html$/, '')}</loc></url>`)
   .join('\n');
 writeFileSync(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
