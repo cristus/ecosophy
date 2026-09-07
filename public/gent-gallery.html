@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gallery — Ecosophy Gent Spa, Dubai</title>
+<title>Gallery — Ecosophy Aesthetic Spa Men Care Center, Dubai</title>
 <meta name="description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
 <link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Ecosophy Spa">
+<meta property="og:site_name" content="Ecosophy">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Gallery — Ecosophy Gent Spa, Dubai">
+<meta property="og:title" content="Gallery — Ecosophy Aesthetic Spa Men Care Center, Dubai">
 <meta property="og:description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
 <meta property="og:url" content="https://ecosophy.pages.dev/gent-gallery">
 <meta name="twitter:card" content="summary_large_image">
@@ -83,6 +83,16 @@ img { display:block; }
 /* Smallest label tiers, raised on phones only. The desktop design keeps its
    fine 8.5-9.5px small caps; below 760px they would fall under the legible
    floor, so the same declarations resolve larger there. */
+/* The bed the arch sits on. The louvres live inside the hero, which ends 20vh
+   below the panel top, but a half-circle dome is ~50vw tall - so the green ran
+   out mid-sweep and the arc turned into a hard horizontal line at the hero
+   edge, leaving what looked like empty wedges in the two bottom corners. This
+   repeats the shut-louvre gradient behind the panel, where only those wedges
+   can see it, so the curve completes on an unbroken backdrop. Counts match the
+   engine: 52 louvres, x0.68 under 1100px, x0.46 under 700px. */
+.arch-bed { background-image:linear-gradient(90deg,#1B4230 0%,#2E6B4A 38%,#3A7F58 72%,#183B2B 100%); background-size:calc(100% / 52) 100%; }
+@media (max-width:1100px) { .arch-bed { background-size:calc(100% / 35) 100%; } }
+@media (max-width:700px)  { .arch-bed { background-size:calc(100% / 24) 100%; } }
 :root { --fs-xxs:8.5px; --fs-xs:9px; --fs-sm:9.5px; --fs-md:10px; --fs-lg:10.5px; }
 @media (max-width: 760px) {
   :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
@@ -564,7 +574,7 @@ img { display:block; }
        covered before they finished closing. At -20vh the panel top sits at
        112vh and the hand-off starts 12vh into the scroll, as on every other
        inside page. -->
-  <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
+  <div data-gsection class="arch-bed" style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, flat once it owns the screen. -->
     <div data-garch="50,21" style="background:#0B1F16; padding:clamp(50px,6vw,90px) 0 clamp(70px,10vw,130px); overflow:hidden; display:flex; flex-direction:column;">
   <div id="gallery" data-screen-label="Gallery" style="flex:0 0 auto; position:relative; background:transparent; overflow:hidden; padding:clamp(24px,3vw,44px) 0 clamp(100px,12vw,180px);">
@@ -651,7 +661,7 @@ img { display:block; }
   <div data-gsection style="position:relative; height:380vh;">
     <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B;">
       <div data-gs="1.22,1.0" style="position:absolute; inset:0; will-change:transform;">
-        <img src="uploads/gent-gal-room-2.jpg" alt="The shower room at Ecosophy Gent Spa" style="width:100%; height:100%; object-fit:cover;">
+        <img src="uploads/gent-gal-room-2.jpg" alt="The shower room at Ecosophy Aesthetic Spa Men Care Center" style="width:100%; height:100%; object-fit:cover;">
       </div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,16,11,.62),rgba(6,16,11,.24) 42%,rgba(6,16,11,.78));"></div>
       <div data-go="0,1" style="position:absolute; left:0; right:0; bottom:clamp(48px,10vh,120px); text-align:center; padding:0 22px;">
@@ -764,7 +774,7 @@ img { display:block; }
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
       <div class="gal-lead">The same house, the same hours — the gentlemen’s entrance is around the side.</div>
       <div class="gal-frame" data-gslats="12" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
-        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Gent Spa" data-gy="0.05">
+        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Aesthetic Spa Men Care Center" data-gy="0.05">
       </div>
       <div class="gal-frame" data-gslats="12" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
         <img src="uploads/gent-gal-centre-2.jpg" alt="The gentlemen’s lounge" data-gy="-0.04">

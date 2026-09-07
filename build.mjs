@@ -11,70 +11,70 @@ const SITE = 'https://ecosophy.pages.dev';
 const PAGES = {
   'Ecosophy Switcher.dc.html': {
     route: 'index.html',
-    title: 'Ecosophy Spa Dubai — Where Nature Restores You',
+    title: 'Ecosophy Dubai — Where Nature Restores You',
     description: 'Two sanctuaries, one philosophy. Balinese hands, Moroccan steam, and the quiet of a green room in Dubai.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy For Her.dc.html': {
     route: 'for-her.html',
-    title: 'Ecosophy Spa for Her — Dubai',
+    title: 'Ecosophy Beauty Center & SPA — Dubai',
     description: 'Moroccan bath, Balinese massage and skin rituals for women, in a calm green room in Dubai.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy For Him.dc.html': {
     route: 'for-him.html',
-    title: 'Ecosophy Gent Spa for Him — Dubai',
+    title: 'Ecosophy Aesthetic Spa Men Care Center — Dubai',
     description: "The gentlemen's retreat. Moroccan bath, deep tissue massage, skin and grooming rituals for men in Dubai.",
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Services.dc.html': {
     route: 'services.html',
     title: 'Spa Treatment Menu — Ecosophy for Her',
-    description: 'The full treatment menu for Ecosophy Spa Dubai — massage, hammam, facials and body rituals.',
+    description: 'The full treatment menu for Ecosophy Beauty Center & SPA, Dubai — massage, hammam, facials and body rituals.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Service Detail.dc.html': {
     route: 'service.html',
-    title: 'Treatment — Ecosophy Spa for Her',
-    description: 'Treatment details and duration at Ecosophy Spa Dubai.',
+    title: 'Treatment — Ecosophy Beauty Center & SPA',
+    description: 'Treatment details and duration at Ecosophy Beauty Center & SPA, Dubai.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Services.dc.html': {
     route: 'gent-services.html',
-    title: 'Treatment Menu — Ecosophy Gent Spa',
-    description: 'The full treatment menu for Ecosophy Gent Spa Dubai — massage, hammam, skin and grooming.',
+    title: 'Treatment Menu — Ecosophy Aesthetic Spa Men Care Center',
+    description: 'The full treatment menu for Ecosophy Aesthetic Spa Men Care Center, Dubai — massage, hammam, skin and grooming.',
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Gallery.dc.html': {
     route: 'gallery.html',
     video: 'gal-video.mp4',
-    title: 'Gallery — Ecosophy Spa for Her, Dubai',
+    title: 'Gallery — Ecosophy Beauty Center & SPA, Dubai',
     description: 'Inside Ecosophy: the hammam, jacuzzi, sauna, treatment rooms and bridal work, photographed where they happen.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Gallery.dc.html': {
     route: 'gent-gallery.html',
     video: 'gent-gal-video.mp4',
-    title: 'Gallery — Ecosophy Gent Spa, Dubai',
+    title: 'Gallery — Ecosophy Aesthetic Spa Men Care Center, Dubai',
     description: "Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.",
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Book.dc.html': {
     route: 'book.html',
-    title: 'Book a Visit — Ecosophy Spa for Her, Dubai',
-    description: 'Request a treatment at Ecosophy Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
+    title: 'Book a Visit — Ecosophy Beauty Center & SPA, Dubai',
+    description: 'Request a treatment at Ecosophy Beauty Center & SPA, Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Gent Book.dc.html': {
     route: 'gent-book.html',
-    title: 'Book a Visit — Ecosophy Gent Spa, Dubai',
-    description: 'Request a treatment at Ecosophy Gent Spa Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
+    title: 'Book a Visit — Ecosophy Aesthetic Spa Men Care Center, Dubai',
+    description: 'Request a treatment at Ecosophy Aesthetic Spa Men Care Center, Dubai — choose your ritual, day and time, and confirm on WhatsApp.',
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Gent Service Detail.dc.html': {
     route: 'gent-service.html',
-    title: 'Treatment — Ecosophy Gent Spa',
-    description: 'Treatment details and duration at Ecosophy Gent Spa Dubai.',
+    title: 'Treatment — Ecosophy Aesthetic Spa Men Care Center',
+    description: 'Treatment details and duration at Ecosophy Aesthetic Spa Men Care Center, Dubai.',
     mark: 'favicons/mark-man-gold-180.png',
   },
 };
@@ -115,7 +115,7 @@ function head(page) {
 <link rel="apple-touch-icon" href="/${page.mark}">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Ecosophy Spa">
+<meta property="og:site_name" content="Ecosophy">
 <meta property="og:locale" content="en_AE">
 <meta property="og:title" content="${esc(page.title)}">
 <meta property="og:description" content="${esc(page.description)}">
