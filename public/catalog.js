@@ -602,7 +602,7 @@
         return {
           name: c.name, slot: c.ddSlot, pic: [c.img, '', ''], blurb: c.blurb,
           items: c.items.map(function (it) {
-            return { name: it.name, duration: it.duration, desc: it.desc };
+            return { name: it.name, type: it.type, duration: it.duration, desc: it.desc };
           }),
         };
       });
