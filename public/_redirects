@@ -1,0 +1,4 @@
+# The treatment-menu pages were removed; their treatments live on the
+# services pages. 301 so bookmarks and search results follow.
+/menu-prices       /services        301
+/gent-menu-prices  /gent-services   301

@@ -270,13 +270,14 @@ a:hover { color:#B98F3E; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      // Hold the half circle until the panel is properly on screen, then flatten
-      // to the centre line. The travel used to start at 1.05vh - above the fold -
-      // so the dome was already collapsing before anyone could see it, and the
-      // first third of the ramp was spent between 66% and 50% where the browser
-      // renders the same semicircle either way. Starting at 0.86vh means the
-      // arch arrives as a true half circle, rises as one, and only then eases.
-      var qa = clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1);
+      // Hold the half circle until the dome is big enough to read, then flatten.
+      // Two earlier versions got this wrong. At 1.05vh the travel started above
+      // the fold, so the arch was collapsing before anyone could see it. At
+      // 0.86vh it was still only a 3-13% sliver at the bottom edge while it was
+      // round - technically a half circle, visually nothing. 0.62vh holds the
+      // full semicircle until the panel covers 38% of the screen, which is the
+      // dome the old gallery showed at rest, and only then eases it flat.
+      var qa = clamp((vh * 0.62 - rg.top) / (vh * 0.30), 0, 1);
       // Smoothstep, so it eases in and out instead of starting and stopping
       // dead at both ends of the travel.
       qa = qa * qa * (3 - 2 * qa);
@@ -470,7 +471,6 @@ a:hover { color:#B98F3E; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/services" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ALL SERVICES</a>
         <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
         <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -498,7 +498,6 @@ a:hover { color:#B98F3E; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ALL SERVICES</a>
       <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>

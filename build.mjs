@@ -59,18 +59,6 @@ const PAGES = {
     description: "Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.",
     mark: 'favicons/mark-man-gold-180.png',
   },
-  'Ecosophy Menu Prices.dc.html': {
-    route: 'menu-prices.html',
-    title: 'Treatment Menu — Ecosophy Spa for Her, Dubai',
-    description: 'Every treatment at Ecosophy Spa Dubai with its length — massage, hammam, facials, nails and packages.',
-    mark: 'favicons/mark-woman-gold-180.png',
-  },
-  'Ecosophy Gent Menu Prices.dc.html': {
-    route: 'gent-menu-prices.html',
-    title: 'Treatment Menu — Ecosophy Gent Spa, Dubai',
-    description: "Every treatment at Ecosophy Gent Spa Dubai with its length — massage, hammam, skin and grooming.",
-    mark: 'favicons/mark-man-gold-180.png',
-  },
   'Ecosophy Book.dc.html': {
     route: 'book.html',
     title: 'Book a Visit — Ecosophy Spa for Her, Dubai',
@@ -295,6 +283,12 @@ writeFileSync(join(OUT, '_headers'), `/vendor/*
   Referrer-Policy: strict-origin-when-cross-origin
 `);
 
+// The treatment-menu pages were removed; keep their URLs redirecting.
+writeFileSync(join(OUT, '_redirects'), `# The treatment-menu pages were removed; their treatments live on the
+# services pages. 301 so bookmarks and search results follow.
+/menu-prices       /services        301
+/gent-menu-prices  /gent-services   301
+`);
 writeFileSync(join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 
 const urls = Object.values(PAGES)

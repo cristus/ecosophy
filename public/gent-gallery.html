@@ -270,7 +270,7 @@ img { display:block; }
     var ga = nums(el, 'data-garch', null);
     if (ga) {
       var rg = el.getBoundingClientRect();
-      var qa = clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1);
+      var qa = clamp((vh * 0.62 - rg.top) / (vh * 0.30), 0, 1);
       var arch = ga[0] + (ga[1] - ga[0]) * qa;
       var arch_px = (arch / 100 * (window.innerWidth || 1)).toFixed(1);
       el.style.borderRadius = arch_px + 'px ' + arch_px + 'px 0 0';
@@ -493,7 +493,6 @@ img { display:block; }
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
         <a href="/for-him" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/gent-menu-prices" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">TREATMENT MENU</a>
         <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
         <a href="/gent-gallery" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">GALLERY</a>
         <a href="/gent-book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
@@ -525,7 +524,6 @@ img { display:block; }
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
       <a href="/for-him" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/gent-menu-prices" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">TREATMENT MENU</a>
       <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">GALLERY</a>
       <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
@@ -537,7 +535,7 @@ img { display:block; }
   <!-- Same proportions as the /gent-book hero (132vh over a 640px floor) so the
        inside pages open at the same height rather than this one running 23vh
        taller. Matches /gallery. -->
-  <!-- Hero. One template across /menu-prices, /services, /gallery and /book
+  <!-- Hero. One template across /services, /gallery and /book
        (and their For Him twins): 132vh over a 640px floor, the -20vh hand-off
        to the panel below, the same louvres, the same parallax on the photo,
        the same green wash, the same heading and the same padding. Only the
@@ -559,7 +557,7 @@ img { display:block; }
   </div>
 
   <!-- ── 2. The Rooms · opposed horizontal drift ─────────────────────────── -->
-  <!-- -20vh against the 132vh hero, the same overlap /book, /menu-prices and
+  <!-- -20vh against the 132vh hero, the same overlap /book and
        /services use. The old -70vh (and the -47vh that replaced it) put the
        panel top at 85vh, so the arch was already 15vh up the screen before a
        wheel was touched: the hero never stood whole and the louvres were

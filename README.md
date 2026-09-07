@@ -32,6 +32,15 @@ new deployment. See [EDITING.md](EDITING.md).
 | `/service?s=<slug>`        | One treatment, for her        |
 | `/gent-service?s=<slug>`   | One treatment, for him        |
 
+`/menu-prices` and `/gent-menu-prices` — the TREATMENT MENU pages — were
+removed. They listed the same treatments as `/services` and `/gent-services`
+with a duration each and no photographs, and the two pairs had grown confusing
+enough that the nav offered two links to what read as the same thing. Their
+URLs 301 to the services pages from `public/_redirects`, which `build.mjs`
+also writes, because a route that simply disappears is served the switcher page
+with a 200 by Pages — a soft 404 that neither a visitor nor a crawler can read
+as "moved".
+
 The two detail pages are single templates driven by the `?s=` slug, so all ~30
 treatments per side are served by one file each.
 
@@ -46,8 +55,8 @@ It holds both sides of the house:
 | Categories | 10 | 5 |
 | Treatments | 89 | 45 |
 
-The two home pages, the two services pages, the two menu & prices pages, the two
-booking pages and the two treatment-detail templates all read it, so:
+The two home pages, the two services pages, the two booking pages and the two
+treatment-detail templates all read it, so:
 
 - **a name or a description** is changed once, and every page follows;
 - **a new treatment** is one `S(...)` row inside the right category;
@@ -117,8 +126,8 @@ parallax is off":
 
 ### One hero template
 
-The four menu pages — **TREATMENT MENU, ALL SERVICES, GALLERY, BOOK** — and
-their four For Him twins now render the *same* hero. Only two things change
+The three menu pages — **ALL SERVICES, GALLERY, BOOK** — and their three For
+Him twins now render the *same* hero. Only two things change
 from page to page: **the photograph and the words.** Everything else comes from
 the template:
 
@@ -144,9 +153,8 @@ two-layer wash with the photo at full opacity, a `#F4EFE3` heading split into
 two colours at `clamp(42px,7.4vw,104px)`, and drove its copy with
 `data-gy`/`data-gfadeout` centred in `100vh` rather than the section;
 `/services` wore a `Great Vibes` "for her" eyebrow, a `.02em` heading with no
-text-shadow, its own lead colour, and carried the whole hero on flex padding;
-`/menu-prices` had no scroll cue and a smaller heading ramp. If you add a fifth
-menu page, copy the block — do not re-derive it.
+text-shadow, its own lead colour, and carried the whole hero on flex padding.
+If you add a fourth menu page, copy the block — do not re-derive it.
 
 **The two treatment templates** (`/service`, `/gent-service`) share the
 geometry, the louvres, the photo parallax, the wash, the copy driver and the
