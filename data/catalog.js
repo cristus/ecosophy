@@ -37,6 +37,12 @@
   // `ddSlot` the one the home-page drilldown uses. Both keep their historical
   // values for categories that already existed, so any photo the owner pinned
   // through the editor stays pinned.
+  //
+  // Every id must be unique ACROSS BOTH SIDES. image-slot.js pins a photo by id
+  // alone, in one file shared by every page, so an id used on both /for-her and
+  // /for-him means a photo pinned on one appears on the other. The men's ids are
+  // prefixed gsvc-/gdd- for exactly this reason; three of them were not, and the
+  // men's massage and packages photos duly turned up on the women's page.
   function C(o) {
     return {
       key: o.key, name: o.name, slot: o.slot, ddSlot: o.ddSlot,
@@ -85,7 +91,7 @@
     ] }),
 
     C({ key: 'lashes', name: 'Eyelashes', slot: 'svc-cat-lashes', ddSlot: 'dd-cat-Eyelashes',
-      img: 'eco-her-bridal.jpg',
+      img: 'eco-her-portrait-1.jpg',
       blurb: 'Russian-speaking lash masters. Extensions mapped to your eye shape, your features and the look you actually want.',
       items: [
       S('Classic, 2D & 3D Volume', 'lashes', '', '',
@@ -259,7 +265,7 @@
     ] }),
 
     C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'svc-cat-massage', ddSlot: 'dd-cat-Massages',
-      img: 'eco-her-room-1.jpg',
+      img: 'eco-her-massage-2.jpg',
       blurb: 'Massage expertise from therapists trained in Bali, Indonesia and Kerala, India, from a focused half hour to full-body bodywork.',
       items: [
       S('Relaxing Massage', 'massage', '60 min', '',
@@ -386,7 +392,7 @@
 
   var HIM_CATS = [
 
-    C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'gsvc-cat-massage', ddSlot: 'dd-cat-Massages',
+    C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'gsvc-cat-massage', ddSlot: 'gdd-cat-Massages',
       img: '775244964_18119167235477475_6941524398570787900_n.jpg',
       blurb: 'Sports recovery, deep tissue and full body wellness, with therapists trained in Bali and Kerala.',
       items: [
@@ -440,7 +446,7 @@
         'The traditional champissage sequence across the upper back, shoulders, neck, scalp and face, done seated and fully clothed.'),
     ] }),
 
-    C({ key: 'bath', name: 'Moroccan Bath & Relaxation', slot: 'gsvc-cat-spa', ddSlot: 'dd-cat-Spa Club',
+    C({ key: 'bath', name: 'Moroccan Bath & Relaxation', slot: 'gsvc-cat-spa', ddSlot: 'gdd-cat-Spa',
       img: 'hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png',
       blurb: 'Moroccan bath, infrared sauna, jacuzzi and the packages that combine them.',
       items: [
@@ -536,7 +542,7 @@
         'Hands, feet, brows and skin tidied in one appointment, at whatever level of detail you want. Booked as a single visit before an event, or kept up monthly.'),
     ] }),
 
-    C({ key: 'pkg', name: 'Packages', slot: 'gsvc-cat-pkg', ddSlot: 'dd-cat-Packages',
+    C({ key: 'pkg', name: 'Packages', slot: 'gsvc-cat-pkg', ddSlot: 'gdd-cat-Packages',
       img: '748718184_18114511022477475_8211076763529339827_n.jpg',
       blurb: 'Two or three treatments combined into one visit.',
       items: [
