@@ -80,22 +80,96 @@ the design sources in line first.
 
 ### The inside-page heroes
 
-Every page but the two homes and the two galleries shares one hero treatment,
-applied to `public/` by hand:
+All ten inside pages — both galleries, both books, both menus, both service
+lists and both treatment templates — now share one hero **geometry**, and it is
+the thing to preserve when any of them is touched:
 
-- the photo sits under the same top-to-bottom green wash `/services` wears,
-  `linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95))`;
-- the `<h1>` is gold, `#E4C778`;
-- the copy carries `data-gherocopy="drift,window,fade_start"` and `z-index:4`.
-  It used to sit *under* the gold louvres, so the closing shutter swallowed the
-  heading whole the moment the page moved. It now rides above them, drifts
-  downward as the hero scrolls away, and fades only at the end of that travel.
-  The effect lives in the per-page scroll engine, beside the louvres.
+| | value |
+| --- | --- |
+| Hero height | `132vh`, floor `640px` |
+| Overlap on the panel below | `margin-top:-20vh` |
+| So the arch panel's top sits at | `112vh` |
 
-`/services` and `/gent-services` also open their arch panel on a shallower
-curve (`data-garch="40,21"`) and give the catalogue a top padding it never had:
-the filter bubbles sat flush against the top edge of the panel, where a 66vw
-dome cut the first of them — and the first category — off at the left.
+That last number is the whole point: the panel starts 12vh *below* the fold, so
+the hero stands whole at rest, the louvres get their moment closing over it,
+and only then does the arch rise through the shut shutter. Measured on every
+page at 1280/1440/1920/1024/768/390 it is 1.12 everywhere.
+
+Three of them used to break it, each differently, and all three read as "the
+parallax is off":
+
+- the **galleries** carried a `-70vh` overlap against a `155vh` hero (and
+  briefly `-47vh` against `132vh`, which preserves the same wrong result). The
+  panel sat at `85vh`, i.e. already 15vh up the screen before a wheel was
+  touched — the hero never stood whole and the arch covered the louvres before
+  they finished closing;
+- **`/services`** was content-sized (`min-height:88vh`), so its height moved
+  with the viewport: the panel landed at 94vh at 1920 and 87vh at 768. It is
+  now the fixed hero, and needs `box-sizing:border-box` because it keeps its
+  flex padding — without that the padding is added *outside* `height:132vh` and
+  the panel drops to 1.46vh instead;
+- **`/service`** is a two-column grid whose height followed its content, and on
+  a phone the arch covered the BOOK THIS TREATMENT button. It takes
+  `min-height:132vh` (not `height` — a long treatment name must still be able
+  to push it taller). Its stacked breakpoint also pins `grid-template-rows:44vh
+  1fr`, so the floor's slack goes to the text row instead of stretching both
+  rows and letting the photo eat the screen.
+
+### One hero template
+
+The four menu pages — **TREATMENT MENU, ALL SERVICES, GALLERY, BOOK** — and
+their four For Him twins now render the *same* hero. Only two things change
+from page to page: **the photograph and the words.** Everything else comes from
+the template:
+
+| | |
+| --- | --- |
+| Container | `isolation:isolate; height:132vh; min-height:640px; background:#0E271C; overflow:hidden` |
+| Louvres | `data-gblinds="52"`, `z-index:1` |
+| Photo layer | `data-gy="0.16" data-gs="1.06,1.18"`, `inset:-14% 0`, `opacity:.42` |
+| Wash | `linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95))` |
+| Copy | `data-gherocopy="0.22,0.5,0.35"`, `z-index:4`, `height:100%`, centred, `padding:0 22px` |
+| Eyebrow | `.<p>-rise .<p>-eyebrow`, delay `.15s`, "ECOSOPHY · FOR HER/HIM" |
+| Heading | Italiana 400, `clamp(40px,7vw,92px)`, `.05em`, `#E4C778`, `line-height:1.06`, `margin:16px 0 0`, `text-shadow:0 8px 34px rgba(0,0,0,.7)` |
+| Lead | `13.5px/1.95`, `#A9B8AB`, `max-width:46ch`, `margin-top:16px` |
+| Scroll cue | `var(--fs-md)`, `2.6px`, `#9FB0A0`, `margin-top:22px` |
+| Arch below | `data-garch="66,21"`, `margin-top:-20vh` |
+
+The `<p>` prefix is per page (`mp-`, `svc-`, `gal-`, `bk-`); the three classes
+behind it are byte-identical, so the rise animation and eyebrow are the same
+everywhere. `/services` had no rise keyframe at all until this pass.
+
+Before it, each of the four had drifted its own way: `/gallery` ran a bespoke
+two-layer wash with the photo at full opacity, a `#F4EFE3` heading split into
+two colours at `clamp(42px,7.4vw,104px)`, and drove its copy with
+`data-gy`/`data-gfadeout` centred in `100vh` rather than the section;
+`/services` wore a `Great Vibes` "for her" eyebrow, a `.02em` heading with no
+text-shadow, its own lead colour, and carried the whole hero on flex padding;
+`/menu-prices` had no scroll cue and a smaller heading ramp. If you add a fifth
+menu page, copy the block — do not re-derive it.
+
+**The two treatment templates** (`/service`, `/gent-service`) share the
+geometry, the louvres, the photo parallax, the wash, the copy driver and the
+heading colour, weight, letter-spacing and shadow — but keep their own
+two-column layout, breadcrumb, stats and CTA pair, and a heading that ramps to
+`clamp(34px,4.6vw,64px)` because it sits in a half-width column and has to hold
+a long treatment name. That is deliberate: they are detail headers, not page
+headers, and the brief was to even out the hero, not restructure the content.
+
+The copy carries `data-gherocopy="drift,window,fade_start"` and `z-index:4`. It
+used to sit *under* the gold louvres, so the closing shutter swallowed the
+heading whole the moment the page moved. It now rides above them, drifts
+downward as the hero scrolls away, and fades only at the end of that travel.
+The effect lives in the per-page scroll engine, beside the louvres.
+
+`/services` and `/gent-services` used to open their arch panel on a shallower
+curve (`data-garch="40,21"`) because the filter bubbles sat flush against the
+top edge of the panel, where a 66vw dome cut the first of them — and the first
+category — off at the left. The top padding added to the catalogue at the same
+time is what actually fixed that, so the shallow curve is no longer needed:
+both pages are back on the shared `66,21`. Measured across a scroll sweep at
+1280/768/390 the widest dome and the clearance over the bubbles are the same
+either way. Keep the catalogue's top padding — that is the load-bearing half.
 
 ## Editing text and pictures
 
@@ -151,19 +225,38 @@ Now every photograph has **one canonical filename** and belongs to one page:
 
 | | Home page | Gallery |
 | --- | --- | --- |
-| For her | `eco-her-room-*`, `-robe`… (18) | `eco-her-massage-*`, `-portrait-*`… (20) |
+| For her | `eco-her-room-*`, `-makeup-2`… (23) | `eco-her-hammam-3`, `-portrait-*`… (23) |
 | For him | `775244964`, `imgi_*`, `eco-him-machine`… (14) | `gent-gal-*` (20) |
 
 **For him the two sets are completely disjoint**, and `/index` uses a third
 photo (`eco-him-reception.jpg`) that neither page shows.
 
-**For her nine photographs still appear on both pages** — the two hammam
-angles, the facial room, both nails, both hair, the jacuzzi and the trolley.
-That is not an oversight: those categories have exactly one usable frame each
-in the whole library, and both pages need to show the category. Closing the
-last nine needs new photography, not re-shuffling. The `images/` folders are
-fully deployed; the only unused frames left are a near-identical second
-exterior and three stock Unsplash shots the site otherwise avoids.
+**For her thirteen photographs appear on both pages.** Nine of those are
+unavoidable — the two hammam angles, the facial room, both nails, both hair,
+the jacuzzi and the trolley are categories with exactly one usable frame each
+in the whole library, and both pages have to show the category. The other four
+(`-makeup-1`, `-massage-1`, `-robe`, `-products-3`) drifted back in later, when
+the offer card's thumbnails and a fan pair were re-pointed at gallery photos;
+they can be swapped out against the home-page set whenever that card is next
+touched. Closing the unavoidable nine needs new photography, not re-shuffling —
+the `images/` folders are fully deployed, and the only unused frames left are a
+near-identical second exterior and three stock Unsplash shots the site
+otherwise avoids.
+
+### The gallery hero
+
+`/gallery` and `/book` used to open on the *same* photograph, one of them
+ungraded, so the two pages read as two versions of one screen. `/gallery` now
+opens on `eco-her-hammam-3.jpg` — the lit arch, the brass taps and the
+candlelit marble — under a green wash matched to `/book`'s, and both heroes run
+at `132vh` over a `640px` floor.
+
+That photo is a still lifted from `images/for ecosophy beauty center web
+site/video moroccan bath/IMG_3245.MOV` at 22.4s, which is the only source in
+the library that shows the whole bath room. Being phone footage it is 9:16, so
+a wide hero cropping it dead-centre lands on bare tile — hence the
+`object-position:50% 62%` on that `<img>`. Keep it if the photo is re-exported;
+drop it only if the replacement is landscape.
 
 Rules to keep it that way:
 
@@ -184,8 +277,8 @@ Rules to keep it that way:
   Precompiling at build time would remove it entirely and cut load time sharply.
 - Hero images are large (up to 7 MB PNG). Converting to WebP/AVIF would be the
   single biggest speed win.
-- The For Her home page and gallery still share nine photographs, in the
-  categories that only have one frame each. See **The photography** above —
-  this needs a shoot, not code.
+- The For Her home page and gallery share thirteen photographs. Four are
+  swappable today; the other nine are categories with only one frame each and
+  need a shoot, not code. See **The photography** above.
 - No Open Graph share image yet, so WhatsApp and Instagram link previews show no
   picture — worth adding since WhatsApp is the booking channel.
