@@ -39,6 +39,18 @@ a:hover { color:#B98F3E; }
 @media (max-width: 760px) {
   :root { --fs-xxs:10.5px; --fs-xs:10.5px; --fs-sm:10.5px; --fs-md:11px; --fs-lg:11px; }
 }
+/* The switcher footer is one space-between row on a desktop. On a phone that
+   wraps to three left-aligned blocks with nothing holding them together, so
+   below 760px it centres, stacks, and bands the links between two hairlines. */
+@media (max-width: 760px) {
+  .sw-foot { flex-direction:column; justify-content:center; text-align:center; gap:14px; }
+  .sw-foot-brand { flex-direction:column; gap:7px; }
+  .sw-foot-links {
+    justify-content:center; gap:4px 28px; width:100%;
+    border-top:1px solid rgba(201,168,96,.16); border-bottom:1px solid rgba(201,168,96,.16);
+  }
+  .sw-foot-hours { opacity:.9; }
+}
 /* Phones: footer links are stacked text at ~14-26px tall, well under a
    comfortable thumb target, so give each one a 40px row of its own. */
 @media (max-width: 760px) {
@@ -89,19 +101,19 @@ a:hover { color:#B98F3E; }
   </div>
 </div>
 
-<div data-screen-label="Footer" style="background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:22px 20px;">
-  <div style="max-width:1180px; margin:0 auto; display:flex; gap:20px 34px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-    <div style="display:flex; align-items:center; gap:10px;">
+<div data-screen-label="Footer" style="background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:clamp(24px,3.4vw,34px) 20px;">
+  <div class="sw-foot" style="max-width:1180px; margin:0 auto; display:flex; gap:20px 34px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+    <div class="sw-foot-brand" style="display:flex; align-items:center; gap:10px;">
       <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
       <span style="font-family:'Great Vibes',cursive; font-size:22px; color:#EBD9A6; line-height:1;">Ecosophy</span>
-      <span style="font-size:var(--fs-sm); letter-spacing:2.5px; color:#8FA192;">DUBAI, UAE</span>
+      <span style="font-size:var(--fs-sm); letter-spacing:2.5px; color:#8FA192;">AJMAN, UAE</span>
     </div>
-    <div style="display:flex; gap:22px; flex-wrap:wrap; font-size:11.5px; letter-spacing:1.5px;">
+    <div class="sw-foot-links" style="display:flex; gap:22px; flex-wrap:wrap; font-size:11.5px; letter-spacing:1.5px;">
       <a href="/for-her" style="color:#D7DECF;" style-hover="color:#E4C778;">FOR HER</a>
       <a href="/for-him" style="color:#D7DECF;" style-hover="color:#E4C778;">FOR HIM</a>
       <a href="https://www.instagram.com/ecosophy.ae/" style="color:#D7DECF;" style-hover="color:#E4C778;">INSTAGRAM</a>
     </div>
-    <div style="font-size:11px; color:#7E8F81;">Daily · 10:00 – 22:00</div>
+    <div class="sw-foot-hours" style="font-size:11px; color:#7E8F81;">Daily · 10:00 – 22:00</div>
   </div>
 </div>
 </x-dc>
