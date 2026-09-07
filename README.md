@@ -183,15 +183,19 @@ into a shallow arc. Two numbers drive it, and both matter:
   points were pure dead travel. The old ramp spent its first third there, which
   is why the arch appeared to sit still and then collapse: it read as a jump,
   not a transition.
-- **`clamp((vh * 0.86 - rg.top) / (vh * 0.36), 0, 1)`** — the ramp window,
-  measured on the panel's own top edge. It starts once the panel is 14vh onto
-  the screen, not at `1.05vh` where it used to: above the fold nobody can see
-  the dome, so that travel was wasted too.
+- **`clamp((vh * 0.62 - rg.top) / (vh * 0.30), 0, 1)`** — the ramp window,
+  measured on the panel's own top edge. The half circle is held until the panel
+  covers 38% of the screen, then eases flat over the next 30vh of travel. Two
+  earlier values were wrong for the same reason in different degrees: `1.05vh`
+  started the collapse above the fold, and `0.86vh` still had it collapsing while
+  the panel was a 3-13% sliver at the bottom edge — round, but far too small to
+  read as a dome. The number to protect is how much screen the panel covers
+  while it is still a half circle, not when the ramp begins.
 
-Together: the panel enters the viewport as an exact half circle, holds it while
-it rises (about a quarter-screen of scroll), then eases to the shallow arc by
-the time it takes the centre line. Verified on all ten pages — entry radius is
-exactly half the viewport width at 1920, 1280, 768 and 390.
+Together: the panel enters the viewport as an exact half circle, stays one all
+the way up to covering 38% of the screen, then eases to the shallow arc.
+Verified on every page carrying an arch — entry radius is exactly half the
+viewport width at 1920, 1280, 768 and 390.
 
 If you change the start value, changing it *up* does nothing visible. Down is
 the only direction with an effect, and it costs you the half circle.
