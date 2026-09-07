@@ -1174,21 +1174,79 @@ class Component extends DCLogic {
     })));
     const cat = CATS.find(c => c.name === dCat);
     const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    // No treatment has a photograph of its own — the library does not hold one
-    // per treatment and will not until there is a shoot. Each card shows the
-    // photo of its type, the same table /service runs its heroes on, and falls
-    // back to its category's photo for the types that table does not cover.
-    const TYPE_PIC = {
-      massage:  'uploads/775244964_18119167235477475_6941524398570787900_n.jpg',
-      bath:     'uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png',
-      facial:   'uploads/imgi_33_man-getting-a-facial-treatment.jpg',
-      water:    'uploads/748718184_18114511022477475_8211076763529339827_n.jpg',
-      grooming: 'uploads/photo_2026-08-02_19-37-29.jpg',
-      tech:     'uploads/eco-him-machine.jpg',
+    // One photograph per card, listed per category and read positionally.
+    //
+    // Filenames lie about what is distinct: portrait-1, portrait-2, beauty-10
+    // and beauty-11 are four frames of one client in one outfit, and hammam-1,
+    // -2, spa-01 and spa-02 are one room shot four times. So the library is
+    // grouped by SHOOT and no two cards in a category may share one — a grid of
+    // different files that all show the same dress still reads as duplicated.
+    //
+    // 134 cards against 82 photographs in about forty shoots, so a photo can
+    // come back in another category. Only Facials (20 cards, 16 usable shoots)
+    // and Eyelashes (10 against 9) repeat a look within themselves, and those
+    // are spaced as far apart in the grid as they go. Regenerate the lists with
+    // scratchpad/allocate.mjs when the catalogue changes.
+    const CAT_PICS = {
+      "Massage & Body Wellness": [
+        "uploads/eco-him-03.jpg",
+        "uploads/eco-him-04.jpg",
+        "uploads/eco-him-13.jpg",
+        "uploads/775244964_18119167235477475_6941524398570787900_n.jpg",
+        "uploads/eco-him-01.jpg",
+        "uploads/eco-him-02.jpg",
+        "uploads/eco-him-06.jpg",
+        "uploads/eco-him-08.jpg",
+        "uploads/eco-him-machine.jpg",
+        "uploads/eco-him-17.jpg",
+        "uploads/eco-him-19.jpg",
+        "uploads/eco-him-18.jpg",
+        "uploads/eco-him-20.jpg",
+        "uploads/photo_2026-08-02_19-37-25.jpg",
+        "uploads/bart-zimny-W5XTTLpk1-I-unsplash.jpg",
+        "uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg",
+      ],
+      "Moroccan Bath & Relaxation": [
+        "uploads/hf_20260827_171947_1e9875d7-e5ab-4df5-b12e-8cd204eda2cb.png",
+        "uploads/748718184_18114511022477475_8211076763529339827_n.jpg",
+        "uploads/eco-him-15.jpg",
+        "uploads/eco-him-07.jpg",
+        "uploads/eco-him-05.jpg",
+        "uploads/photo_2026-08-02_19-37-29.jpg",
+        "uploads/eco-him-reception.jpg",
+        "uploads/eco-him-16.jpg",
+        "uploads/eco-him-18.jpg",
+        "uploads/eco-him-20.jpg",
+        "uploads/photo_2026-08-02_19-37-25.jpg",
+        "uploads/bart-zimny-W5XTTLpk1-I-unsplash.jpg",
+      ],
+      "Advanced Aesthetic Care": [
+        "uploads/imgi_33_man-getting-a-facial-treatment.jpg",
+        "uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg",
+        "uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg",
+        "uploads/imgi_26_mens-beauty-treatment.jpg",
+        "uploads/imgi_8_young-man-receiving-cosmetic-treatment-at-the-spa.jpg",
+        "uploads/eco-him-11.jpg",
+        "uploads/eco-him-02.jpg",
+        "uploads/eco-him-06.jpg",
+        "uploads/eco-him-08.jpg",
+        "uploads/eco-him-09.jpg",
+      ],
+      "Men’s Grooming": [
+        "uploads/photo_2026-08-02_19-37-29.jpg",
+        "uploads/eco-him-10.jpg",
+        "uploads/eco-him-16.jpg",
+        "uploads/eco-him-21.jpg",
+      ],
+      "Packages": [
+        "uploads/748718184_18114511022477475_8211076763529339827_n.jpg",
+        "uploads/eco-him-15.jpg",
+        "uploads/eco-him-07.jpg",
+      ],
     };
     const items = cat ? cat.items.map((it, i) => ({
       ...it, slot: 'dd-' + cat.name + '-' + i,
-      photo: TYPE_PIC[it.type] || (cat.pic && cat.pic[0]) || '',
+      photo: (CAT_PICS[cat.name] || [])[i] || (cat.pic && cat.pic[0]) || '',
       photoHint: it.name + ' photo',
       href: '/gent-service?s=' + slugify(it.name),
       durationLabel: it.duration || 'BY REQUEST',
