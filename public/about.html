@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book a Visit — Ecosophy Aesthetic Spa, Dubai</title>
-<meta name="description" content="Request a treatment at Ecosophy Aesthetic Spa, Dubai — choose your ritual, day and time, and confirm on WhatsApp.">
-<link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
-<link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
+<title>About — Ecosophy Beauty Lounge, Ajman</title>
+<meta name="description" content="A premium ladies’ beauty, aesthetics, body and wellness destination in Al Rawda 2, Ajman — nails, lashes, brows, advanced skincare, slimming, massage and SPA.">
+<link rel="icon" type="image/png" href="/favicons/mark-woman-gold-180.png">
+<link rel="apple-touch-icon" href="/favicons/mark-woman-gold-180.png">
 <meta name="theme-color" content="#0E2B1C">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Book a Visit — Ecosophy Aesthetic Spa, Dubai">
-<meta property="og:description" content="Request a treatment at Ecosophy Aesthetic Spa, Dubai — choose your ritual, day and time, and confirm on WhatsApp.">
-<meta property="og:url" content="https://ecosophy.pages.dev/gent-book">
+<meta property="og:title" content="About — Ecosophy Beauty Lounge, Ajman">
+<meta property="og:description" content="A premium ladies’ beauty, aesthetics, body and wellness destination in Al Rawda 2, Ajman — nails, lashes, brows, advanced skincare, slimming, massage and SPA.">
+<meta property="og:url" content="https://ecosophy.pages.dev/about">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://ecosophy.pages.dev/gent-book">
+<link rel="canonical" href="https://ecosophy.pages.dev/about">
 <script src="/vendor/react.production.min.js"></script>
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
@@ -55,6 +55,72 @@ img { display:block; }
     display:inline-flex; align-items:center; min-height:40px;
   }
 }
+
+/* ---- About page ---------------------------------------------------------
+   A photograph that holds still while the copy travels over it. Done with a
+   sticky pane pulled back by its own height, not background-attachment:fixed,
+   which iOS Safari quietly ignores. The pane must not sit inside anything with
+   overflow:hidden -- that makes a scroll container the pane sticks to instead
+   of the page, and it stops moving. Which is why the arch panel above closes
+   before the first stage begins. */
+.ab-stage { position:relative; }
+.ab-back { position:sticky; top:0; height:100vh; margin-bottom:-100vh; overflow:hidden; }
+.ab-back img { width:100%; height:100%; object-fit:cover; }
+.ab-back::after { content:''; position:absolute; inset:0; }
+.ab-back--faint::after { background:linear-gradient(180deg,rgba(11,31,22,.93),rgba(11,31,22,.88)); }
+.ab-back--photo::after { background:linear-gradient(90deg,rgba(11,31,22,.86) 0%,rgba(11,31,22,.52) 46%,rgba(11,31,22,.34) 100%); }
+.ab-flow { position:relative; }
+
+.ab-h2 { font-family:'Italiana','Prata',serif; font-weight:400; letter-spacing:.06em;
+  color:#E4C778; line-height:1.08; margin:0; font-size:clamp(30px,5.4vw,66px); }
+.ab-body { font-size:clamp(13.5px,1.35vw,16px); line-height:2.05; color:#C4CFC1; }
+.ab-strip { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; }
+.ab-strip span { border:1px solid rgba(201,168,96,.4); border-radius:22px; padding:8px 16px;
+  font-size:var(--fs-lg); letter-spacing:1.7px; color:#EBD9A6; white-space:nowrap; }
+
+/* Three photographs, the middle one carried a little larger and a little
+   forward, the outer two drifting at a different rate as the section passes. */
+.ab-trio { display:grid; grid-template-columns:1fr 1.24fr 1fr; gap:clamp(12px,2.2vw,30px); align-items:center; }
+.ab-card { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.3);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.95); }
+.ab-card img { width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform 1.2s cubic-bezier(.2,.8,.3,1); }
+.ab-card:hover img { transform:scale(1.07); }
+.ab-card--side { aspect-ratio:3/4; }
+.ab-card--mid { aspect-ratio:4/5; box-shadow:0 54px 100px -40px rgba(0,0,0,.95); }
+.ab-cap { position:absolute; left:0; right:0; bottom:0; padding:40px 16px 15px;
+  background:linear-gradient(180deg,rgba(11,31,22,0),rgba(11,31,22,.88));
+  font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
+
+.ab-why { columns:2; column-gap:clamp(26px,4vw,70px); margin:0; padding:0; }
+.ab-why li { break-inside:avoid; list-style:none; position:relative; padding:11px 0 11px 26px;
+  font-size:13.5px; line-height:1.75; color:#CBD6C4; border-bottom:1px solid rgba(201,168,96,.13); }
+.ab-why li::before { content:''; position:absolute; left:3px; top:18px; width:7px; height:7px;
+  border:1px solid #C9A860; transform:rotate(45deg); }
+
+.ab-quote { text-shadow:0 3px 22px rgba(0,0,0,.75); font-family:'Cormorant Garamond','Prata',serif; font-weight:300;
+  font-size:clamp(23px,3.4vw,44px); line-height:1.35; color:#F1E7CC; margin:0; }
+
+@media (max-width: 860px) {
+  /* The quote band scrims left-to-right on a wide screen, where the copy sits
+     in the dark half. On a phone the copy is full width, so the scrim has to
+     run top-to-bottom instead or the first line lands on the bright part. */
+  .ab-back--photo::after { background:linear-gradient(180deg,rgba(11,31,22,.92) 0%,rgba(11,31,22,.74) 48%,rgba(11,31,22,.58) 100%); }
+  .ab-trio { grid-template-columns:1fr; }
+  .ab-card--side, .ab-card--mid { aspect-ratio:4/3; }
+  .ab-why { columns:1; }
+  /* A 100vh pane behind a section only a little taller than the screen leaves
+     the copy nothing to travel over, so the stages get their own floor. */
+  .ab-stage { min-height:auto; }
+}
+
+/* The wordmark is the logo's own script, which is far finer than the Great
+   Vibes it replaced. At the phone badge size it renders about 33px tall and the
+   strokes all but vanish; 46px carries them. Width stays clear of the burger
+   and the BOOK button at 360px and up. */
+@media (max-width: 760px) {
+  .hdr-wordmark { height:46px !important; }
+}
 </style>
 <script>
 (function(){
@@ -80,7 +146,7 @@ img { display:block; }
   // bodies too. A statement like `var prevY = 0` therefore comes back as
   // `var sc-camel-prev-y = 0` and the re-appended copy fails to parse. Keep
   // every assignment in here lowercase or snake_case.
-  if (window.__ecoPlx_ecosophygentbo) return; window.__ecoPlx_ecosophygentbo = 1;
+  if (window.__ecoPlx_ecosophybook) return; window.__ecoPlx_ecosophybook = 1;
 
   function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
   function nums(el, attr, fallback){
@@ -455,6 +521,10 @@ img { display:block; }
 <div style="min-height:100vh; background:#0B1F16; overflow-x:clip;">
 
   <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
+    <!-- The badge overhangs the band, so its wordmark would otherwise sit on
+         the page's own photograph. This carries the band's colour down behind
+         the overhang and fades out, giving the script a ground on every page. -->
+    <div style="pointer-events:none; position:absolute; top:100%; left:0; right:0; height:clamp(54px,8.5vh,86px); background:linear-gradient(180deg, rgba(11,31,22,.88) 0%, rgba(11,31,22,.66) 38%, rgba(11,31,22,.28) 72%, rgba(11,31,22,0) 100%);"></div>
     <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
       <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:var(--fs-lg); letter-spacing:1.3px; min-width:0;">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
@@ -463,21 +533,21 @@ img { display:block; }
           <span style="display:block; height:1.5px; width:62%; background:#E4C778; border-radius:2px;"></span>
         </button>
         <a href="/" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">OUR WORLDS</a>
-        <a href="/for-him" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
-        <a href="/gent-about" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ABOUT</a>
-        <a href="/gent-services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
-        <a href="/gent-gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
-        <a href="/gent-book" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">BOOK</a>
-        <a href="/for-her" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HER</a>
+        <a href="/for-her" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">HOME</a>
+        <a href="/about" style="display:{{ navShow }}; color:#E4C778; white-space:nowrap;">ABOUT</a>
+        <a href="/services" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">ALL SERVICES</a>
+        <a href="/gallery" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">GALLERY</a>
+        <a href="/book" style="display:{{ navShow }}; color:#D7DECF; white-space:nowrap;" style-hover="color:#E4C778;">BOOK</a>
+        <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
-      <a href="/for-him" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
+      <a href="/for-her" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
         <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
-          <img src="assets/mark-man-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
-          <img src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
-          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">AESTHETIC SPA</span>
+          <img class="hdr-wordmark" src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
+          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY LOUNGE</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
@@ -490,12 +560,12 @@ img { display:block; }
     </div>
     <div style="display:{{ menuShow }}; flex-direction:column; padding:6px 22px 20px; border-top:1px solid rgba(201,168,96,.2);">
       <a href="/" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">OUR WORLDS</a>
-      <a href="/for-him" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
-      <a href="/gent-about" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ABOUT</a>
-      <a href="/gent-services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
-      <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
-      <a href="/gent-book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">BOOK</a>
-      <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
+      <a href="/for-her" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">HOME</a>
+      <a href="/about" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E4C778;">ABOUT</a>
+      <a href="/services" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">ALL SERVICES</a>
+      <a href="/gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
+      <a href="/book" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
+      <a href="/for-him" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HIM</a>
     </div>
   </div>
 
@@ -520,70 +590,120 @@ img { display:block; }
          hero no longer carries. -->
     <div style="position:absolute; inset:0; overflow:hidden;">
       <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.42; will-change:transform;">
-        <img src="uploads/gent-gal-hero.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+        <img src="uploads/eco-her-exterior-7.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
       </div>
     </div>
     <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
     <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
-      <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
-      <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#E4C778; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">BOOK YOUR VISIT</h1>
-      <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">Tell us the ritual and when suits you. The request opens in WhatsApp and our team confirms the slot.</div>
+      <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HER</div>
+      <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#E4C778; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">ABOUT US</h1>
+      <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">One house in Ajman for nails, skin, body and hair — and the people who do the work.</div>
       <div class="bk-rise" style="animation-delay:.55s; font-size:var(--fs-md); letter-spacing:2.6px; color:#9FB0A0; margin-top:22px;">SCROLL ↓</div>
     </div>
   </div>
 
+
+  <!-- Intro. Inside the arch, so it keeps the hand-off every inside page has.
+       The photograph behind it is a flat layer rather than a sticky one for the
+       same reason the stages below sit outside this panel: the arch clips. -->
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
-    <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
-         arc once it owns the screen. Same hand-off as the gallery. -->
-    <div data-garch="50,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
-    <div style="max-width:780px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
-      <div style="border:1px solid rgba(201,168,96,.3); border-radius:22px; padding:clamp(24px,4vw,42px); background:rgba(11,31,22,.7);">
-        <div class="bk-eyebrow">REQUEST A BOOKING</div>
-        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(24px,3.4vw,40px); color:#F4EFE3; margin-top:8px;">{{ headline }}</div>
-        <div style="margin-top:26px;"><span class="bk-label">RITUAL</span>
-          <select value="{{ ritual }}" onChange="{{ setRitual }}" class="bk-field">
-            <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
-          </select>
-        </div>
-        <div class="bk-grid" style="margin-top:18px;">
-          <div><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
-            <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}">{{ d.v }}</option></sc-for>
-          </select></div>
-          <div><span class="bk-label">TIME</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
-            <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}">{{ t.v }}</option></sc-for>
-          </select></div>
-        </div>
-        <div class="bk-grid" style="margin-top:18px;">
-          <div><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" class="bk-field"></div>
-          <div><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="05x xxx xxxx" class="bk-field"></div>
-        </div>
-        <div style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">Please choose a ritual and add your name.</div>
-        <div onClick="{{ submit }}" style="cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</div>
-        <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is charged here.</div>
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-top:34px; font-size:11.5px; color:#9FB0A0; letter-spacing:1.4px;">
-        <div>DAILY · 10:00 – 22:00</div><div>AJMAN, UAE</div>
-        <a href="{{ waHref }}" style="color:#E4C778;">OR MESSAGE US DIRECTLY</a>
+    <div data-garch="50,21" style="position:relative; background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
+      <img src="uploads/eco-her-facial-1.jpg" alt="" style="pointer-events:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.13;">
+      <div style="position:relative; max-width:900px; margin:0 auto; padding:clamp(66px,10vw,130px) clamp(20px,3vw,44px) clamp(56px,7vw,92px); text-align:center;">
+        <div class="bk-eyebrow">ECOSOPHY BEAUTY LOUNGE</div>
+        <h2 class="ab-h2" style="margin-top:14px;">MORE THAN A SALON</h2>
+        <p class="ab-body" style="max-width:64ch; margin:22px auto 0;">Ecosophy Beauty Lounge is a premium ladies’ beauty, aesthetics, body and wellness destination in Ajman, UAE. From Russian-speaking nail and lash masters and a Top Brow Master to advanced aesthetic facials, Dermapen&nbsp;4 microneedling, customized slimming programs, professional massage and SPA rituals, Ecosophy brings an exceptional variety of beauty and wellness services together under one roof.</p>
+        <div class="ab-strip" style="margin-top:clamp(28px,3.6vw,44px);"><span>RUSSIAN-SPEAKING NAIL &amp; LASH MASTERS</span><span>TOP BROW MASTER</span><span>SEMI-PERMANENT MAKEUP</span><span>DERMAPEN 4 BY DERMAPENWORLD™</span><span>ADVANCED AESTHETIC FACIALS</span><span>CUSTOMIZED SLIMMING</span><span>MASSAGE</span><span>SPA &amp; WELLNESS</span></div>
       </div>
     </div>
+  </div>
+
+  <!-- Stage one. One photograph held still behind the pictures and the list. -->
+  <div class="ab-stage" style="background:#0B1F16;">
+    <div class="ab-back ab-back--faint"><img src="uploads/eco-her-facial-1.jpg" alt=""></div>
+    <div class="ab-flow">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(60px,8vw,110px) clamp(20px,3vw,44px) clamp(30px,4vw,60px);">
+        <div class="ab-trio">
+          <div class="ab-card ab-card--side" data-gy="0.05">
+            <img src="uploads/eco-her-nails-1.jpg" alt="A finished manicure">
+            <div class="ab-cap">NAILS</div>
+          </div>
+          <div class="ab-card ab-card--mid">
+            <img src="uploads/eco-her-facial-1.jpg" alt="The facial room">
+            <div class="ab-cap">SKIN</div>
+          </div>
+          <div class="ab-card ab-card--side" data-gy="-0.05">
+            <img src="uploads/eco-her-hammam-1.jpg" alt="The hammam">
+            <div class="ab-cap">SPA &amp; WELLNESS</div>
+          </div></div>
+      </div>
+      <div style="max-width:1080px; margin:0 auto; padding:clamp(46px,6vw,84px) clamp(20px,3vw,44px) clamp(80px,10vw,140px);">
+        <div class="bk-eyebrow" style="text-align:center;">WHY ECOSOPHY</div>
+        <h2 class="ab-h2" style="text-align:center; margin-top:14px;">WHAT YOU WILL FIND HERE</h2>
+        <ul class="ab-why" style="margin-top:clamp(30px,4vw,52px);"><li>A premium ladies’ beauty and wellness house in Ajman</li><li>One of the widest selections of aesthetic facial treatments in the emirate</li><li>Dermapen 4 by DermapenWorld™ microneedling</li><li>Russian-speaking nail and lash masters</li><li>A Top Brow Master</li><li>Semi-permanent makeup</li><li>Experienced massage therapists from Bali and Kerala</li><li>EMSCULPT body sculpting</li><li>Endospheres treatments</li><li>Maderotherapy and lymphatic drainage</li><li>Infrared sauna and Moroccan bath</li><li>Customized slimming and body-contouring packages</li><li>Professional hair services</li><li>Personalized skincare and wellness programs</li><li>An international team of beauty professionals</li><li>An elegant and relaxing environment</li></ul>
+      </div></div>
+  </div>
+
+  <!-- Stage two. The photograph stays put for the whole passage of the quote. -->
+  <div class="ab-stage" style="background:#0B1F16;">
+    <div class="ab-back ab-back--photo"><img src="uploads/eco-her-robe.jpg" alt=""></div>
+    <div class="ab-flow">
+      <div style="min-height:170vh; display:flex; align-items:center;">
+        <div style="max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,3vw,44px); width:100%;">
+          <div style="max-width:60ch;">
+            <div class="bk-eyebrow">THE ECOSOPHY EXPERIENCE</div>
+            <blockquote class="ab-quote" style="margin-top:20px;">&ldquo;Ecosophy is more than a beauty salon. It is a destination where beauty, aesthetics, body care and wellness come together.&rdquo;</blockquote>
+            <p class="ab-body" style="margin-top:26px; max-width:52ch;">A Russian manicure, a Dermapen treatment, semi-permanent makeup, body contouring, a massage or a full SPA ritual — whatever brings you in, the visit is built around you.</p>
+          </div>
+        </div>
+      </div></div>
+  </div>
+
+  <!-- Where we are -->
+  <div style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.16);">
+    <div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,110px) clamp(20px,3vw,44px);">
+      <div class="bk-eyebrow" style="text-align:center;">VISIT US</div>
+      <h2 class="ab-h2" style="text-align:center; margin-top:14px;">FIND US IN AJMAN</h2>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:clamp(26px,5vw,74px); margin-top:clamp(32px,4vw,52px); text-align:center;">
+        <div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#C9A860;">ADDRESS</div>
+          <div class="ab-body" style="margin-top:9px;">Al Rawda 2, Ajman, UAE</div>
+        </div>
+        <div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#C9A860;">HOURS</div>
+          <div class="ab-body" style="margin-top:9px;">Daily · 10:00 AM – 10:00 PM</div>
+        </div>
+        <div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#C9A860;">CALL &amp; WHATSAPP</div>
+          <div class="ab-body" style="margin-top:9px;">{{ whatsapp }}</div>
+        </div>
+        <div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#C9A860;">INSTAGRAM</div>
+          <div class="ab-body" style="margin-top:9px;">@ecosophy.ae</div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:clamp(34px,4.4vw,54px);">
+        <a href="{{ waHref }}" style="display:inline-block; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:14px 34px; font-size:11.5px; letter-spacing:3px; font-weight:600;">BOOK ON WHATSAPP</a>
+        <a href="/services" style="display:inline-block; margin-left:10px; border:1px solid rgba(201,168,96,.55); color:#EBD9A6; border-radius:26px; padding:14px 34px; font-size:11.5px; letter-spacing:3px;">SEE EVERY TREATMENT</a>
+      </div>
     </div>
   </div>
 
   <div data-screen-label="Footer" style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:clamp(72px,9vw,120px) 20px 72px; overflow:hidden;">
-    <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; left:44%; top:50%; transform:translate(-50%,-50%); width:min(16vw,170px); opacity:.045;">
-    <img src="assets/mark-man-gold.png" alt="" style="pointer-events:none; position:absolute; right:2%; top:10%; width:min(8vw,80px); opacity:.05;">
+    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:44%; top:50%; transform:translate(-50%,-50%); width:min(16vw,170px); opacity:.045;">
+    <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:2%; top:10%; width:min(8vw,80px); opacity:.05;">
     <div style="max-width:1180px; margin:0 auto; display:flex; gap:36px; flex-wrap:wrap; justify-content:space-between;">
       <div style="min-width:220px;">
         <div style="display:flex; align-items:center; gap:11px;">
-          <img src="assets/mark-man-gold.png" alt="" style="width:38px; height:38px;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:38px; height:38px;">
           <img src="assets/wordmark-gold.png" alt="Ecosophy" style="height:43px; width:auto; display:block;">
         </div>
-        <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Aesthetic spa and grooming studio. Al Rawda 2, Ajman, UAE.</div>
+        <div style="font-size:12px; color:#8FA192; line-height:1.8; margin-top:12px; max-width:280px;">Beauty lounge for women. Al Rawda 2, Ajman, UAE.</div>
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">CONTACT</div>
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
-          <a href="https://www.instagram.com/ecosophy_gentspa/" style="color:#D7DECF;">@ecosophy_gentspa</a>
+          <a href="https://www.instagram.com/ecosophy.ae/" style="color:#D7DECF;">@ecosophy.ae</a>
           <a href="{{ waHref }}" style="color:#D7DECF;">{{ whatsapp }}</a>
         </div>
       </div>
@@ -592,9 +712,9 @@ img { display:block; }
         <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 10:00 AM – 10:00 PM</div>
       </div>
       <div style="min-width:170px;">
-        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>
+        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HIM</div>
         <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
-          <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty Lounge</a>
+          <a href="/for-him" style="color:#D7DECF;">Ecosophy Aesthetic Spa</a>
           <a href="/" style="color:#D7DECF;">Switch world</a>
         </div>
       </div>
@@ -602,10 +722,12 @@ img { display:block; }
   </div>
 </div>
 
-<script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 50 444 5566&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 58 548 0899&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
-  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false,
-    ritual: '', day: '', time: '', name: '', phone: '', error: false };
+  // Nothing on this page has state of its own. Everything below drives the
+  // shared header: the badge that shrinks once you are past the hero, the
+  // drawer under 1280, and the WhatsApp button.
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false };
   componentDidMount() {
     this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
     this._navScroll = () => { const past = (window.scrollY || 0) > 90; if (past !== this.state.scrolled) this.setState({ scrolled: past }); };
@@ -613,49 +735,15 @@ class Component extends DCLogic {
     window.addEventListener('scroll', this._navScroll, { passive: true });
     this._navScroll();
   }
-  cats() {
-    return window.ECO.menuCats('him');
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._navResize);
+    window.removeEventListener('scroll', this._navScroll);
   }
   renderVals() {
-    const wa = (this.props.whatsapp ?? '+971 50 444 5566');
+    const wa = (this.props.whatsapp ?? '+971 58 548 0899');
     const vw = this.state.vw || 1280;
-    // Ritual list comes from the same cats() the menu and services pages use.
-    const rituals = [{ v: 'Choose a ritual' }];
-    this.cats().forEach(c => c.items.forEach(it => rituals.push({ v: it.name })));
-    const days = [{ v: 'Choose a day' }];
-    const fmt = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(); d.setDate(d.getDate() + i);
-      days.push({ v: fmt[d.getDay()] + ' ' + d.getDate() + ' ' + mon[d.getMonth()] });
-    }
-    const times = [{ v: 'Choose a time' }];
-    for (let h = 10; h <= 21; h++) times.push({ v: (h < 10 ? '0' : '') + h + ':00' });
-    const ready = this.state.ritual && this.state.ritual.indexOf('Choose') !== 0 && this.state.name.trim();
     return {
-      headline: 'Tell us what you would like, and when.',
-      ritualOptions: rituals, dayOptions: days, timeOptions: times,
-      ritual: this.state.ritual, day: this.state.day, time: this.state.time,
-      name: this.state.name, phone: this.state.phone,
-      setRitual: (e) => this.setState({ ritual: e.target.value, error: false }),
-      setDay: (e) => this.setState({ day: e.target.value }),
-      setTime: (e) => this.setState({ time: e.target.value }),
-      setName: (e) => this.setState({ name: e.target.value, error: false }),
-      setPhone: (e) => this.setState({ phone: e.target.value }),
-      errShow: this.state.error ? 'block' : 'none',
-      submitLabel: ready ? 'SEND REQUEST ON WHATSAPP' : 'REQUEST A BOOKING',
-      submit: () => {
-        if (!ready) { this.setState({ error: true }); return; }
-        const lines = [
-          'Booking request — ' + 'Ecosophy Aesthetic Spa',
-          'Ritual: ' + this.state.ritual,
-          'When: ' + (this.state.day || 'any day') + ' · ' + (this.state.time || 'any time'),
-          'Name: ' + this.state.name,
-          'Phone: ' + (this.state.phone || '-'),
-        ];
-        const n = wa.replace(/[^0-9]/g, '');
-        window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
-      },
+      whatsapp: wa,
       navGap: vw < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
       navShow: vw < 1280 ? 'none' : 'inline',
       burgerShow: vw < 1280 ? 'flex' : 'none',
@@ -665,7 +753,7 @@ class Component extends DCLogic {
       badgeSlotW: this.state.scrolled ? (vw < 860 ? '150px' : '190px') : (vw < 860 ? '54px' : '78px'),
       badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '46px' : '58px'),
       badgeWordSize: this.state.scrolled ? (vw < 860 ? '17px' : '19px') : (vw < 860 ? '19px' : '22px'),
-      badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
+      badgeSubShow: (this.state.scrolled || vw < 1520) ? 'none' : 'block',
       waLabel: vw < 860 ? 'BOOK' : 'WHATSAPP',
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''),
     };
