@@ -84,8 +84,18 @@ img { display:block; }
 .ab-card { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.3);
   box-shadow:0 40px 80px -40px rgba(0,0,0,.95); }
 .ab-card img { width:100%; height:100%; object-fit:cover; display:block;
-  transition:transform 1.2s cubic-bezier(.2,.8,.3,1); }
-.ab-card:hover img { transform:scale(1.07); }
+  animation:abPush 19s ease-in-out infinite alternate; will-change:transform; }
+.ab-card:nth-child(2) img { animation-duration:23s; animation-delay:-7s; }
+.ab-card:nth-child(3) img { animation-duration:21s; animation-delay:-13s; }
+@keyframes abPush { from { transform:scale(1); } to { transform:scale(1.09); } }
+/* Hover stays off transform: the engine owns the card's transform and the
+   photograph's is spoken for by the push-in above. */
+.ab-card { transition:box-shadow .55s ease, border-color .55s ease; }
+.ab-card::after { content:''; position:absolute; inset:0; background:rgba(11,31,22,.16);
+  transition:opacity .55s ease; pointer-events:none; }
+.ab-card:hover { border-color:rgba(201,168,96,.62); box-shadow:0 46px 90px -34px rgba(0,0,0,.98); }
+.ab-card:hover::after { opacity:0; }
+@media (prefers-reduced-motion: reduce) { .ab-card img { animation:none; } }
 .ab-card--side { aspect-ratio:3/4; }
 .ab-card--mid { aspect-ratio:4/5; box-shadow:0 54px 100px -40px rgba(0,0,0,.95); }
 .ab-cap { position:absolute; left:0; right:0; bottom:0; padding:40px 16px 15px;
@@ -622,17 +632,17 @@ img { display:block; }
   <div class="ab-stage" style="background:#0B1F16;">
     <div class="ab-back ab-back--faint"><img src="uploads/eco-him-14.jpg" alt=""></div>
     <div class="ab-flow">
-      <div style="max-width:1180px; margin:0 auto; padding:clamp(60px,8vw,110px) clamp(20px,3vw,44px) clamp(30px,4vw,60px);">
+      <div data-gsection style="max-width:1180px; margin:0 auto; padding:clamp(60px,8vw,110px) clamp(20px,3vw,44px) clamp(30px,4vw,60px);">
         <div class="ab-trio">
-          <div class="ab-card ab-card--side" data-gy="0.05">
+          <div class="ab-card ab-card--side" data-gy="0.05" data-go="0,1" data-gs="0.93,1">
             <img src="uploads/eco-him-03.jpg" alt="A therapist at work">
             <div class="ab-cap">MASSAGE</div>
           </div>
-          <div class="ab-card ab-card--mid">
+          <div class="ab-card ab-card--mid" data-gy="-0.02" data-go="0,1" data-gs="0.89,1">
             <img src="uploads/imgi_33_man-getting-a-facial-treatment.jpg" alt="An advanced facial">
             <div class="ab-cap">SKIN</div>
           </div>
-          <div class="ab-card ab-card--side" data-gy="-0.05">
+          <div class="ab-card ab-card--side" data-gy="-0.05" data-go="0,1" data-gs="0.93,1">
             <img src="uploads/eco-him-14.jpg" alt="The Moroccan bath">
             <div class="ab-cap">THE BATH</div>
           </div></div>
