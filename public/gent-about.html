@@ -66,13 +66,8 @@ img { display:block; }
 .ab-stage { position:relative; }
 .ab-back { position:sticky; top:0; height:100vh; margin-bottom:-100vh; overflow:hidden; }
 .ab-back img { width:100%; height:100%; object-fit:cover; }
-/* These photographs are portrait (0.67) and the band is 1.72 wide, so cover
-   keeps barely a third of their height. Centred that lands on the crown of
-   the head; aim it at the face instead. */
-.ab-back--photo img { object-position:50% 26%; }
 .ab-back::after { content:''; position:absolute; inset:0; }
 .ab-back--faint::after { background:linear-gradient(180deg,rgba(11,31,22,.93),rgba(11,31,22,.88)); }
-.ab-back--photo::after { background:linear-gradient(90deg,rgba(11,31,22,.86) 0%,rgba(11,31,22,.52) 46%,rgba(11,31,22,.34) 100%); }
 /* The arch above paints its photograph at 13% over #0B1F16; a stage washes the
    same photograph at 93%. Close, but not the same colour, and they used to meet
    at a hard line. Fade each stage in from the flat colour and back out to it. */
@@ -112,6 +107,34 @@ img { display:block; }
   font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
 @media (prefers-reduced-motion: reduce) { .ab-shot img { animation:none; } }
 
+/* A full-bleed band of fixed height with the copy down its left side, hard
+   edged against the sections above and below. */
+.ab-band { position:relative; height:clamp(520px,78vh,760px); overflow:hidden;
+  display:flex; align-items:center; background:#0B1F16; }
+.ab-band > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  object-position:56% 26%; }
+/* Only as much shadow as the copy needs, and only where the copy is. */
+.ab-band::after { content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(90deg,rgba(8,22,16,.80) 0%,rgba(8,22,16,.58) 30%,rgba(8,22,16,.12) 58%,rgba(8,22,16,0) 100%); }
+.ab-band-copy { position:relative; z-index:2; width:100%; max-width:1180px;
+  margin:0 auto; padding:0 clamp(20px,3vw,44px); }
+.ab-band-copy > div { max-width:29rem; }
+.ab-band-eyebrow { font-family:'Cormorant Garamond','Prata',serif; font-size:clamp(17px,1.6vw,21px);
+  color:#EBD9A6; letter-spacing:.02em; }
+.ab-band h2 { font-family:'Italiana','Prata',serif; font-weight:400; margin:10px 0 0;
+  font-size:clamp(30px,4.4vw,58px); line-height:.98; letter-spacing:.03em; color:#FFF8E7;
+  text-shadow:0 4px 26px rgba(0,0,0,.6); }
+.ab-band p { margin:clamp(18px,2.2vw,30px) 0 0; font-size:14px; line-height:1.85; color:#E4EADF; }
+.ab-band a.ab-pill { display:inline-block; margin-top:clamp(22px,2.6vw,34px);
+  border:1px solid rgba(255,248,231,.75); border-radius:26px; padding:12px 26px;
+  font-family:'Cormorant Garamond','Prata',serif; font-size:17px; color:#FFF8E7;
+  transition:background .4s ease, color .4s ease; }
+.ab-band a.ab-pill:hover { background:#FFF8E7; color:#12281D; }
+@media (max-width: 760px) {
+  .ab-band { height:clamp(460px,72vh,620px); }
+  .ab-band::after { background:linear-gradient(180deg,rgba(8,22,16,.42) 0%,rgba(8,22,16,.72) 46%,rgba(8,22,16,.90) 100%); }
+  .ab-band-copy > div { max-width:none; }
+}
 /* The hero photograph, framed on the sign rather than on the middle of the
    room. The 1.06-1.18 parallax scale works off the right edge because the
    wordmark ends at 98.5% of the frame and the louvres on the left are the part
@@ -140,14 +163,7 @@ img { display:block; }
 .ab-why li::before { content:''; position:absolute; left:3px; top:18px; width:7px; height:7px;
   border:1px solid #C9A860; transform:rotate(45deg); }
 
-.ab-quote { text-shadow:0 3px 22px rgba(0,0,0,.75); font-family:'Cormorant Garamond','Prata',serif; font-weight:300;
-  font-size:clamp(23px,3.4vw,44px); line-height:1.35; color:#F1E7CC; margin:0; }
-
 @media (max-width: 860px) {
-  /* The quote band scrims left-to-right on a wide screen, where the copy sits
-     in the dark half. On a phone the copy is full width, so the scrim has to
-     run top-to-bottom instead or the first line lands on the bright part. */
-  .ab-back--photo::after { background:linear-gradient(180deg,rgba(11,31,22,.92) 0%,rgba(11,31,22,.74) 48%,rgba(11,31,22,.58) 100%); }
   /* Three columns come out at about 100px on a phone. Two, and the middle
      column drops its offset so the rows line up. */
   .ab-mosaic { grid-template-columns:repeat(2,1fr); max-width:none; }
@@ -736,25 +752,22 @@ img { display:block; }
     </div>
   </div>
 
-  <!-- Stage two. The photograph stays put for the whole passage of the quote. -->
-  <div class="ab-stage" style="background:#0B1F16;">
-    <div class="ab-back ab-back--photo"><img src="uploads/eco-him-04.jpg" alt=""></div>
-    <div class="ab-flow">
-      <div style="min-height:170vh; display:flex; align-items:center;">
-        <div style="max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,3vw,44px); width:100%;">
-          <div style="max-width:60ch;">
-            <div class="bk-eyebrow">OUR MISSION</div>
-            <blockquote class="ab-quote" style="margin-top:20px;">&ldquo;To redefine men’s self-care in Ajman — to make professional wellness and aesthetic care a regular part of modern life rather than an occasional treat.&rdquo;</blockquote>
-            <p class="ab-body" style="margin-top:26px; max-width:52ch;">Recover from physical stress, keep skin and body in good order, relax properly, build a routine you actually keep — in a private environment, to a standard that holds.</p>
-          </div>
-        </div>
+  <!-- The mission, in a band of its own -->
+  <section class="ab-band">
+    <img src="uploads/eco-him-18.jpg" alt="A treatment room on the men's floor">
+    <div class="ab-band-copy">
+      <div>
+        <div class="ab-band-eyebrow">(Our mission)</div>
+        <h2>SELF-CARE, MADE ROUTINE</h2>
+        <p>To redefine men’s self-care in Ajman — to make professional wellness and aesthetic care a regular part of modern life rather than an occasional treat. Recover from physical stress, keep skin and body in good order, relax properly, and build a routine you actually keep.</p>
+        <a class="ab-pill" href="/gent-services">See every treatment</a>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Values, vision, and the corporate work -->
   <div style="position:relative; background:#0B1F16;">
-    <div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,110px) clamp(20px,3vw,44px) 0;">
+    <div style="max-width:1080px; margin:0 auto; padding:clamp(72px,9vw,124px) clamp(20px,3vw,44px) 0;">
       <div class="bk-eyebrow" style="text-align:center;">OUR VALUES</div>
       <h2 class="ab-h2" style="text-align:center; margin-top:14px;">WHAT WE HOLD TO</h2>
       <div class="ab-grid3" style="margin-top:clamp(30px,4vw,52px);">
