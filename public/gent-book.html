@@ -55,6 +55,14 @@ img { display:block; }
     display:inline-flex; align-items:center; min-height:40px;
   }
 }
+
+/* The wordmark is the logo's own script, which is far finer than the Great
+   Vibes it replaced. At the phone badge size it renders about 33px tall and the
+   strokes all but vanish; 46px carries them. Width stays clear of the burger
+   and the BOOK button at 360px and up. */
+@media (max-width: 760px) {
+  .hdr-wordmark { height:46px !important; }
+}
 </style>
 <script>
 (function(){
@@ -455,6 +463,10 @@ img { display:block; }
 <div style="min-height:100vh; background:#0B1F16; overflow-x:clip;">
 
   <div data-screen-label="Header" style="position:fixed; top:0; left:0; right:0; z-index:60; background:rgba(11,31,22,.9); backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,96,.25); overflow:visible;">
+    <!-- The badge overhangs the band, so its wordmark would otherwise sit on
+         the page's own photograph. This carries the band's colour down behind
+         the overhang and fades out, giving the script a ground on every page. -->
+    <div style="pointer-events:none; position:absolute; top:100%; left:0; right:0; height:clamp(54px,8.5vh,86px); background:linear-gradient(180deg, rgba(11,31,22,.88) 0%, rgba(11,31,22,.66) 38%, rgba(11,31,22,.28) 72%, rgba(11,31,22,0) 100%);"></div>
     <div style="max-width:1280px; margin:0 auto; padding:0 20px; position:relative; height:66px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;">
       <div style="display:flex; align-items:center; gap:{{ navGap }}; font-size:var(--fs-lg); letter-spacing:1.3px; min-width:0;">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerShow }}; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; padding:0 9px; background:transparent; border:none; cursor:pointer;">
@@ -476,7 +488,7 @@ img { display:block; }
           <img src="assets/mark-man-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
         </span>
         <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
-          <img src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
+          <img class="hdr-wordmark" src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
           <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">AESTHETIC SPA</span>
         </span>
       </a>
