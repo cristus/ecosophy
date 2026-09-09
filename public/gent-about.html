@@ -73,7 +73,10 @@ img { display:block; }
 .ab-back::after { content:''; position:absolute; inset:0; }
 .ab-back--faint::after { background:linear-gradient(180deg,rgba(11,31,22,.93),rgba(11,31,22,.88)); }
 .ab-back--photo::after { background:linear-gradient(90deg,rgba(11,31,22,.86) 0%,rgba(11,31,22,.52) 46%,rgba(11,31,22,.34) 100%); }
-.ab-flow { position:relative; }
+/* The arch above paints its photograph at 13% over #0B1F16; a stage washes the
+   same photograph at 93%. Close, but not the same colour, and they used to meet
+   at a hard line. Fade each stage in from the flat colour and back out to it. */
+.ab-flow { position:relative; background:linear-gradient(180deg,#0B1F16 0,rgba(11,31,22,0) 260px,rgba(11,31,22,0) calc(100% - 260px),#0B1F16 100%); }
 
 .ab-h2 { font-family:'Italiana','Prata',serif; font-weight:400; letter-spacing:.06em;
   color:#E4C778; line-height:1.08; margin:0; font-size:clamp(30px,5.4vw,66px); }
@@ -82,29 +85,32 @@ img { display:block; }
 .ab-strip span { border:1px solid rgba(201,168,96,.4); border-radius:22px; padding:8px 16px;
   font-size:var(--fs-lg); letter-spacing:1.7px; color:#EBD9A6; white-space:nowrap; }
 
-/* Three photographs, the middle one carried a little larger and a little
-   forward, the outer two drifting at a different rate as the section passes. */
-.ab-trio { display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:clamp(12px,1.8vw,24px); align-items:center; max-width:1000px; margin:0 auto; }
-.ab-card { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.3);
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.95); }
-.ab-card img { width:100%; height:100%; object-fit:cover; display:block;
+/* Six photographs in three columns. Each column drifts at its own rate while
+   the section is on screen — the same three-speed idea the gallery uses — so
+   there is always movement rather than one reveal that can finish before the
+   row is in view. */
+.ab-mosaic { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.8vw,24px);
+  max-width:1040px; margin:0 auto; align-items:start; }
+.ab-col { display:flex; flex-direction:column; gap:clamp(12px,1.8vw,24px); will-change:transform; }
+.ab-col--mid { margin-top:clamp(26px,4vw,58px); }
+.ab-shot { position:relative; overflow:hidden; border-radius:18px; margin:0;
+  border:1px solid rgba(201,168,96,.3); box-shadow:0 34px 70px -34px rgba(0,0,0,.92);
+  transition:box-shadow .55s ease, border-color .55s ease; aspect-ratio:4/3; }
+.ab-shot--tall { aspect-ratio:3/4; }
+.ab-shot img { width:100%; height:100%; object-fit:cover; display:block;
   animation:abPush 19s ease-in-out infinite alternate; will-change:transform; }
-.ab-card:nth-child(2) img { animation-duration:23s; animation-delay:-7s; }
-.ab-card:nth-child(3) img { animation-duration:21s; animation-delay:-13s; }
+.ab-shot:nth-child(2) img { animation-duration:24s; animation-delay:-9s; }
+.ab-col--mid .ab-shot img { animation-duration:22s; animation-delay:-14s; }
+.ab-col:last-child .ab-shot img { animation-duration:26s; animation-delay:-5s; }
 @keyframes abPush { from { transform:scale(1); } to { transform:scale(1.09); } }
-/* Hover stays off transform: the engine owns the card's transform and the
-   photograph's is spoken for by the push-in above. */
-.ab-card { transition:box-shadow .55s ease, border-color .55s ease; }
-.ab-card::after { content:''; position:absolute; inset:0; background:rgba(11,31,22,.16);
+.ab-shot::after { content:''; position:absolute; inset:0; background:rgba(11,31,22,.18);
   transition:opacity .55s ease; pointer-events:none; }
-.ab-card:hover { border-color:rgba(201,168,96,.62); box-shadow:0 46px 90px -34px rgba(0,0,0,.98); }
-.ab-card:hover::after { opacity:0; }
-@media (prefers-reduced-motion: reduce) { .ab-card img { animation:none; } }
-.ab-card--side { aspect-ratio:5/6; }
-.ab-card--mid { aspect-ratio:1/1; box-shadow:0 54px 100px -40px rgba(0,0,0,.95); }
-.ab-cap { position:absolute; left:0; right:0; bottom:0; padding:40px 16px 15px;
+.ab-shot:hover { border-color:rgba(201,168,96,.62); box-shadow:0 46px 90px -34px rgba(0,0,0,.98); }
+.ab-shot:hover::after { opacity:0; }
+.ab-cap { position:absolute; left:0; right:0; bottom:0; padding:38px 14px 13px; margin:0;
   background:linear-gradient(180deg,rgba(11,31,22,0),rgba(11,31,22,.88));
   font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
+@media (prefers-reduced-motion: reduce) { .ab-shot img { animation:none; } }
 
 .ab-why { columns:2; column-gap:clamp(26px,4vw,70px); margin:0; padding:0; }
 .ab-why li { break-inside:avoid; list-style:none; position:relative; padding:11px 0 11px 26px;
@@ -120,8 +126,12 @@ img { display:block; }
      in the dark half. On a phone the copy is full width, so the scrim has to
      run top-to-bottom instead or the first line lands on the bright part. */
   .ab-back--photo::after { background:linear-gradient(180deg,rgba(11,31,22,.92) 0%,rgba(11,31,22,.74) 48%,rgba(11,31,22,.58) 100%); }
-  .ab-trio { grid-template-columns:1fr; }
-  .ab-card--side, .ab-card--mid { aspect-ratio:4/3; }
+  /* Three columns come out at about 100px on a phone. Two, and the middle
+     column drops its offset so the rows line up. */
+  .ab-mosaic { grid-template-columns:repeat(2,1fr); max-width:none; }
+  .ab-col--mid { margin-top:0; }
+  .ab-col:last-child { grid-column:1 / -1; flex-direction:row; }
+  .ab-col:last-child .ab-shot { flex:1 1 0; aspect-ratio:1/1; }
   .ab-why { columns:1; }
   /* A 100vh pane behind a section only a little taller than the screen leaves
      the copy nothing to travel over, so the stages get their own floor. */
@@ -636,6 +646,9 @@ img { display:block; }
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <div data-garch="50,21" style="position:relative; background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
       <img src="uploads/eco-him-14.jpg" alt="" style="pointer-events:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.13;">
+      <!-- The stage below fades in from flat #0B1F16; fade this panel out to the
+           same colour or the two meet as a visible step. -->
+      <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; height:300px; background:linear-gradient(180deg,rgba(11,31,22,0),#0B1F16);"></div>
       <div style="position:relative; max-width:900px; margin:0 auto; padding:clamp(66px,10vw,130px) clamp(20px,3vw,44px) clamp(56px,7vw,92px); text-align:center;">
         <div class="bk-eyebrow">ECOSOPHY AESTHETIC SPA</div>
         <h2 class="ab-h2" style="margin-top:14px;">A FLOOR OF OUR OWN</h2>
@@ -649,20 +662,39 @@ img { display:block; }
   <div class="ab-stage" style="background:#0B1F16;">
     <div class="ab-back ab-back--faint"><img src="uploads/eco-him-14.jpg" alt=""></div>
     <div class="ab-flow">
-      <div data-gsection style="max-width:1180px; margin:0 auto; padding:clamp(60px,8vw,110px) clamp(20px,3vw,44px) clamp(30px,4vw,60px);">
-        <div class="ab-trio">
-          <div class="ab-card ab-card--side" data-gy="0.05" data-go="0,1" data-gs="0.93,1">
-            <img src="uploads/eco-him-03.jpg" alt="A therapist at work">
-            <div class="ab-cap">MASSAGE</div>
+      <div data-gsection style="max-width:1180px; margin:0 auto; padding:clamp(60px,8vw,110px) clamp(20px,3vw,44px) clamp(40px,5vw,70px);">
+        <div class="ab-mosaic">
+          <div class="ab-col" data-gy="0.09">
+            <figure class="ab-shot ab-shot--tall" data-go="0,1" data-gs="0.93,1">
+              <img src="uploads/eco-him-03.jpg" alt="A therapist at work">
+              <figcaption class="ab-cap">MASSAGE</figcaption>
+            </figure>
+            <figure class="ab-shot" data-go="0,1" data-gs="0.93,1">
+              <img src="uploads/photo_2026-08-02_19-37-29.jpg" alt="The gent reception">
+              <figcaption class="ab-cap">GROOMING</figcaption>
+            </figure>
           </div>
-          <div class="ab-card ab-card--mid" data-gy="-0.02" data-go="0,1" data-gs="0.89,1">
-            <img src="uploads/imgi_33_man-getting-a-facial-treatment.jpg" alt="An advanced facial">
-            <div class="ab-cap">SKIN</div>
+          <div class="ab-col ab-col--mid" data-gy="-0.05">
+            <figure class="ab-shot" data-go="0,1" data-gs="0.9,1">
+              <img src="uploads/imgi_33_man-getting-a-facial-treatment.jpg" alt="An advanced facial">
+              <figcaption class="ab-cap">SKIN</figcaption>
+            </figure>
+            <figure class="ab-shot ab-shot--tall" data-go="0,1" data-gs="0.9,1">
+              <img src="uploads/eco-him-14.jpg" alt="The Moroccan bath">
+              <figcaption class="ab-cap">THE BATH</figcaption>
+            </figure>
           </div>
-          <div class="ab-card ab-card--side" data-gy="-0.05" data-go="0,1" data-gs="0.93,1">
-            <img src="uploads/eco-him-14.jpg" alt="The Moroccan bath">
-            <div class="ab-cap">THE BATH</div>
-          </div></div>
+          <div class="ab-col" data-gy="0.13">
+            <figure class="ab-shot ab-shot--tall" data-go="0,1" data-gs="0.93,1">
+              <img src="uploads/eco-him-19.jpg" alt="Body contouring">
+              <figcaption class="ab-cap">RECOVERY</figcaption>
+            </figure>
+            <figure class="ab-shot" data-go="0,1" data-gs="0.93,1">
+              <img src="uploads/eco-him-15.jpg" alt="The sauna">
+              <figcaption class="ab-cap">SAUNA &amp; JACUZZI</figcaption>
+            </figure>
+          </div>
+        </div>
       </div>
       <div style="max-width:1080px; margin:0 auto; padding:clamp(46px,6vw,84px) clamp(20px,3vw,44px) clamp(80px,10vw,140px);">
         <div class="bk-eyebrow" style="text-align:center;">WHY ECOSOPHY</div>
