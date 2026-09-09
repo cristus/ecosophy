@@ -112,6 +112,20 @@ img { display:block; }
   font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
 @media (prefers-reduced-motion: reduce) { .ab-shot img { animation:none; } }
 
+/* The hero photograph, framed on the sign rather than on the middle of the
+   room. The 1.06-1.18 parallax scale works off the right edge because the
+   wordmark ends at 98.5% of the frame and the louvres on the left are the part
+   worth losing; object-position drops the visible band so the script clears the
+   header. Measured clear at every width from 1024 to 2560. */
+.gab-photo { position:absolute; inset:-14% 0; opacity:.95; will-change:transform;
+  transform-origin:100% 50%; }
+.gab-photo img { width:100%; height:100%; object-fit:cover; object-position:50% 30%; }
+@media (max-width: 760px) {
+  /* Height-driven here, so less overhang means less magnification, and the
+     crop is biased right to keep the start of the word on screen. */
+  .gab-photo { inset:-3% 0; transform-origin:0 50%; }
+  .gab-photo img { object-position:78% 30%; }
+}
 .ab-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2vw,26px); }
 .ab-tile { border:1px solid rgba(201,168,96,.24); border-radius:16px; padding:clamp(18px,2.2vw,26px);
   background:rgba(11,31,22,.55); }
@@ -634,12 +648,12 @@ img { display:block; }
     <!-- The photo is inset -14% and scales to 1.18, so it needs the clip the
          hero no longer carries. -->
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.95; will-change:transform;">
-        <img src="uploads/eco-him-12.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
+      <div class="gab-photo" data-gy="0.16" data-gs="1.06,1.18">
+        <img src="uploads/eco-him-12.jpg" alt="The reception, under the Ecosophy sign">
       </div>
     </div>
     <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(112% 78% at 50% 63%,rgba(11,31,22,.88) 0%,rgba(11,31,22,.72) 34%,rgba(11,31,22,.34) 66%,rgba(11,31,22,.12) 100%),linear-gradient(180deg,rgba(14,39,28,.68) 0%,rgba(14,39,28,0) 20%,rgba(14,39,28,0) 74%,rgba(14,39,28,.72) 100%);"></div>
-    <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
+    <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px 22px 0;">
       <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
       <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#E4C778; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">ABOUT US</h1>
       <div class="bk-rise" style="animation-delay:.4s; font-size:13.5px; line-height:1.95; color:#A9B8AB; max-width:46ch; margin-top:16px;">A men-only floor in Ajman for grooming, skin, recovery and the bath — with its own entrance.</div>
