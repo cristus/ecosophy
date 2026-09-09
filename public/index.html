@@ -125,6 +125,13 @@ a:hover { color:#B98F3E; }
     background:linear-gradient(180deg, rgba(11,31,22,.22) 0%, rgba(11,31,22,.17) 34%, rgba(11,31,22,.34) 74%, rgba(11,31,22,.52) 100%) !important;
   }
 }
+/* Side by side at 26px the two marks are the same gold - both measure 182 mean
+   ink luminance - but not the same weight: the lion fills its wreath while the
+   woman is an open face inside a finer one, 12.8% ink coverage against 15.6%.
+   Downscaled 100x from 2633px, her thinner strokes lose more to antialiasing
+   and the mark reads dull beside his. Lifting the ink brings the perceived
+   weight back level without touching the size or the drawing. */
+.sw-foot-mark-fine { filter:brightness(1.22) saturate(1.08); }
 /* Phones: footer links are stacked text at ~14-26px tall, well under a
    comfortable thumb target, so give each one a 40px row of its own. */
 @media (max-width: 760px) {
@@ -182,7 +189,7 @@ a:hover { color:#B98F3E; }
            and its links are the two of them. Kept in their own row so they stay
            side by side when .sw-foot-brand stacks into a column on a phone. -->
       <span style="display:flex; align-items:center; gap:7px;">
-        <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
+        <img class="sw-foot-mark-fine" src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
         <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px;">
       </span>
       <img src="assets/wordmark-gold.png" alt="Ecosophy" style="height:31px; width:auto; display:block;">
