@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gallery — Ecosophy Aesthetic Spa, Dubai</title>
+<title>Gallery — Ecosophy Aesthetic Spa Men Care Center, Ajman</title>
 <meta name="description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
 <link rel="icon" type="image/png" href="/favicons/mark-man-gold-180.png">
 <link rel="apple-touch-icon" href="/favicons/mark-man-gold-180.png">
@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ecosophy">
 <meta property="og:locale" content="en_AE">
-<meta property="og:title" content="Gallery — Ecosophy Aesthetic Spa, Dubai">
+<meta property="og:title" content="Gallery — Ecosophy Aesthetic Spa Men Care Center, Ajman">
 <meta property="og:description" content="Inside the gentlemen's side: hammam, sauna, treatment rooms, grooming and recovery, photographed where they happen.">
 <meta property="og:url" content="https://ecosophy.pages.dev/gent-gallery">
 <meta name="twitter:card" content="summary_large_image">
@@ -270,19 +270,27 @@ img { display:block; }
       var steps = el.children.length - 1;
       var content_w = steps * pitch + bw2;
       if (content_w < rs.width - 8) {
-        var q2 = clamp((vh - rs.top) / (vh * 0.85), 0, 1);
-        var u2 = q2 * steps;
-        var i2 = Math.floor(u2), fr = u2 - i2;
-        if (i2 >= steps) { i2 = steps - 1; fr = 1; }
-        var fe = clamp((fr - 0.5) * 3.2 + 0.5, 0, 1);
-        fe = fe * fe * (3 - 2 * fe);
-        var idx = steps - (i2 + fe);
         // The row carries its own left padding, so the first bubble does not
-        // start at the content edge; without it every park sits a few px right.
+        // start at the content edge; without it the rest sits a few px right.
         var pad_l = parseFloat(getComputedStyle(el).paddingLeft) || 0;
-        var tx2 = rs.width / 2 - (pad_l + idx * pitch + bw2 / 2);
+        // Resting place: the whole group of bubbles on the centre line. This
+        // used to step the row from one bubble to the next the whole way down
+        // the page, so it never settled - it just slid. /gallery was fixed and
+        // this page was left behind.
+        var mid_x = rs.width / 2 - (pad_l + content_w / 2);
+        // Same timing as the arch above - in from the bottom of the screen,
+        // done by the time the row reaches the middle - so the two settle
+        // together instead of one still moving after the other has stopped.
+        var q2 = clamp((vh * 1.05 - rs.top) / (vh * 0.55), 0, 1);
+        q2 = q2 * q2 * (3 - 2 * q2);
+        var lead_in = Math.min(rs.width * 0.28, 260);
+        var tx2 = mid_x - lead_in * (1 - q2);
+        // Damped like the arch: a wheel notch moves the row a long way in one
+        // frame, and easing toward the target turns that step into a glide.
+        if (el.__snapx == null) el.__snapx = tx2;
+        el.__snapx += (tx2 - el.__snapx) * 0.075;
         el.style.willChange = 'transform';
-        el.style.transform = 'translateX(' + tx2.toFixed(1) + 'px)';
+        el.style.transform = 'translateX(' + el.__snapx.toFixed(1) + 'px)';
       } else {
         // Narrow screens: the bubbles already overflow, so leave the native
         // horizontal scroll alone rather than fighting it with a transform.
@@ -705,7 +713,7 @@ img { display:block; }
   <div data-gsection style="position:relative; height:380vh;">
     <div style="position:sticky; top:0; height:100vh; overflow:hidden; background:#060F0B;">
       <div data-gs="1.22,1.0" style="position:absolute; inset:0; will-change:transform;">
-        <img src="uploads/gent-gal-room-2.jpg" alt="The shower room at Ecosophy Aesthetic Spa" style="width:100%; height:100%; object-fit:cover;">
+        <img src="uploads/gent-gal-room-2.jpg" alt="The shower room at Ecosophy Aesthetic Spa Men Care Center" style="width:100%; height:100%; object-fit:cover;">
       </div>
       <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(6,16,11,.62),rgba(6,16,11,.24) 42%,rgba(6,16,11,.78));"></div>
       <div data-go="0,1" style="position:absolute; left:0; right:0; bottom:clamp(48px,10vh,120px); text-align:center; padding:0 22px;">
@@ -818,7 +826,7 @@ img { display:block; }
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
       <div class="gal-lead">The same house, the same hours — the gentlemen’s entrance is around the side.</div>
       <div class="gal-frame gal-wide" data-gslats="12" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
-        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Aesthetic Spa" data-gy="0.05" style="object-position:50% 30%;">
+        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Aesthetic Spa Men Care Center" data-gy="0.05" style="object-position:50% 30%;">
       </div>
       <div class="gal-frame gal-wide" data-gslats="12" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
         <img src="uploads/photo_2026-08-02_19-37-25.jpg" alt="The gentlemen’s lounge" data-gy="-0.04">
@@ -861,7 +869,7 @@ img { display:block; }
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>
         <div style="font-size:12.5px; line-height:2.1; margin-top:10px; display:flex; flex-direction:column;">
-          <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty Lounge</a>
+          <a href="/for-her" style="color:#D7DECF;">Ecosophy Beauty Center &amp; SPA</a>
           <a href="/" style="color:#D7DECF;">Switch world</a>
         </div>
       </div>
