@@ -347,7 +347,12 @@ Now every photograph has **one canonical filename** and belongs to one page:
 | For her | `eco-her-room-*`, `-makeup-2`… (23) | `eco-her-hammam-3`, `-portrait-*`… (23) |
 | For him | `775244964`, `imgi_*`, `eco-him-machine`… (14) | `gent-gal-*` (20) |
 
-**For him the two sets are completely disjoint**, and `/index` uses a third
+**For him the two sets now share exactly one photograph**: the lounge shot
+`photo_2026-08-02_19-37-25.jpg`. The gallery slot for it is captioned “The
+gentlemen’s lounge” and nothing else in the men’s library is that room, so the
+choice was to share it or to caption a reception desk as a lounge. The nearest
+alternative, `eco-him-12`, is the same desk as `gent-gal-centre-1` and would
+have rebuilt the duplication this replaced. `/index` uses a third
 photo (`eco-him-reception.jpg`) that neither page shows.
 
 **For her thirteen photographs appear on both pages.** Nine of those are
