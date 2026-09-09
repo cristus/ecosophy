@@ -64,18 +64,52 @@ a:hover { color:#B98F3E; }
     background:linear-gradient(180deg, rgba(11,31,22,.10) 0%, rgba(11,31,22,.05) 34%, rgba(11,31,22,.22) 74%, rgba(11,31,22,.42) 100%) !important;
   }
   .sw-copy {
-    padding-top:clamp(24px,4vh,50px) !important;
+    /* The block is bottom-anchored, so anything taller than the card overflows
+       upward and the card's overflow:hidden eats the wreath first. On a 360x740
+       phone the two cards are only ~210px each, so the padding has to come down
+       with them or the mark is cut in half. */
+    padding-top:clamp(12px,2.2vh,32px) !important;
+    padding-bottom:clamp(14px,2.4vh,34px) !important;
     background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.28) 44%, rgba(11,31,22,.70) 100%) !important;
   }
+  /* Tighten the stack itself: the gaps between mark, name, line and pill are
+     tuned for a tall desktop card and are pure overflow on a short one. */
+  .sw-copy > div:nth-of-type(2) { margin-top:1px !important; }
+  .sw-copy > div:last-child > div:first-child { margin-top:6px !important; }
+  .sw-copy > div:last-child > div:last-child { margin-top:10px !important; padding:9px 26px !important; }
   /* With the layers pulled back, the gold script sits on a bright part of the
      photograph. Carry the legibility on the type instead of on more darkening,
      so the room behind it stays visible. */
   .sw-copy div { text-shadow:0 2px 14px rgba(11,31,22,.9), 0 1px 3px rgba(11,31,22,.7); }
 }
 /* The wreath sits at the very top of the card, where both layers are lightest,
-   and it is gold leaf on a warm photograph — it washes out completely. Give it
-   its own shadow rather than darkening the frame behind it. */
-.sw-copy img { filter:drop-shadow(0 2px 10px rgba(11,31,22,.9)) drop-shadow(0 1px 2px rgba(11,31,22,.65)); }
+   and it is thin gold line art on a warm, busy photograph. A drop-shadow alone
+   only haloes it — the strokes still fight the detail behind them. The radial
+   shows through the PNG's own transparency and gives them a pool to sit on,
+   which reads as depth rather than as a badge stuck on the photo. */
+.sw-copy img {
+  background:radial-gradient(circle closest-side, rgba(11,31,22,.62) 0%, rgba(11,31,22,.46) 56%, rgba(11,31,22,0) 100%);
+  border-radius:50%;
+  filter:drop-shadow(0 1px 2px rgba(11,31,22,.95)) drop-shadow(0 3px 12px rgba(11,31,22,.7));
+}
+/* Short phones squeeze the two cards to ~220px, which is less than the stack
+   needs even trimmed. Take the difference out of the wreath rather than the
+   words: at 40px it still reads, and nothing is cut off the top of it. */
+@media (max-width: 760px) and (max-height: 800px) {
+  .sw-copy img { width:40px !important; height:40px !important; }
+  .sw-copy { padding-top:10px !important; padding-bottom:12px !important; }
+}
+/* Below ~680px of viewport the cards fall to ~170px and the stack will not fit
+   at any trim — the switcher is a fixed 100vh box, so the overflow lands on the
+   wreath and beheads it. Letting the section grow is not an option: the cards
+   are flex:1 1 0 and collapse to nothing in an auto-height column. So drop the
+   ENTER pill instead, which is the one thing on the card that carries no
+   information — the whole card is already the link. That frees enough for the
+   logo to sit whole. Guarded on height as well as width, so a normal phone
+   keeps its pill. */
+@media (max-width: 760px) and (max-height: 680px) {
+  .sw-copy > div:last-child > div:last-child { display:none !important; }
+}
 /* Both cards run the same veil, but the two photographs are not equally bright:
    the men's averages 161 against the women's 137, so the identical gradient
    reads as far less of it and that card looks flat and pale beside the other.
@@ -144,7 +178,13 @@ a:hover { color:#B98F3E; }
 <div data-screen-label="Footer" style="background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:clamp(24px,3.4vw,34px) 20px;">
   <div class="sw-foot" style="max-width:1180px; margin:0 auto; display:flex; gap:20px 34px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
     <div class="sw-foot-brand" style="display:flex; align-items:center; gap:10px;">
-      <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
+      <!-- Both marks, not just the women's: this page belongs to neither world
+           and its links are the two of them. Kept in their own row so they stay
+           side by side when .sw-foot-brand stacks into a column on a phone. -->
+      <span style="display:flex; align-items:center; gap:7px;">
+        <img src="assets/mark-woman-gold.png" alt="" style="width:26px; height:26px;">
+        <img src="assets/mark-man-gold.png" alt="" style="width:26px; height:26px;">
+      </span>
       <img src="assets/wordmark-gold.png" alt="Ecosophy" style="height:31px; width:auto; display:block;">
       <span style="font-size:var(--fs-sm); letter-spacing:2.5px; color:#8FA192;">AJMAN, UAE</span>
     </div>
@@ -182,7 +222,11 @@ class Component extends DCLogic {
       himDetail: isMobile ? 'auto' : (hover === 'him' ? '96px' : '0px'),
       herDetailOpacity: isMobile ? 1 : (hover === 'her' ? 1 : 0),
       himDetailOpacity: isMobile ? 1 : (hover === 'him' ? 1 : 0),
-      markSize: isMobile ? '104px' : 'clamp(58px,6vw,84px)',
+      // 104px was larger than the desktop mark and the phone card is a third
+      // the height: the copy block ran 353px inside a 267px card, so the wreath
+      // overflowed 52px above the top edge and the card clipped it. Nobody saw
+      // it while it was washing out anyway; now that it reads, it has to fit.
+      markSize: isMobile ? '56px' : 'clamp(58px,6vw,84px)',
     };
   }
 }
