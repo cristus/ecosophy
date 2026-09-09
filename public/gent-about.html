@@ -112,6 +112,14 @@ img { display:block; }
   font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
 @media (prefers-reduced-motion: reduce) { .ab-shot img { animation:none; } }
 
+.ab-grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,2vw,26px); }
+.ab-tile { border:1px solid rgba(201,168,96,.24); border-radius:16px; padding:clamp(18px,2.2vw,26px);
+  background:rgba(11,31,22,.55); }
+.ab-tile h3 { font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(16px,1.7vw,20px);
+  letter-spacing:.08em; color:#E4C778; margin:0 0 8px; }
+.ab-two { display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(26px,4vw,64px); }
+.ab-rule { height:1px; background:rgba(201,168,96,.18); margin:clamp(46px,6vw,84px) 0 0; }
+@media (max-width: 860px) { .ab-grid3, .ab-two { grid-template-columns:1fr; } }
 .ab-why { columns:2; column-gap:clamp(26px,4vw,70px); margin:0; padding:0; }
 .ab-why li { break-inside:avoid; list-style:none; position:relative; padding:11px 0 11px 26px;
   font-size:13.5px; line-height:1.75; color:#CBD6C4; border-bottom:1px solid rgba(201,168,96,.13); }
@@ -626,11 +634,11 @@ img { display:block; }
     <!-- The photo is inset -14% and scales to 1.18, so it needs the clip the
          hero no longer carries. -->
     <div style="position:absolute; inset:0; overflow:hidden;">
-      <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.42; will-change:transform;">
+      <div data-gy="0.16" data-gs="1.06,1.18" style="position:absolute; inset:-14% 0; opacity:.95; will-change:transform;">
         <img src="uploads/eco-him-12.jpg" alt="" style="width:100%; height:100%; object-fit:cover;">
       </div>
     </div>
-    <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg,rgba(14,39,28,.55),rgba(14,39,28,.95));"></div>
+    <div style="pointer-events:none; position:absolute; inset:0; background:radial-gradient(112% 78% at 50% 63%,rgba(11,31,22,.88) 0%,rgba(11,31,22,.72) 34%,rgba(11,31,22,.34) 66%,rgba(11,31,22,.12) 100%),linear-gradient(180deg,rgba(14,39,28,.68) 0%,rgba(14,39,28,0) 20%,rgba(14,39,28,0) 74%,rgba(14,39,28,.72) 100%);"></div>
     <div data-gherocopy="0.22,0.5,0.35" style="position:relative; z-index:4; will-change:transform,opacity; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 22px;">
       <div class="bk-rise bk-eyebrow" style="animation-delay:.15s;">ECOSOPHY · FOR HIM</div>
       <h1 class="bk-rise" style="animation-delay:.28s; font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(40px,7vw,92px); letter-spacing:.05em; color:#E4C778; line-height:1.06; margin:16px 0 0; text-shadow:0 8px 34px rgba(0,0,0,.7);">ABOUT US</h1>
@@ -643,6 +651,7 @@ img { display:block; }
   <!-- Intro. Inside the arch, so it keeps the hand-off every inside page has.
        The photograph behind it is a flat layer rather than a sticky one for the
        same reason the stages below sit outside this panel: the arch clips. -->
+  <!-- Intro. Inside the arch, so it keeps the hand-off every inside page has. -->
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <div data-garch="50,21" style="position:relative; background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
       <img src="uploads/eco-him-14.jpg" alt="" style="pointer-events:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.13;">
@@ -650,15 +659,16 @@ img { display:block; }
            same colour or the two meet as a visible step. -->
       <div style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; height:300px; background:linear-gradient(180deg,rgba(11,31,22,0),#0B1F16);"></div>
       <div style="position:relative; max-width:900px; margin:0 auto; padding:clamp(66px,10vw,130px) clamp(20px,3vw,44px) clamp(56px,7vw,92px); text-align:center;">
-        <div class="bk-eyebrow">ECOSOPHY AESTHETIC SPA</div>
-        <h2 class="ab-h2" style="margin-top:14px;">A FLOOR OF OUR OWN</h2>
-        <p class="ab-body" style="max-width:64ch; margin:22px auto 0;">Ecosophy Aesthetic Spa is a premium gentlemen’s grooming, body and wellness destination in Ajman, UAE. From master barbers and beard specialists to advanced facials, Dermapen&nbsp;4 microneedling, sports recovery and body contouring, Moroccan bath and Balinese massage, Ecosophy brings a full gentlemen’s grooming and wellness menu together under one roof.</p>
-        <div class="ab-strip" style="margin-top:clamp(28px,3.6vw,44px);"><span>MASTER BARBERS</span><span>BEARD SCULPTING</span><span>HOT TOWEL SHAVE</span><span>DERMAPEN 4 BY DERMAPENWORLD™</span><span>ADVANCED FACIALS</span><span>SPORTS RECOVERY</span><span>MOROCCAN BATH</span><span>MASSAGE &amp; SPA</span></div>
+        <div class="bk-eyebrow">ECOSOPHY AESTHETIC SPA · MEN CARE CENTER</div>
+        <h2 class="ab-h2" style="margin-top:14px;">CREATED FOR MEN</h2>
+        <p class="ab-body" style="max-width:64ch; margin:22px auto 0;">Ecosophy Aesthetic Spa – Men Care Center is a premium men’s wellness, grooming and aesthetic care destination in Ajman, UAE. Created exclusively for men, it brings professional body care, relaxation, advanced non-invasive aesthetic treatments and personal grooming together in a private, sophisticated environment.</p>
+        <p class="ab-body" style="max-width:64ch; margin:18px auto 0;">The philosophy runs past traditional grooming: wellness, recovery, appearance and preventive self-care — physical recovery, skin health, body maintenance, relaxation and overall well-being.</p>
+        <div class="ab-strip" style="margin-top:clamp(28px,3.6vw,44px);"><span>PREMIUM MEN’S WELLNESS</span><span>AESTHETIC CARE</span><span>MASSAGE</span><span>MOROCCAN BATH</span><span>INFRARED SAUNA</span><span>GROOMING</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Stage one. One photograph held still behind the pictures and the list. -->
+  <!-- Stage one. One photograph held still behind the pictures and the lists. -->
   <div class="ab-stage" style="background:#0B1F16;">
     <div class="ab-back ab-back--faint"><img src="uploads/eco-him-14.jpg" alt=""></div>
     <div class="ab-flow">
@@ -671,16 +681,16 @@ img { display:block; }
             </figure>
             <figure class="ab-shot" data-go="0,1" data-gs="0.93,1">
               <img src="uploads/photo_2026-08-02_19-37-29.jpg" alt="The gent reception">
-              <figcaption class="ab-cap">GROOMING</figcaption>
+              <figcaption class="ab-cap">THE CENTRE</figcaption>
             </figure>
           </div>
           <div class="ab-col ab-col--mid" data-gy="-0.05">
             <figure class="ab-shot" data-go="0,1" data-gs="0.9,1">
               <img src="uploads/imgi_33_man-getting-a-facial-treatment.jpg" alt="An advanced facial">
-              <figcaption class="ab-cap">SKIN</figcaption>
+              <figcaption class="ab-cap">AESTHETIC CARE</figcaption>
             </figure>
             <figure class="ab-shot ab-shot--tall" data-go="0,1" data-gs="0.9,1">
-              <img src="uploads/eco-him-14.jpg" alt="The Moroccan bath">
+              <img src="uploads/eco-him-07.jpg" alt="The Moroccan bath wet room">
               <figcaption class="ab-cap">THE BATH</figcaption>
             </figure>
           </div>
@@ -691,16 +701,25 @@ img { display:block; }
             </figure>
             <figure class="ab-shot" data-go="0,1" data-gs="0.93,1">
               <img src="uploads/eco-him-15.jpg" alt="The sauna">
-              <figcaption class="ab-cap">SAUNA &amp; JACUZZI</figcaption>
+              <figcaption class="ab-cap">SAUNA</figcaption>
             </figure>
           </div>
         </div>
       </div>
+
+      <div style="max-width:1000px; margin:0 auto; padding:clamp(40px,5vw,70px) clamp(20px,3vw,44px) 0; text-align:center;">
+        <div class="bk-eyebrow">OUR CONCEPT</div>
+        <h2 class="ab-h2" style="margin-top:14px;">MEN TO MEN</h2>
+        <p class="ab-body" style="max-width:60ch; margin:20px auto 0;">A dedicated men-to-men wellness concept, with professional male therapists delivering massage and body-care services — including experienced Indonesian specialists. Every treatment follows an established protocol, with attention to hygiene, privacy, professionalism and your comfort.</p>
+        <div class="ab-strip" style="margin-top:26px;"><span>WELLNESS</span><span>RECOVERY</span><span>AESTHETIC CARE</span><span>GROOMING</span><span>RELAXATION</span></div>
+      </div>
+
       <div style="max-width:1080px; margin:0 auto; padding:clamp(46px,6vw,84px) clamp(20px,3vw,44px) clamp(80px,10vw,140px);">
         <div class="bk-eyebrow" style="text-align:center;">WHY ECOSOPHY</div>
         <h2 class="ab-h2" style="text-align:center; margin-top:14px;">WHAT YOU WILL FIND HERE</h2>
-        <ul class="ab-why" style="margin-top:clamp(30px,4vw,52px);"><li>A men-only floor with its own entrance, lounge and treatment rooms</li><li>Professional male therapists, men to men</li><li>Master barbers and beard specialists</li><li>Hot towel shaving</li><li>Dermapen 4 by DermapenWorld™ microneedling</li><li>Advanced aesthetic facials for men’s skin</li><li>Sports recovery and deep tissue work</li><li>Shockwave and body-contouring technology</li><li>Traditional Moroccan bath</li><li>Infrared sauna and jacuzzi</li><li>Balinese massage from therapists trained at home</li><li>Customized recovery and wellness packages</li><li>Personalized skincare programs</li><li>An international team</li><li>A calm, private environment</li><li>Open daily, late</li></ul>
-      </div></div>
+        <ul class="ab-why" style="margin-top:clamp(30px,4vw,52px);"><li><strong style="color:#EBD9A6; font-weight:600;">Men-focused concept</strong><br>A dedicated environment for men’s wellness, not a men’s corner of somewhere else.</li><li><strong style="color:#EBD9A6; font-weight:600;">Professional male therapists</strong><br>Trained male professionals, including experienced Indonesian specialists.</li><li><strong style="color:#EBD9A6; font-weight:600;">One concept, not six errands</strong><br>Massage, body care, aesthetics, sauna, Moroccan bath and grooming under one roof.</li><li><strong style="color:#EBD9A6; font-weight:600;">Privacy and comfort</strong><br>Discretion and comfort are part of the protocol, not an afterthought.</li><li><strong style="color:#EBD9A6; font-weight:600;">Customized programs</strong><br>Individual and corporate, built around your goals.</li><li><strong style="color:#EBD9A6; font-weight:600;">Ajman-based</strong><br>Serving individual, corporate and government clients.</li></ul>
+      </div>
+    </div>
   </div>
 
   <!-- Stage two. The photograph stays put for the whole passage of the quote. -->
@@ -710,16 +729,49 @@ img { display:block; }
       <div style="min-height:170vh; display:flex; align-items:center;">
         <div style="max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,120px) clamp(20px,3vw,44px); width:100%;">
           <div style="max-width:60ch;">
-            <div class="bk-eyebrow">THE ECOSOPHY EXPERIENCE</div>
-            <blockquote class="ab-quote" style="margin-top:20px;">&ldquo;A dedicated men-to-men wellness concept — professional male therapists, a private floor, and the time to use it.&rdquo;</blockquote>
-            <p class="ab-body" style="margin-top:26px; max-width:52ch;">A cut and a beard sculpt, a facial, an hour of deep tissue, the bath, or the whole circuit — whatever brings you in, the visit is built around you.</p>
+            <div class="bk-eyebrow">OUR MISSION</div>
+            <blockquote class="ab-quote" style="margin-top:20px;">&ldquo;To redefine men’s self-care in Ajman — to make professional wellness and aesthetic care a regular part of modern life rather than an occasional treat.&rdquo;</blockquote>
+            <p class="ab-body" style="margin-top:26px; max-width:52ch;">Recover from physical stress, keep skin and body in good order, relax properly, build a routine you actually keep — in a private environment, to a standard that holds.</p>
           </div>
         </div>
-      </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values, vision, and the corporate work -->
+  <div style="position:relative; background:#0B1F16;">
+    <div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,110px) clamp(20px,3vw,44px) 0;">
+      <div class="bk-eyebrow" style="text-align:center;">OUR VALUES</div>
+      <h2 class="ab-h2" style="text-align:center; margin-top:14px;">WHAT WE HOLD TO</h2>
+      <div class="ab-grid3" style="margin-top:clamp(30px,4vw,52px);">
+        <div class="ab-tile"><h3>PROFESSIONALISM</h3><div class="ab-body" style="font-size:13px;">Established protocols on every treatment, followed every time.</div></div>
+        <div class="ab-tile"><h3>HYGIENE</h3><div class="ab-body" style="font-size:13px;">Clinical standards of cleanliness across every room and instrument.</div></div>
+        <div class="ab-tile"><h3>PRIVACY</h3><div class="ab-body" style="font-size:13px;">A private floor, and discretion taken as read.</div></div>
+        <div class="ab-tile"><h3>QUALITY</h3><div class="ab-body" style="font-size:13px;">Equipment, products and training chosen once and kept to.</div></div>
+        <div class="ab-tile"><h3>WELLNESS</h3><div class="ab-body" style="font-size:13px;">Recovery and prevention, not only appearance.</div></div>
+        <div class="ab-tile"><h3>INNOVATION</h3><div class="ab-body" style="font-size:13px;">Non-invasive technology brought in as it proves itself.</div></div>
+      </div>
+
+      <div class="ab-rule"></div>
+
+      <div class="ab-two" style="margin-top:clamp(46px,6vw,84px);">
+        <div>
+          <div class="bk-eyebrow">OUR VISION</div>
+          <h2 class="ab-h2" style="margin-top:12px; font-size:clamp(24px,3.2vw,38px);">A DESTINATION FOR MEN’S WELLNESS</h2>
+          <p class="ab-body" style="margin-top:16px;">To stand among Ajman’s recognized destinations for modern men’s wellness and aesthetic care, and to add to the UAE’s growing wellness culture through preventive care, healthy habits and high-quality personal care for men.</p>
+        </div>
+        <div>
+          <div class="bk-eyebrow">CORPORATE &amp; GOVERNMENT</div>
+          <h2 class="ab-h2" style="margin-top:12px; font-size:clamp(24px,3.2vw,38px);">WELLNESS AT WORK</h2>
+          <p class="ab-body" style="margin-top:16px;">We work with government entities, corporations, institutions, sports organizations and employee wellness programs. Packages are built to the brief and can include:</p>
+          <ul class="ab-why" style="columns:1; margin-top:14px;"><li>Employee massage and recovery packages</li><li>Sports recovery programs</li><li>Stress-management packages</li><li>Infrared sauna programs</li><li>Moroccan bath programs</li><li>Corporate memberships</li><li>Facial and grooming packages</li><li>Customized employee benefits</li></ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Where we are -->
-  <div style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.16);">
+  <div style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.16); margin-top:clamp(64px,8vw,110px);">
     <div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,110px) clamp(20px,3vw,44px);">
       <div class="bk-eyebrow" style="text-align:center;">VISIT US</div>
       <h2 class="ab-h2" style="text-align:center; margin-top:14px;">FIND US IN AJMAN</h2>
