@@ -137,6 +137,44 @@ go with it. The override is content someone set through `?edit=1`, so it has
 not been removed here. `tools/remove-dead-overrides.ps1` is the script for
 pruning that file. Worth checking the other 29 slots in it for the same thing.
 
+### The header badge
+
+Every page runs the same fixed bar, and the badge in the middle of it behaves
+the same way on all of them: a medallion at rest — the wreath in a bordered
+disc with the wordmark beneath it, overhanging the bar — that collapses into a
+compact row the moment the page moves, wreath and wordmark side by side, disc
+gone, sitting inside the 66px band.
+
+Twelve values drive that, all off `this.state.scrolled`:
+
+| | rest | scrolled |
+| --- | --- | --- |
+| `badgeDir` | `column` | `row` |
+| `badgeSize` | 78px / 54px phone | 40px / 34px phone |
+| `badgeWordSize` | 26px / 22px phone | 22px / 19px phone |
+| `badgeMarkFill` | `74%` | `100%` |
+| `badgeGap` | `6px` | `10px` |
+| `badgeWordAlign` | `center` | `flex-start` |
+| `badgeTop` | 12px / 10px phone | 13px / 14px phone |
+| `badgeCircleBg` / `Border` / `Shadow` | disc | all `none` |
+
+Only the two home pages had them. The ten inside pages carried the *same
+markup* with those values written in as constants, so their badge only ever
+changed size — it stayed a column medallion, 81px tall against a 66px bar,
+while the home page's collapsed to 40px. That is the difference you saw
+scrolling from one to the other. All twelve are now measured identical:
+`column/131px/1px border` at rest, `row/40px/no border` scrolled, at 1280 and
+390.
+
+One wrinkle if you touch these: the pages spell the phone test three different
+ways — `heroMobile` on the galleries, `vw < 860` on About and Book,
+`(this.state.vw || 1280) < 860` on Services and the treatment templates. They
+mean the same thing, but a sweep that matches on a fixed string will silently
+skip two thirds of the pages.
+
+The badge's `href` is deliberately *not* uniform: the home pages point at `/`
+(the switcher), the inside pages at their own side's home.
+
 ### The footer
 
 Every page in a world carries the same footer, taken verbatim from that world's

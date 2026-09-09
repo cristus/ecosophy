@@ -192,10 +192,23 @@ img { display:block; }
       // position and the value cannot drift frame over frame.
       var mid = (r.top - prev_y) + r.height / 2 - vh / 2;
       var mid_x = (r.left - prev_x) + r.width / 2 - (window.innerWidth || 1) / 2;
-      var ty = isNaN(gy) ? 0 : -mid * gy;
-      var tx = isNaN(gx) ? 0 : -mid_x * gx;
-      el.__ty = ty; el.__tx = tx;
-      t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
+      var ty_to = isNaN(gy) ? 0 : -mid * gy;
+      var tx_to = isNaN(gx) ? 0 : -mid_x * gx;
+      // Chase the target rather than snapping to it, the same way the arch and
+      // the filter row below already do, and for the same reason: a wheel notch
+      // is 100px in a single frame, so taking the offset straight from scroll
+      // position turns every notch into a visible step and the whole page reads
+      // as hurried. Easing spreads that step over roughly eight frames and lets
+      // the layer keep gliding for a moment after the wheel stops. The page
+      // still scrolls at the browser's own speed -- only the drift is calmed.
+      //
+      // On the first frame there is nothing to ease from, so it takes the exact
+      // value: otherwise every layer would visibly slide into place on load.
+      if (el.__ty == null) el.__ty = ty_to;
+      if (el.__tx == null) el.__tx = tx_to;
+      el.__ty += (ty_to - el.__ty) * 0.13;
+      el.__tx += (tx_to - el.__tx) * 0.13;
+      t += 'translate3d(' + el.__tx.toFixed(1) + 'px,' + el.__ty.toFixed(1) + 'px,0) ';
       if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
     }
 

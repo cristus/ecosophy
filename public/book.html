@@ -120,10 +120,23 @@ img { display:block; }
       // position and the value cannot drift frame over frame.
       var mid = (r.top - prev_y) + r.height / 2 - vh / 2;
       var mid_x = (r.left - prev_x) + r.width / 2 - (window.innerWidth || 1) / 2;
-      var ty = isNaN(gy) ? 0 : -mid * gy;
-      var tx = isNaN(gx) ? 0 : -mid_x * gx;
-      el.__ty = ty; el.__tx = tx;
-      t += 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) ';
+      var ty_to = isNaN(gy) ? 0 : -mid * gy;
+      var tx_to = isNaN(gx) ? 0 : -mid_x * gx;
+      // Chase the target rather than snapping to it, the same way the arch and
+      // the filter row below already do, and for the same reason: a wheel notch
+      // is 100px in a single frame, so taking the offset straight from scroll
+      // position turns every notch into a visible step and the whole page reads
+      // as hurried. Easing spreads that step over roughly eight frames and lets
+      // the layer keep gliding for a moment after the wheel stops. The page
+      // still scrolls at the browser's own speed -- only the drift is calmed.
+      //
+      // On the first frame there is nothing to ease from, so it takes the exact
+      // value: otherwise every layer would visibly slide into place on load.
+      if (el.__ty == null) el.__ty = ty_to;
+      if (el.__tx == null) el.__tx = tx_to;
+      el.__ty += (ty_to - el.__ty) * 0.13;
+      el.__tx += (tx_to - el.__tx) * 0.13;
+      t += 'translate3d(' + el.__tx.toFixed(1) + 'px,' + el.__ty.toFixed(1) + 'px,0) ';
       if (!isNaN(gr)) t += 'rotate(' + (-mid / vh * gr).toFixed(2) + 'deg) ';
     }
 
@@ -483,13 +496,13 @@ img { display:block; }
         <a href="/for-him" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HIM</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
-      <a href="/for-her" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
-        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
-          <img src="assets/mark-woman-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+      <a href="/for-her" title="Back to home" style="position:absolute; left:50%; top:{{ badgeTop }}; transform:translateX(-50%); transform-origin:top center; transition:top .35s ease; z-index:2; display:flex; flex-direction:{{ badgeDir }}; align-items:center; gap:{{ badgeGap }};">
+        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:{{ badgeCircleBg }}; border:{{ badgeCircleBorder }}; box-shadow:{{ badgeCircleShadow }}; transition:width .35s ease, height .35s ease, background .35s ease, box-shadow .35s ease;">
+          <img src="assets/mark-woman-gold.png" alt="" style="width:{{ badgeMarkFill }}; height:{{ badgeMarkFill }}; object-fit:contain;">
         </span>
-        <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
+        <span style="display:flex; flex-direction:column; align-items:{{ badgeWordAlign }}; line-height:1; opacity:{{ badgeWordOpacity }}; transition:opacity .3s ease; pointer-events:none;">
           <img class="hdr-wordmark" src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
-          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">BEAUTY LOUNGE</span>
+          <span style="display:{{ badgeSubShow }}; font-size:{{ badgeSubSize }}; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,.8);">BEAUTY LOUNGE</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
@@ -675,8 +688,21 @@ class Component extends DCLogic {
       toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
       langShow: vw < 860 ? 'none' : 'flex',
       badgeSlotW: this.state.scrolled ? (vw < 860 ? '150px' : '190px') : (vw < 860 ? '54px' : '78px'),
-      badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '46px' : '58px'),
-      badgeWordSize: this.state.scrolled ? (vw < 860 ? '17px' : '19px') : (vw < 860 ? '19px' : '22px'),
+      // The header badge, identical to the two home pages: a medallion at rest
+      // that collapses into a compact row once the page moves, so the bar reads
+      // the same everywhere. Sizes, gaps and the disc all animate together.
+      badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '54px' : '78px'),
+      badgeWordSize: this.state.scrolled ? (vw < 860 ? '19px' : '22px') : (vw < 860 ? '22px' : '26px'),
+      badgeDir: this.state.scrolled ? 'row' : 'column',
+      badgeGap: this.state.scrolled ? '10px' : '6px',
+      badgeMarkFill: this.state.scrolled ? '100%' : '74%',
+      badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
+      badgeWordOpacity: ((vw < 860) && this.state.menuOpen) ? 0 : 1,
+      badgeSubSize: 'var(--fs-xxs)',
+      badgeTop: this.state.scrolled ? (vw < 860 ? '14px' : '13px') : (vw < 860 ? '10px' : '12px'),
+      badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
+      badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
+      badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',
       badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
       waLabel: vw < 860 ? 'BOOK' : 'WHATSAPP',
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''),
