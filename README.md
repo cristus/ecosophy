@@ -358,6 +358,27 @@ third-party runtime dependency** — an unpkg outage cannot take it down.
 
 ## The photography
 
+### The library is duplicated — read this before adding photos
+
+`public/uploads/` holds **115 files for about 70 distinct photographs.** Nearly
+the whole library exists twice: every `eco-her-spa-*`, `eco-her-beauty-*` and
+`eco-him-NN` is a byte-for-byte second copy of a photo that was already there
+under a descriptive name. A fingerprint sweep finds 44 duplicate pairs —
+`gent-gal-hero.jpg == eco-him-14.jpg`, `eco-her-hammam-1.jpg == eco-her-spa-01.jpg`,
+and so on down the list.
+
+This matters beyond disk. The point of the split below is that a visitor moving
+from a home page to its gallery does not see the same pictures twice — and that
+guarantee is only as good as the filenames, because two names for one photograph
+defeat every check that compares them. Before adding an image, fingerprint it
+against what is already there rather than trusting the name.
+
+Consolidating is a job of its own: pick the descriptive name in each pair, point
+every reference at it, delete the copy. Nothing below has been re-verified
+against the duplicates.
+
+
+
 Each side of the house has two photo-heavy pages — a home page (the parallax
 hero rail, the ritual reels, the menu cards) and a gallery — and they are kept
 on **separate photo sets** on purpose. The gallery used to be a straight re-run
@@ -391,6 +412,19 @@ touched. Closing the unavoidable nine needs new photography, not re-shuffling �
 the `images/` folders are fully deployed, and the only unused frames left are a
 near-identical second exterior and three stock Unsplash shots the site
 otherwise avoids.
+
+### The men's Moroccan bath
+
+Every Moroccan Bath image on the men's side used to be
+`hf_20260827_121534…png` — an AI render of a round sunken bath. It was the one
+synthetic frame on a rail of real photographs and read as such, so it is gone:
+the hero rail card, the reel still, the menu card, the catalogue category and
+`ECO.him.imgs.bath` (the hero behind every bath treatment page) all now use
+`eco-him-14.jpg`, a photograph of the room's actual tub. The render is deleted
+— it was 5.9 MB, the heaviest file in `uploads/` — and recoverable from git.
+
+The men's library holds exactly one real Moroccan bath frame, so that photo is
+also `/gent-gallery`'s hero. Nothing else in the pool shows the tub.
 
 ### The gallery hero
 
