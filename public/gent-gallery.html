@@ -63,6 +63,14 @@ img { display:block; }
 @media (max-width: 620px) {
   .gal-art-grid { grid-template-columns:1fr !important; }
 }
+/* The two "Find us in Ajman" frames are 21:9 over portrait photographs, so only
+   a 32% band of each shows. That is a ~160px sliver on a phone, and on the
+   men's reception shot it sliced the Ecosophy sign in half. Half the picture
+   reads far better at that width, and the deeper frame also leaves the crop
+   headroom against the parallax drift. */
+@media (max-width: 760px) {
+  .gal-wide { aspect-ratio:3/2 !important; }
+}
 
 /* ── Reels: ported from the For Him page, so the section stays one design in two places ── */
 .reel-scroll { scrollbar-width:none; }
@@ -782,10 +790,10 @@ img { display:block; }
       <div class="gal-eyebrow">06 — THE CENTRE</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
       <div class="gal-lead">The same house, the same hours — the gentlemen’s entrance is around the side.</div>
-      <div class="gal-frame" data-gslats="12" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
-        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Aesthetic Spa" data-gy="0.05">
+      <div class="gal-frame gal-wide" data-gslats="12" style="margin-top:clamp(34px,4.5vw,58px); aspect-ratio:21/9;">
+        <img src="uploads/gent-gal-centre-1.jpg" alt="Ecosophy Aesthetic Spa" data-gy="0.05" style="object-position:50% 30%;">
       </div>
-      <div class="gal-frame" data-gslats="12" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
+      <div class="gal-frame gal-wide" data-gslats="12" style="margin-top:clamp(14px,1.8vw,26px); aspect-ratio:21/9;">
         <img src="uploads/photo_2026-08-02_19-37-25.jpg" alt="The gentlemen’s lounge" data-gy="-0.04">
       </div>
     </div>
