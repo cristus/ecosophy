@@ -451,18 +451,25 @@ the `images/` folders are fully deployed, and the only unused frames left are a
 near-identical second exterior and three stock Unsplash shots the site
 otherwise avoids.
 
-### The men's Moroccan bath
+### The men’s Moroccan bath
 
-Every Moroccan Bath image on the men's side used to be
+Every Moroccan Bath image on the men’s side used to be
 `hf_20260827_121534…png` — an AI render of a round sunken bath. It was the one
 synthetic frame on a rail of real photographs and read as such, so it is gone:
 the hero rail card, the reel still, the menu card, the catalogue category and
-`ECO.him.imgs.bath` (the hero behind every bath treatment page) all now use
-`eco-him-14.jpg`, a photograph of the room's actual tub. The render is deleted
-— it was 5.9 MB, the heaviest file in `uploads/` — and recoverable from git.
+`ECO.him.imgs.bath` (the hero behind every bath treatment page) all point at one
+photograph now. The render is deleted — 5.9 MB, the heaviest file in `uploads/`
+— and recoverable from git.
 
-The men's library holds exactly one real Moroccan bath frame, so that photo is
-also `/gent-gallery`'s hero. Nothing else in the pool shows the tub.
+The replacement took two goes, which is worth recording. The obvious choice was
+the bath itself (`eco-him-14.jpg`, the tub); at card size it read as a bathroom
+rather than a hammam. The card carries the wet room instead (`eco-him-07.jpg`
+— the bench, glass shower and leaf wall), which also makes the rail consistent,
+since MASSAGE, THE CENTRE and SAUNA are all empty rooms.
+
+The gent film does hold real bath-ritual frames — a therapist scrubbing a client
+on the heated slab, roughly 20–27s into `gent-gal-video.mp4` — if a photograph
+of the treatment is ever wanted in place of a room.
 
 ### The gallery hero
 
