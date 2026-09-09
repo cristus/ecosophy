@@ -32,6 +32,14 @@
 body { margin:0; background:#0B1F16; font-family:'Manrope',sans-serif; color:#E7EDE2; }
 a { color:#E4C778; text-decoration:none; }
 img { display:block; }
+/* Sections that centre short copy inside a tall box so the drift and the slat
+   wipe have room to run. On a phone the copy is a few hundred pixels and the
+   box is still ~280vh, so the content floats with a couple of screens of dead
+   space above and below it - which is what reads as "a huge gap before THE
+   CENTRE" and again before READY WHEN YOU ARE. The effects are driven by each
+   image’s own position in the viewport, not by section progress, so dropping the
+   floor costs nothing but the emptiness. */
+@media (max-width: 760px) { .gal-tall { min-height:0 !important; } }
 @keyframes galRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
 @keyframes galFade { from { opacity:0; } to { opacity:1; } }
 .gal-rise { animation:galRise 1s cubic-bezier(.2,.8,.3,1) both; }
@@ -719,7 +727,7 @@ img { display:block; }
   </div>
 
   <!-- ── 5. The Details · depth stack, layers moving against each other ──── -->
-  <div data-gsection style="position:relative; padding:clamp(90px,13vw,180px) clamp(20px,3vw,44px); overflow:hidden; min-height:250vh; display:flex; align-items:center;">
+  <div data-gsection class="gal-tall" style="position:relative; padding:clamp(90px,13vw,180px) clamp(20px,3vw,44px); overflow:hidden; min-height:250vh; display:flex; align-items:center;">
     <div style="max-width:1520px; margin:0 auto; position:relative;">
       <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(28px,5vw,80px); align-items:center;">
         <div style="position:relative;">
@@ -743,7 +751,7 @@ img { display:block; }
   </div>
 
   <!-- ── 6. The Artistry · staggered columns at three speeds ─────────────── -->
-  <div data-gsection style="position:relative; min-height:270vh; display:flex; align-items:center; padding:clamp(70px,10vw,130px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
+  <div data-gsection class="gal-tall" style="position:relative; min-height:270vh; display:flex; align-items:center; padding:clamp(70px,10vw,130px) clamp(20px,3vw,44px) clamp(90px,13vw,170px); background:linear-gradient(180deg,#0B1F16,#0E2B1C 45%,#0B1F16);">
     <div style="max-width:1520px; margin:0 auto;">
       <div class="gal-eyebrow">05 — THE TREATMENTS</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Skin, recovery and grooming</h2>
@@ -769,7 +777,7 @@ img { display:block; }
   </div>
 
   <!-- ── 7. The Centre · wipe reveal + counter-drifting caption ──────────── -->
-  <div data-gsection style="position:relative; min-height:280vh; display:flex; align-items:center; padding:clamp(70px,10vw,140px) clamp(20px,3vw,44px) clamp(90px,13vw,170px);">
+  <div data-gsection class="gal-tall" style="position:relative; min-height:280vh; display:flex; align-items:center; padding:clamp(70px,10vw,140px) clamp(20px,3vw,44px) clamp(90px,13vw,170px);">
     <div style="max-width:1520px; margin:0 auto;">
       <div class="gal-eyebrow">06 — THE CENTRE</div>
       <h2 class="gal-h2" style="font-size:clamp(30px,4.6vw,62px);">Find us in Ajman</h2>
@@ -813,7 +821,7 @@ img { display:block; }
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
-        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 11:00 AM – 12:00 Midnight</div>
+        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 10:00 AM – 10:00 PM</div>
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>

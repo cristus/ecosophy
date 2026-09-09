@@ -88,6 +88,30 @@ old inline treatment lists, the prices, the old heroes *and* the duplicated
 photography back. Either re-apply all four to the regenerated pages, or bring
 the design sources in line first.
 
+### Tall sections on a phone
+
+`/gallery` and `/gent-gallery` centre short copy inside very tall boxes
+(`min-height:250–280vh` with `display:flex; align-items:center`) so the image
+drift and the slat wipe have room to run. On a desktop the images are wide and
+fill it; on a phone the copy is a few hundred pixels inside a box still ~2.8
+screens tall, so it floats with a couple of screens of dead space above and
+below. On a 390×844 phone THE CENTRE measured 2523px of section around 482px of
+content — 2041px of nothing, which is what reads as a huge gap before the
+heading and again before READY WHEN YOU ARE.
+
+The `.gal-tall` class drops the floor under 760px. Both effects are driven by
+each element's own position in the viewport, not by section progress, so the
+floor costs nothing but the emptiness — THE CENTRE is 642px on a phone now and
+unchanged at 2534px on desktop. Four sections carry the class: THE CENTRE on
+both galleries, plus THE DETAILS and THE TREATMENTS on the gent one. Note that
+the gent DETAILS section writes its properties in a different order
+(`padding; overflow; min-height; display`), so match on the properties rather
+than on a fixed string if you ever sweep for these again.
+
+The pinned sections (`height:380vh` / `420vh` — the bath and the arrival) also
+look mostly empty in a measurement, but that height *is* the scroll runway for
+a sticky child. Leave those alone.
+
 ### The footer
 
 Every page in a world carries the same footer, taken verbatim from that world's
@@ -102,8 +126,13 @@ hiding:
 
 - **the opening hours contradicted themselves.** The strip said *Daily ·
   10:00 – 22:00*; every full footer said *Daily · 11:00 AM – 12:00 Midnight*.
-  The whole site now says the latter, because that is what the home pages say —
-  but nobody has confirmed which is actually right, so check it.
+  Both are now **Daily · 10:00 AM – 10:00 PM**, which is what the sign on the
+  building says — the board by the gate reads WORKING HOURS 10 AM TO 10 PM, and
+  /gallery's own copy already said "open daily from ten in the morning until
+  ten at night". The midnight figure was in six of the footers and was simply
+  wrong; standardising on it first, before the signage turned up, spread it to
+  the other five. The hours live in the footer block on every page, so change
+  them in `/for-her` and `/for-him` and copy the footer out.
 - **the men's gallery and booking pages carried the women's WhatsApp number.**
   `/gent-gallery` hardcoded `+971 58 548 0899` and `/gent-book` defaulted to it.
   Both now use `+971 50 444 5566`. The numbers are per world and easy to get
