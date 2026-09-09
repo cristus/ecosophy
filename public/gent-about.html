@@ -66,6 +66,10 @@ img { display:block; }
 .ab-stage { position:relative; }
 .ab-back { position:sticky; top:0; height:100vh; margin-bottom:-100vh; overflow:hidden; }
 .ab-back img { width:100%; height:100%; object-fit:cover; }
+/* These photographs are portrait (0.67) and the band is 1.72 wide, so cover
+   keeps barely a third of their height. Centred that lands on the crown of
+   the head; aim it at the face instead. */
+.ab-back--photo img { object-position:50% 26%; }
 .ab-back::after { content:''; position:absolute; inset:0; }
 .ab-back--faint::after { background:linear-gradient(180deg,rgba(11,31,22,.93),rgba(11,31,22,.88)); }
 .ab-back--photo::after { background:linear-gradient(90deg,rgba(11,31,22,.86) 0%,rgba(11,31,22,.52) 46%,rgba(11,31,22,.34) 100%); }
@@ -80,7 +84,7 @@ img { display:block; }
 
 /* Three photographs, the middle one carried a little larger and a little
    forward, the outer two drifting at a different rate as the section passes. */
-.ab-trio { display:grid; grid-template-columns:1fr 1.24fr 1fr; gap:clamp(12px,2.2vw,30px); align-items:center; }
+.ab-trio { display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:clamp(12px,1.8vw,24px); align-items:center; max-width:1000px; margin:0 auto; }
 .ab-card { position:relative; overflow:hidden; border-radius:20px; border:1px solid rgba(201,168,96,.3);
   box-shadow:0 40px 80px -40px rgba(0,0,0,.95); }
 .ab-card img { width:100%; height:100%; object-fit:cover; display:block;
@@ -96,8 +100,8 @@ img { display:block; }
 .ab-card:hover { border-color:rgba(201,168,96,.62); box-shadow:0 46px 90px -34px rgba(0,0,0,.98); }
 .ab-card:hover::after { opacity:0; }
 @media (prefers-reduced-motion: reduce) { .ab-card img { animation:none; } }
-.ab-card--side { aspect-ratio:3/4; }
-.ab-card--mid { aspect-ratio:4/5; box-shadow:0 54px 100px -40px rgba(0,0,0,.95); }
+.ab-card--side { aspect-ratio:5/6; }
+.ab-card--mid { aspect-ratio:1/1; box-shadow:0 54px 100px -40px rgba(0,0,0,.95); }
 .ab-cap { position:absolute; left:0; right:0; bottom:0; padding:40px 16px 15px;
   background:linear-gradient(180deg,rgba(11,31,22,0),rgba(11,31,22,.88));
   font-size:var(--fs-lg); letter-spacing:2.2px; color:#EBD9A6; text-align:center; }
@@ -551,13 +555,13 @@ img { display:block; }
         <a href="/for-her" style="display:{{ navShow }}; color:#9FB0A0; white-space:nowrap; border-left:1px solid rgba(201,168,96,.3); padding-left:clamp(8px,0.9vw,13px);" style-hover="color:#E4C778;">⇄ FOR HER</a>
       </div>
       <span style="display:block; width:{{ badgeSlotW }}; height:1px;"></span>
-      <a href="/for-him" title="Back to home" style="position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;">
-        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:radial-gradient(circle at 50% 38%, #1B4630 0%, #0E2B1C 70%); border:1px solid rgba(201,168,96,.55); transition:width .35s ease, height .35s ease;">
-          <img src="assets/mark-man-gold.png" alt="" style="width:74%; height:74%; object-fit:contain;">
+      <a href="/for-him" title="Back to home" style="position:absolute; left:50%; top:{{ badgeTop }}; transform:translateX(-50%); transform-origin:top center; transition:top .35s ease; z-index:2; display:flex; flex-direction:{{ badgeDir }}; align-items:center; gap:{{ badgeGap }};">
+        <span style="flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:{{ badgeSize }}; height:{{ badgeSize }}; border-radius:50%; background:{{ badgeCircleBg }}; border:{{ badgeCircleBorder }}; box-shadow:{{ badgeCircleShadow }}; transition:width .35s ease, height .35s ease, background .35s ease, box-shadow .35s ease;">
+          <img src="assets/mark-man-gold.png" alt="" style="width:{{ badgeMarkFill }}; height:{{ badgeMarkFill }}; object-fit:contain;">
         </span>
-        <span style="display:flex; flex-direction:column; align-items:center; line-height:1; pointer-events:none;">
+        <span style="display:flex; flex-direction:column; align-items:{{ badgeWordAlign }}; line-height:1; opacity:{{ badgeWordOpacity }}; transition:opacity .3s ease; pointer-events:none;">
           <img class="hdr-wordmark" src="assets/wordmark-gold.png" alt="Ecosophy" style="height:calc({{ badgeWordSize }} * 1.72); width:auto; display:block; filter:drop-shadow(0 2px 14px rgba(0,0,0,.75)); transition:height .35s ease;">
-          <span style="display:{{ badgeSubShow }}; font-size:var(--fs-xxs); letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap;">AESTHETIC SPA</span>
+          <span style="display:{{ badgeSubShow }}; font-size:{{ badgeSubSize }}; letter-spacing:2.4px; color:#9FB0A0; margin-top:4px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,.8);">AESTHETIC SPA</span>
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
@@ -761,8 +765,21 @@ class Component extends DCLogic {
       toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
       langShow: vw < 860 ? 'none' : 'flex',
       badgeSlotW: this.state.scrolled ? (vw < 860 ? '150px' : '190px') : (vw < 860 ? '54px' : '78px'),
-      badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '46px' : '58px'),
-      badgeWordSize: this.state.scrolled ? (vw < 860 ? '17px' : '19px') : (vw < 860 ? '19px' : '22px'),
+      // The header badge, identical to the two home pages: a medallion at rest
+      // that collapses into a compact row once the page moves, so the bar reads
+      // the same everywhere. Sizes, gaps and the disc all animate together.
+      badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '54px' : '78px'),
+      badgeWordSize: this.state.scrolled ? (vw < 860 ? '19px' : '22px') : (vw < 860 ? '22px' : '26px'),
+      badgeDir: this.state.scrolled ? 'row' : 'column',
+      badgeGap: this.state.scrolled ? '10px' : '6px',
+      badgeMarkFill: this.state.scrolled ? '100%' : '74%',
+      badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
+      badgeWordOpacity: ((vw < 860) && this.state.menuOpen) ? 0 : 1,
+      badgeSubSize: 'var(--fs-xxs)',
+      badgeTop: this.state.scrolled ? (vw < 860 ? '14px' : '13px') : (vw < 860 ? '10px' : '12px'),
+      badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
+      badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
+      badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',
       badgeSubShow: (this.state.scrolled || vw < 1520) ? 'none' : 'block',
       waLabel: vw < 860 ? 'BOOK' : 'WHATSAPP',
       waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''),
