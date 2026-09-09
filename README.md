@@ -114,7 +114,6 @@ a sticky child. Leave those alone.
 
 ### The switcher cards, and a stale editor override
 
-
 `/index` runs two full-bleed cards. Each carries a veil over the whole card and
 a scrim under the copy; below 760px both are pulled back, because on a phone the
 cards stack at ~267px while the copy block alone is ~368px and the two layers
@@ -137,6 +136,8 @@ the centre at more than four times the resolution, and `.sw-veil--bright` can
 go with it. The override is content someone set through `?edit=1`, so it has
 not been removed here. `tools/remove-dead-overrides.ps1` is the script for
 pruning that file. Worth checking the other 29 slots in it for the same thing.
+
+### The footer
 
 Every page in a world carries the same footer, taken verbatim from that world's
 home page: four columns — brand and address, CONTACT, HOURS, and a cross-link

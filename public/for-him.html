@@ -1078,7 +1078,7 @@ class Component extends DCLogic {
     const L = u => [u, '', ''];
     // One distinct still per ritual, all from this page's own set — /gent-gallery
     // runs its film strip off the photographs its own sections show.
-    const paje = L('uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png');
+    const paje = L('uploads/eco-him-14.jpg');
     const stone = L('uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg');
     const hume = L('uploads/imgi_33_man-getting-a-facial-treatment.jpg');
     const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
@@ -1426,7 +1426,7 @@ class Component extends DCLogic {
     // burger has to take over earlier than the hero breakpoint.
     const navMobile = (this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280)) < 1280;
     const IMGS = {
-      paje: ['uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png','','','Steam, black soap and a full body scrub on heated marble.'],
+      paje: ['uploads/eco-him-14.jpg','','','Steam, black soap and a full body scrub on heated marble.'],
       hume: ['uploads/imgi_26_mens-beauty-treatment.jpg','',''],
       rosa: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','','','Deep cleansing, extraction and hydration in one session.'],
       caishan: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','','','Slow oil-based bodywork with therapists from Bali.'],
@@ -1570,7 +1570,11 @@ class Component extends DCLogic {
           mroom: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','',''],
           lounge1: ['uploads/photo_2026-08-02_19-37-29.jpg','',''],
           lounge2: ['uploads/photo_2026-08-02_19-37-25.jpg','',''],
-          hammam: ['uploads/hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png','',''],
+          // The bath's own tub, not the AI render that used to sit here: it was
+          // the one synthetic image on a rail of real photographs and read as
+          // such. This is the only real Moroccan bath frame the men's library
+          // holds, so it is also /gent-gallery's hero.
+          hammam: ['uploads/eco-him-14.jpg','',''],
           stone: ['uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg','',''],
           leaf: ['uploads/bart-zimny-W5XTTLpk1-I-unsplash.jpg','',''],
           fman: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','',''],

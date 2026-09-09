@@ -447,7 +447,7 @@
     ] }),
 
     C({ key: 'bath', name: 'Moroccan Bath & Relaxation', slot: 'gsvc-cat-spa', ddSlot: 'gdd-cat-Spa',
-      img: 'hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png',
+      img: 'eco-him-14.jpg',
       blurb: 'Moroccan bath, infrared sauna, jacuzzi and the packages that combine them.',
       items: [
       S('Classic Moroccan Bath', 'bath', '45 min', '',
@@ -631,7 +631,7 @@
   // library - the whole IMG table was eco-her-*. These are the men's own.
   w.ECO.him.imgs = {
     massage:  [UP + '775244964_18119167235477475_6941524398570787900_n.jpg', '', ''],
-    bath:     [UP + 'hf_20260827_121534_8d5d46c1-20e0-4b07-a7b9-e0ce0c9c14bc.png', '', ''],
+    bath:     [UP + 'eco-him-14.jpg', '', ''],
     facial:   [UP + 'imgi_33_man-getting-a-facial-treatment.jpg', '', ''],
     water:    [UP + '748718184_18114511022477475_8211076763529339827_n.jpg', '', ''],
     tech:     [UP + 'gent-gal-detail-2.jpg', '', ''],
