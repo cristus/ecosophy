@@ -131,6 +131,33 @@ a:hover { color:#B98F3E; }
    and the mark reads dull beside his. Lifting the ink brings the perceived
    weight back level without touching the size or the drawing. */
 .sw-foot-mark-fine { filter:brightness(1.22) saturate(1.08); }
+/* Desktop cards need a floor. The switcher is sized to the viewport, so on a
+   short one — a 1920x1080 laptop at 150% scaling leaves ~550px of page — the
+   title block takes half and the cards fall to ~260px. The copy stack (wreath,
+   script, name, ENTER) needs ~300px and is bottom-anchored, so it overflowed
+   upward and the card clipped the wreath, while the photograph was cropped to
+   a letterbox strip. Here the section may grow past the viewport and the cards
+   keep at least 400px; the page scrolls a little instead. 400 also covers the
+   narrowed card while the other is hovered, when the men's name runs to four
+   lines. 900px matches the script's isMobile; below it the stacked layout
+   keeps its fixed height and the phone rules above. */
+@media (min-width: 900px) {
+  #choose { height:auto !important; min-height:calc(100vh - 96px) !important; }
+  .sw-doors { min-height:400px !important; }
+}
+/* A short desktop still wants both ENTER pills above the fold, so the heading
+   gives up its air instead: smaller wordmark and title, tighter gaps, and a
+   smaller wreath. That buys the cards back enough that the whole switcher sits
+   in ~520px, while 360px still holds the tallest (hovered-beside) stack. */
+@media (min-width: 900px) and (max-height: 700px) {
+  #choose { padding-top:14px !important; padding-bottom:18px !important; }
+  .sw-head img { height:40px !important; }
+  .sw-head > div:nth-of-type(1) { font-size:30px !important; margin-top:4px !important; }
+  .sw-head > div:nth-of-type(2) { margin-top:2px !important; }
+  .sw-doors { min-height:360px !important; margin-top:12px !important; }
+  .sw-copy img { width:60px !important; height:60px !important; }
+  .sw-copy { padding-top:20px !important; padding-bottom:22px !important; }
+}
 /* Phones: footer links are stacked text at ~14-26px tall, well under a
    comfortable thumb target, so give each one a 40px row of its own. */
 @media (max-width: 760px) {
@@ -145,13 +172,13 @@ a:hover { color:#B98F3E; }
   <svg viewBox="0 0 200 120" style="pointer-events:none; position:absolute; left:-4%; top:12%; width:min(30vw,300px); opacity:.5;"><path d="M10 110 Q60 12 190 18 Q104 34 42 82 Q26 96 10 110 Z" fill="none" stroke="rgba(185,143,62,.35)" stroke-width="1"></path></svg>
   <svg viewBox="0 0 200 120" style="pointer-events:none; position:absolute; right:-4%; bottom:8%; width:min(28vw,280px); opacity:.45; transform:rotate(180deg);"><path d="M10 110 Q60 12 190 18 Q104 34 42 82 Q26 96 10 110 Z" fill="none" stroke="rgba(185,143,62,.35)" stroke-width="1"></path></svg>
 
-  <div style="text-align:center; padding:0 20px;">
+  <div class="sw-head" style="text-align:center; padding:0 20px;">
     <img src="assets/wordmark-green.png" alt="Ecosophy" style="height:clamp(43px,5.7vw,60px); width:auto; display:block; margin:0 auto;">
     <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(24px,3.4vw,42px); letter-spacing:.05em; color:#14532D; margin-top:12px;">Choose your world</div>
     <div style="font-size:13px; color:#77704F; margin-top:8px;">Two sanctuaries, one philosophy.</div>
   </div>
 
-  <div style="flex:1 1 auto; min-height:0; display:flex; flex-direction:{{ doorDir }}; gap:3px; margin-top:clamp(16px,3vh,40px); align-items:stretch;">
+  <div class="sw-doors" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:{{ doorDir }}; gap:3px; margin-top:clamp(16px,3vh,40px); align-items:stretch;">
     <!-- The card is not a link: only its ENTER pill opens the page, so a stray
          tap on the photograph selects the side instead of leaving the switcher. -->
     <div id="her" onClick="{{ selectHer }}" onMouseEnter="{{ hoverHer }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; position:relative; overflow:hidden; flex:{{ herFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
