@@ -75,8 +75,8 @@ a:hover { color:#B98F3E; }
   /* Tighten the stack itself: the gaps between mark, name, line and pill are
      tuned for a tall desktop card and are pure overflow on a short one. */
   .sw-copy > div:nth-of-type(2) { margin-top:1px !important; }
-  .sw-copy > div:last-child > div:first-child { margin-top:6px !important; }
-  .sw-copy > div:last-child > div:last-child { margin-top:10px !important; padding:9px 26px !important; }
+  .sw-line > div { margin-top:6px !important; }
+  .sw-enter { margin-top:10px !important; padding:9px 26px !important; }
   /* With the layers pulled back, the gold script sits on a bright part of the
      photograph. Carry the legibility on the type instead of on more darkening,
      so the room behind it stays visible. */
@@ -103,12 +103,11 @@ a:hover { color:#B98F3E; }
    at any trim — the switcher is a fixed 100vh box, so the overflow lands on the
    wreath and beheads it. Letting the section grow is not an option: the cards
    are flex:1 1 0 and collapse to nothing in an auto-height column. So drop the
-   ENTER pill instead, which is the one thing on the card that carries no
-   information — the whole card is already the link. That frees enough for the
-   logo to sit whole. Guarded on height as well as width, so a normal phone
-   keeps its pill. */
+   description line instead. The ENTER pill cannot go: it is the only link on
+   the card. That frees enough for the logo to sit whole. Guarded on height as
+   well as width, so a normal phone keeps its line. */
 @media (max-width: 760px) and (max-height: 680px) {
-  .sw-copy > div:last-child > div:last-child { display:none !important; }
+  .sw-line { display:none !important; }
 }
 /* Both cards run the same veil, but the two photographs are not equally bright:
    the men's averages 161 against the women's 137, so the identical gradient
@@ -153,32 +152,34 @@ a:hover { color:#B98F3E; }
   </div>
 
   <div style="flex:1 1 auto; min-height:0; display:flex; flex-direction:{{ doorDir }}; gap:3px; margin-top:clamp(16px,3vh,40px); align-items:stretch;">
-    <a href="/for-her" id="her" onClick="{{ selectHer }}" onMouseEnter="{{ hoverHer }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; cursor:pointer; position:relative; overflow:hidden; flex:{{ herFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
+    <!-- The card is not a link: only its ENTER pill opens the page, so a stray
+         tap on the photograph selects the side instead of leaving the switcher. -->
+    <div id="her" onClick="{{ selectHer }}" onMouseEnter="{{ hoverHer }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; position:relative; overflow:hidden; flex:{{ herFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
       <image-slot id="sw-her" src="uploads/sw-her-original.jpg" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
       <div class="sw-veil" style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.34) 0%, rgba(11,31,22,.18) 30%, rgba(11,31,22,.38) 62%, rgba(11,31,22,.62) 100%);"></div>
-      <div class="sw-copy" style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:clamp(46px,8vh,104px) clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center; background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.45) 40%, rgba(11,31,22,.80) 100%);">
+      <div class="sw-copy" style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:clamp(28px,5vh,104px) clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center; background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.45) 40%, rgba(11,31,22,.80) 100%);">
         <img src="assets/mark-woman-gold.png" alt="" style="width:{{ markSize }}; height:{{ markSize }}; opacity:.95;">
         <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,2.4vw,30px); color:#C9A860; line-height:1.1;">for her</div>
         <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(22px,2.6vw,38px); letter-spacing:.05em; color:#F1E3B8; margin-top:2px; line-height:1.16; min-height:2.32em; display:flex; align-items:flex-end; justify-content:center; text-wrap:balance;">Ecosophy Beauty Center &amp; SPA</div>
-        <div style="overflow:hidden; height:{{ herDetail }}; opacity:{{ herDetailOpacity }}; transition:height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
+        <div class="sw-line" style="overflow:hidden; max-height:{{ herDetail }}; opacity:{{ herDetailOpacity }}; transition:max-height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
           <div style="font-size:13px; color:#C4CFC1; margin-top:10px;">Russian nail, lash and brow masters, advanced facials and spa rituals.</div>
-          <div style="display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778;">ENTER</div>
         </div>
+        <a class="sw-enter" href="/for-her" aria-label="Enter Ecosophy Beauty Center &amp; SPA" style="pointer-events:auto; cursor:pointer; display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778; transition:background .3s, color .3s;" style-hover="background:#C9A860; color:#0B1F16;">ENTER</a>
       </div>
-    </a>
-    <a href="/for-him" id="him" onClick="{{ selectHim }}" onMouseEnter="{{ hoverHim }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; cursor:pointer; position:relative; overflow:hidden; flex:{{ himFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
+    </div>
+    <div id="him" onClick="{{ selectHim }}" onMouseEnter="{{ hoverHim }}" onMouseLeave="{{ hoverNone }}" style="min-width:0; position:relative; overflow:hidden; flex:{{ himFlex }}; transition:flex .8s cubic-bezier(.22,1,.36,1);">
       <image-slot id="sw-him" src="uploads/eco-him-reception.jpg?q=80&w=1100&auto=format&fit=crop" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
       <div class="sw-veil sw-veil--bright" style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.34) 0%, rgba(11,31,22,.18) 30%, rgba(11,31,22,.38) 62%, rgba(11,31,22,.62) 100%);"></div>
-      <div class="sw-copy" style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:clamp(46px,8vh,104px) clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center; background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.45) 40%, rgba(11,31,22,.80) 100%);">
+      <div class="sw-copy" style="pointer-events:none; position:absolute; left:0; right:0; bottom:0; padding:clamp(28px,5vh,104px) clamp(20px,3vw,38px) clamp(26px,4vh,48px); text-align:center; background:linear-gradient(180deg, rgba(11,31,22,0) 0%, rgba(11,31,22,.45) 40%, rgba(11,31,22,.80) 100%);">
         <img src="assets/mark-man-gold.png" alt="" style="width:{{ markSize }}; height:{{ markSize }}; opacity:.95;">
         <div style="font-family:'Great Vibes',cursive; font-size:clamp(22px,2.4vw,30px); color:#C9A860; line-height:1.1;">for him</div>
         <div style="font-family:'Italiana','Prata','Amiri',serif; font-size:clamp(22px,2.6vw,38px); letter-spacing:.05em; color:#F1E3B8; margin-top:2px; line-height:1.16; min-height:2.32em; display:flex; align-items:flex-end; justify-content:center; text-wrap:balance;">Ecosophy Aesthetic Spa Men Care Center</div>
-        <div style="overflow:hidden; height:{{ himDetail }}; opacity:{{ himDetailOpacity }}; transition:height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
+        <div class="sw-line" style="overflow:hidden; max-height:{{ himDetail }}; opacity:{{ himDetailOpacity }}; transition:max-height .6s cubic-bezier(.22,1,.36,1), opacity .5s;">
           <div style="font-size:13px; color:#C4CFC1; margin-top:10px;">Deep tissue, Moroccan bath and recovery therapy for men.</div>
-          <div style="display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778;">ENTER</div>
         </div>
+        <a class="sw-enter" href="/for-him" aria-label="Enter Ecosophy Aesthetic Spa Men Care Center" style="pointer-events:auto; cursor:pointer; display:inline-block; margin-top:14px; border:1px solid #C9A860; border-radius:24px; padding:11px 30px; font-size:11px; letter-spacing:3px; color:#E4C778; transition:background .3s, color .3s;" style-hover="background:#C9A860; color:#0B1F16;">ENTER</a>
       </div>
-    </a>
+    </div>
   </div>
 </div>
 
@@ -225,8 +226,10 @@ class Component extends DCLogic {
       hoverNone: () => { if (!isMobile) this.setState({ hover: null }); },
       herFlex: isMobile ? '1 1 0' : (hover === 'her' ? 1.9 : hover === 'him' ? 0.7 : 1),
       himFlex: isMobile ? '1 1 0' : (hover === 'him' ? 1.9 : hover === 'her' ? 0.7 : 1),
-      herDetail: isMobile ? 'auto' : (hover === 'her' ? '96px' : '0px'),
-      himDetail: isMobile ? 'auto' : (hover === 'him' ? '96px' : '0px'),
+      // Only the description line folds away on desktop; the ENTER pill is
+      // outside it and always shows, since it is now the only way in.
+      herDetail: isMobile ? 'none' : (hover === 'her' ? '60px' : '0px'),
+      himDetail: isMobile ? 'none' : (hover === 'him' ? '60px' : '0px'),
       herDetailOpacity: isMobile ? 1 : (hover === 'her' ? 1 : 0),
       himDetailOpacity: isMobile ? 1 : (hover === 'him' ? 1 : 0),
       // 104px was larger than the desktop mark and the phone card is a third
