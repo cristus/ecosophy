@@ -651,9 +651,9 @@
         'Endospheres therapy, Emsculpt, a Carboxytherapy CO2 facial, one hour of full-body rejuvenation, an Alessandro spa manicure or pedicure, and a classic Moroccan bath.'),
     ] }),
 
-    C({ key: 'removal', name: 'Shaving, Waxing & Laser', slot: 'gsvc-cat-removal', ddSlot: 'gdd-cat-Removal',
+    C({ key: 'removal', name: 'Shaving & Waxing', slot: 'gsvc-cat-removal', ddSlot: 'gdd-cat-Removal',
       img: 'eco-him-machine.jpg',
-      blurb: 'Body hair removal for men, from a quick underarm tidy to full-body laser.',
+      blurb: 'Body hair removal for men, from a quick underarm tidy to full-body waxing.',
       items: [
       S('Body Shaving', 'removal', '60 min', '180 AED',
         'Full-body shave, done properly and without nicks.',
@@ -673,9 +673,6 @@
       S('Body Waxing', 'removal', '60 min', '250 AED',
         'Full-body waxing for a longer-lasting result than shaving.',
         'Chest, back, arms and legs waxed in one appointment, with the skin prepared before and calmed after.'),
-      S('Body Laser', 'removal', '60 min', '400 AED',
-        'Laser hair reduction for a permanent result over a course.',
-        'An hour of laser hair reduction over the areas you choose. Each session thins the hair further, and a course brings lasting results.'),
     ] }),
 
     C({ key: 'courses', name: 'Courses & Multi-Session Plans', slot: 'gsvc-cat-courses', ddSlot: 'gdd-cat-Courses',
@@ -730,9 +727,6 @@
       S('Smart Pedicure — 5 Sessions', 'grooming', '5 × 60 min', '500 AED',
         'Five smart pedicures.',
         'Five dry, blade-free smart pedicures, to keep feet in good shape month after month.'),
-      S('Body Laser — 5 Sessions', 'removal', '5 × 60 min', '1,100 AED',
-        'A course of five one-hour laser sessions.',
-        'Five one-hour laser hair reduction sessions, spaced to catch each growth cycle.'),
     ] }),
   ];
 
@@ -1026,7 +1020,7 @@
       steps: [
         ['Consultation', '5 MIN', 'The areas agreed, and a quick look at the skin and how the hair grows.'],
         ['Preparation', '10 MIN', 'Skin cleansed and long hair trimmed down so nothing pulls.'],
-        ['The treatment', '30 MIN', 'Shave, wax or laser, worked area by area at a pace your skin can take.'],
+        ['The treatment', '30 MIN', 'Shave or wax, worked area by area at a pace your skin can take.'],
         ['Calm', '10 MIN', 'A soothing balm, and advice on keeping ingrown hairs away.'],
       ],
       includes: ['A private room, not a shop floor', 'Fresh blades and single-use wax spatulas', 'Skin prepared before and calmed after', 'Areas covered exactly as agreed', 'Aftercare for ingrown hairs', 'Herbal tea afterwards'],
@@ -1034,11 +1028,11 @@
         ['Done by professionals', 'The awkward-to-reach areas, done evenly and without nicks.'],
         ['Hygiene first', 'Fresh blades for every guest, and wax never double-dipped.'],
         ['Kind to the skin', 'Preparation and a calming finish keep redness and razor burn down.'],
-        ['A route to permanent', 'Laser thins the hair a little more every session, so a course means less upkeep.'],
+        ['Longer between visits', 'Waxing takes the hair from the root, so skin stays smooth for weeks rather than days.'],
       ],
       reviews: [
         ['Back shave done in twenty minutes, not a single nick.', 'Omar R.', '2 WEEKS AGO'],
-        ['Three laser sessions in and the difference is obvious.', 'Khalid M.', 'LAST MONTH'],
+        ['Full body wax, far quicker and kinder than I expected.', 'Khalid M.', 'LAST MONTH'],
         ['Discreet, private and properly professional.', 'Yousef A.', 'LAST MONTH'],
         ['Finally no more razor burn before the beach.', 'Saeed N.', '2 MONTHS AGO'],
       ],
@@ -1058,6 +1052,6 @@
   };
   w.ECO.him.faqs = {
     grooming: [['Is it a barbershop?', 'No. This is hand, foot and skin care in a private treatment room, with no colour and no shine. Most guests come monthly.']],
-    removal:  [['Shave, wax or laser?', 'Shaving is quickest and lasts days, waxing lasts a few weeks, and a laser course reduces the hair for good. We are happy to talk it through before you book.']],
+    removal:  [['Shave or wax?', 'Shaving is quickest and lasts days; waxing takes a little longer and lasts a few weeks. We are happy to talk it through before you book.']],
   };
 })(window);
