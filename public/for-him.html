@@ -598,6 +598,7 @@ a:hover { color:#B98F3E; }
                 <div style="font-size:12.5px; color:#77704F; line-height:1.6; margin-top:6px;">{{ item.desc }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:auto; padding-top:12px;">
                   <span style="font-size:var(--fs-md); letter-spacing:1.5px; color:#9A917A;">{{ item.durationLabel }}</span>
+                  <span style="font-size:13px; color:#B98F3E; white-space:nowrap;">{{ item.price }}</span>
                 </div>
               </div>
             </a>
@@ -612,6 +613,7 @@ a:hover { color:#B98F3E; }
               <image-slot id="{{ detail.heroSlot }}" sc-camel-src="{{ detail.photo }}" placeholder="{{ detail.photoHint }}" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-top:20px;">
+              <span style="font-family:'Prata',serif; font-size:26px; color:#B98F3E;">{{ detail.price }}</span>
               <span style="font-size:11px; letter-spacing:2px; color:#77704F;">{{ detail.durationLabel }}</span>
             </div>
             <div style="font-size:14px; color:#5A5340; line-height:1.85; margin-top:12px;">{{ detail.desc }}</div>
@@ -632,6 +634,7 @@ a:hover { color:#B98F3E; }
               <sc-for list="{{ detailSiblings }}" as="sib" hint-placeholder-count="5">
                 <div onClick="{{ sib.open }}" style="cursor:pointer; display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:12px 12px; border-top:1px solid #E3D9C2; border-radius:9px;" style-hover="background:rgba(201,168,96,.1);">
                   <span style="flex:1; min-width:0; font-size:13px; color:#14532D;">{{ sib.name }}</span>
+                  <span style="font-size:12.5px; color:#B98F3E; white-space:nowrap;">{{ sib.price }}</span>
                 </div>
               </sc-for>
             </div>
@@ -1337,7 +1340,7 @@ class Component extends DCLogic {
     const ddSubmit = () => {
       if (!detail || missing.length) return this.setState({ ddError: true });
       const lines = ['Hello Ecosophy, I would like to book:', '',
-        'Treatment: ' + detail.name];
+        'Treatment: ' + detail.name + (detail.price ? ' (' + detail.price + ')' : '')];
       if (extraNames.length) lines.push('Also interested in: ' + extraNames.join(', '));
       lines.push('Date & time: ' + whenText,
         'Name: ' + this.state.name, 'Phone: ' + this.state.phone);

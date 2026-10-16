@@ -53,8 +53,8 @@ It holds both sides of the house:
 
 | | For her | For him |
 | --- | --- | --- |
-| Categories | 10 | 5 |
-| Treatments | 89 | 45 |
+| Categories | 10 | 7 |
+| Treatments | 89 | 100 |
 
 The two home pages, the two services pages, the two booking pages and the two
 treatment-detail templates all read it, so:
@@ -68,17 +68,23 @@ treatment-detail templates all read it, so:
 Duration may be left blank; the pages then show *BY REQUEST* rather than a
 made-up number.
 
-### No prices
+### Prices — men's side only
 
-The site does not publish prices. No figure is stored in `catalog.js` and no
-page renders one, so the services lists, the treatment pages, the menu pages,
-the home-page ritual menus and the WhatsApp messages the booking forms compose
-all go out without a number. WhatsApp is where a price is quoted.
+The men's pages publish prices; the women's pages do not. A price is the fourth
+`S(...)` argument in `catalog.js` (`'250 AED'`, or `'Complimentary'` for the
+free trials), and `flat()`, `menuCats()` and `homeCats()` pass it through.
+It renders on `/gent-services`, `/gent-service` (hero and related cards),
+the `/for-him` treatment drilldown, and the `/gent-book` ritual list, and it
+goes into the WhatsApp message both booking flows compose. A blank price shows
+nothing, so men's treatments that are not on the spa's price list simply have
+no figure. Every women's row is blank and her pages have no price render sites.
 
-`S(...)` still takes a fourth argument, the old price slot, and it is
-deliberately not read — filling one in would do nothing on its own. Putting
-prices back means restoring that field in `S()`, in `flat()`, `menuCats()` and
-`homeCats()`, and re-adding the render sites the pages used to have.
+The men's figures come from the spa's own service list (screenshots in
+`menservices/`, October 2026). Its cost column is internal and is not used.
+
+New men's treatments are appended to the end of their category, never inserted
+mid-list: the `/for-him` drilldown keys card photos by position
+(`dd-<category>-<index>`), so inserting would shift every photo pinned below it.
 
 Note that `build.mjs` regenerates the pages from the Claude Design sources in
 `ref/`, which are **not** committed and do not know about `catalog.js` — nor
