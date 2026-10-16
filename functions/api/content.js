@@ -6,13 +6,35 @@
 // copy of the doc would silently drop every page edited since it loaded; PATCH
 // touches only the routes that tab actually changed. PUT stays for restoring a
 // downloaded content.json backup, where replacing the lot is the intent.
+//
+// Drafts: ?draft=1 on GET or PATCH reads or writes a second doc that only edit
+// mode loads, so "Save" keeps work on the server without visitors seeing it. A
+// draft route holds the whole page as it should go live, {} meaning "no edits".
+// A live PATCH (publish) drops the routes it wrote from the draft doc.
 
 import { CONTENT_KEY, MAX_DOC, authed, json, kv } from './_lib.js';
 
+const DRAFT_KEY = CONTENT_KEY + ':draft';
 const EMPTY = { pages: {} };
 
-export async function onRequestGet({ env }) {
+const isDraft = (request) => new URL(request.url).searchParams.get('draft') === '1';
+
+async function readDoc(store, key) {
+  const cur = await store.get(key);
+  let doc;
+  try { doc = cur ? JSON.parse(cur) : null; } catch (e) { doc = null; }
+  if (!doc || typeof doc !== 'object' || typeof doc.pages !== 'object' || !doc.pages) doc = { pages: {} };
+  return doc;
+}
+
+export async function onRequestGet({ request, env }) {
   const store = kv(env);
+  if (isDraft(request)) {
+    const auth = authed(request, env);
+    if (!auth.ok) return json({ error: auth.msg }, auth.status);
+    if (!store) return json(EMPTY);
+    return json(await readDoc(store, DRAFT_KEY));
+  }
   if (!store) return json(EMPTY);
   const doc = await store.get(CONTENT_KEY);
   return new Response(doc || JSON.stringify(EMPTY), {
@@ -74,10 +96,17 @@ export async function onRequestPatch({ request, env }) {
   // Read-modify-write. KV is eventually consistent, so two saves landing within a
   // second of each other can still race; saves of *different* pages no longer
   // clobber one another, which is the failure that actually bit.
-  const cur = await store.get(CONTENT_KEY);
-  let doc;
-  try { doc = cur ? JSON.parse(cur) : null; } catch (e) { doc = null; }
-  if (!doc || typeof doc !== 'object' || typeof doc.pages !== 'object' || !doc.pages) doc = { pages: {} };
+  if (isDraft(request)) {
+    const draft = await readDoc(store, DRAFT_KEY);
+    for (const r of Object.keys(routes)) draft.pages[r] = routes[r] || {};
+    draft.updated = new Date().toISOString();
+    const out = JSON.stringify(draft);
+    if (out.length > MAX_DOC) return json({ error: 'Draft doc too large.' }, 413);
+    await store.put(DRAFT_KEY, out);
+    return json({ ok: true, draft: true, updated: draft.updated, saved: Object.keys(routes) });
+  }
+
+  const doc = await readDoc(store, CONTENT_KEY);
 
   const cleared = [];
   for (const r of Object.keys(routes)) {
@@ -93,6 +122,13 @@ export async function onRequestPatch({ request, env }) {
   await store.put(CONTENT_KEY + ':backup:' + Date.now(), out, {
     expirationTtl: 60 * 60 * 24 * 30
   });
+
+  // Published, so these routes no longer have anything waiting in draft.
+  const draft = await readDoc(store, DRAFT_KEY);
+  let had = false;
+  for (const r of Object.keys(routes)) if (r in draft.pages) { delete draft.pages[r]; had = true; }
+  if (had) { draft.updated = doc.updated; await store.put(DRAFT_KEY, JSON.stringify(draft)); }
+
   return json({
     ok: true,
     updated: doc.updated,

@@ -2,7 +2,8 @@
 
 Text and pictures can be changed on the live site itself — no rebuild, no
 redeploy, no touching the design files. Turn edit mode on, change what you want,
-press Save, turn it off. Visitors see the change on their next page load.
+press **Save & make live**, turn it off. Visitors see the change on their next
+page load.
 
 ## Using it
 
@@ -15,13 +16,25 @@ press Save, turn it off. Visitors see the change on their next page load.
      **Escape** cancels.
    - **Click a picture** → pick a new file. Or just **drag a photo onto it**.
    - **Alt+click** anything → put the original back.
-4. Press **Save** (or Ctrl+S). The bar says *"Saved — it is live on the site now."*
-5. Press **Exit** to leave edit mode. Edit mode stays on while you browse from
-   page to page, so you can walk the whole site fixing things, then exit once.
+4. Use the bar in the bottom-right corner:
 
-Nothing is published until you press Save. If you close the tab with unsaved
-changes the browser warns you, and the changes are kept in that browser until
-you come back and save them.
+   | Button | Does |
+   | --- | --- |
+   | **↶ Undo** / **↷ Redo** | step back and forward through your edits on this page (Ctrl+Z, Ctrl+Y) |
+   | **Save** | keeps your changes on the server **without publishing them** (Ctrl+S). Only edit mode shows them, from any browser, until you publish |
+   | **Save & make live** | publishes everything that isn't live yet: unsaved changes plus anything saved earlier, on this page and on any other |
+   | **View live page ↗** | opens this page in a new tab as a visitor sees it, so you can check what's live |
+   | **Reset page** | removes every edit on this page (Undo brings them back) |
+
+   The bar shows where this page stands: **● Unsaved changes**,
+   **◐ Saved — not live yet**, or **✓ This page is live**. It also says when
+   other pages have changes waiting to go live.
+5. Press **Exit** to leave edit mode. Edit mode stays on while you browse from
+   page to page, so you can walk the whole site fixing things, then publish once.
+
+Visitors see nothing until you press **Save & make live**. If you close the tab
+with unsaved changes the browser warns you, and the changes are kept in that
+browser until you come back. Undo history lasts until you leave the page.
 
 ### Notes
 
@@ -29,7 +42,6 @@ you come back and save them.
   upload, so a 7 MB phone photo lands as a few hundred KB. Upload cap: 12 MB.
 - Each treatment page (`/service?s=...`) is edited per treatment — the slug is
   part of what gets saved.
-- **Undo all** reverts every edit on the page you're looking at.
 - **Download** saves the whole overrides file as `content.json` — a backup, and
   the way to move edits between environments.
 
@@ -40,15 +52,27 @@ you come back and save them.
   page. The site is client-rendered and re-renders itself, so a MutationObserver
   re-applies the overrides after every render pass.
 - Each edit is keyed by the element's position in the DOM, with the original
-  text/image URL kept alongside as a fallback matcher — so an edit usually
-  survives a redesign of the surrounding page, and simply stops applying if the
-  element is gone.
+  text/image URL kept alongside. A position alone is not trusted: an edit lands
+  on the element at its position only if that element still shows the original
+  (or the edited value). When a rebuild moves things, the edit follows its
+  original to wherever it went, picking the nearest match if the same text or
+  picture appears twice. When the original is gone from the page altogether,
+  the edit is held back rather than painted onto whatever now sits in that
+  spot. Before this, a reordered menu put the client's rename of one heading on
+  its neighbour.
+- Held-back edits stay stored, and they reappear if their original comes back.
+  In edit mode the bar counts them ("· 3 no longer fit"); hovering the count
+  lists them. To replace one, edit the new text or picture directly. After a
+  rebuild, `window.ecosophyEdit.orphans()` in the console lists the held-back
+  keys on the page you are viewing.
 - `functions/api/*` is the backend, running on Cloudflare Pages Functions:
 
   | Route | Does |
   | --- | --- |
   | `GET /api/content` | the overrides every visitor reads |
-  | `PATCH /api/content` | save the pages this browser changed (password required) |
+  | `PATCH /api/content` | publish the pages this browser changed, and drop their drafts (password required) |
+  | `GET /api/content?draft=1` | the saved-but-not-live drafts, which only edit mode loads (password required) |
+  | `PATCH /api/content?draft=1` | Save: store pages as drafts, each as the whole page it should become (password required) |
   | `PUT /api/content` | replace the whole doc — restoring a `content.json` backup |
   | `POST /api/upload` | store one picture, returns its permanent URL |
   | `GET /api/img/<hash>.<ext>` | serve a stored picture, cached forever |

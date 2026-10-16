@@ -8,9 +8,11 @@
  *      every render pass rather than editing the DOM once and hoping.
  *
  *   2. IN EDIT MODE (?edit=1, or Ctrl+Shift+E): let a signed-in editor click any
- *      line of text to retype it and any picture to replace it, then Save — which
- *      PUTs the overrides to /api/content (Cloudflare KV) so the change is live
- *      for everyone on the next page view.
+ *      line of text to retype it and any picture to replace it. "Save" keeps the
+ *      work as a server-side draft only edit mode sees; "Save & make live"
+ *      publishes it to /api/content (Cloudflare KV) for everyone on their next
+ *      page view. Undo/Redo step through this page's edits; "View live page"
+ *      opens the page as a visitor sees it.
  *
  * Overrides are keyed by DOM path (tag + sibling index, from <body>), with the
  * original text/src stored alongside as a fallback matcher for when the design is
@@ -35,6 +37,12 @@
     // several routes at once — that multi-page "fix the whole site, save once"
     // flow still works, it just no longer carries the untouched pages with it.
     touched: {},
+    placed: {},   // edit key -> the element it was last painted on
+    orphans: [],  // edit keys whose element is no longer on the page
+    drafts: {},   // routes saved as a draft on the server but not yet live
+    live: {},     // the live doc's pages, to tell a draft from what is published
+    undo: [],     // snapshots of this page's edits, newest last
+    redo: [],
     remote: false,
     edit: false,
     dirty: 0,
@@ -83,17 +91,24 @@
     return parts.join('/');
   }
 
+  // A part is tag + index with no separator, so "div12" and "h10" are ambiguous
+  // to a regex ("div1" #2? "h" #10?). Try each split of the trailing digits and
+  // keep the one whose tag is actually at that index.
+  function childByPart(n, part) {
+    var s = part.length;
+    while (s > 1 && /\d/.test(part.charAt(s - 1))) s--;
+    for (var cut = s; cut < part.length; cut++) {
+      var el = n.children[+part.slice(cut)];
+      if (el && el.tagName.toLowerCase() === part.slice(0, cut)) return el;
+    }
+    return null;
+  }
+
   function elByPath(path) {
     var parts = path.split('/');
     var n = document.body;
-    for (var i = 0; i < parts.length; i++) {
-      var m = /^([a-z0-9-]+)(\d+)$/.exec(parts[i]);
-      if (!m || !n) return null;
-      var el = n.children[+m[2]];
-      if (!el || el.tagName.toLowerCase() !== m[1]) return null;
-      n = el;
-    }
-    return n === document.body ? null : n;
+    for (var i = 0; i < parts.length && n; i++) n = childByPart(n, parts[i]);
+    return n && n !== document.body ? n : null;
   }
 
   // ── what can be edited ──────────────────────────────────────────────────
@@ -118,28 +133,70 @@
   function imgSrc(el) { return el.getAttribute('src') || ''; }
 
   // ── applying overrides ──────────────────────────────────────────────────
-  function findFallback(entry) {
-    var i, els;
-    if (entry.t === 'text') {
-      els = document.body.querySelectorAll('*');
-      for (i = 0; i < els.length; i++) {
-        if (isTextLeaf(els[i]) && els[i].textContent.trim() === String(entry.o || '').trim()) return els[i];
-      }
-    } else {
-      els = document.querySelectorAll('img, image-slot');
-      for (i = 0; i < els.length; i++) {
-        if (imgSrc(els[i]) === entry.o) return els[i];
-      }
-    }
-    return null;
+  // An edit is keyed by DOM path, but a path is only a position: when a page is
+  // rebuilt (a card removed, a menu reordered) the same path names a different
+  // element, and painting the edit there puts the client's words on the wrong
+  // thing — "Make-Up" relabelled with their rename of "Massage & Body Wellness".
+  // So an edit lands only on an element that still shows what it replaced (or
+  // what it set). Failing that it follows its original to wherever it moved, and
+  // failing that it is held back and counted in the edit bar, never guessed at.
+  function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
+  function valueOf(el, t) { return t === 'text' ? norm(el.textContent) : imgSrc(el); }
+  function want(entry, which) { return entry.t === 'text' ? norm(entry[which]) : String(entry[which] || ''); }
+  function fits(el, entry) {
+    if (!el || isUi(el)) return false;
+    if (entry.t === 'text' ? el.childElementCount !== 0 : !isImage(el)) return false;
+    var cur = valueOf(el, entry.t);
+    return cur === want(entry, 'o') || cur === want(entry, 'v');
   }
 
-  function applyOne(path, entry) {
-    if (!entry || entry.v == null) return;
-    var el = elByPath(path);
-    if (!el) el = findFallback(entry);
-    if (!el) return;
-    if (el === state.editingEl) return;
+  // Shared leading path segments: among several elements showing the same
+  // original, the one nearest the edit's old position is the one it was made on.
+  function nearness(a, b) {
+    var x = a.split('/'), y = b.split('/'), i = 0;
+    while (i < x.length && i < y.length && x[i] === y[i]) i++;
+    return i;
+  }
+
+  // key -> element for every edit on this page that can be placed; the rest are
+  // listed in state.orphans.
+  function resolve(m) {
+    var out = {}, claimed = [], left = [], k, el;
+    for (k in m) {
+      if (!Object.prototype.hasOwnProperty.call(m, k) || !m[k] || m[k].v == null) continue;
+      // Placed on an earlier pass and still showing this edit or its original.
+      // An element mid-typing shows neither, but it is still this edit's.
+      el = state.placed[k];
+      if (el && el === state.editingEl) { out[k] = el; claimed.push(el); continue; }
+      if (!(el && el.isConnected && fits(el, m[k]))) el = elByPath(k);
+      if (fits(el, m[k]) && claimed.indexOf(el) < 0) { out[k] = el; claimed.push(el); }
+      else left.push(k);
+    }
+    if (left.length) {
+      var all = document.body.querySelectorAll('*');
+      for (var i = 0; i < left.length; i++) {
+        k = left[i];
+        var e = m[k], o = want(e, 'o'), best = null, score = -1;
+        for (var j = 0; j < all.length; j++) {
+          el = all[j];
+          if (claimed.indexOf(el) >= 0 || isUi(el)) continue;
+          if (e.t === 'text' ? !isTextLeaf(el) : !isImage(el)) continue;
+          if (valueOf(el, e.t) !== o) continue;
+          var sc = nearness(k, pathOf(el));
+          if (sc > score) { best = el; score = sc; }
+        }
+        if (best) { out[k] = best; claimed.push(best); }
+      }
+    }
+    var orphans = [];
+    for (k in m) if (Object.prototype.hasOwnProperty.call(m, k) && !out[k]) orphans.push(k);
+    state.orphans = orphans;
+    state.placed = out;
+    return out;
+  }
+
+  function applyOne(el, entry) {
+    if (!el || el === state.editingEl) return;
 
     if (entry.t === 'text') {
       if (el.childElementCount === 0 && el.textContent !== entry.v) el.textContent = entry.v;
@@ -163,10 +220,11 @@
     state.applying = true;
     try {
       var m = pageMap(false);
-      for (var k in m) if (Object.prototype.hasOwnProperty.call(m, k)) applyOne(k, m[k]);
+      var at = resolve(m);
+      for (var k in at) applyOne(at[k], m[k]);
     } catch (e) {}
     state.applying = false;
-    if (state.edit) paintTargets();
+    if (state.edit) { paintTargets(); refreshBar(); }
   }
 
   var pending = 0;
@@ -223,7 +281,10 @@
     })
     .then(function (doc) {
       state.doc = doc && typeof doc === 'object' && doc.pages ? doc : { pages: {} };
-      var local = loadLocal();
+      state.live = JSON.parse(JSON.stringify(state.doc.pages));
+      // Unsaved work belongs to edit mode. Painted for everyone in this browser,
+      // it made "View live page" show changes that were not live at all.
+      var local = wantsEdit() ? loadLocal() : null;
       if (local) {
         mergeDoc(state.doc, local.doc);
         for (var r in local.touched) {
@@ -291,10 +352,34 @@
     });
   }
 
+  // Drafts are layered over the live doc in edit mode only. A route with work
+  // still unsaved in this browser keeps that work instead.
+  function loadDrafts() {
+    if (!state.remote) return Promise.resolve();
+    return fetch(API_CONTENT + '?draft=1&t=' + Date.now(), { cache: 'no-store', headers: authHeaders() })
+      .then(function (r) { return r.ok ? r.json() : { pages: {} }; })
+      .catch(function () { return { pages: {} }; })
+      .then(function (d) {
+        var pages = (d && d.pages) || {};
+        state.drafts = {};
+        for (var r in pages) {
+          if (!Object.prototype.hasOwnProperty.call(pages, r)) continue;
+          state.drafts[r] = 1;
+          if (state.touched[r]) continue;
+          var next = Object.keys(pages[r]).length ? pages[r] : null;
+          if (r === ROUTE) setPage(next);
+          else if (next) state.doc.pages[r] = next;
+          else delete state.doc.pages[r];
+        }
+        refreshBar();
+      });
+  }
+
   function enterEdit() {
     if (state.edit) return;
     signIn().then(function (ok) {
       if (!ok) return;
+      loaded.then(loadDrafts);
       state.edit = true;
       try { sessionStorage.setItem(SS_MODE, '1'); } catch (e) {}
       document.documentElement.setAttribute('data-eco-edit', '');
@@ -319,7 +404,29 @@
       var q = location.search.replace(/([?&])edit=1&?/, '$1').replace(/[?&]$/, '');
       history.replaceState(null, '', location.pathname + q + location.hash);
     }
+    // The page may be showing drafts or unsaved work; out of edit mode it
+    // should show what visitors see.
+    if (pendingRoutes().length) { location.reload(); return; }
     if (!silent) toast('Edit mode off.');
+  }
+
+  // Routes with changes that are not live: unsaved here, or saved as a draft.
+  function pendingRoutes() {
+    var out = touchedRoutes();
+    for (var r in state.drafts) if (state.drafts[r] && out.indexOf(r) < 0) out.push(r);
+    return out;
+  }
+
+  // This page as a visitor sees it, in a fresh tab. noopener keeps it from
+  // inheriting this tab's sessionStorage, so it opens signed out and out of edit
+  // mode; the t= query only defeats caching.
+  function viewLive() {
+    var q = location.search.replace(/([?&])(edit|t)=[^&]*&?/g, '$1').replace(/[?&]$/, '');
+    var url = location.pathname + q + (q ? '&' : '?') + 't=' + Date.now() + location.hash;
+    if (state.touched[ROUTE] || state.drafts[ROUTE]) {
+      toast('This page has changes that are not live yet — the new tab shows the site as visitors see it now.', 5000);
+    }
+    window.open(url, '_blank', 'noopener');
   }
 
   // ── edit-mode chrome ────────────────────────────────────────────────────
@@ -332,13 +439,17 @@
       '[data-eco-edit] [data-eco-target="img"]{outline:2px dashed rgba(20,83,45,.9);cursor:copy;}',
       '[data-eco-edit] [data-eco-target]:hover{outline-color:#B98F3E;outline-style:solid;background:rgba(185,143,62,.08);}',
       '[data-eco-edit] [contenteditable="true"]{outline:2px solid #14532D;background:#fff;}',
-      '#eco-editbar{position:fixed;z-index:2147483647;right:14px;bottom:14px;display:flex;gap:6px;align-items:center;',
+      '#eco-editbar{position:fixed;z-index:2147483647;right:14px;bottom:14px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;align-items:center;',
+      'max-width:calc(100vw - 28px);box-sizing:border-box;',
       'background:#0E2B1C;color:#F6F1E6;padding:8px 10px;border-radius:10px;font:500 12px/1.2 Manrope,system-ui,sans-serif;',
       'box-shadow:0 8px 30px rgba(0,0,0,.35);}',
-      '#eco-editbar button{font:inherit;border:0;border-radius:7px;padding:7px 10px;cursor:pointer;background:#B98F3E;color:#0E2B1C;}',
+      '#eco-editbar button{font:inherit;border:0;border-radius:7px;padding:7px 10px;cursor:pointer;background:#B98F3E;color:#0E2B1C;white-space:nowrap;}',
       '#eco-editbar button.ghost{background:rgba(246,241,230,.14);color:#F6F1E6;}',
+      '#eco-editbar button.live{background:#F6F1E6;color:#0E2B1C;}',
       '#eco-editbar button:disabled{opacity:.45;cursor:default;}',
-      '#eco-editbar .n{opacity:.75;margin-right:4px;}',
+      '#eco-editbar .sep{width:1px;align-self:stretch;background:rgba(246,241,230,.2);margin:0 2px;}',
+      '#eco-editbar .n{opacity:.85;margin-right:4px;flex-basis:100%;text-align:right;}',
+      '#eco-editbar .n b{font-weight:700;}',
       '#eco-toast{position:fixed;z-index:2147483647;left:50%;bottom:74px;transform:translateX(-50%);background:#0E2B1C;color:#F6F1E6;',
       'padding:9px 14px;border-radius:8px;font:500 12px/1.2 Manrope,system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:80vw;text-align:center;}'
     ].join('');
@@ -362,12 +473,22 @@
     bar.setAttribute('data-eco-ui', '');
     bar.innerHTML =
       '<span class="n" id="eco-count">no changes</span>' +
-      '<button id="eco-save">Save</button>' +
-      '<button class="ghost" id="eco-revert">Undo all</button>' +
-      '<button class="ghost" id="eco-dl">Download</button>' +
+      '<button class="ghost" id="eco-undo" title="Undo (Ctrl+Z)">↶ Undo</button>' +
+      '<button class="ghost" id="eco-redo" title="Redo (Ctrl+Y)">↷ Redo</button>' +
+      '<span class="sep"></span>' +
+      '<button class="ghost" id="eco-save" title="Keep these changes without publishing them (Ctrl+S)">Save</button>' +
+      '<button id="eco-publish" title="Publish every saved and unsaved change to the live site">Save &amp; make live</button>' +
+      '<button class="live" id="eco-view" title="Open this page as visitors see it, in a new tab">View live page ↗</button>' +
+      '<span class="sep"></span>' +
+      '<button class="ghost" id="eco-revert" title="Remove every edit on this page">Reset page</button>' +
+      '<button class="ghost" id="eco-dl" title="Download all edits as content.json">Download</button>' +
       '<button class="ghost" id="eco-exit">Exit</button>';
     document.body.appendChild(bar);
-    bar.querySelector('#eco-save').onclick = save;
+    bar.querySelector('#eco-undo').onclick = undo;
+    bar.querySelector('#eco-redo').onclick = redo;
+    bar.querySelector('#eco-save').onclick = saveDraft;
+    bar.querySelector('#eco-publish').onclick = publish;
+    bar.querySelector('#eco-view').onclick = viewLive;
     bar.querySelector('#eco-revert').onclick = revertPage;
     bar.querySelector('#eco-dl').onclick = download;
     bar.querySelector('#eco-exit').onclick = function () {
@@ -377,12 +498,36 @@
     refreshBar();
   }
 
+  function setDisabled(id, off) {
+    var b = document.getElementById(id);
+    if (b && b.disabled !== off) b.disabled = off;
+  }
+
   function refreshBar() {
     var c = document.getElementById('eco-count');
     if (!c) return;
-    var n = Object.keys(pageMap(false)).length;
-    c.textContent = (state.dirty ? '● unsaved · ' : '') +
-      (n ? n + ' edit' + (n === 1 ? '' : 's') + ' on this page' : 'no changes');
+    var m = pageMap(false);
+    var n = Object.keys(m).length;
+    var lost = state.orphans.length;
+    var others = pendingRoutes().filter(function (r) { return r !== ROUTE; }).length;
+    var status = state.touched[ROUTE] ? '● Unsaved changes'
+      : state.drafts[ROUTE] ? '◐ Saved — not live yet'
+      : '✓ This page is live';
+    var text = status + ' · ' +
+      (n ? n + ' edit' + (n === 1 ? '' : 's') + ' on this page' : 'no edits on this page') +
+      (lost ? ' · ' + lost + ' no longer fit' + (lost === 1 ? 's' : '') : '') +
+      (others ? ' · ' + others + ' other page' + (others === 1 ? '' : 's') + ' not live yet' : '');
+    setDisabled('eco-undo', !state.undo.length);
+    setDisabled('eco-redo', !state.redo.length);
+    setDisabled('eco-save', !touchedRoutes().length);
+    setDisabled('eco-publish', !pendingRoutes().length);
+    var tip = lost ? 'The page changed under these edits, so they are not shown:\n' +
+      state.orphans.map(function (k) { var e = m[k] || {}; return '• ' + (e.t === 'text' ? '"' + e.o + '" → "' + e.v + '"' : 'picture ' + e.o); }).join('\n') +
+      '\nEdit the new text or picture directly to replace them.' : '';
+    // applyAll calls this on every render pass; writing unchanged text would
+    // wake the MutationObserver and loop.
+    if (c.textContent !== text) c.textContent = text;
+    if (c.title !== tip) c.title = tip;
   }
 
   function paintTargets() {
@@ -402,31 +547,14 @@
   }
 
   // ── edits ───────────────────────────────────────────────────────────────
-  // Which stored entry, if any, is the one already driving this element?
-  //
-  // Looking it up by DOM path alone is not enough: applyOne falls back to
-  // matching the original text when the path has shifted, so a live override can
-  // be filed under a path that no longer resolves. Re-editing such an element
-  // then found no previous entry, took the *overridden* text as the "original",
-  // and wrote a second entry — leaving two overrides fighting over one element on
-  // every render, and making Alt+click revert do nothing at all.
+  // Which stored entry, if any, is the one already driving this element? Asked
+  // of resolve(), the same placement applyAll paints with — a lookup by path
+  // alone would hand a rebuilt page's new element someone else's edit, and its
+  // "original" with it.
   function entryFor(el) {
     var m = pageMap(false);
-    var p = pathOf(el);
-    if (m[p]) return { path: p, entry: m[p] };
-    for (var k in m) {
-      if (!Object.prototype.hasOwnProperty.call(m, k)) continue;
-      var e = m[k];
-      if (elByPath(k) === el) return { path: k, entry: e };
-      // The entry is usually already applied by the time anyone clicks, so the
-      // element shows its new value, not the original — match on both.
-      if (e.t === 'text') {
-        if (e.v && isTextLeaf(el) && el.textContent.trim() === String(e.v).trim()) return { path: k, entry: e };
-      } else if (e.v && isImage(el) && imgSrc(el) === e.v) {
-        return { path: k, entry: e };
-      }
-      if (findFallback(e) === el) return { path: k, entry: e };
-    }
+    var at = resolve(m);
+    for (var k in at) if (at[k] === el) return { path: k, entry: m[k] };
     return null;
   }
 
@@ -434,13 +562,21 @@
   // once it shows neither the original nor the stored value, entryFor cannot
   // recognise it any more.
   function record(el, type, value, orig, prevPath) {
+    remember();
     var m = pageMap(true);
     var p = pathOf(el);
     var stale = prevPath;
     if (stale === undefined) { var pr = entryFor(el); stale = pr ? pr.path : null; }
     // Re-file the edit under the element's current path, dropping the stale key.
     if (stale != null && stale !== p) delete m[stale];
-    m[p] = { t: type, v: value, o: orig };
+    // That path can still belong to another edit — one that followed its
+    // original elsewhere, or one held back because its element is gone. Keep it,
+    // and file this one under a suffixed key: elByPath cannot read the suffix, so
+    // the edit is placed by its original like any edit whose path has moved.
+    var key = p, n = 1;
+    while (key !== stale && m[key]) key = p + '~' + (n++);
+    m[key] = { t: type, v: value, o: orig };
+    state.placed[key] = el;
     state.dirty = 1;
     touch();
     saveLocal();
@@ -450,6 +586,7 @@
   function forget(el) {
     var prev = entryFor(el);
     if (!prev) return;
+    remember();
     var m = pageMap(true);
     var entry = prev.entry;
     delete m[prev.path];
@@ -459,8 +596,46 @@
     if (entry.t === 'text') el.textContent = entry.o;
     else el.setAttribute('src', entry.o);
     refreshBar();
-    toast('Reverted to the original — press Save to publish that.');
+    toast('Back to the original — press Save, or Save & make live.');
   }
+
+  // ── undo / redo ─────────────────────────────────────────────────────────
+  // Each step is a snapshot of this page's edits taken just before a change.
+  // History is per page and lasts until the page is left.
+  function snapshot() { return JSON.stringify(pageMap(false)); }
+  function remember() {
+    state.undo.push(snapshot());
+    if (state.undo.length > 100) state.undo.shift();
+    state.redo = [];
+  }
+
+  // Swap this page's edits for another set: put every element the current set
+  // drives back to its original, then paint the new set over the clean page.
+  function setPage(next) {
+    var m = pageMap(false), at = resolve(m);
+    for (var k in at) {
+      if (m[k].t === 'text') at[k].textContent = m[k].o;
+      else at[k].setAttribute('src', m[k].o);
+    }
+    state.placed = {};
+    if (next && Object.keys(next).length) state.doc.pages[ROUTE] = next;
+    else delete state.doc.pages[ROUTE];
+    applyAll();
+  }
+
+  function step(from, to, done) {
+    if (state.editingEl) commitText();
+    if (!from.length) return;
+    to.push(snapshot());
+    setPage(JSON.parse(from.pop()));
+    state.dirty = 1;
+    touch();
+    saveLocal();
+    refreshBar();
+    toast(done);
+  }
+  function undo() { step(state.undo, state.redo, 'Undone.'); }
+  function redo() { step(state.redo, state.undo, 'Redone.'); }
 
   function beginText(el) {
     if (state.editingEl) commitText();
@@ -488,7 +663,7 @@
     state.editingEl = null;
     el.removeAttribute('contenteditable');
     var v = (el.innerText != null ? el.innerText : el.textContent).replace(/ /g, ' ').trim();
-    if (v === '') { el.textContent = el._ecoBefore; return; }
+    if (v === '' || v === norm(el._ecoBefore)) { el.textContent = el._ecoBefore; return; }
     el.textContent = v;
     if (v !== String(el._ecoOrig).trim()) record(el, 'text', v, el._ecoOrig, el._ecoPrevPath);
     else forget(el);
@@ -555,7 +730,7 @@
       .then(function (url) {
         record(el, 'img', url, orig, prevPath);
         applyAll();
-        toast('Picture replaced — press Save to publish it.');
+        toast('Picture replaced — press Save, or Save & make live.');
       })
       .catch(function (e) { toast('Could not replace that image: ' + e.message, 5000); });
   }
@@ -581,26 +756,18 @@
   }
 
   // ── save / export ───────────────────────────────────────────────────────
-  function save() {
-    if (!state.remote) {
-      saveLocal();
-      toast('No editor backend reachable — kept in this browser. Use Download and commit the file.', 6000);
-      return;
-    }
-    var routes = touchedRoutes();
-    if (!routes.length) { toast('Nothing to save — no changes made in this browser.'); return; }
-
-    // Send only what this browser changed. An empty map means "clear this page",
-    // which is what Undo all leaves behind.
+  // Send the named routes, each as the whole page it should become. An empty
+  // map means "clear this page", which is what Reset page leaves behind.
+  function send(routes, draft, btnId, busy) {
     var payload = { routes: {} };
     for (var i = 0; i < routes.length; i++) {
       var m = (state.doc.pages && state.doc.pages[routes[i]]) || null;
       payload.routes[routes[i]] = m && Object.keys(m).length ? m : null;
     }
-
-    var btn = document.getElementById('eco-save');
-    if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
-    fetch(API_CONTENT, {
+    var btn = document.getElementById(btnId);
+    var label = btn && btn.innerHTML;
+    if (btn) { btn.disabled = true; btn.textContent = busy; }
+    return fetch(API_CONTENT + (draft ? '?draft=1' : ''), {
       method: 'PATCH',
       headers: authHeaders({ 'content-type': 'application/json' }),
       body: JSON.stringify(payload)
@@ -616,30 +783,71 @@
       state.dirty = 0;
       state.touched = {};
       clearLocal();
-      toast('Saved — it is live on the site now.');
+      return true;
     }).catch(function (e) {
       saveLocal();
       toast('Save failed: ' + e.message, 6000);
-    }).then(function () {
-      if (btn) { btn.disabled = false; btn.textContent = 'Save'; }
+      return false;
+    }).then(function (ok) {
+      if (btn) { btn.innerHTML = label; btn.disabled = false; }
       refreshBar();
+      return ok;
+    });
+  }
+
+  function offline() {
+    saveLocal();
+    toast('No editor backend reachable — kept in this browser. Use Download and commit the file.', 6000);
+  }
+
+  // Save: keep the work on the server, visible in edit mode only.
+  function saveDraft() {
+    if (!state.remote) return offline();
+    var routes = touchedRoutes();
+    if (!routes.length) { toast('Nothing new to save.'); return; }
+    send(routes, true, 'eco-save', 'Saving…').then(function (ok) {
+      if (!ok) return;
+      for (var i = 0; i < routes.length; i++) state.drafts[routes[i]] = 1;
+      refreshBar();
+      toast('Saved — not live yet. Press “Save & make live” to publish.', 4000);
+    });
+  }
+
+  // Save & make live: publish everything not live yet — unsaved work here and
+  // saved drafts, on this page and any other.
+  function publish() {
+    if (!state.remote) return offline();
+    var routes = pendingRoutes();
+    if (!routes.length) { toast('Everything is already live.'); return; }
+    send(routes, false, 'eco-publish', 'Publishing…').then(function (ok) {
+      if (!ok) return;
+      for (var i = 0; i < routes.length; i++) {
+        delete state.drafts[routes[i]];
+        var m = state.doc.pages[routes[i]];
+        if (m) state.live[routes[i]] = JSON.parse(JSON.stringify(m)); else delete state.live[routes[i]];
+      }
+      refreshBar();
+      toast('Live now' + (routes.length > 1 ? ' — ' + routes.length + ' pages published' : '') +
+        '. Press “View live page” to check it.', 5000);
     });
   }
 
   function revertPage() {
-    if (!confirm('Undo every edit on this page and go back to the original design?')) return;
+    if (!confirm('Remove every edit on this page and go back to the original design?')) return;
+    remember();
     var m = pageMap(true);
-    for (var k in m) {
+    var at = resolve(m);
+    for (var k in at) {
       var e = m[k];
-      var el = elByPath(k);
-      if (el) { if (e.t === 'text') el.textContent = e.o; else el.setAttribute('src', e.o); }
+      if (e.t === 'text') at[k].textContent = e.o; else at[k].setAttribute('src', e.o);
     }
     delete state.doc.pages[ROUTE];
+    state.orphans = [];
     state.dirty = 1;
     touch();
     saveLocal();
     refreshBar();
-    toast('Page reverted — press Save to publish that.');
+    toast('Page reset — press Save, or Save & make live. Undo brings the edits back.', 4000);
   }
 
   function download() {
@@ -677,7 +885,13 @@
       return;
     }
     if (!state.edit) return;
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); save(); return; }
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); saveDraft(); return; }
+    // Mid-typing, Ctrl+Z belongs to the browser's own undo inside the line.
+    if ((e.ctrlKey || e.metaKey) && !state.editingEl) {
+      var key = e.key.toLowerCase();
+      if (key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return; }
+      if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); redo(); return; }
+    }
     if (!state.editingEl) return;
     if (e.key === 'Escape') { e.preventDefault(); cancelText(); }
     else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitText(); }
@@ -729,8 +943,11 @@
   window.ecosophyEdit = {
     enter: enterEdit,
     exit: exitEdit,
-    save: save,
+    save: saveDraft,
+    publish: publish,
     doc: function () { return state.doc; },
+    // Edits on this page whose element is gone — for checking a rebuild.
+    orphans: function () { return state.orphans.slice(); },
     loaded: loaded
   };
 })();
