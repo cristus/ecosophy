@@ -53,8 +53,8 @@ It holds both sides of the house:
 
 | | For her | For him |
 | --- | --- | --- |
-| Categories | 10 | 7 |
-| Treatments | 89 | 98 |
+| Categories | 14 | 7 |
+| Treatments | 233 | 98 |
 
 The two home pages, the two services pages, the two booking pages and the two
 treatment-detail templates all read it, so:
@@ -77,7 +77,8 @@ It renders on `/gent-services`, `/gent-service` (hero and related cards),
 the `/for-him` treatment drilldown, and the `/gent-book` ritual list, and it
 goes into the WhatsApp message both booking flows compose. A blank price shows
 nothing, so men's treatments that are not on the spa's price list simply have
-no figure. Every women's row is blank and her pages have no price render sites.
+no figure. Her rows carry the salon's prices too (from `womenservices/`, October
+2026), but her pages have no price render sites, so none of them show.
 
 The men's figures come from the spa's own service list (screenshots in
 `menservices/`, October 2026). Its cost column is internal and is not used.

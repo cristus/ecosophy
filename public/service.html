@@ -582,8 +582,8 @@ a:hover { color:#B98F3E; }
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">{{ durationLong }}</div>
           <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ roomLabel }}</div>
         </div>
-        <div style="width:1px; height:44px; background:rgba(201,168,96,.32);"></div>
-        <div style="flex:0 0 auto;">
+        <div style="width:1px; height:44px; background:rgba(201,168,96,.32); display:{{ reviewsShow }};"></div>
+        <div style="flex:0 0 auto; display:{{ reviewsShow }};">
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">★★★★★ {{ rating }}</div>
           <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ reviewCountLabel }}</div>
         </div>
@@ -749,7 +749,7 @@ a:hover { color:#B98F3E; }
     </div>
   </div>
 
-  <div id="reviews" data-screen-label="Reviews" style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,130px) 20px; overflow:clip;">
+  <div id="reviews" data-screen-label="Reviews" style="display:{{ reviewsShow }}; position:relative; max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,130px) 20px; overflow:clip;">
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:14px; top:40%; transform:translateY(-50%); width:min(16vw,190px); opacity:.085;">
     <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:4%; bottom:4%; width:min(11vw,125px); opacity:.06;">
     <div class="d-split" style="position:relative; display:grid; grid-template-columns:.8fr 1.2fr; gap:clamp(30px,5vw,64px); align-items:start;">
@@ -1203,6 +1203,9 @@ class Component extends DCLogic {
         { stars: '1 ★', pct: '0%', count: 0 },
       ],
       reviews: t.reviews.map(r => ({ text: r[0], name: r[1], when: r[2] })),
+      // Types with no reviews written (waxing, threading, make-up) hide the
+      // section and the hero rating instead of showing invented ones.
+      reviewsShow: t.reviews.length ? 'block' : 'none',
       faqs, related,
     };
   }

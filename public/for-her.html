@@ -1205,21 +1205,91 @@ class Component extends DCLogic {
     })));
     const cat = CATS.find(c => c.name === dCat);
     const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    // One photograph per card, listed per category and read positionally.
+    // Photographs for the cards, one pool per category, dealt out in turn.
     //
     // Filenames lie about what is distinct: portrait-1, portrait-2, beauty-10
     // and beauty-11 are four frames of one client in one outfit, and hammam-1,
-    // -2, spa-01 and spa-02 are one room shot four times. So the library is
-    // grouped by SHOOT and no two cards in a category may share one — a grid of
-    // different files that all show the same dress still reads as duplicated.
-    //
-    // 134 cards against 82 photographs in about forty shoots, so a photo can
-    // come back in another category. Only Facials (20 cards, 16 usable shoots)
-    // and Eyelashes (10 against 9) repeat a look within themselves, and those
-    // are spaced as far apart in the grid as they go. Regenerate the lists with
-    // scratchpad/allocate.mjs when the catalogue changes.
+    // -2, spa-01 and spa-02 are one room shot four times. So each pool is drawn
+    // from different shoots, and a pool repeats only once a category has more
+    // cards than it has photographs (Nails, Eyelashes and Hair all do). Keyed by
+    // category name: renaming a category in catalog.js means renaming it here,
+    // or its cards fall back to the category photo.
     const CAT_PICS = {
-      "Facials & Advanced Aesthetic Skincare": [
+      "Nails": [
+        "uploads/eco-her-beauty-09.jpg",
+        "uploads/eco-her-beauty-05.jpg",
+        "uploads/eco-her-beauty-06.jpg",
+        "uploads/eco-her-beauty-04.jpg",
+        "uploads/eco-her-beauty-08.jpg",
+        "uploads/eco-her-portrait-1.jpg",
+        "uploads/eco-her-beauty-03.jpg",
+        "uploads/eco-her-spa-07.jpg"
+      ],
+      "Eyelashes": [
+        "uploads/eco-her-hair-2.jpg",
+        "uploads/eco-her-hair-1.jpg",
+        "uploads/eco-her-bridal-2.jpg",
+        "uploads/eco-her-nails-2.jpg",
+        "uploads/eco-her-beauty-11.jpg",
+        "uploads/eco-her-robe.jpg",
+        "uploads/eco-her-spa-06.jpg",
+        "uploads/eco-her-beauty-01.jpg",
+        "uploads/eco-her-facial-1.jpg",
+        "uploads/eco-her-bridal.jpg"
+      ],
+      "Brows": [
+        "uploads/eco-her-hair-1.jpg",
+        "uploads/eco-her-bridal.jpg",
+        "uploads/eco-her-beauty-03.jpg",
+        "uploads/eco-her-makeup-2.jpg",
+        "uploads/eco-her-bridal-2.jpg"
+      ],
+      "Threading": [
+        "uploads/eco-her-bridal-2.jpg",
+        "uploads/eco-her-makeup-2.jpg",
+        "uploads/eco-her-beauty-03.jpg",
+        "uploads/eco-her-bridal.jpg",
+        "uploads/eco-her-hair-1.jpg",
+        "uploads/eco-her-beauty-07.jpg",
+        "uploads/eco-her-portrait-2.jpg"
+      ],
+      "Waxing": [
+        "uploads/eco-her-spa-09.jpg",
+        "uploads/eco-her-spa-10.jpg",
+        "uploads/eco-her-sauna-2.jpg",
+        "uploads/eco-her-spa-08.jpg",
+        "uploads/eco-her-spa-01.jpg",
+        "uploads/eco-her-products-3.jpg",
+        "uploads/eco-her-robe.jpg",
+        "uploads/eco-her-room-1.jpg",
+        "uploads/eco-her-room-2.jpg",
+        "uploads/eco-her-products-2.jpg",
+        "uploads/eco-her-spa-04.jpg",
+        "uploads/eco-her-spa-06.jpg"
+      ],
+      "Semi-Permanent Makeup": [
+        "uploads/eco-her-hair-1.jpg",
+        "uploads/eco-her-beauty-07.jpg",
+        "uploads/eco-her-beauty-02.jpg",
+        "uploads/eco-her-bridal-2.jpg",
+        "uploads/eco-her-nails-2.jpg",
+        "uploads/eco-her-portrait-2.jpg",
+        "uploads/eco-her-robe.jpg"
+      ],
+      "Make-Up": [
+        "uploads/eco-her-bridal.jpg",
+        "uploads/eco-her-makeup-1.jpg",
+        "uploads/eco-her-bridal-2.jpg"
+      ],
+      "Hair": [
+        "uploads/eco-her-beauty-05.jpg",
+        "uploads/eco-her-hair-2.jpg",
+        "uploads/eco-her-makeup-1.jpg",
+        "uploads/eco-her-beauty-04.jpg",
+        "uploads/eco-her-beauty-08.jpg",
+        "uploads/eco-her-beauty-10.jpg"
+      ],
+      "Facials": [
         "uploads/eco-her-facial-1.jpg",
         "uploads/eco-her-beauty-01.jpg",
         "uploads/eco-her-beauty-04.jpg",
@@ -1229,7 +1299,9 @@ class Component extends DCLogic {
         "uploads/eco-her-beauty-03.jpg",
         "uploads/eco-her-beauty-07.jpg",
         "uploads/eco-her-beauty-05.jpg",
-        "uploads/eco-her-massage-1.jpg",
+        "uploads/eco-her-massage-1.jpg"
+      ],
+      "Aesthetic Dermatology": [
         "uploads/eco-her-massage-2.jpg",
         "uploads/eco-her-room-1.jpg",
         "uploads/eco-her-jacuzzi-1.jpg",
@@ -1240,6 +1312,8 @@ class Component extends DCLogic {
         "uploads/eco-her-beauty-02.jpg",
         "uploads/eco-her-bridal-2.jpg",
         "uploads/eco-her-nails-2.jpg",
+        "uploads/eco-her-facial-1.jpg",
+        "uploads/eco-her-beauty-01.jpg"
       ],
       "Massage & Body Wellness": [
         "uploads/eco-her-spa-09.jpg",
@@ -1254,9 +1328,17 @@ class Component extends DCLogic {
         "uploads/eco-her-facial-1.jpg",
         "uploads/eco-her-makeup-1.jpg",
         "uploads/eco-her-beauty-04.jpg",
-        "uploads/eco-her-beauty-08.jpg",
+        "uploads/eco-her-beauty-08.jpg"
       ],
-      "SPA & Wellness": [
+      "Slimming & Body Contouring": [
+        "uploads/eco-her-spa-09.jpg",
+        "uploads/eco-her-spa-10.jpg",
+        "uploads/eco-her-sauna-2.jpg",
+        "uploads/eco-her-spa-08.jpg",
+        "uploads/eco-her-spa-01.jpg",
+        "uploads/eco-her-products-3.jpg"
+      ],
+      "SPA & Moroccan Bath": [
         "uploads/eco-her-hammam-2.jpg",
         "uploads/eco-her-spa-03.jpg",
         "uploads/eco-her-massage-1.jpg",
@@ -1267,71 +1349,23 @@ class Component extends DCLogic {
         "uploads/eco-her-exterior-7.jpg",
         "uploads/eco-her-beauty-10.jpg",
         "uploads/eco-her-spa-05.jpg",
-        "uploads/eco-her-makeup-2.jpg",
+        "uploads/eco-her-makeup-2.jpg"
       ],
-      "Eyelashes": [
-        "uploads/eco-her-hair-2.jpg",
-        "uploads/eco-her-hair-1.jpg",
-        "uploads/eco-her-bridal-2.jpg",
-        "uploads/eco-her-nails-2.jpg",
-        "uploads/eco-her-beauty-11.jpg",
-        "uploads/eco-her-robe.jpg",
-        "uploads/eco-her-spa-06.jpg",
-        "uploads/eco-her-beauty-01.jpg",
-        "uploads/eco-her-facial-1.jpg",
-        "uploads/eco-her-bridal.jpg",
-      ],
-      "Nails": [
-        "uploads/eco-her-beauty-09.jpg",
-        "uploads/eco-her-beauty-05.jpg",
-        "uploads/eco-her-beauty-06.jpg",
-        "uploads/eco-her-beauty-04.jpg",
-        "uploads/eco-her-beauty-08.jpg",
-        "uploads/eco-her-portrait-1.jpg",
-        "uploads/eco-her-beauty-03.jpg",
-        "uploads/eco-her-spa-07.jpg",
-      ],
-      "Semi-Permanent Makeup": [
-        "uploads/eco-her-hair-1.jpg",
-        "uploads/eco-her-beauty-07.jpg",
-        "uploads/eco-her-beauty-02.jpg",
-        "uploads/eco-her-bridal-2.jpg",
-        "uploads/eco-her-nails-2.jpg",
-        "uploads/eco-her-portrait-2.jpg",
-        "uploads/eco-her-robe.jpg",
-      ],
-      "Slimming & Body Contouring": [
-        "uploads/eco-her-spa-09.jpg",
-        "uploads/eco-her-spa-10.jpg",
-        "uploads/eco-her-sauna-2.jpg",
-        "uploads/eco-her-spa-08.jpg",
-        "uploads/eco-her-spa-01.jpg",
-        "uploads/eco-her-products-3.jpg",
-      ],
-      "Hair": [
-        "uploads/eco-her-beauty-05.jpg",
-        "uploads/eco-her-hair-2.jpg",
-        "uploads/eco-her-makeup-1.jpg",
-        "uploads/eco-her-beauty-04.jpg",
-        "uploads/eco-her-beauty-08.jpg",
-        "uploads/eco-her-beauty-10.jpg",
-      ],
-      "Brows": [
-        "uploads/eco-her-hair-1.jpg",
-        "uploads/eco-her-bridal.jpg",
-        "uploads/eco-her-beauty-03.jpg",
-        "uploads/eco-her-makeup-2.jpg",
-        "uploads/eco-her-bridal-2.jpg",
-      ],
-      "Packages": [
+      "Packages & Offers": [
         "uploads/eco-her-spa-02.jpg",
         "uploads/eco-her-jacuzzi-1.jpg",
         "uploads/eco-her-massage-1.jpg",
-      ],
+        "uploads/eco-her-hammam-2.jpg",
+        "uploads/eco-her-spa-03.jpg",
+        "uploads/eco-her-sauna.jpg",
+        "uploads/eco-her-jacuzzi-2.jpg",
+        "uploads/eco-her-hammam-3.jpg",
+        "uploads/eco-her-spa-05.jpg"
+      ]
     };
     const items = cat ? cat.items.map((it, i) => ({
       ...it, slot: 'dd-' + cat.name + '-' + i,
-      photo: (CAT_PICS[cat.name] || [])[i] || (cat.pic && cat.pic[0]) || '',
+      photo: (CAT_PICS[cat.name] || [])[i % ((CAT_PICS[cat.name] || []).length || 1)] || (cat.pic && cat.pic[0]) || '',
       photoHint: it.name + ' photo',
       href: '/service?s=' + slugify(it.name),
       durationLabel: it.duration || 'BY REQUEST',
