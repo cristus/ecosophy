@@ -496,10 +496,10 @@ a:hover { color:#B98F3E; }
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,46px); color:#14532D; margin-top:6px; line-height:1.15;">ECOSOPHY BEAUTY CENTER SALON &amp; SPA</div>
         <div style="display:flex; align-items:center; gap:14px; margin-top:16px;">
           <span style="width:44px; height:1px; background:rgba(20,83,45,.3);"></span>
-          <span style="font-size:11px; letter-spacing:3px; color:#9A917A;">GROOMING · BARBER · BODY · WELLNESS</span>
+          <span style="font-size:11px; letter-spacing:3px; color:#9A917A;">AESTHETICS · BODY · BATH · WELLNESS</span>
         </div>
         <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:26px;">Welcome to Ecosophy Aesthetic Spa Men Care Center, a premium gentlemen’s grooming, body and wellness destination in Ajman, UAE.</div>
-        <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:16px;">From master barbers and beard specialists to advanced facials, Dermapen 4 microneedling, sports recovery and body contouring, Moroccan bath and Balinese massage, Ecosophy brings a full gentlemen’s grooming and wellness menu together under one roof.</div>
+        <div style="font-size:14px; color:#5A5340; line-height:1.9; margin-top:16px;">From advanced facials, HydraFacial and Dermapen microneedling to Emsculpt, Endospheres and sports recovery, Moroccan bath and Balinese massage, Ecosophy brings a full gentlemen’s aesthetic and wellness menu together under one roof.</div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:28px;">
           <sc-for list="{{ aboutTags }}" as="tag" hint-placeholder-count="7">
             <span style="font-size:var(--fs-lg); letter-spacing:1.5px; color:#14532D; border:1px solid #D8CCA6; border-radius:20px; padding:8px 16px;">{{ tag }}</span>
@@ -1113,17 +1113,11 @@ class Component extends DCLogic {
       { type: 'FACIALS', title: 'HydraFacial', length: '0:18', pic: hume,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
       { type: 'FACIALS', title: 'Ecosophy Signature Facial', length: '0:29', pic: fac,
-        caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
+        caption: 'Deep cleanse and hydration built for beard-line and city skin.', cta: 'BOOK A FACIAL' },
       { type: 'MASSAGE', title: 'Balinese Massage', length: '0:31', pic: caishan,
         caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
       { type: 'MASSAGE', title: 'Hot Stone Massage', length: '0:26', pic: room,
         caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'BARBER & BEARD', title: 'Cut & Beard Sculpt', length: '0:15', pic: element,
-        caption: 'Scissor cut and beard shaping by our master barbers.', cta: 'BOOK THE BARBER' },
-      { type: 'BARBER & BEARD', title: 'Hot Towel Shave', length: '0:14', pic: shave,
-        caption: 'Steamed towels, straight razor and a cooling finish.', cta: 'BOOK A SHAVE' },
-      { type: 'THE SPA', title: 'Jacuzzi Therapy', length: '0:22', pic: nick,
-        caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
       { type: 'THE SPA', title: 'Infrared Sauna Session', length: '0:19', pic: machine,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
@@ -1262,12 +1256,6 @@ class Component extends DCLogic {
         "uploads/eco-him-08.jpg",
         "uploads/eco-him-09.jpg",
       ],
-      "Men’s Grooming": [
-        "uploads/photo_2026-08-02_19-37-29.jpg",
-        "uploads/eco-him-10.jpg",
-        "uploads/eco-him-16.jpg",
-        "uploads/eco-him-21.jpg",
-      ],
       "Packages": [
         "uploads/748718184_18114511022477475_8211076763529339827_n.jpg",
         "uploads/eco-him-15.jpg",
@@ -1276,7 +1264,7 @@ class Component extends DCLogic {
     };
     const items = cat ? cat.items.map((it, i) => ({
       ...it, slot: 'dd-' + cat.name + '-' + i,
-      photo: (CAT_PICS[cat.name] || [])[i] || (cat.pic && cat.pic[0]) || '',
+      photo: (CAT_PICS[cat.name] || [])[i % ((CAT_PICS[cat.name] || []).length || 1)] || (cat.pic && cat.pic[0]) || '',
       photoHint: it.name + ' photo',
       href: '/gent-service?s=' + slugify(it.name),
       durationLabel: it.duration || 'BY REQUEST',
@@ -1447,7 +1435,7 @@ class Component extends DCLogic {
       hume: ['uploads/imgi_26_mens-beauty-treatment.jpg','',''],
       rosa: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','','','Deep cleansing, extraction and hydration in one session.'],
       caishan: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','','','Slow oil-based bodywork with therapists from Bali.'],
-      element: ['uploads/photo_2026-08-02_19-37-25.jpg','','','Cut, beard sculpt and hot-towel shave by our master barbers.'],
+      tissue: ['uploads/eco-him-03.jpg','','','Firm pressure that works into knots and tight muscle.'],
       nico: ['uploads/imgi_8_young-man-receiving-cosmetic-treatment-at-the-spa.jpg','',''],
     };
 
@@ -1492,20 +1480,18 @@ class Component extends DCLogic {
     const C = (slot,k,name,desc) => ({ slot, img: IMGS[k][0], credit: IMGS[k][1], chref: IMGS[k][2], name, desc });
     const cards = [
         C('him-m1','paje','Royal Moroccan Bath','Steam, black soap, deep exfoliation and a nourishing body mask.'),
-        C('him-m2','rosa','Signature Facial + Massage','Our signature facial followed by a full-body Balinese massage.'),
+        C('him-m2','rosa','Ecosophy Signature Facial','Deep cleanse and hydration built for beard-line and city skin.'),
         C('him-m3','hume','HydraFacial','Deep cleansing, extraction and hydration in one session.'),
-        C('him-m4','element','Cut & Beard Sculpt','Scissor cut and beard shaping by our master barbers.'),
+        C('him-m4','tissue','Deep Tissue Massage','Firm pressure that works into knots and tight muscle.'),
         C('him-m5','caishan','Balinese Massage','60 minutes with therapists from Bali, Indonesia.'),
-        C('him-m6','nico','Body Scrub + Wrap','Full-body polish sealed with a warm nourishing wrap.'),
+        C('him-m6','nico','Detox Slimming Body Wrap','A warming body wrap to draw out fluid and tighten the skin.'),
     ];
     const RATINGS = [{ star: 5, count: 114 }, { star: 4, count: 10 }, { star: 3, count: 3 }, { star: 2, count: 1 }, { star: 1, count: 0 }];
     const rTotal = RATINGS.reduce((s, r) => s + r.count, 0);
     const ratingBars = RATINGS.map(r => ({ star: r.star, count: r.count, w: Math.round((r.count / rTotal) * 100) + '%' }));
     const TESTI = [
       { name: 'Omar R.', date: '2 weeks ago', service: 'Royal Moroccan Bath', quote: 'The Moroccan bath left my skin softer than it has been in years, and the room was so quiet I almost fell asleep. I have already booked my next visit.' },
-      { name: 'Sergey K.', date: 'a month ago', service: 'Cut & Beard Sculpt', quote: 'Finally a barber in Ajman who understands shape. Three weeks later and the beard line still sits exactly where he left it.' },
       { name: 'Faisal S.', date: 'a month ago', service: 'Balinese Massage', quote: 'Sixty minutes with their Balinese therapist undid months of desk work. The pressure was exactly right and nobody rushed me out afterwards.' },
-      { name: 'Khalid M.', date: '3 months ago', service: 'Signature Facial + Massage', quote: 'A calm, men-only space that feels far away from the city. The signature facial and massage together is the best two hours of my month.' },
     ];
     this._testiCount = TESTI.length;
     window.__ecoTestiHost = this;
@@ -1534,8 +1520,8 @@ class Component extends DCLogic {
       tKey: 'testi-' + tIdx,
       tPhotoA: 'him-rev-a-' + tIdx,
       tPhotoHintA: TESTI[tIdx].service + ' — the work',
-      aboutTags: ['MASTER BARBERS','BEARD SCULPTING','HOT TOWEL SHAVE','DERMAPEN 4','ADVANCED FACIALS','SPORTS RECOVERY','MASSAGE & SPA'],
-      aboutCategories: ['BARBER','BEARD','SHAVE','FACIALS','BODY','MASSAGE'],
+      aboutTags: ['ADVANCED FACIALS','HYDRAFACIAL','DERMAPEN','EMSCULPT','SPORTS RECOVERY','MOROCCAN BATH','MASSAGE & SPA'],
+      aboutCategories: ['FACIALS','BODY','MASSAGE','BATH','SAUNA','WAXING'],
       cards, featuredCard: cards[0], listCards: cards.slice(1),
       ...dd,
       rituals: dd.allServices.map((c) => ({
@@ -1609,7 +1595,7 @@ class Component extends DCLogic {
           ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.fman,P.shave]],
           ['centre','THE CENTRE','reception & lounge','Where every visit begins: reception, tea and the quiet lounge.',[P.lounge1,P.lounge2]],
           ['skin','SKIN & GROOMING','mens facial','Purifying masks and beard-line skin care.',[P.fac1,P.machine]],
-          ['sauna','SAUNA & JACUZZI','infrared sauna','Infrared heat and warm hydrotherapy for muscle recovery.',[P.sauna,P.leaf]],
+          ['sauna','INFRARED SAUNA','infrared sauna','Infrared heat for muscle recovery and circulation.',[P.sauna,P.leaf]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';

@@ -53,8 +53,8 @@ It holds both sides of the house:
 
 | | For her | For him |
 | --- | --- | --- |
-| Categories | 14 | 7 |
-| Treatments | 233 | 98 |
+| Categories | 14 | 6 |
+| Treatments | 233 | 70 |
 
 The two home pages, the two services pages, the two booking pages and the two
 treatment-detail templates all read it, so:
