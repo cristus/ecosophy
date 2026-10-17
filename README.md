@@ -205,9 +205,10 @@ hiding:
   them in `/for-her` and `/for-him` and copy the footer out.
 - **the men's gallery and booking pages carried the women's WhatsApp number.**
   `/gent-gallery` hardcoded `+971 58 548 0899` and `/gent-book` defaulted to it.
-  Both now use `+971 50 444 5566`. The numbers are per world and easy to get
+  Both now use the men's number. The numbers are per world and easy to get
   wrong when a page is copied: her is `+971 58 548 0899`, him is
-  `+971 50 444 5566`.
+  `+971 52 829 1991` (it replaced `+971 50 444 5566` and a stray
+  `+971 50 111 2233` fallback in `/for-him`).
 
 The footer prints `{{ whatsapp }}`, so a page that carries it has to expose that
 binding — `/gallery` and `/gent-gallery` only had `waHref` and needed
