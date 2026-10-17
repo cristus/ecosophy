@@ -51,20 +51,40 @@ browser until you come back. Undo history lasts until you leave the page.
   It fetches `/api/content` and paints the saved overrides over the rendered
   page. The site is client-rendered and re-renders itself, so a MutationObserver
   re-applies the overrides after every render pass.
-- Each edit is keyed by the element's position in the DOM, with the original
-  text/image URL kept alongside. A position alone is not trusted: an edit lands
-  on the element at its position only if that element still shows the original
-  (or the edited value). When a rebuild moves things, the edit follows its
-  original to wherever it went, picking the nearest match if the same text or
-  picture appears twice. When the original is gone from the page altogether,
-  the edit is held back rather than painted onto whatever now sits in that
-  spot. Before this, a reordered menu put the client's rename of one heading on
-  its neighbour.
-- Held-back edits stay stored, and they reappear if their original comes back.
-  In edit mode the bar counts them ("· 3 no longer fit"); hovering the count
-  lists them. To replace one, edit the new text or picture directly. After a
-  rebuild, `window.ecosophyEdit.orphans()` in the console lists the held-back
-  keys on the page you are viewing.
+- A picture in an `<image-slot id>` is keyed by that id (`#dd-Massage & Body
+  Wellness-13`), which names the treatment or card it shows — not where it
+  sits. The home pages' drilldown is one grid reused for every category, and
+  the same photos recur across the page, so position-keyed pictures could not
+  tell card 13 of one category from card 13 of the next, and while a category
+  was closed they were painted on whatever else showed the same photo (the
+  hero fan). Older position-keyed picture edits are re-filed under the slot's
+  id the first time they are seen at their own position.
+- Everything else is keyed by the element's position in the DOM, with the
+  original text/image URL kept alongside. A position alone is not trusted: an
+  edit lands on the element at its position only if that element still shows
+  the original (or the edited value). When a rebuild moves things, text follows
+  its original to an element of the same kind, picking the nearest match; a
+  position-keyed picture does so only when exactly one element of that kind
+  shows its original photo. Otherwise the edit is held back rather than painted
+  onto whatever now sits in that spot.
+- **The newest edit wins.** When two edits want one element, the later one is
+  shown, and making an edit drops the older attempts at that same element.
+  Before this the first attempt won, so a client re-doing a change that "did not
+  take" stacked up copies (one card had six) and never saw the new one.
+- Held-back edits stay stored, and they reappear where their item does. In edit
+  mode the bar counts them ("· 3 not on screen") — mostly cards in a category
+  that is not open; hovering the count lists them. After a rebuild,
+  `window.ecosophyEdit.orphans()` in the console lists the held-back keys on the
+  page you are viewing.
+- **Save** and **Save & make live** wait for a picture still uploading, for the
+  line being typed, and for the server's drafts to load. Pressed earlier, they
+  published without the picture (while saying "Live now") and skipped the other
+  pages waiting in draft.
+- The server's drafts live in one KV record that every Save reads and rewrites,
+  and KV can return a copy a few seconds old, so a Save of one page could drop
+  another page saved just before it. The browser keeps its own copy of each page
+  it saved as a draft (`eco:drafts:mine`) until that page is published, and puts
+  back any page the server lost.
 - `functions/api/*` is the backend, running on Cloudflare Pages Functions:
 
   | Route | Does |

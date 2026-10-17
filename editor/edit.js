@@ -14,9 +14,10 @@
  *      page view. Undo/Redo step through this page's edits; "View live page"
  *      opens the page as a visitor sees it.
  *
- * Overrides are keyed by DOM path (tag + sibling index, from <body>), with the
- * original text/src stored alongside as a fallback matcher for when the design is
- * rebuilt and paths shift.
+ * A picture in an <image-slot id> is keyed by that id ("#dd-Massage & Body
+ * Wellness-13"), which names the treatment it shows. Everything else is keyed by
+ * DOM path (tag + sibling index, from <body>), with the original text/src stored
+ * alongside so an edit only lands on an element that still shows it.
  */
 (function () {
   'use strict';
@@ -38,7 +39,11 @@
     // flow still works, it just no longer carries the untouched pages with it.
     touched: {},
     placed: {},   // edit key -> the element it was last painted on
-    orphans: [],  // edit keys whose element is no longer on the page
+    orphans: [],  // edit keys whose element is not on the page right now
+    superseded: [], // older edits whose element a newer edit holds
+    exact: {},    // edit keys placed at their own position, not by their original
+    uploads: [],  // picture uploads still in flight; saving waits for them
+    draftsIn: null, // resolves once the server's drafts are layered in
     drafts: {},   // routes saved as a draft on the server but not yet live
     live: {},     // the live doc's pages, to tell a draft from what is published
     undo: [],     // snapshots of this page's edits, newest last
@@ -132,23 +137,72 @@
 
   function imgSrc(el) { return el.getAttribute('src') || ''; }
 
+  // ── identity ────────────────────────────────────────────────────────────
+  // A position is not an identity. The home pages' drilldown is one grid that
+  // shows whichever category is open, so card 13 is "Detox Slimming Body Wrap"
+  // in one category and something else in the next — and the same photos recur
+  // all over the page. Keyed by position, a picture edit had nowhere to go while
+  // its category was closed, so it was painted on any picture that happened to
+  // show the same photo (the hero fan) and stayed there. An <image-slot id> names
+  // the item it shows, so a picture in one is keyed by that id instead.
+  //
+  // Painting a slot drops its id (see applyOne), so the id is kept in
+  // data-eco-slot as well.
+  function slotOf(el) {
+    if (!el || el.tagName !== 'IMAGE-SLOT') return '';
+    return el.id || el.getAttribute('data-eco-slot') || '';
+  }
+  function isSlotKey(k) { return k.charAt(0) === '#'; }
+  function keyOf(el, t) {
+    var s = t === 'img' ? slotOf(el) : '';
+    return s ? '#' + s : pathOf(el);
+  }
+  // A ~n suffix files a second edit under a position another edit already holds.
+  function baseOf(k) { return k.replace(/~\d+$/, ''); }
+  function elBySlot(id) {
+    var slots = document.getElementsByTagName('image-slot');
+    for (var i = 0; i < slots.length; i++) if (slotOf(slots[i]) === id) return slots[i];
+    return null;
+  }
+
+  // The page re-renders the same elements for whatever item is now in view. When
+  // a slot we painted is handed a different id, it is showing another item: put
+  // back the photo it had, in case the page left our picture in place because the
+  // new item's photo is the same file the old one had.
+  function syncSlots() {
+    var slots = document.getElementsByTagName('image-slot');
+    for (var i = 0; i < slots.length; i++) {
+      var el = slots[i];
+      if (!el.id || el.getAttribute('data-eco-slot') === el.id) continue;
+      if (el._ecoPaint) {
+        if (el.getAttribute('src') === el._ecoPaint.v) el.setAttribute('src', el._ecoPaint.o);
+        el._ecoPaint = null;
+      }
+      el.setAttribute('data-eco-slot', el.id);
+    }
+  }
+
   // ── applying overrides ──────────────────────────────────────────────────
-  // An edit is keyed by DOM path, but a path is only a position: when a page is
-  // rebuilt (a card removed, a menu reordered) the same path names a different
-  // element, and painting the edit there puts the client's words on the wrong
-  // thing — "Make-Up" relabelled with their rename of "Massage & Body Wellness".
-  // So an edit lands only on an element that still shows what it replaced (or
-  // what it set). Failing that it follows its original to wherever it moved, and
-  // failing that it is held back and counted in the edit bar, never guessed at.
+  // A path is only a position: when a page is rebuilt (a card removed, a menu
+  // reordered) the same path names a different element, and painting the edit
+  // there puts the client's words on the wrong thing. So a path-keyed edit lands
+  // only on an element that still shows what it replaced (or what it set). Text
+  // can follow its original to where it moved, among elements of the same shape;
+  // a picture only when exactly one such element shows its original photo, since
+  // the same photo is used in many places. Anything that cannot be placed is held
+  // back and counted in the edit bar.
   function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
   function valueOf(el, t) { return t === 'text' ? norm(el.textContent) : imgSrc(el); }
   function want(entry, which) { return entry.t === 'text' ? norm(entry[which]) : String(entry[which] || ''); }
-  function fits(el, entry) {
+  function fits(el, entry, k) {
     if (!el || isUi(el)) return false;
+    if (k && isSlotKey(k)) return el.tagName === 'IMAGE-SLOT' && slotOf(el) === k.slice(1);
     if (entry.t === 'text' ? el.childElementCount !== 0 : !isImage(el)) return false;
     var cur = valueOf(el, entry.t);
     return cur === want(entry, 'o') || cur === want(entry, 'v');
   }
+  // A path with its sibling indexes dropped: the kind of place an element sits.
+  function shape(path) { return path.replace(/\d+(\/|~|$)/g, '$1'); }
 
   // Shared leading path segments: among several elements showing the same
   // original, the one nearest the edit's old position is the one it was made on.
@@ -158,41 +212,91 @@
     return i;
   }
 
-  // key -> element for every edit on this page that can be placed; the rest are
-  // listed in state.orphans.
+  // key -> element for every edit on this page that can be placed. The rest are
+  // listed in state.orphans; older edits that lost their element to a newer one
+  // are listed in state.superseded.
+  //
+  // Newest first: an edit is (re)inserted at the end of its page's map when it
+  // is made, so when two want one element the later one wins. Oldest-first let a
+  // client's first attempt hide every correction made after it.
   function resolve(m) {
-    var out = {}, claimed = [], left = [], k, el;
-    for (k in m) {
-      if (!Object.prototype.hasOwnProperty.call(m, k) || !m[k] || m[k].v == null) continue;
-      // Placed on an earlier pass and still showing this edit or its original.
-      // An element mid-typing shows neither, but it is still this edit's.
+    var out = {}, claimed = [], left = [], gone = [], older = [], exact = {}, k, el, i;
+    var keys = Object.keys(m).filter(function (x) { return m[x] && m[x].v != null; }).reverse();
+    function take(key, node) { out[key] = node; claimed.push(node); }
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      // An element mid-typing shows neither the original nor the edit, but it is
+      // still this edit's.
       el = state.placed[k];
-      if (el && el === state.editingEl) { out[k] = el; claimed.push(el); continue; }
-      if (!(el && el.isConnected && fits(el, m[k]))) el = elByPath(k);
-      if (fits(el, m[k]) && claimed.indexOf(el) < 0) { out[k] = el; claimed.push(el); }
-      else left.push(k);
-    }
-    if (left.length) {
-      var all = document.body.querySelectorAll('*');
-      for (var i = 0; i < left.length; i++) {
-        k = left[i];
-        var e = m[k], o = want(e, 'o'), best = null, score = -1;
-        for (var j = 0; j < all.length; j++) {
-          el = all[j];
-          if (claimed.indexOf(el) >= 0 || isUi(el)) continue;
-          if (e.t === 'text' ? !isTextLeaf(el) : !isImage(el)) continue;
-          if (valueOf(el, e.t) !== o) continue;
-          var sc = nearness(k, pathOf(el));
-          if (sc > score) { best = el; score = sc; }
+      if (el && el === state.editingEl) { take(k, el); continue; }
+      if (isSlotKey(k)) el = elBySlot(k.slice(1));
+      else {
+        el = elByPath(baseOf(k));
+        // Text keeps the element it was last painted on if its path has shifted.
+        if (!fits(el, m[k], k)) {
+          el = m[k].t === 'text' ? state.placed[k] : null;
+          if (!(el && el.isConnected && fits(el, m[k], k))) el = null;
         }
-        if (best) { out[k] = best; claimed.push(best); }
       }
+      if (!el || !fits(el, m[k], k)) { left.push(k); continue; }
+      if (claimed.indexOf(el) >= 0) older.push(k); else { take(k, el); exact[k] = 1; }
     }
-    var orphans = [];
-    for (k in m) if (Object.prototype.hasOwnProperty.call(m, k) && !out[k]) orphans.push(k);
-    state.orphans = orphans;
+    var all = null;
+    for (i = 0; i < left.length; i++) {
+      k = left[i];
+      var e = m[k];
+      if (isSlotKey(k)) { gone.push(k); continue; }
+      all = all || document.body.querySelectorAll('*');
+      var o = want(e, 'o'), s = shape(baseOf(k)), best = null, score = -1, seen = 0;
+      for (var j = 0; j < all.length; j++) {
+        el = all[j];
+        if (e.t === 'text' ? !isTextLeaf(el) : !isImage(el)) continue;
+        if (valueOf(el, e.t) !== o) continue;
+        var p = pathOf(el);
+        if (shape(p) !== s) continue;
+        seen++;
+        if (claimed.indexOf(el) >= 0) continue;
+        var sc = nearness(k, p);
+        if (sc > score) { best = el; score = sc; }
+      }
+      // A photo is reused across cards, so a picture follows it only when it is
+      // the one place of its kind still showing that photo.
+      if (best && (e.t === 'text' || seen === 1)) take(k, best); else gone.push(k);
+    }
+    state.orphans = gone;
+    state.superseded = older;
+    state.exact = exact;
     state.placed = out;
     return out;
+  }
+
+  // Older saves filed pictures by position, often several times over for one
+  // card. Once such an edit sits on a slot at its own position, re-file it under
+  // the slot's id, and drop the older attempts that lost that element to it.
+  // Saved with the next save of this page. A picture placed by its photo alone is
+  // a guess, and stays as it is.
+  function tidy(m, at) {
+    var k, moved = 0;
+    for (k in at) {
+      if (isSlotKey(k) || !state.exact[k] || m[k].t !== 'img' || at[k].tagName !== 'IMAGE-SLOT') continue;
+      var s = slotOf(at[k]);
+      if (!s) continue;
+      var nk = '#' + s, e = m[k];
+      delete m[k];
+      delete m[nk];
+      m[nk] = e;
+      at[nk] = at[k];
+      state.placed[nk] = at[k];
+      delete at[k];
+      delete state.placed[k];
+      moved++;
+    }
+    for (var i = 0; i < state.superseded.length; i++) {
+      k = state.superseded[i];
+      if (m[k] && !isSlotKey(k)) { delete m[k]; moved++; }
+    }
+    state.superseded = [];
+    return moved;
   }
 
   function applyOne(el, entry) {
@@ -206,8 +310,9 @@
     if (el.tagName === 'IMAGE-SLOT') {
       // A slot prefers its sidecar-stored image (keyed by id) over src=, and only
       // accepts data: URLs from that store — so drop the id and the slot falls
-      // through to the src we set here.
-      if (el.id) el.removeAttribute('id');
+      // through to the src we set here. data-eco-slot keeps the id for us.
+      if (el.id) { el.setAttribute('data-eco-slot', el.id); el.removeAttribute('id'); }
+      el._ecoPaint = { o: entry.o, v: entry.v };
       if (el.getAttribute('src') !== entry.v) el.setAttribute('src', entry.v);
     } else {
       if (el.getAttribute('srcset')) el.removeAttribute('srcset');
@@ -215,12 +320,23 @@
     }
   }
 
+  // Put an element back to what the design shows, the reverse of applyOne.
+  function restore(el, entry) {
+    if (entry.t === 'text') { el.textContent = entry.o; return; }
+    el.setAttribute('src', entry.o);
+    var s = el.getAttribute('data-eco-slot');
+    if (el.tagName === 'IMAGE-SLOT' && s && !el.id) el.id = s;
+    el._ecoPaint = null;
+  }
+
   function applyAll() {
     if (state.applying) return;
     state.applying = true;
     try {
+      syncSlots();
       var m = pageMap(false);
       var at = resolve(m);
+      tidy(m, at);
       for (var k in at) applyOne(at[k], m[k]);
     } catch (e) {}
     state.applying = false;
@@ -261,14 +377,21 @@
     try { localStorage.removeItem(LS_LOCAL); } catch (e) {}
   }
 
-  function mergeDoc(base, extra) {
-    if (!extra || !extra.pages) return base;
-    base.pages = base.pages || {};
-    for (var r in extra.pages) {
-      base.pages[r] = base.pages[r] || {};
-      for (var k in extra.pages[r]) base.pages[r][k] = extra.pages[r][k];
-    }
-    return base;
+  // A copy of every page this browser saved as a draft and has not yet
+  // published. The server's drafts sit in one KV record that each save reads and
+  // rewrites, and KV can hand back a copy a few seconds old — so a save of one
+  // page could drop another page saved just before it, and publishing then
+  // skipped that page. This copy puts any such page back (see loadDrafts).
+  var LS_MINE = 'eco:drafts:mine';
+  function loadMine() {
+    try { var x = JSON.parse(localStorage.getItem(LS_MINE) || '{}'); return x && typeof x === 'object' ? x : {}; }
+    catch (e) { return {}; }
+  }
+  function saveMine(x) {
+    try {
+      if (Object.keys(x).length) localStorage.setItem(LS_MINE, JSON.stringify(x));
+      else localStorage.removeItem(LS_MINE);
+    } catch (e) {}
   }
 
   var loaded = fetch(API_CONTENT + '?t=' + Date.now(), { cache: 'no-store' })
@@ -284,14 +407,18 @@
       state.live = JSON.parse(JSON.stringify(state.doc.pages));
       // Unsaved work belongs to edit mode. Painted for everyone in this browser,
       // it made "View live page" show changes that were not live at all.
+      // Only the pages changed here come back, each whole, as it was left: the
+      // stored copy holds every page as this browser last saw it, and merging all
+      // of it put stale edits back over newer ones — and brought back edits this
+      // browser had already replaced or removed.
       var local = wantsEdit() ? loadLocal() : null;
       if (local) {
-        mergeDoc(state.doc, local.doc);
         for (var r in local.touched) {
           state.touched[r] = 1;
           // Touched but absent locally means it was reverted here and not yet
           // saved; the copy that just came back from the server must not undo it.
-          if (!local.doc.pages[r]) delete state.doc.pages[r];
+          if (local.doc.pages[r]) state.doc.pages[r] = local.doc.pages[r];
+          else delete state.doc.pages[r];
         }
         state.dirty = 1;
       }
@@ -361,6 +488,15 @@
       .catch(function () { return { pages: {} }; })
       .then(function (d) {
         var pages = (d && d.pages) || {};
+        // A page this browser saved as a draft that the server no longer lists
+        // as one: lost to a racing save, unless it went live in the meantime.
+        var mine = loadMine();
+        for (var mr in mine) {
+          if (pages[mr]) continue;
+          if (JSON.stringify(state.live[mr] || {}) === JSON.stringify(mine[mr] || {})) { delete mine[mr]; continue; }
+          pages[mr] = mine[mr];
+        }
+        saveMine(mine);
         state.drafts = {};
         for (var r in pages) {
           if (!Object.prototype.hasOwnProperty.call(pages, r)) continue;
@@ -379,7 +515,7 @@
     if (state.edit) return;
     signIn().then(function (ok) {
       if (!ok) return;
-      loaded.then(loadDrafts);
+      state.draftsIn = loaded.then(loadDrafts);
       state.edit = true;
       try { sessionStorage.setItem(SS_MODE, '1'); } catch (e) {}
       document.documentElement.setAttribute('data-eco-edit', '');
@@ -514,20 +650,21 @@
     var n = Object.keys(m).length;
     var lost = state.orphans.length;
     var others = pendingRoutes().filter(function (r) { return r !== ROUTE; }).length;
-    var status = state.touched[ROUTE] ? '● Unsaved changes'
+    var status = state.uploads.length ? '⇡ Uploading picture…'
+      : state.touched[ROUTE] ? '● Unsaved changes'
       : state.drafts[ROUTE] ? '◐ Saved — not live yet'
       : '✓ This page is live';
     var text = status + ' · ' +
       (n ? n + ' edit' + (n === 1 ? '' : 's') + ' on this page' : 'no edits on this page') +
-      (lost ? ' · ' + lost + ' no longer fit' + (lost === 1 ? 's' : '') : '') +
+      (lost ? ' · ' + lost + ' not on screen' : '') +
       (others ? ' · ' + others + ' other page' + (others === 1 ? '' : 's') + ' not live yet' : '');
     setDisabled('eco-undo', !state.undo.length);
     setDisabled('eco-redo', !state.redo.length);
     setDisabled('eco-save', !touchedRoutes().length);
     setDisabled('eco-publish', !pendingRoutes().length);
-    var tip = lost ? 'The page changed under these edits, so they are not shown:\n' +
-      state.orphans.map(function (k) { var e = m[k] || {}; return '• ' + (e.t === 'text' ? '"' + e.o + '" → "' + e.v + '"' : 'picture ' + e.o); }).join('\n') +
-      '\nEdit the new text or picture directly to replace them.' : '';
+    var tip = lost ? 'Saved edits for things not on screen right now — another category, tab or slide —\n' +
+      'or for text the design has since changed. They are kept, and show where their item does:\n' +
+      state.orphans.map(function (k) { var e = m[k] || {}; return '• ' + (e.t === 'text' ? '"' + e.o + '" → "' + e.v + '"' : 'picture ' + (isSlotKey(k) ? k.slice(1) : e.o)); }).join('\n') : '';
     // applyAll calls this on every render pass; writing unchanged text would
     // wake the MutationObserver and loop.
     if (c.textContent !== text) c.textContent = text;
@@ -565,20 +702,33 @@
   // prevPath must be captured *before* the element's text or src is changed —
   // once it shows neither the original nor the stored value, entryFor cannot
   // recognise it any more.
+  // Every older edit of this same element: what its position held when it showed
+  // this same original. Left in place they piled up under each new attempt.
+  function dropOlder(m, el, type, orig, keep) {
+    var here = pathOf(el), o = type === 'text' ? norm(orig) : String(orig || '');
+    for (var k in m) {
+      if (k === keep || !Object.prototype.hasOwnProperty.call(m, k) || !m[k] || m[k].t !== type) continue;
+      if (state.placed[k] === el || (!isSlotKey(k) && baseOf(k) === here && want(m[k], 'o') === o)) delete m[k];
+    }
+  }
+
   function record(el, type, value, orig, prevPath) {
     remember();
     var m = pageMap(true);
-    var p = pathOf(el);
+    var p = keyOf(el, type);
     var stale = prevPath;
     if (stale === undefined) { var pr = entryFor(el); stale = pr ? pr.path : null; }
-    // Re-file the edit under the element's current path, dropping the stale key.
+    // Re-file the edit under the element's current key, dropping the stale one.
     if (stale != null && stale !== p) delete m[stale];
-    // That path can still belong to another edit — one that followed its
-    // original elsewhere, or one held back because its element is gone. Keep it,
-    // and file this one under a suffixed key: elByPath cannot read the suffix, so
-    // the edit is placed by its original like any edit whose path has moved.
+    dropOlder(m, el, type, orig, p);
+    // A position can still belong to another item's edit — the drilldown shows a
+    // different treatment at the same place in each category. Keep it, and file
+    // this one under a suffixed key: elByPath reads the key without the suffix,
+    // and the original tells the two apart.
     var key = p, n = 1;
-    while (key !== stale && m[key]) key = p + '~' + (n++);
+    while (!isSlotKey(p) && key !== stale && m[key]) key = p + '~' + (n++);
+    // Re-inserted, so it sits last: the newest edit wins (see resolve).
+    delete m[key];
     m[key] = { t: type, v: value, o: orig };
     state.placed[key] = el;
     state.dirty = 1;
@@ -594,11 +744,11 @@
     var m = pageMap(true);
     var entry = prev.entry;
     delete m[prev.path];
+    dropOlder(m, el, entry.t, entry.o, null);
     state.dirty = 1;
     touch();
     saveLocal();
-    if (entry.t === 'text') el.textContent = entry.o;
-    else el.setAttribute('src', entry.o);
+    restore(el, entry);
     refreshBar();
     toast('Back to the original — press Save, or Save & make live.');
   }
@@ -617,10 +767,7 @@
   // drives back to its original, then paint the new set over the clean page.
   function setPage(next) {
     var m = pageMap(false), at = resolve(m);
-    for (var k in at) {
-      if (m[k].t === 'text') at[k].textContent = m[k].o;
-      else at[k].setAttribute('src', m[k].o);
-    }
+    for (var k in at) restore(at[k], m[k]);
     state.placed = {};
     if (next && Object.keys(next).length) state.doc.pages[ROUTE] = next;
     else delete state.doc.pages[ROUTE];
@@ -724,7 +871,7 @@
     var orig = prev ? prev.entry.o : imgSrc(el);
     var prevPath = prev ? prev.path : null;
     toast('Uploading…', 8000);
-    shrink(file)
+    var job = shrink(file)
       .then(function (blob) {
         return upload(blob).catch(function (e) {
           if (state.remote) throw e;
@@ -736,7 +883,23 @@
         applyAll();
         toast('Picture replaced — press Save, or Save & make live.');
       })
-      .catch(function (e) { toast('Could not replace that image: ' + e.message, 5000); });
+      .catch(function (e) { toast('Could not replace that image: ' + e.message, 5000); })
+      .then(function () { state.uploads.splice(state.uploads.indexOf(job), 1); refreshBar(); });
+    state.uploads.push(job);
+    refreshBar();
+  }
+
+  // Save and publish act on what is finished. A picture still uploading is
+  // recorded only once the upload returns, so saving before then left it out
+  // while the bar said "Live now"; and publishing before the server's drafts
+  // were read skipped every other page waiting in draft. Wait for both, and for
+  // the line being typed.
+  function settled() {
+    if (state.editingEl) commitText();
+    var wait = state.uploads.slice();
+    if (state.draftsIn) wait.push(state.draftsIn);
+    if (state.uploads.length) toast('Waiting for the picture upload to finish…', 8000);
+    return Promise.all(wait).catch(function () {});
   }
 
   var picker = null;
@@ -807,13 +970,20 @@
   // Save: keep the work on the server, visible in edit mode only.
   function saveDraft() {
     if (!state.remote) return offline();
-    var routes = touchedRoutes();
-    if (!routes.length) { toast('Nothing new to save.'); return; }
-    send(routes, true, 'eco-save', 'Saving…').then(function (ok) {
-      if (!ok) return;
-      for (var i = 0; i < routes.length; i++) state.drafts[routes[i]] = 1;
-      refreshBar();
-      toast('Saved — not live yet. Press “Save & make live” to publish.', 4000);
+    settled().then(function () {
+      var routes = touchedRoutes();
+      if (!routes.length) { toast('Nothing new to save.'); return; }
+      send(routes, true, 'eco-save', 'Saving…').then(function (ok) {
+        if (!ok) return;
+        var mine = loadMine();
+        for (var i = 0; i < routes.length; i++) {
+          state.drafts[routes[i]] = 1;
+          mine[routes[i]] = state.doc.pages[routes[i]] || {};
+        }
+        saveMine(mine);
+        refreshBar();
+        toast('Saved — not live yet. Press “Save & make live” to publish.', 4000);
+      });
     });
   }
 
@@ -821,18 +991,23 @@
   // saved drafts, on this page and any other.
   function publish() {
     if (!state.remote) return offline();
-    var routes = pendingRoutes();
-    if (!routes.length) { toast('Everything is already live.'); return; }
-    send(routes, false, 'eco-publish', 'Publishing…').then(function (ok) {
-      if (!ok) return;
-      for (var i = 0; i < routes.length; i++) {
-        delete state.drafts[routes[i]];
-        var m = state.doc.pages[routes[i]];
-        if (m) state.live[routes[i]] = JSON.parse(JSON.stringify(m)); else delete state.live[routes[i]];
-      }
-      refreshBar();
-      toast('Live now' + (routes.length > 1 ? ' — ' + routes.length + ' pages published' : '') +
-        '. Press “View live page” to check it.', 5000);
+    settled().then(function () {
+      var routes = pendingRoutes();
+      if (!routes.length) { toast('Everything is already live.'); return; }
+      send(routes, false, 'eco-publish', 'Publishing…').then(function (ok) {
+        if (!ok) return;
+        var mine = loadMine();
+        for (var i = 0; i < routes.length; i++) {
+          delete state.drafts[routes[i]];
+          delete mine[routes[i]];
+          var m = state.doc.pages[routes[i]];
+          if (m) state.live[routes[i]] = JSON.parse(JSON.stringify(m)); else delete state.live[routes[i]];
+        }
+        saveMine(mine);
+        refreshBar();
+        toast('Live now' + (routes.length > 1 ? ' — ' + routes.length + ' pages published' : '') +
+          '. Press “View live page” to check it.', 5000);
+      });
     });
   }
 
@@ -841,10 +1016,7 @@
     remember();
     var m = pageMap(true);
     var at = resolve(m);
-    for (var k in at) {
-      var e = m[k];
-      if (e.t === 'text') at[k].textContent = e.o; else at[k].setAttribute('src', e.o);
-    }
+    for (var k in at) restore(at[k], m[k]);
     delete state.doc.pages[ROUTE];
     state.orphans = [];
     state.dirty = 1;
@@ -925,7 +1097,7 @@
   }, true);
 
   window.addEventListener('beforeunload', function (e) {
-    if (state.edit && state.dirty) { e.preventDefault(); e.returnValue = ''; }
+    if (state.edit && (state.dirty || state.uploads.length)) { e.preventDefault(); e.returnValue = ''; }
   });
 
   // ── boot ────────────────────────────────────────────────────────────────
