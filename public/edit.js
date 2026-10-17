@@ -436,6 +436,10 @@
     s.id = 'eco-edit-css';
     s.textContent = [
       '[data-eco-edit] [data-eco-target]{outline:1px dashed rgba(185,143,62,.85);outline-offset:2px;cursor:text;}',
+      // Captions laid over photos sit in pointer-events:none layers so the card
+      // clicks through — which sent a click on "Massage & Body Wellness" to the
+      // picture underneath and opened the file picker. Take text clicks back.
+      '[data-eco-edit] [data-eco-target="text"]{pointer-events:auto !important;}',
       '[data-eco-edit] [data-eco-target="img"]{outline:2px dashed rgba(20,83,45,.9);cursor:copy;}',
       '[data-eco-edit] [data-eco-target]:hover{outline-color:#B98F3E;outline-style:solid;background:rgba(185,143,62,.08);}',
       '[data-eco-edit] [contenteditable="true"]{outline:2px solid #14532D;background:#fff;}',

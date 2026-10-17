@@ -226,6 +226,19 @@ function buildPage(srcName, page) {
   return html.length;
 }
 
+// public/edit.js and public/catalog.js are copies; editor/ and data/ hold the
+// real files. A fix typed into the copy is wiped by the next build — which is
+// how an editor fix once never reached the live site. Stop instead of losing it.
+const OURS = { 'edit.js': join('editor', 'edit.js'), 'catalog.js': join('data', 'catalog.js') };
+for (const [name, src] of Object.entries(OURS)) {
+  const out = join(OUT, name);
+  if (existsSync(out) && !readFileSync(out).equals(readFileSync(src))) {
+    console.error(`\n  ! ${out} has changes that are not in ${src}.\n` +
+      `    Make them in ${src} (the build copies it over ${out}), then build again.\n`);
+    process.exit(1);
+  }
+}
+
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 
