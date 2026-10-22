@@ -1264,7 +1264,7 @@ class Component extends DCLogic {
     };
     const items = cat ? cat.items.map((it, i) => ({
       ...it, slot: 'dd-' + cat.name + '-' + i,
-      photo: (CAT_PICS[cat.name] || [])[i % ((CAT_PICS[cat.name] || []).length || 1)] || (cat.pic && cat.pic[0]) || '',
+      photo: it.img || (CAT_PICS[cat.name] || [])[i % ((CAT_PICS[cat.name] || []).length || 1)] || (cat.pic && cat.pic[0]) || '',
       photoHint: it.name + ' photo',
       href: '/gent-service?s=' + slugify(it.name),
       durationLabel: it.duration || 'BY REQUEST',

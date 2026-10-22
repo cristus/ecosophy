@@ -858,19 +858,19 @@
       img: '775244964_18119167235477475_6941524398570787900_n.jpg',
       blurb: 'Sports recovery, deep tissue and full body wellness, with therapists trained in Bali and Kerala.',
       items: [
-      S('Sports Recovery Ritual', 'massage', '60 min', '200 AED',
+      S('Sport Massage', 'massage', '60 min', '200 AED',
         'Stretch work, deep tissue and heat therapy in one session.',
         'Assisted stretching, deep tissue through the legs and back, and heat where it is needed. Built for training loads rather than for general relaxation.'),
-      S('Balinese Massage', 'massage', '60 min', '180 AED',
+      S('Relaxing Balinese', 'massage', '60 min', '180 AED',
         'Slow oil-based bodywork with therapists from Bali.',
         'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.'),
-      S('Deep Tissue Massage', 'massage', '60 min', '250 AED',
+      S('Deep Tissue', 'massage', '60 min', '250 AED',
         'Firm pressure that works into knots and tight muscle.',
         'Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that a lighter massage never quite reaches.'),
-      S('Hot Stone Massage', 'massage', '60 min', '300 AED',
+      S('Hot Stone', 'massage', '60 min', '300 AED',
         'Warm basalt stones ease deep muscular tightness.',
         'Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.'),
-      S('Lymphatic Drainage Massage', 'massage', '60 min', '300 AED',
+      S('Lymphatic Drainage', 'massage', '60 min', '300 AED',
         'Gentle rhythmic work to reduce fluid and puffiness.',
         'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after training.'),
       S('Maderotherapy', 'tech', '60 min', '250 AED',
@@ -888,16 +888,16 @@
       S('Face Massage', 'focused', '60 min', '150 AED',
         'Manual massage of the face, jaw and scalp.',
         'Slow manual work across the face, jaw, temples and scalp. Releases a clenched jaw and leaves the skin brighter for the rest of the day.'),
-      S('30-Minute Massage', 'focused', '30 min', '110 AED',
+      S('30 Minutes Massage', 'focused', '30 min', '110 AED',
         'A short massage on the area that needs it most.',
         'Half an hour, spent wherever you need it: back, legs, neck or feet. The quickest way to fit a massage into a working day.'),
-      S('Medical Therapy Massage', 'massage', '60 min', '250 AED',
+      S('Medical Therapy', 'massage', '60 min', '250 AED',
         'Therapeutic massage for a specific ache or stiffness.',
         'Targeted therapeutic work on a specific complaint, from a stiff lower back to tight hamstrings, planned after a short conversation about where it hurts.'),
       S('Slimming Massage', 'tech', '60 min', '300 AED',
         'Firm, brisk massage over the areas that hold fat and fluid.',
         'Brisk, firm manual work over the abdomen, waist and thighs to stimulate circulation and drainage. Most effective taken as a course.'),
-      S('Detox Slimming Body Wrap', 'tech', '60 min', '300 AED',
+      S('Detox Slimming Body Wraps', 'tech', '60 min', '300 AED',
         'A warming body wrap to draw out fluid and tighten the skin.',
         'The skin is prepared, coated in an active slimming formula and wrapped to hold the warmth in, then unwrapped and finished with a light massage.'),
       S('Belly Therapy Plan', 'tech', '30 min', '200 AED',
@@ -906,10 +906,10 @@
       S('Home Service Massage', 'massage', '60 min', '350 AED',
         'A one-hour massage delivered to your home or hotel.',
         'Our therapist comes to you with a table, linens and oils, and gives a full hour of massage wherever you are staying.'),
-      S('Balinese Massage — Home Service', 'massage', '60 min', '210 AED',
+      S('Balinese Massage Home Service', 'massage', '60 min', '210 AED',
         'Traditional Balinese massage, at your home.',
         'A full hour of Balinese bodywork, palm pressure and slow stretches over warm oil, delivered by our therapist at your home.'),
-      S('Holistic Massage — Home Service', 'massage', '60 min', '1,000 AED',
+      S('Home Service Holistic Massage', 'massage', '60 min', '1,000 AED',
         'Our holistic full-body massage, at your home.',
         'The holistic massage from our menu, taken at home: a therapist, a table and a full hour adapted to how you feel on the day.'),
     ] }),
@@ -918,19 +918,19 @@
       img: 'eco-him-07.jpg',
       blurb: 'Moroccan bath, infrared sauna and the packages that combine them.',
       items: [
-      S('Classic Moroccan Bath', 'bath', '60 min', '160 AED',
+      S('Classic Moroccan Hammam', 'bath', '60 min', '160 AED',
         'Steam, black soap and gentle exfoliation, leaving skin soft and refreshed.',
         'The essential version of the ritual: steam, beldi black soap and a full kessa exfoliation, finished with a warm rinse.'),
-      S('Royal Moroccan Bath', 'bath', '60 min', '300 AED',
+      S('Royal Moroccan Hammam', 'bath', '60 min', '300 AED',
         'Steam, black soap, deep exfoliation and a nourishing body mask.',
         'The full ritual, with a ghassoul clay mask and an argan oil finish added to the classic bath. Skin comes out softer than it has felt in months.'),
-      S('Infrared Sauna Session', 'water', '30 min', '150 AED',
+      S('Sauna', 'water', '30 min', '150 AED',
         'Gentle heat to support muscle recovery, improve circulation and ease tension.',
         'Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna while still doing the work.'),
-      S('Sauna & Massage Program', 'pkg', '90 min', '300 AED',
+      S('Sauna and Massage', 'pkg', '90 min', '300 AED',
         'Infrared heat, followed by bodywork.',
         'Time in the infrared cabin to open the muscle, then a massage while it is still warm. The combination most of our regulars settle on.'),
-      S('Sauna + HydraFacial', 'pkg', '90 min', '450 AED',
+      S('Sauna and HydraFacial', 'pkg', '90 min', '450 AED',
         'Infrared sauna, followed by a HydraFacial.',
         'Time in the infrared cabin to warm and open the skin, then a HydraFacial to cleanse, extract and hydrate while it is still receptive.'),
     ] }),
@@ -939,19 +939,19 @@
       img: 'imgi_33_man-getting-a-facial-treatment.jpg',
       blurb: 'Advanced facial and body treatments for men, from HydraFacial and professional cleansing to Dermapen, Emsculpt and Endospheres.',
       items: [
-      S('HydraFacial', 'facial', '60 min', '250 AED',
+      S('HydraFacial Basic', 'facial', '60 min', '250 AED',
         'Cleansing, extraction and hydration in one pass.',
         'A vortex handpiece cleanses, exfoliates, extracts and infuses serum in a single continuous pass. Fast, comfortable, and the easiest first facial to book.'),
-      S('Professional Skin Cleansing', 'facial', '60 min', '500 AED',
+      S('Deep Cleansing', 'facial', '60 min', '500 AED',
         'Steam, extraction and a calming finish.',
         'A proper clinical clean: steam to soften, careful extraction of congestion around the nose and beard line, then a calming mask.'),
-      S('Men\u2019s Signature Facial', 'facial', '60 min', '600 AED',
+      S('Ecosophy Signature Facial', 'facial', '60 min', '600 AED',
         'Deep cleanse and hydration built for beard-line and city skin.',
         'A facial built around the beard line: deep cleanse, steam, extraction where it is needed, and hydration that holds up against shaving and city air.'),
       S('Endospheres Therapy', 'tech', '60 min', '300 AED',
         'Compressive microvibration for skin tone and circulation.',
         'A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone.'),
-      S('Endospheres Face', 'tech', '60 min', '200 AED',
+      S('Endosphere Face Massage', 'tech', '60 min', '200 AED',
         'Microvibration facial treatment for tone and lift.',
         'A smaller Endospheres handpiece worked over the face and neck to support drainage, tone and definition along the jaw.'),
       S('HydraFacial Royal', 'facial', '60 min', '350 AED',
@@ -972,22 +972,22 @@
       S('Academie Facial', 'facial', '60 min', '300 AED',
         'A hydrating facial with Academie Scientifique de Beauté products.',
         'A classic hydrating facial using the French Academie line: cleanse, exfoliation, massage and a mask chosen for your skin.'),
-      S('Anti-Aging & Whitening Facial', 'facial', '60 min', '350 AED',
+      S('Anti-Aging and Whitening Facial', 'facial', '60 min', '350 AED',
         'Targets fine lines and uneven tone in one facial.',
         'A facial built around brightening and firming actives, aimed at fine lines, dark spots and an uneven tone left by sun and shaving.'),
-      S('Deep Cleansing Add-On', 'facial', '30 min', '50 AED',
+      S('Add-On Deep Cleansing', 'facial', '30 min', '50 AED',
         'Extra extraction time, added to any facial.',
         'Thirty extra minutes of steam and careful extraction, added to another facial when congestion needs more attention.'),
       S('Emsculpt', 'tech', '60 min', '400 AED',
         'Electromagnetic muscle stimulation for tone and definition.',
         'Non-invasive electromagnetic stimulation contracts the muscle far beyond what voluntary effort can reach, building tone through the abdomen, arms and legs. No downtime.'),
-      S('Emsculpt & Slimming', 'tech', '60 min', '500 AED',
+      S('Emsculpt and Slimming', 'tech', '60 min', '500 AED',
         'Emsculpt, combined with a slimming treatment.',
         'An Emsculpt session to build muscle, paired with slimming work on the same area to reduce fat and fluid over it.'),
-      S('Emsculpt & Slimming — Free Trial', 'tech', '15 min', 'Complimentary',
+      S('Free Trial Emsculpt and Slimming', 'tech', '15 min', 'Complimentary',
         'A free 15-minute taster of Emsculpt and slimming.',
         'Fifteen minutes on the device, free of charge, so you can feel how it works before committing to a session or a course.'),
-      S('Endospheres — Free Trial', 'tech', '15 min', 'Complimentary',
+      S('Free Trial Endosphere', 'tech', '15 min', 'Complimentary',
         'A free 15-minute taster of Endospheres therapy.',
         'Fifteen minutes of compressive microvibration, free of charge, so you know exactly what the treatment feels like before you book one.'),
     ] }),
@@ -1059,7 +1059,7 @@
       S('Relaxing Balinese — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
         'Five one-hour Balinese massages.',
         'Five full hours of relaxing Balinese massage, booked whenever you need one.'),
-      S('Sports Massage — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
+      S('Sport Massage — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
         'Five one-hour sports massages.',
         'Five sports massage sessions, timed around your training to keep recovery on track.'),
       S('Deep Tissue — 3 Sessions', 'massage', '3 × 60 min', '540 AED',
@@ -1086,10 +1086,10 @@
       S('Emsculpt — 5 Sessions', 'tech', '5 × 60 min', '1,000 AED',
         'A course of five Emsculpt sessions.',
         'Five Emsculpt sessions, the course length the device is designed around.'),
-      S('Emsculpt & Slimming — 5 Sessions', 'tech', '5 × 60 min', '1,500 AED',
+      S('Emsculpt and Slimming — 5 Sessions', 'tech', '5 × 60 min', '1,500 AED',
         'Five sessions of Emsculpt combined with slimming.',
         'Five combined Emsculpt and slimming sessions, building muscle and reducing fat over the same areas.'),
-      S('Emsculpt & Slimming — 10 Sessions', 'tech', '10 × 60 min', '2,400 AED',
+      S('Emsculpt and Slimming — 10 Sessions', 'tech', '10 × 60 min', '2,400 AED',
         'Ten sessions of Emsculpt combined with slimming.',
         'The full ten-session course of combined Emsculpt and slimming, for the most visible change.'),
       S('HydraFacial — 5 Sessions', 'facial', '5 × 60 min', '1,200 AED',
@@ -1100,6 +1100,122 @@
         'Five dry, blade-free smart pedicures, to keep feet in good shape month after month.'),
     ] }),
   ];
+
+  // Per-treatment photos: the client-approved selection of 18 October 2026
+  // (menservice.images/ and womenservice.images/, SERVICE PHOTO MAPPING.txt).
+  // Keyed by photo, each listing the slugs of the treatments that use it, so a
+  // course or combo shows the same photo as the treatment it is built on. A
+  // treatment not listed keeps its category / type photo. A slug is the
+  // slugified name, so renaming a treatment means updating its entry here.
+  var PHOTOS = {
+    him: {
+      'eco-him-svc-img-1110.png': [
+        'sport-massage', 'relaxing-balinese', 'deep-tissue', 'maderotherapy',
+        'holistic-massage', 'neck-shoulder-massage', '30-minutes-massage',
+        'medical-therapy', 'home-service-massage',
+        'balinese-massage-home-service', 'home-service-holistic-massage',
+        'relaxing-balinese-5-sessions', 'sport-massage-5-sessions',
+        'deep-tissue-3-sessions', 'deep-tissue-5-sessions',
+        'holistic-massage-5-sessions', 'maderotherapy-10-sessions',
+      ],
+      'eco-him-svc-treatment-room.jpg': [
+        'hot-stone', 'feet-massage', 'face-massage',
+        'detox-slimming-body-wraps', 'belly-therapy-plan',
+        'endosphere-face-massage', 'dermapen-by-dermapen-world',
+        'basic-dermapen', 'carboxytherapy-co2-treatment', 'academie-facial',
+        'anti-aging-and-whitening-facial',
+        'standard-package-moroccan-bath-plus-relaxing-body-massage',
+        'quick-recovery-moroccan-bath-plus-massage', 'premium-package',
+        'rejuvenation-package', 'signature-package', 'marble-body-package',
+        'luxury-package', 'vip-experience', 'body-shaving',
+        'chest-back-shaving', 'back-shaving', 'underarm-shaving',
+        'full-leg-waxing', 'body-waxing',
+        'detox-slimming-body-wraps-5-sessions', 'smart-pedicure-5-sessions',
+      ],
+      'eco-him-svc-photo-2026-07-25-02-03-04.jpg': [
+        'lymphatic-drainage', 'slimming-massage', 'endospheres-therapy',
+        'free-trial-endosphere', 'slimming-massage-5-sessions',
+        'endospheres-therapy-5-sessions',
+      ],
+      'eco-him-svc-photo-2026-07-25-02-03-59.jpg': [
+        'classic-moroccan-hammam', 'royal-moroccan-hammam',
+        'moroccan-hammam-3-sessions', 'moroccan-hammam-5-sessions',
+      ],
+      'eco-him-svc-photo-2026-08-02-15-48-52.jpg': [
+        'sauna', 'sauna-and-massage', 'sauna-and-hydrafacial',
+      ],
+      'eco-him-svc-photo-2026-08-02-15-49-50.jpg': [
+        'hydrafacial-basic', 'deep-cleansing', 'ecosophy-signature-facial',
+        'hydrafacial-royal', 'add-on-deep-cleansing', 'hydrafacial-5-sessions',
+      ],
+      'eco-him-svc-photo-2026-07-25-02-02-55.jpg': [
+        'express-facial',
+      ],
+      'eco-him-svc-img-0099.png': [
+        'emsculpt', 'emsculpt-5-sessions',
+      ],
+      'eco-him-svc-photo-2026-08-02-15-49-59.jpg': [
+        'emsculpt-and-slimming', 'free-trial-emsculpt-and-slimming',
+        'emsculpt-and-slimming-5-sessions', 'emsculpt-and-slimming-10-sessions',
+      ],
+    },
+    her: {
+      'eco-her-svc-img-3478.jpg': [
+        'basic-make-up',
+      ],
+      'eco-her-svc-img-2974.jpg': [
+        'evening-make-up',
+      ],
+      'eco-her-svc-img-3483.jpg': [
+        'make-up-hair-style-package',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-17-26.jpg': [
+        'endospheres-massage', 'endospheres-face', 'maderotherapy',
+        'maderotherapy-home-service', 'rf-slimming',
+        'slimming-massage-manual-anti-cellulite', 'maderotherapy-free-trial',
+        'endospheres-free-trial', 'ecosophy-pure-luxe-day',
+        'marble-body-package', 'rf-body-contouring-5-sessions',
+        'endospheres-lymphatic-drainage-5-sessions', 'endospheres-10-sessions',
+        'maderotherapy-5-sessions', 'maderotherapy-10-sessions',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-11-19.jpg': [
+        'classic-moroccan-bath', 'la-sultane-de-saba-ecosophy-deluxe',
+        'herbal-moroccan-bath-add-on',
+        'moroccan-bath-plus-1-hour-balinese-massage',
+        'deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure',
+        'ecosophy-escape',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-11-31.jpg': [
+        'royal-moroccan-bath',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-17-06.jpg': [
+        'beauty-spa-full-set-slimming-body-mask-scrub', 'body-scrub',
+        'body-mask',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-17-42.jpg': [
+        'slimming-body-wrap-by-beauty-spa', 'chocolate-body-mask',
+        'body-bleach', 'back-bleach',
+      ],
+      'eco-her-svc-img-7733.jpg': [
+        'infrared-sauna',
+      ],
+      'eco-her-svc-img-7739.jpg': [
+       
+        'classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-16-51.jpg': [
+        'ecosophy-elegance-trio', 'glass-skin-package',
+        'signature-radiance-ritual', 'classic-mani-pedi-offer',
+      ],
+    },
+  };
+
+  var PHOTO_OF = { him: {}, her: {} };
+  Object.keys(PHOTOS).forEach(function (side) {
+    Object.keys(PHOTOS[side]).forEach(function (f) {
+      PHOTOS[side][f].forEach(function (slug) { PHOTO_OF[side][slug] = UP + f; });
+    });
+  });
 
   w.ECO = {
     her: { cats: HER_CATS },
@@ -1115,7 +1231,7 @@
           out.push({
             name: it.name, cat: c.name, catKey: c.key, type: it.type,
             duration: it.duration, price: it.price, desc: it.desc, long: it.long,
-            slug: slugify(it.name),
+            slug: slugify(it.name), img: PHOTO_OF[side][slugify(it.name)] || '',
           });
         });
       });
@@ -1145,7 +1261,10 @@
         return {
           name: c.name, slot: c.ddSlot, pic: [c.img, '', ''], blurb: c.blurb,
           items: c.items.map(function (it) {
-            return { name: it.name, type: it.type, duration: it.duration, price: it.price, desc: it.desc };
+            return {
+              name: it.name, type: it.type, duration: it.duration, price: it.price, desc: it.desc,
+              img: PHOTO_OF[side][slugify(it.name)] || '',
+            };
           }),
         };
       });

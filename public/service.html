@@ -1135,7 +1135,7 @@ class Component extends DCLogic {
 
     const related = list.filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
       href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST',
-      slot: 'det-' + svc.slug + '-rel' + i, img: IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
+      slot: 'det-' + svc.slug + '-rel' + i, img: s.img || IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
     }));
 
     const ready = !!this.state.time && this.state.name.trim() && this.state.phone.trim();
@@ -1170,7 +1170,7 @@ class Component extends DCLogic {
       nameUpper: svc.name.toUpperCase(), catUpper: svc.cat.toUpperCase(), catHref: '/services',
       kicker: t.kicker, intro: svc.long, durationLong: durLong, roomLabel: t.room,
       rating, reviewCountLabel: count + ' GUEST REVIEWS',
-      heroSlot: 'det-' + svc.slug + '-hero', heroImg: IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
+      heroSlot: 'det-' + svc.slug + '-hero', heroImg: svc.img || IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
       overviewHeading: t.heading, overviewBody: svc.long + ' ' + (svc.type === 'pkg' ? 'Both stages run back to back in the same private suite.' : 'Your therapist stays with you for the whole session.'),
       steps: t.steps.map((s, i) => ({ no: '0' + (i + 1), name: s[0], time: s[1], desc: s[2] })),
       includes: t.includes.map(x => ({ t: x })),

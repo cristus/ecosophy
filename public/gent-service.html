@@ -1171,7 +1171,7 @@ class Component extends DCLogic {
 
     const related = list.filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
       href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST', price: s.price,
-      slot: 'gdet-' + svc.slug + '-rel' + i, img: IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
+      slot: 'gdet-' + svc.slug + '-rel' + i, img: s.img || IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
     }));
 
     const ready = !!this.state.time && this.state.name.trim() && this.state.phone.trim();
@@ -1208,7 +1208,7 @@ class Component extends DCLogic {
       price: svc.price, priceShow: svc.price ? 'block' : 'none',
       priceUnit: svc.type === 'pkg' ? 'PACKAGE' : / \d+ Sessions$/.test(svc.name) ? 'COURSE' : 'SESSION',
       rating, reviewCountLabel: count + ' GUEST REVIEWS',
-      heroSlot: 'gdet-' + svc.slug + '-hero', heroImg: IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
+      heroSlot: 'gdet-' + svc.slug + '-hero', heroImg: svc.img || IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
       overviewHeading: t.heading, overviewBody: svc.long + ' ' + (svc.type === 'pkg' ? 'Both stages run back to back in the same private suite.' : 'Your therapist stays with you for the whole session.'),
       steps: t.steps.map((s, i) => ({ no: '0' + (i + 1), name: s[0], time: s[1], desc: s[2] })),
       includes: t.includes.map(x => ({ t: x })),

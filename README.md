@@ -119,7 +119,7 @@ The pinned sections (`height:380vh` / `420vh` — the bath and the arrival) also
 look mostly empty in a measurement, but that height *is* the scroll runway for
 a sticky child. Leave those alone.
 
-### The switcher cards, and a stale editor override
+### The switcher cards
 
 `/index` runs two full-bleed cards. Each carries a veil over the whole card and
 a scrim under the copy; below 760px both are pulled back, because on a phone the
@@ -128,21 +128,14 @@ compounded over the whole photograph. The gold wreath and the script line get
 their legibility from a `drop-shadow` and a `text-shadow` instead, so the room
 behind them stays visible.
 
-The men's card also carries `.sw-veil--bright`, which darkens it further. That
-is a patch over a content problem, not a design choice. **`sw-him` is being
-served from an editor override, not from its `src`.** The markup says
-`uploads/eco-him-reception.jpg` — the gent reception desk under the neon
-wordmark, 960×1280 — but `public/.image-slots.state.json` holds an inline
-`data:image/webp` for that slot, and the sidecar wins. What actually renders is
-a **612×408 stock photo** of a man having a facial, upscaled to fill the card,
-mean luminance 161 against the women's photograph at 137. That is why the same
-gradient reads as far less of it on that side.
-
-So: clearing the `sw-him` entry from the sidecar restores a real photograph of
-the centre at more than four times the resolution, and `.sw-veil--bright` can
-go with it. The override is content someone set through `?edit=1`, so it has
-not been removed here. `tools/remove-dead-overrides.ps1` is the script for
-pruning that file. Worth checking the other 29 slots in it for the same thing.
+The men's card shows `uploads/sw-him-facial.jpg`: the centre's own HydraFacial
+photograph (`photo_2026-08-02_15-49-50.jpg`), cropped close on the client's face
+and the therapist's hands so it mirrors the women's facial close-up. It used to be served from a 612×408 stock frame
+held as an inline `data:` image for `sw-him` in `public/.image-slots.state.json`,
+which beat the `src`; that entry has been removed, and with it the
+`.sw-veil--bright` modifier that darkened the card to compensate for the stock
+frame's brightness. The live editor kept its own override on the same card
+(`/api/content`, page `/`); a picture changed through `?edit=1` wins over both.
 
 ### The header badge
 
