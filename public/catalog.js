@@ -1354,7 +1354,7 @@
       'svc-her-3d-nail-extension.jpg': [
         '3d-nail-extension',
       ],
-      'svc-her-extra-long-nail-extension.jpg': [
+      'svc-her-extra-long-nail-extension-v2.jpg': [
         'extra-long-nail-extension',
       ],
       'svc-her-plastic-nails-false-nail-extension-gel.jpg': [
@@ -1363,7 +1363,7 @@
       'svc-her-refill-nail-extension.jpg': [
         'refill-nail-extension',
       ],
-      'svc-her-refill-nail-extension-extra-long.jpg': [
+      'svc-her-refill-nail-extension-extra-long-v2.jpg': [
         'refill-nail-extension-extra-long',
       ],
       'svc-her-fake-nails-glue-on-regular-polish.jpg': [
