@@ -1101,133 +1101,561 @@
     ] }),
   ];
 
-  // Per-treatment photos: the client-approved selection of 18 October 2026
-  // (menservice.images/ and womenservice.images/, SERVICE PHOTO MAPPING.txt).
-  // Keyed by photo, each listing the slugs of the treatments that use it, so a
-  // course or combo shows the same photo as the treatment it is built on. A
+  // Per-treatment photos: every treatment has its own. Fifteen are the
+  // client's photographs of that exact service (eco-*-svc-*); the rest are
+  // generated images made for each treatment (svc-<side>-<slug>.jpg).
+  // Keyed by photo, each listing the slugs of the treatments that use it. A
   // treatment not listed keeps its category / type photo. A slug is the
   // slugified name, so renaming a treatment means updating its entry here.
   var PHOTOS = {
     him: {
+      'svc-him-sport-massage.jpg': [
+        'sport-massage',
+      ],
+      'eco-him-svc-img-1111.jpg': [
+        'relaxing-balinese',
+      ],
+      'svc-him-deep-tissue.jpg': [
+        'deep-tissue',
+      ],
+      'svc-him-hot-stone.jpg': [
+        'hot-stone',
+      ],
+      'svc-him-lymphatic-drainage.jpg': [
+        'lymphatic-drainage',
+      ],
+      'svc-him-maderotherapy.jpg': [
+        'maderotherapy',
+      ],
+      'svc-him-feet-massage.jpg': [
+        'feet-massage',
+      ],
+      'svc-him-holistic-massage.jpg': [
+        'holistic-massage',
+      ],
       'eco-him-svc-img-1110.png': [
-        'sport-massage', 'relaxing-balinese', 'deep-tissue', 'maderotherapy',
-        'holistic-massage', 'neck-shoulder-massage', '30-minutes-massage',
-        'medical-therapy', 'home-service-massage',
-        'balinese-massage-home-service', 'home-service-holistic-massage',
-        'relaxing-balinese-5-sessions', 'sport-massage-5-sessions',
-        'deep-tissue-3-sessions', 'deep-tissue-5-sessions',
-        'holistic-massage-5-sessions', 'maderotherapy-10-sessions',
+        'neck-shoulder-massage',
       ],
-      'eco-him-svc-treatment-room.jpg': [
-        'hot-stone', 'feet-massage', 'face-massage',
-        'detox-slimming-body-wraps', 'belly-therapy-plan',
-        'endosphere-face-massage', 'dermapen-by-dermapen-world',
-        'basic-dermapen', 'carboxytherapy-co2-treatment', 'academie-facial',
-        'anti-aging-and-whitening-facial',
-        'standard-package-moroccan-bath-plus-relaxing-body-massage',
-        'quick-recovery-moroccan-bath-plus-massage', 'premium-package',
-        'rejuvenation-package', 'signature-package', 'marble-body-package',
-        'luxury-package', 'vip-experience', 'body-shaving',
-        'chest-back-shaving', 'back-shaving', 'underarm-shaving',
-        'full-leg-waxing', 'body-waxing',
-        'detox-slimming-body-wraps-5-sessions', 'smart-pedicure-5-sessions',
+      'svc-him-face-massage.jpg': [
+        'face-massage',
       ],
-      'eco-him-svc-photo-2026-07-25-02-03-04.jpg': [
-        'lymphatic-drainage', 'slimming-massage', 'endospheres-therapy',
-        'free-trial-endosphere', 'slimming-massage-5-sessions',
-        'endospheres-therapy-5-sessions',
+      'svc-him-30-minutes-massage.jpg': [
+        '30-minutes-massage',
+      ],
+      'svc-him-medical-therapy.jpg': [
+        'medical-therapy',
+      ],
+      'svc-him-slimming-massage.jpg': [
+        'slimming-massage',
+      ],
+      'svc-him-detox-slimming-body-wraps.jpg': [
+        'detox-slimming-body-wraps',
+      ],
+      'svc-him-belly-therapy-plan.jpg': [
+        'belly-therapy-plan',
+      ],
+      'svc-him-home-service-massage.jpg': [
+        'home-service-massage',
+      ],
+      'svc-him-balinese-massage-home-service.jpg': [
+        'balinese-massage-home-service',
+      ],
+      'svc-him-home-service-holistic-massage.jpg': [
+        'home-service-holistic-massage',
       ],
       'eco-him-svc-photo-2026-07-25-02-03-59.jpg': [
-        'classic-moroccan-hammam', 'royal-moroccan-hammam',
-        'moroccan-hammam-3-sessions', 'moroccan-hammam-5-sessions',
+        'classic-moroccan-hammam',
+      ],
+      'svc-him-royal-moroccan-hammam.jpg': [
+        'royal-moroccan-hammam',
       ],
       'eco-him-svc-photo-2026-08-02-15-48-52.jpg': [
-        'sauna', 'sauna-and-massage', 'sauna-and-hydrafacial',
+        'sauna',
+      ],
+      'svc-him-sauna-and-massage.jpg': [
+        'sauna-and-massage',
+      ],
+      'svc-him-sauna-and-hydrafacial.jpg': [
+        'sauna-and-hydrafacial',
       ],
       'eco-him-svc-photo-2026-08-02-15-49-50.jpg': [
-        'hydrafacial-basic', 'deep-cleansing', 'ecosophy-signature-facial',
-        'hydrafacial-royal', 'add-on-deep-cleansing', 'hydrafacial-5-sessions',
+        'hydrafacial-basic',
+      ],
+      'svc-him-deep-cleansing.jpg': [
+        'deep-cleansing',
+      ],
+      'svc-him-ecosophy-signature-facial.jpg': [
+        'ecosophy-signature-facial',
+      ],
+      'eco-him-svc-photo-2026-07-25-02-03-04.jpg': [
+        'endospheres-therapy',
+      ],
+      'svc-him-endosphere-face-massage.jpg': [
+        'endosphere-face-massage',
+      ],
+      'svc-him-hydrafacial-royal.jpg': [
+        'hydrafacial-royal',
+      ],
+      'svc-him-dermapen-by-dermapen-world.jpg': [
+        'dermapen-by-dermapen-world',
+      ],
+      'svc-him-basic-dermapen.jpg': [
+        'basic-dermapen',
+      ],
+      'svc-him-carboxytherapy-co2-treatment.jpg': [
+        'carboxytherapy-co2-treatment',
       ],
       'eco-him-svc-photo-2026-07-25-02-02-55.jpg': [
         'express-facial',
       ],
+      'svc-him-academie-facial.jpg': [
+        'academie-facial',
+      ],
+      'svc-him-anti-aging-and-whitening-facial.jpg': [
+        'anti-aging-and-whitening-facial',
+      ],
+      'svc-him-add-on-deep-cleansing.jpg': [
+        'add-on-deep-cleansing',
+      ],
       'eco-him-svc-img-0099.png': [
-        'emsculpt', 'emsculpt-5-sessions',
+        'emsculpt',
       ],
       'eco-him-svc-photo-2026-08-02-15-49-59.jpg': [
-        'emsculpt-and-slimming', 'free-trial-emsculpt-and-slimming',
-        'emsculpt-and-slimming-5-sessions', 'emsculpt-and-slimming-10-sessions',
+        'emsculpt-and-slimming',
+      ],
+      'svc-him-free-trial-emsculpt-and-slimming.jpg': [
+        'free-trial-emsculpt-and-slimming',
+      ],
+      'svc-him-free-trial-endosphere.jpg': [
+        'free-trial-endosphere',
+      ],
+      'svc-him-standard-package-moroccan-bath-plus-relaxing-body-massage.jpg': [
+        'standard-package-moroccan-bath-plus-relaxing-body-massage',
+      ],
+      'svc-him-quick-recovery-moroccan-bath-plus-massage.jpg': [
+        'quick-recovery-moroccan-bath-plus-massage',
+      ],
+      'svc-him-premium-package.jpg': [
+        'premium-package',
+      ],
+      'svc-him-rejuvenation-package.jpg': [
+        'rejuvenation-package',
+      ],
+      'svc-him-signature-package.jpg': [
+        'signature-package',
+      ],
+      'svc-him-marble-body-package.jpg': [
+        'marble-body-package',
+      ],
+      'svc-him-luxury-package.jpg': [
+        'luxury-package',
+      ],
+      'svc-him-vip-experience.jpg': [
+        'vip-experience',
+      ],
+      'svc-him-body-shaving.jpg': [
+        'body-shaving',
+      ],
+      'svc-him-chest-back-shaving.jpg': [
+        'chest-back-shaving',
+      ],
+      'svc-him-back-shaving.jpg': [
+        'back-shaving',
+      ],
+      'svc-him-underarm-shaving.jpg': [
+        'underarm-shaving',
+      ],
+      'svc-him-full-leg-waxing.jpg': [
+        'full-leg-waxing',
+      ],
+      'svc-him-body-waxing.jpg': [
+        'body-waxing',
+      ],
+      'svc-him-moroccan-hammam-3-sessions.jpg': [
+        'moroccan-hammam-3-sessions',
+      ],
+      'svc-him-moroccan-hammam-5-sessions.jpg': [
+        'moroccan-hammam-5-sessions',
+      ],
+      'svc-him-relaxing-balinese-5-sessions.jpg': [
+        'relaxing-balinese-5-sessions',
+      ],
+      'svc-him-sport-massage-5-sessions.jpg': [
+        'sport-massage-5-sessions',
+      ],
+      'svc-him-deep-tissue-3-sessions.jpg': [
+        'deep-tissue-3-sessions',
+      ],
+      'svc-him-deep-tissue-5-sessions.jpg': [
+        'deep-tissue-5-sessions',
+      ],
+      'svc-him-holistic-massage-5-sessions.jpg': [
+        'holistic-massage-5-sessions',
+      ],
+      'svc-him-slimming-massage-5-sessions.jpg': [
+        'slimming-massage-5-sessions',
+      ],
+      'svc-him-detox-slimming-body-wraps-5-sessions.jpg': [
+        'detox-slimming-body-wraps-5-sessions',
+      ],
+      'svc-him-maderotherapy-10-sessions.jpg': [
+        'maderotherapy-10-sessions',
+      ],
+      'svc-him-endospheres-therapy-5-sessions.jpg': [
+        'endospheres-therapy-5-sessions',
+      ],
+      'svc-him-emsculpt-5-sessions.jpg': [
+        'emsculpt-5-sessions',
+      ],
+      'svc-him-emsculpt-and-slimming-5-sessions.jpg': [
+        'emsculpt-and-slimming-5-sessions',
+      ],
+      'svc-him-emsculpt-and-slimming-10-sessions.jpg': [
+        'emsculpt-and-slimming-10-sessions',
+      ],
+      'svc-him-hydrafacial-5-sessions.jpg': [
+        'hydrafacial-5-sessions',
+      ],
+      'svc-him-smart-pedicure-5-sessions.jpg': [
+        'smart-pedicure-5-sessions',
       ],
     },
     her: {
-      'eco-her-nails-1.jpg': [
-        'cut-and-file', 'classic-manicure',
-        'classic-smart-russian-manicure-machine', 'spa-manicure-alessandro',
-        'soft-gel-manicure', 'overlay-manicure', 'japanese-manicure',
-        'biab-manicure', 'gel-polish-application-colour-change-only',
-        'nail-extension-acrylic-gel-gel-polygel-acrygel', '3d-nail-extension',
-        'extra-long-nail-extension', 'plastic-nails-false-nail-extension-gel',
-        'refill-nail-extension', 'refill-nail-extension-extra-long',
-        'fake-nails-glue-on-regular-polish', 'false-nail-tips-stick-on-only',
+      'svc-her-cut-and-file.jpg': [
+        'cut-and-file',
+      ],
+      'svc-her-classic-manicure.jpg': [
+        'classic-manicure',
+      ],
+      'svc-her-classic-smart-russian-manicure-machine.jpg': [
+        'classic-smart-russian-manicure-machine',
+      ],
+      'svc-her-spa-manicure-alessandro.jpg': [
+        'spa-manicure-alessandro',
+      ],
+      'svc-her-soft-gel-manicure.jpg': [
+        'soft-gel-manicure',
+      ],
+      'svc-her-overlay-manicure.jpg': [
+        'overlay-manicure',
+      ],
+      'svc-her-japanese-manicure.jpg': [
+        'japanese-manicure',
+      ],
+      'svc-her-biab-manicure.jpg': [
+        'biab-manicure',
+      ],
+      'svc-her-gel-polish-application-colour-change-only.jpg': [
+        'gel-polish-application-colour-change-only',
+      ],
+      'svc-her-nail-extension-acrylic-gel-gel-polygel-acrygel.jpg': [
+        'nail-extension-acrylic-gel-gel-polygel-acrygel',
+      ],
+      'svc-her-3d-nail-extension.jpg': [
+        '3d-nail-extension',
+      ],
+      'svc-her-extra-long-nail-extension.jpg': [
+        'extra-long-nail-extension',
+      ],
+      'svc-her-plastic-nails-false-nail-extension-gel.jpg': [
+        'plastic-nails-false-nail-extension-gel',
+      ],
+      'svc-her-refill-nail-extension.jpg': [
+        'refill-nail-extension',
+      ],
+      'svc-her-refill-nail-extension-extra-long.jpg': [
+        'refill-nail-extension-extra-long',
+      ],
+      'svc-her-fake-nails-glue-on-regular-polish.jpg': [
+        'fake-nails-glue-on-regular-polish',
+      ],
+      'svc-her-false-nail-tips-stick-on-only.jpg': [
+        'false-nail-tips-stick-on-only',
+      ],
+      'svc-her-classic-manicure-plus-fake-nails-application.jpg': [
         'classic-manicure-plus-fake-nails-application',
-        'repair-per-nail-extension', 'soft-gel-by-top-master', 'french-add-on',
-        'ombre-add-on', 'cat-eye-add-on', 'chrome-powder-add-on',
-        'sticker-per-nail-add-on', 'drawing-design-per-nail-add-on',
-        'regular-nail-polish-add-on-hands', 'regular-nail-polish-add-on-feet',
-        'soft-gel-removal', 'hard-gel-removal', 'regular-nail-polish-removal',
-        'callus-removal-kinetics', 'spa-pedicure',
-        'ecosophy-signature-pedicure', 'signature-pedicure-machine-heels',
+      ],
+      'svc-her-repair-per-nail-extension.jpg': [
+        'repair-per-nail-extension',
+      ],
+      'svc-her-soft-gel-by-top-master.jpg': [
+        'soft-gel-by-top-master',
+      ],
+      'svc-her-french-add-on.jpg': [
+        'french-add-on',
+      ],
+      'svc-her-ombre-add-on.jpg': [
+        'ombre-add-on',
+      ],
+      'svc-her-cat-eye-add-on.jpg': [
+        'cat-eye-add-on',
+      ],
+      'svc-her-chrome-powder-add-on.jpg': [
+        'chrome-powder-add-on',
+      ],
+      'svc-her-sticker-per-nail-add-on.jpg': [
+        'sticker-per-nail-add-on',
+      ],
+      'svc-her-drawing-design-per-nail-add-on.jpg': [
+        'drawing-design-per-nail-add-on',
+      ],
+      'svc-her-regular-nail-polish-add-on-hands.jpg': [
+        'regular-nail-polish-add-on-hands',
+      ],
+      'svc-her-regular-nail-polish-add-on-feet.jpg': [
+        'regular-nail-polish-add-on-feet',
+      ],
+      'svc-her-soft-gel-removal.jpg': [
+        'soft-gel-removal',
+      ],
+      'svc-her-hard-gel-removal.jpg': [
+        'hard-gel-removal',
+      ],
+      'svc-her-regular-nail-polish-removal.jpg': [
+        'regular-nail-polish-removal',
+      ],
+      'svc-her-callus-removal-kinetics.jpg': [
+        'callus-removal-kinetics',
+      ],
+      'svc-her-spa-pedicure.jpg': [
+        'spa-pedicure',
+      ],
+      'svc-her-ecosophy-signature-pedicure.jpg': [
+        'ecosophy-signature-pedicure',
+      ],
+      'svc-her-signature-pedicure-machine-heels.jpg': [
+        'signature-pedicure-machine-heels',
+      ],
+      'svc-her-smart-pedicure-gel-machine-pedicure.jpg': [
         'smart-pedicure-gel-machine-pedicure',
-        'smart-pedicure-without-gel-colour', 'gel-pedicure',
-        'hard-gel-pedicure', 'spa-mani-pedi-combo',
+      ],
+      'svc-her-smart-pedicure-without-gel-colour.jpg': [
+        'smart-pedicure-without-gel-colour',
+      ],
+      'svc-her-gel-pedicure.jpg': [
+        'gel-pedicure',
+      ],
+      'svc-her-hard-gel-pedicure.jpg': [
+        'hard-gel-pedicure',
+      ],
+      'svc-her-foot-reflexology-massage-pedicure-add-on.jpg': [
+        'foot-reflexology-massage-pedicure-add-on',
+      ],
+      'svc-her-spa-mani-pedi-combo.jpg': [
+        'spa-mani-pedi-combo',
+      ],
+      'svc-her-russian-manicure-russian-pedicure.jpg': [
         'russian-manicure-russian-pedicure',
+      ],
+      'svc-her-russian-smart-pedicure-plus-classic-manicure.jpg': [
         'russian-smart-pedicure-plus-classic-manicure',
-        'overlay-manicure-home-service', 'soft-gel-manicure-home-service',
-        'gel-nail-extensions-home-service', 'gel-pedicure-home-service',
-        'spa-pedicure-home-service', 'classic-mani-pedi-home-service',
-        'hand-polish-home-service', 'feet-polish-home-service',
       ],
-      'eco-her-massage-1.jpg': [
-        'foot-reflexology-massage-pedicure-add-on', 'relaxing-massage',
-        'balinese-relaxing-massage', 'swedish-massage', 'deep-tissue',
-        'hot-stone-massage', 'aromatherapy', 'aromatherapy-with-hot-stone',
-        'lymphatic-drainage', 'face-lymphatic-massage', 'prenatal-massage',
-        'postpartum-massage', 'head-massage', 'back-massage',
-        'reflexology-feet', 'foot-massage', 'relaxing-massage-home-service',
-        'lymphatic-drainage-massage-home-service',
-        'postpartum-massage-home-service',
+      'svc-her-overlay-manicure-home-service.jpg': [
+        'overlay-manicure-home-service',
       ],
-      'eco-her-makeup-1.jpg': [
-        'classic-natural-lashes', '2d-lashes', '3d-lashes', 'mega-volume',
-        'any-volume-lashes', 'special-offer-any-volume', 'silk-lashes',
-        'half-set-lashes', 'led-lashes', 'rays-kim-kardashian-pattern',
-        'kylie-pattern', 'anime-pattern', 'wet-pattern', 'lower-lashes',
-        'lash-tint', 'eyelash-lifting', 'eyelash-brow-lifting-combo',
-        'lash-refill-within-1-week', 'led-lash-refill-within-1-week',
+      'svc-her-soft-gel-manicure-home-service.jpg': [
+        'soft-gel-manicure-home-service',
+      ],
+      'svc-her-gel-nail-extensions-home-service.jpg': [
+        'gel-nail-extensions-home-service',
+      ],
+      'svc-her-gel-pedicure-home-service.jpg': [
+        'gel-pedicure-home-service',
+      ],
+      'svc-her-spa-pedicure-home-service.jpg': [
+        'spa-pedicure-home-service',
+      ],
+      'svc-her-classic-mani-pedi-home-service.jpg': [
+        'classic-mani-pedi-home-service',
+      ],
+      'svc-her-hand-polish-home-service.jpg': [
+        'hand-polish-home-service',
+      ],
+      'svc-her-feet-polish-home-service.jpg': [
+        'feet-polish-home-service',
+      ],
+      'svc-her-classic-natural-lashes.jpg': [
+        'classic-natural-lashes',
+      ],
+      'svc-her-2d-lashes.jpg': [
+        '2d-lashes',
+      ],
+      'svc-her-3d-lashes.jpg': [
+        '3d-lashes',
+      ],
+      'svc-her-mega-volume.jpg': [
+        'mega-volume',
+      ],
+      'svc-her-any-volume-lashes.jpg': [
+        'any-volume-lashes',
+      ],
+      'svc-her-special-offer-any-volume.jpg': [
+        'special-offer-any-volume',
+      ],
+      'svc-her-silk-lashes.jpg': [
+        'silk-lashes',
+      ],
+      'svc-her-half-set-lashes.jpg': [
+        'half-set-lashes',
+      ],
+      'svc-her-led-lashes.jpg': [
+        'led-lashes',
+      ],
+      'svc-her-rays-kim-kardashian-pattern.jpg': [
+        'rays-kim-kardashian-pattern',
+      ],
+      'svc-her-kylie-pattern.jpg': [
+        'kylie-pattern',
+      ],
+      'svc-her-anime-pattern.jpg': [
+        'anime-pattern',
+      ],
+      'svc-her-wet-pattern.jpg': [
+        'wet-pattern',
+      ],
+      'svc-her-lower-lashes.jpg': [
+        'lower-lashes',
+      ],
+      'svc-her-lash-tint.jpg': [
+        'lash-tint',
+      ],
+      'svc-her-eyelash-lifting.jpg': [
+        'eyelash-lifting',
+      ],
+      'svc-her-eyelash-brow-lifting-combo.jpg': [
+        'eyelash-brow-lifting-combo',
+      ],
+      'svc-her-lash-refill-within-1-week.jpg': [
+        'lash-refill-within-1-week',
+      ],
+      'svc-her-led-lash-refill-within-1-week.jpg': [
+        'led-lash-refill-within-1-week',
+      ],
+      'svc-her-lash-refill-within-14-days-classic-2d.jpg': [
         'lash-refill-within-14-days-classic-2d',
-        'lash-refill-within-14-days-3d-mega-volume', 'led-lash-refill-15-days',
-        'lash-refill-after-21-days',
-        'lash-refill-within-25-days-3d-mega-volume',
-        'led-lash-refill-26-days-and-above', 'lash-refill-after-30-days',
-        'weekly-lash', 'eyelash-removal', 'lash-extension-home-service',
       ],
-      'eco-her-nails-2.jpg': [
-        'eyebrow-lifting', 'eyebrow-lifting-full-set-tinting-cleaning-lifting',
-        'eyebrow-architecture-plus-tinting-colouring', 'eyebrow-modelling',
-        'eyebrow-cleaning', 'eyebrow-colour', 'brow-clean-plus-colour-combo',
+      'svc-her-lash-refill-within-14-days-3d-mega-volume.jpg': [
+        'lash-refill-within-14-days-3d-mega-volume',
+      ],
+      'svc-her-led-lash-refill-15-days.jpg': [
+        'led-lash-refill-15-days',
+      ],
+      'svc-her-lash-refill-after-21-days.jpg': [
+        'lash-refill-after-21-days',
+      ],
+      'svc-her-lash-refill-within-25-days-3d-mega-volume.jpg': [
+        'lash-refill-within-25-days-3d-mega-volume',
+      ],
+      'svc-her-led-lash-refill-26-days-and-above.jpg': [
+        'led-lash-refill-26-days-and-above',
+      ],
+      'svc-her-lash-refill-after-30-days.jpg': [
+        'lash-refill-after-30-days',
+      ],
+      'svc-her-weekly-lash.jpg': [
+        'weekly-lash',
+      ],
+      'svc-her-eyelash-removal.jpg': [
+        'eyelash-removal',
+      ],
+      'svc-her-lash-extension-home-service.jpg': [
+        'lash-extension-home-service',
+      ],
+      'svc-her-eyebrow-lifting.jpg': [
+        'eyebrow-lifting',
+      ],
+      'svc-her-eyebrow-lifting-full-set-tinting-cleaning-lifting.jpg': [
+        'eyebrow-lifting-full-set-tinting-cleaning-lifting',
+      ],
+      'svc-her-eyebrow-architecture-plus-tinting-colouring.jpg': [
+        'eyebrow-architecture-plus-tinting-colouring',
+      ],
+      'svc-her-eyebrow-modelling.jpg': [
+        'eyebrow-modelling',
+      ],
+      'svc-her-eyebrow-cleaning.jpg': [
+        'eyebrow-cleaning',
+      ],
+      'svc-her-eyebrow-colour.jpg': [
+        'eyebrow-colour',
+      ],
+      'svc-her-brow-clean-plus-colour-combo.jpg': [
+        'brow-clean-plus-colour-combo',
+      ],
+      'svc-her-eyebrow-bleaching-muslim-brow-architecture.jpg': [
         'eyebrow-bleaching-muslim-brow-architecture',
+      ],
+      'svc-her-eyebrow-lifting-home-service.jpg': [
         'eyebrow-lifting-home-service',
       ],
-      'eco-her-spa-08.jpg': [
-        'eyebrow-threading-cleaning', 'face-threading', 'full-face-mousse',
-        'upper-lip-threading', 'chin-threading', 'brow-bleaching',
-        'full-body-wax', 'full-leg-wax', 'half-leg-wax', 'full-arm-wax',
-        'half-arm-wax', 'underarm-wax', 'bikini-zone-wax', 'back-wax',
-        'upper-lip-wax', 'chin-wax', 'nose-waxing', 'waxing-home-service',
+      'svc-her-eyebrow-threading-cleaning.jpg': [
+        'eyebrow-threading-cleaning',
       ],
-      'eco-her-makeup-2.jpg': [
-        'semi-permanent-eyebrow-colour', 'eyeliner', 'dark-lips-neutralisation',
-        'lips-spa', 'eyebrow-pigment-removal',
+      'svc-her-face-threading.jpg': [
+        'face-threading',
+      ],
+      'svc-her-full-face-mousse.jpg': [
+        'full-face-mousse',
+      ],
+      'svc-her-upper-lip-threading.jpg': [
+        'upper-lip-threading',
+      ],
+      'svc-her-chin-threading.jpg': [
+        'chin-threading',
+      ],
+      'svc-her-brow-bleaching.jpg': [
+        'brow-bleaching',
+      ],
+      'svc-her-full-body-wax.jpg': [
+        'full-body-wax',
+      ],
+      'svc-her-full-leg-wax.jpg': [
+        'full-leg-wax',
+      ],
+      'svc-her-half-leg-wax.jpg': [
+        'half-leg-wax',
+      ],
+      'svc-her-full-arm-wax.jpg': [
+        'full-arm-wax',
+      ],
+      'svc-her-half-arm-wax.jpg': [
+        'half-arm-wax',
+      ],
+      'svc-her-underarm-wax.jpg': [
+        'underarm-wax',
+      ],
+      'svc-her-bikini-zone-wax.jpg': [
+        'bikini-zone-wax',
+      ],
+      'svc-her-back-wax.jpg': [
+        'back-wax',
+      ],
+      'svc-her-upper-lip-wax.jpg': [
+        'upper-lip-wax',
+      ],
+      'svc-her-chin-wax.jpg': [
+        'chin-wax',
+      ],
+      'svc-her-nose-waxing.jpg': [
+        'nose-waxing',
+      ],
+      'svc-her-waxing-home-service.jpg': [
+        'waxing-home-service',
+      ],
+      'svc-her-semi-permanent-eyebrow-colour.jpg': [
+        'semi-permanent-eyebrow-colour',
+      ],
+      'svc-her-eyeliner.jpg': [
+        'eyeliner',
+      ],
+      'svc-her-dark-lips-neutralisation.jpg': [
+        'dark-lips-neutralisation',
+      ],
+      'svc-her-lips-spa.jpg': [
+        'lips-spa',
+      ],
+      'svc-her-eyebrow-pigment-removal.jpg': [
+        'eyebrow-pigment-removal',
       ],
       'eco-her-svc-img-3478.jpg': [
         'basic-make-up',
@@ -1238,76 +1666,360 @@
       'eco-her-svc-img-3483.jpg': [
         'make-up-hair-style-package',
       ],
-      'eco-her-hair-1.jpg': [
-        'haircut', 'hair-trim', 'fringe-cut', 'baby-trim', 'hair-wash',
-        'blow-dry-long-basic', 'blow-dry-medium-length-basic', 'blow-dry-curls',
-        'hair-styling', 'full-hair-colour-short-length',
-        'full-hair-colour-medium', 'full-hair-colour-medium-length',
-        'root-colour', 'hair-colour-application', 'highlights-short-hair',
-        'hair-bleach-roots', 'toner-rinsage', 'estel-colour-off-medium-length',
-        'estel-colour-off-long-length', 'estel-colour-off-extra-long',
-        'hair-keratin', 'keratin-roots', 'hair-protein', 'hair-botox',
-        'remount-hair-treatment', 'estel-cloud-hair-treatment',
-        'estel-banya-treatment', 'flowers-hair-treatment', 'korean-hair-spa',
+      'svc-her-haircut.jpg': [
+        'haircut',
+      ],
+      'svc-her-hair-trim.jpg': [
+        'hair-trim',
+      ],
+      'svc-her-fringe-cut.jpg': [
+        'fringe-cut',
+      ],
+      'svc-her-baby-trim.jpg': [
+        'baby-trim',
+      ],
+      'svc-her-hair-wash.jpg': [
+        'hair-wash',
+      ],
+      'svc-her-blow-dry-long-basic.jpg': [
+        'blow-dry-long-basic',
+      ],
+      'svc-her-blow-dry-medium-length-basic.jpg': [
+        'blow-dry-medium-length-basic',
+      ],
+      'svc-her-blow-dry-curls.jpg': [
+        'blow-dry-curls',
+      ],
+      'svc-her-hair-styling.jpg': [
+        'hair-styling',
+      ],
+      'svc-her-full-hair-colour-short-length.jpg': [
+        'full-hair-colour-short-length',
+      ],
+      'svc-her-full-hair-colour-medium.jpg': [
+        'full-hair-colour-medium',
+      ],
+      'svc-her-full-hair-colour-medium-length.jpg': [
+        'full-hair-colour-medium-length',
+      ],
+      'svc-her-root-colour.jpg': [
+        'root-colour',
+      ],
+      'svc-her-hair-colour-application.jpg': [
+        'hair-colour-application',
+      ],
+      'svc-her-highlights-short-hair.jpg': [
+        'highlights-short-hair',
+      ],
+      'svc-her-hair-bleach-roots.jpg': [
+        'hair-bleach-roots',
+      ],
+      'svc-her-toner-rinsage.jpg': [
+        'toner-rinsage',
+      ],
+      'svc-her-estel-colour-off-medium-length.jpg': [
+        'estel-colour-off-medium-length',
+      ],
+      'svc-her-estel-colour-off-long-length.jpg': [
+        'estel-colour-off-long-length',
+      ],
+      'svc-her-estel-colour-off-extra-long.jpg': [
+        'estel-colour-off-extra-long',
+      ],
+      'svc-her-hair-keratin.jpg': [
+        'hair-keratin',
+      ],
+      'svc-her-keratin-roots.jpg': [
+        'keratin-roots',
+      ],
+      'svc-her-hair-protein.jpg': [
+        'hair-protein',
+      ],
+      'svc-her-hair-botox.jpg': [
+        'hair-botox',
+      ],
+      'svc-her-remount-hair-treatment.jpg': [
+        'remount-hair-treatment',
+      ],
+      'svc-her-estel-cloud-hair-treatment.jpg': [
+        'estel-cloud-hair-treatment',
+      ],
+      'svc-her-estel-banya-treatment.jpg': [
+        'estel-banya-treatment',
+      ],
+      'svc-her-flowers-hair-treatment.jpg': [
+        'flowers-hair-treatment',
+      ],
+      'svc-her-korean-hair-spa.jpg': [
+        'korean-hair-spa',
+      ],
+      'svc-her-more-therapy-scalp-scrub-short-hair.jpg': [
         'more-therapy-scalp-scrub-short-hair',
+      ],
+      'svc-her-more-therapy-scalp-scrub-medium-hair.jpg': [
         'more-therapy-scalp-scrub-medium-hair',
+      ],
+      'svc-her-more-therapy-scalp-scrub-long-extra-long.jpg': [
         'more-therapy-scalp-scrub-long-extra-long',
+      ],
+      'svc-her-hair-treatment-add-on-for-moroccan-bath.jpg': [
         'hair-treatment-add-on-for-moroccan-bath',
-        'extension-removal-per-piece', 'extension-cleaning-per-piece',
+      ],
+      'svc-her-extension-removal-per-piece.jpg': [
+        'extension-removal-per-piece',
+      ],
+      'svc-her-extension-cleaning-per-piece.jpg': [
+        'extension-cleaning-per-piece',
+      ],
+      'svc-her-remove-clean-refit-extensions-per-piece.jpg': [
         'remove-clean-refit-extensions-per-piece',
       ],
-      'eco-her-facial-1.jpg': [
-        'royal-hydrafacial', 'basic-hydrafacial', 'deep-cleansing-facial',
-        'express-facial', 'anti-aging-facial', 'red-carpet-facial',
-        'microcurrent-face-lift', 'ultrasonic-cleansing-facial',
-        'carbon-peel-non-invasive', 'fcl-peel', 'dermabrasion',
-        'carboxytherapy', 'led-light-therapy-plus-botox-mask', 'algae-mask',
-        'klapp-repagen-treatment', 'klapp-repagen-combined-with-hydrafacial',
-        'klapp-aloe-vera', 'dermapen-by-dermapen-world', 'dermapen-by-dr-pen',
-        'skin-booster', 'biorevitalisation', 'mesotherapy', 'diamond-facial',
-        'chemical-peel', 'almond-peeling', 'lip-rejuvenation',
+      'svc-her-royal-hydrafacial.jpg': [
+        'royal-hydrafacial',
+      ],
+      'svc-her-basic-hydrafacial.jpg': [
+        'basic-hydrafacial',
+      ],
+      'svc-her-deep-cleansing-facial.jpg': [
+        'deep-cleansing-facial',
+      ],
+      'svc-her-express-facial.jpg': [
+        'express-facial',
+      ],
+      'svc-her-anti-aging-facial.jpg': [
+        'anti-aging-facial',
+      ],
+      'svc-her-red-carpet-facial.jpg': [
+        'red-carpet-facial',
+      ],
+      'svc-her-microcurrent-face-lift.jpg': [
+        'microcurrent-face-lift',
+      ],
+      'svc-her-ultrasonic-cleansing-facial.jpg': [
+        'ultrasonic-cleansing-facial',
+      ],
+      'svc-her-carbon-peel-non-invasive.jpg': [
+        'carbon-peel-non-invasive',
+      ],
+      'svc-her-fcl-peel.jpg': [
+        'fcl-peel',
+      ],
+      'svc-her-dermabrasion.jpg': [
+        'dermabrasion',
+      ],
+      'svc-her-carboxytherapy.jpg': [
+        'carboxytherapy',
+      ],
+      'svc-her-led-light-therapy-plus-botox-mask.jpg': [
+        'led-light-therapy-plus-botox-mask',
+      ],
+      'svc-her-algae-mask.jpg': [
+        'algae-mask',
+      ],
+      'svc-her-klapp-repagen-treatment.jpg': [
+        'klapp-repagen-treatment',
+      ],
+      'svc-her-klapp-repagen-combined-with-hydrafacial.jpg': [
+        'klapp-repagen-combined-with-hydrafacial',
+      ],
+      'svc-her-klapp-aloe-vera.jpg': [
+        'klapp-aloe-vera',
+      ],
+      'svc-her-dermapen-by-dermapen-world.jpg': [
+        'dermapen-by-dermapen-world',
+      ],
+      'svc-her-dermapen-by-dr-pen.jpg': [
+        'dermapen-by-dr-pen',
+      ],
+      'svc-her-skin-booster.jpg': [
+        'skin-booster',
+      ],
+      'svc-her-biorevitalisation.jpg': [
+        'biorevitalisation',
+      ],
+      'svc-her-mesotherapy.jpg': [
+        'mesotherapy',
+      ],
+      'svc-her-diamond-facial.jpg': [
+        'diamond-facial',
+      ],
+      'svc-her-chemical-peel.jpg': [
+        'chemical-peel',
+      ],
+      'svc-her-almond-peeling.jpg': [
+        'almond-peeling',
+      ],
+      'svc-her-lip-rejuvenation.jpg': [
+        'lip-rejuvenation',
+      ],
+      'svc-her-intimate-whitening.jpg': [
         'intimate-whitening',
       ],
-      'eco-her-jacuzzi-1.jpg': [
-        'water-bed-relaxing-treatment', 'jacuzzi-massage',
+      'svc-her-relaxing-massage.jpg': [
+        'relaxing-massage',
       ],
-      'eco-her-svc-photo-2026-08-02-21-17-26.jpg': [
-        'endospheres-massage', 'endospheres-face', 'maderotherapy',
-        'maderotherapy-home-service', 'rf-slimming',
-        'slimming-massage-manual-anti-cellulite', 'maderotherapy-free-trial',
-        'endospheres-free-trial', 'ecosophy-pure-luxe-day',
-        'marble-body-package', 'rf-body-contouring-5-sessions',
-        'endospheres-lymphatic-drainage-5-sessions', 'endospheres-10-sessions',
-        'maderotherapy-5-sessions', 'maderotherapy-10-sessions',
+      'svc-her-balinese-relaxing-massage.jpg': [
+        'balinese-relaxing-massage',
+      ],
+      'svc-her-swedish-massage.jpg': [
+        'swedish-massage',
+      ],
+      'svc-her-deep-tissue.jpg': [
+        'deep-tissue',
+      ],
+      'svc-her-hot-stone-massage.jpg': [
+        'hot-stone-massage',
+      ],
+      'svc-her-aromatherapy.jpg': [
+        'aromatherapy',
+      ],
+      'svc-her-aromatherapy-with-hot-stone.jpg': [
+        'aromatherapy-with-hot-stone',
+      ],
+      'svc-her-lymphatic-drainage.jpg': [
+        'lymphatic-drainage',
+      ],
+      'svc-her-face-lymphatic-massage.jpg': [
+        'face-lymphatic-massage',
+      ],
+      'svc-her-prenatal-massage.jpg': [
+        'prenatal-massage',
+      ],
+      'svc-her-postpartum-massage.jpg': [
+        'postpartum-massage',
+      ],
+      'svc-her-water-bed-relaxing-treatment.jpg': [
+        'water-bed-relaxing-treatment',
+      ],
+      'svc-her-jacuzzi-massage.jpg': [
+        'jacuzzi-massage',
+      ],
+      'svc-her-head-massage.jpg': [
+        'head-massage',
+      ],
+      'svc-her-back-massage.jpg': [
+        'back-massage',
+      ],
+      'svc-her-reflexology-feet.jpg': [
+        'reflexology-feet',
+      ],
+      'svc-her-foot-massage.jpg': [
+        'foot-massage',
+      ],
+      'svc-her-relaxing-massage-home-service.jpg': [
+        'relaxing-massage-home-service',
+      ],
+      'svc-her-lymphatic-drainage-massage-home-service.jpg': [
+        'lymphatic-drainage-massage-home-service',
+      ],
+      'svc-her-postpartum-massage-home-service.jpg': [
+        'postpartum-massage-home-service',
+      ],
+      'svc-her-endospheres-massage.jpg': [
+        'endospheres-massage',
+      ],
+      'svc-her-endospheres-face.jpg': [
+        'endospheres-face',
+      ],
+      'svc-her-maderotherapy.jpg': [
+        'maderotherapy',
+      ],
+      'svc-her-maderotherapy-home-service.jpg': [
+        'maderotherapy-home-service',
+      ],
+      'svc-her-rf-slimming.jpg': [
+        'rf-slimming',
+      ],
+      'svc-her-slimming-massage-manual-anti-cellulite.jpg': [
+        'slimming-massage-manual-anti-cellulite',
+      ],
+      'svc-her-maderotherapy-free-trial.jpg': [
+        'maderotherapy-free-trial',
+      ],
+      'svc-her-endospheres-free-trial.jpg': [
+        'endospheres-free-trial',
       ],
       'eco-her-svc-photo-2026-08-02-21-11-19.jpg': [
-        'classic-moroccan-bath', 'la-sultane-de-saba-ecosophy-deluxe',
-        'herbal-moroccan-bath-add-on',
-        'moroccan-bath-plus-1-hour-balinese-massage',
-        'deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure',
-        'ecosophy-escape',
+        'classic-moroccan-bath',
       ],
       'eco-her-svc-photo-2026-08-02-21-11-31.jpg': [
         'royal-moroccan-bath',
       ],
-      'eco-her-svc-photo-2026-08-02-21-17-06.jpg': [
-        'beauty-spa-full-set-slimming-body-mask-scrub', 'body-scrub',
+      'svc-her-la-sultane-de-saba-ecosophy-deluxe.jpg': [
+        'la-sultane-de-saba-ecosophy-deluxe',
+      ],
+      'svc-her-herbal-moroccan-bath-add-on.jpg': [
+        'herbal-moroccan-bath-add-on',
+      ],
+      'svc-her-beauty-spa-full-set-slimming-body-mask-scrub.jpg': [
+        'beauty-spa-full-set-slimming-body-mask-scrub',
+      ],
+      'svc-her-slimming-body-wrap-by-beauty-spa.jpg': [
+        'slimming-body-wrap-by-beauty-spa',
+      ],
+      'svc-her-body-scrub.jpg': [
+        'body-scrub',
+      ],
+      'svc-her-body-mask.jpg': [
         'body-mask',
       ],
-      'eco-her-svc-photo-2026-08-02-21-17-42.jpg': [
-        'slimming-body-wrap-by-beauty-spa', 'chocolate-body-mask',
-        'body-bleach', 'back-bleach',
+      'svc-her-chocolate-body-mask.jpg': [
+        'chocolate-body-mask',
+      ],
+      'svc-her-body-bleach.jpg': [
+        'body-bleach',
+      ],
+      'svc-her-back-bleach.jpg': [
+        'back-bleach',
       ],
       'eco-her-svc-img-7733.jpg': [
         'infrared-sauna',
       ],
-      'eco-her-svc-img-7739.jpg': [
+      'svc-her-moroccan-bath-plus-1-hour-balinese-massage.jpg': [
+        'moroccan-bath-plus-1-hour-balinese-massage',
+      ],
+      'svc-her-classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage.jpg': [
        
         'classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage',
       ],
-      'eco-her-svc-photo-2026-08-02-21-16-51.jpg': [
-        'ecosophy-elegance-trio', 'glass-skin-package',
-        'signature-radiance-ritual', 'classic-mani-pedi-offer',
+      'svc-her-deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure.jpg': [
+        'deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure',
+      ],
+      'svc-her-ecosophy-escape.jpg': [
+        'ecosophy-escape',
+      ],
+      'svc-her-ecosophy-elegance-trio.jpg': [
+        'ecosophy-elegance-trio',
+      ],
+      'svc-her-ecosophy-pure-luxe-day.jpg': [
+        'ecosophy-pure-luxe-day',
+      ],
+      'svc-her-glass-skin-package.jpg': [
+        'glass-skin-package',
+      ],
+      'svc-her-marble-body-package.jpg': [
+        'marble-body-package',
+      ],
+      'svc-her-signature-radiance-ritual.jpg': [
+        'signature-radiance-ritual',
+      ],
+      'svc-her-classic-mani-pedi-offer.jpg': [
+        'classic-mani-pedi-offer',
+      ],
+      'svc-her-rf-body-contouring-5-sessions.jpg': [
+        'rf-body-contouring-5-sessions',
+      ],
+      'svc-her-endospheres-lymphatic-drainage-5-sessions.jpg': [
+        'endospheres-lymphatic-drainage-5-sessions',
+      ],
+      'svc-her-endospheres-10-sessions.jpg': [
+        'endospheres-10-sessions',
+      ],
+      'svc-her-maderotherapy-5-sessions.jpg': [
+        'maderotherapy-5-sessions',
+      ],
+      'svc-her-maderotherapy-10-sessions.jpg': [
+        'maderotherapy-10-sessions',
       ],
     },
   };
