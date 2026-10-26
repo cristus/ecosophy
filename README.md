@@ -68,6 +68,37 @@ treatment-detail templates all read it, so:
 Duration may be left blank; the pages then show *BY REQUEST* rather than a
 made-up number.
 
+### Treatment pages, packages, booking and search (launch corrections, 24 Oct 2026)
+
+Everything below lives in `catalog.js`, so a change is made once and every
+page — menu, detail page, related cards, booking selectors, WhatsApp text —
+follows.
+
+- **No invented stages.** Detail pages used to show four or five per-type
+  "stages" with minutes against each, which disagreed with the real duration
+  on 206 pages. Single treatments now show their menu description and their
+  one real duration. Type copy (`ECO.<side>.types`) is kept general enough to
+  be true for every treatment of that type — check that before adding a line.
+- **Packages** list their real components: `S(..., { parts: [P(name, link,
+  desc)] })`, taken from the client's menu rows and offer cards. `link` is the
+  component's own slug; its description is then reused, so they cannot drift.
+- **Stable slugs.** A renamed treatment keeps its old URL identifier via
+  `{ slug: 'old-slug' }`. Identifiers handed out before a rename go in
+  `ECO.legacy`; anything unknown shows a not-found page (never another
+  treatment).
+- **Booking** (`ECO.booking`, `ECO.hours`): opening hours per side, Dubai time,
+  past times disabled, phone validation, re-checked when sending. There is no
+  live diary, so nothing is shown as reserved; every form sends a request on
+  WhatsApp that the centre confirms. All six booking flows use it.
+- **Photos** follow the 18 October handoff (`PHOTOS`); no generated images.
+- **Search engines.** `functions/service.js` and `gent-service.js` write each
+  treatment's own canonical, title and description, 301 legacy slugs and 404
+  unknown ones. After changing names, descriptions, treatments or `ECO.site`
+  (the launch domain), run `node tools/seo.mjs` to regenerate
+  `public/sitemap.xml`, `robots.txt` and `functions/_services.js`, then
+  `cp data/catalog.js public/catalog.js`. `node tools/test-detail-function.mjs`
+  checks the Functions.
+
 ### Prices — men's side only
 
 The men's pages publish prices; the women's pages do not. A price is the fourth

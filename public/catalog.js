@@ -26,12 +26,30 @@
 
   // One treatment. Duration may be blank: the pages fall back to "BY REQUEST".
   // Price may be blank too: the men's pages then simply show no figure.
-  function S(name, type, duration, price, desc, long) {
+  //
+  // `o` holds the optional extras:
+  //   slug  - the treatment's URL identifier, when it must not follow the name.
+  //           A renamed treatment keeps its old slug here, so its page address,
+  //           its pinned photos and every link already handed out stay valid.
+  //   parts - a package's components, as keys of PARTS below. The detail page
+  //           describes those components, in that order, instead of a template.
+  //   visits - 'separate' for a package taken as several separate sessions.
+  function S(name, type, duration, price, desc, long, o) {
+    o = o || {};
     return {
       name: name, type: type,
       duration: duration || '', price: price || '',
       desc: desc, long: long,
+      slug: o.slug || '', parts: o.parts || null, visits: o.visits || 'one',
     };
+  }
+
+  // One component of a package, exactly as the package's own menu row or offer
+  // card names it. `link` is the slug of the same treatment on its own page,
+  // where there is one; `desc` may then be left out and the page uses that
+  // treatment's own description, so the two can never disagree.
+  function P(name, link, desc) {
+    return { name: name, link: link || '', desc: desc || '' };
   }
 
   // One category. `slot` is the image-slot id the services and menu pages use,
@@ -187,9 +205,10 @@
       S('Hard Gel Pedicure', 'nails', '60 min', '210 AED',
         'A pedicure with a hard gel finish.',
         'A full pedicure with a hard gel layer for the strongest, longest-lasting finish on the toes.'),
-      S('Foot Reflexology Massage (Pedicure Add-On)', 'focused', '15 min', '100 AED',
+      S('Foot Reflexology Rejuvenating (Pedicure Add-On)', 'focused', '15 min', '100 AED',
         'Reflexology added to your pedicure.',
-        'Fifteen minutes of pressure-point work on the soles, added to the end of any pedicure.'),
+        'Fifteen minutes of pressure-point work on the soles, added to the end of any pedicure.',
+        { slug: 'foot-reflexology-massage-pedicure-add-on' }),
       S('Spa Mani Pedi Combo', 'nails', '120 min', '300 AED',
         'Spa manicure and spa pedicure in one visit.',
         'The spa manicure and the spa pedicure booked together, with scrub, mask and massage for both hands and feet.'),
@@ -226,7 +245,7 @@
     ] }),
 
     C({ key: 'lashes', name: 'Eyelashes', slot: 'svc-cat-lashes', ddSlot: 'dd-cat-Eyelashes',
-      img: 'eco-her-portrait-1.jpg',
+      img: 'eco-her-svc-lashes-volume-1.jpg',
       blurb: 'Russian-speaking lash masters. Extensions, lifts and refills mapped to your eye shape and the look you want.',
       items: [
       S('Classic Natural Lashes', 'lashes', '150 min', '220 AED',
@@ -660,79 +679,96 @@
         'A discreet treatment in a private room to even out skin tone in the intimate area.'),
     ] }),
 
-    C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'svc-cat-massage', ddSlot: 'dd-cat-Massages',
+    C({ key: 'massage', name: 'Body Rejuvenating & Wellness', slot: 'svc-cat-massage', ddSlot: 'dd-cat-Massages',
       img: 'eco-her-massage-2.jpg',
       blurb: 'Relaxing, Balinese, deep tissue, hot stone, prenatal and postpartum massage, in the salon or at home.',
       items: [
-      S('Relaxing Massage', 'massage', '60 min', '200 AED',
+      S('Relaxing Body Rejuvenating', 'massage', '60 min', '200 AED',
         'Light, flowing pressure to unwind the whole body.',
-        'Long, unhurried strokes at light to medium pressure, designed to quiet the nervous system rather than work into deep tissue.'),
-      S('Balinese Relaxing Massage', 'massage', '60 min', '180 AED',
+        'Long, unhurried strokes at light to medium pressure, designed to quiet the nervous system rather than work into deep tissue.',
+        { slug: 'relaxing-massage' }),
+      S('Balinese Relaxing Body Rejuvenating', 'massage', '60 min', '180 AED',
         'Slow oil-based bodywork in the Balinese tradition.',
-        'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil.'),
-      S('Swedish Massage', 'massage', '60 min', '200 AED',
+        'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil.',
+        { slug: 'balinese-relaxing-massage' }),
+      S('Swedish Body Rejuvenating', 'massage', '60 min', '200 AED',
         'Classic long strokes for circulation and tension relief.',
-        'The classic European technique: long gliding strokes, kneading and circular pressure that leave the whole body loose.'),
-      S('Deep Tissue', 'massage', '60 min', '200 AED',
+        'The classic European technique: long gliding strokes, kneading and circular pressure that leave the whole body loose.',
+        { slug: 'swedish-massage' }),
+      S('Deep Tissue Body Rejuvenating', 'massage', '60 min', '200 AED',
         'Firm pressure that works into knots and tight muscle.',
-        'Firm, slow pressure into the layers beneath the surface, for tension a lighter massage never quite reaches.'),
-      S('Hot Stone Massage', 'massage', '60 min', '300 AED',
+        'Firm, slow pressure into the layers beneath the surface, for tension that lighter work never quite reaches.',
+        { slug: 'deep-tissue' }),
+      S('Hot Stone Body Rejuvenating', 'massage', '60 min', '300 AED',
         'Warm basalt stones ease deep muscular tightness.',
-        'Heated basalt stones are placed along the back and used as an extension of the therapist’s hands. The heat opens tight muscle before any pressure is applied.'),
+        'Heated basalt stones are placed along the back and used as an extension of the therapist’s hands. The heat opens tight muscle before any pressure is applied.',
+        { slug: 'hot-stone-massage' }),
       S('Aromatherapy', 'massage', '60 min', '200 AED',
         'Essential-oil blends chosen for how you want to feel.',
         'You choose the blend at the start, calming, uplifting or clearing, and it is worked into the skin over a full-body massage.'),
       S('Aromatherapy with Hot Stone', 'massage', '60 min', '350 AED',
         'Aromatherapy oils with the warmth of hot stones.',
         'An aromatherapy massage with heated stones worked in, for deeper relaxation.'),
-      S('Lymphatic Drainage', 'massage', '60 min', '300 AED',
+      S('Lymphatic Drainage Body Rejuvenating', 'massage', '60 min', '300 AED',
         'Gentle rhythmic work to reduce fluid and puffiness.',
-        'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention and puffiness.'),
-      S('Face Lymphatic Massage', 'focused', '30 min', '200 AED',
+        'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention and puffiness.',
+        { slug: 'lymphatic-drainage' }),
+      S('Face Lymphatic Rejuvenating', 'focused', '30 min', '200 AED',
         'Lymphatic drainage for a de-puffed, defined face.',
-        'Light drainage strokes across the face and neck to reduce puffiness and sharpen the contours.'),
-      S('Prenatal Massage', 'massage', '60 min', '300 AED',
-        'Safe, supported massage during pregnancy.',
-        'Side-lying positions, extra support and gentle pressure, adapted for each stage of pregnancy.'),
-      S('Postpartum Massage', 'massage', '60 min', '300 AED',
+        'Light drainage strokes across the face and neck to reduce puffiness and sharpen the contours.',
+        { slug: 'face-lymphatic-massage' }),
+      S('Prenatal Body Rejuvenating', 'massage', '60 min', '300 AED',
+        'Safe, supported body rejuvenating during pregnancy.',
+        'Side-lying positions, extra support and gentle pressure, adapted for each stage of pregnancy.',
+        { slug: 'prenatal-massage' }),
+      S('Postpartum Body Rejuvenating', 'massage', '60 min', '300 AED',
         'Restorative bodywork after birth.',
-        'Gentle restorative massage for the weeks and months after birth, easing the back, shoulders and legs.'),
+        'Gentle restorative work for the weeks and months after birth, easing the back, shoulders and legs.',
+        { slug: 'postpartum-massage' }),
       S('Water Bed Relaxing Treatment', 'water', '60 min', '150 AED',
         'Deep relaxation on a warm water bed.',
         'An hour of deep relaxation on a warm water bed, letting the body rest completely.'),
-      S('Jacuzzi Massage', 'water', '60 min', '250 AED',
+      S('Jacuzzi Body Rejuvenating', 'water', '60 min', '250 AED',
         'Warm hydrotherapy jets on the back and legs.',
-        'Time in the private jacuzzi with warm jets on the back and legs, to soothe tired muscles.'),
-      S('Head Massage', 'focused', '30 min', '150 AED',
+        'Time in the private jacuzzi with warm jets on the back and legs, to soothe tired muscles.',
+        { slug: 'jacuzzi-massage' }),
+      S('Head Rejuvenating', 'focused', '30 min', '150 AED',
         'Scalp, neck and shoulder release.',
-        'Focused work on the scalp, neck and shoulders to release tension and quiet the mind.'),
-      S('Back Massage', 'focused', '30 min', '100 AED',
+        'Focused work on the scalp, neck and shoulders to release tension and quiet the mind.',
+        { slug: 'head-massage' }),
+      S('Back Rejuvenating', 'focused', '30 min', '100 AED',
         'Thirty focused minutes on the back.',
-        'All the attention on the back, shoulders and neck, where most tension sits.'),
+        'All the attention on the back, shoulders and neck, where most tension sits.',
+        { slug: 'back-massage' }),
       S('Reflexology Feet', 'focused', '30 min', '150 AED',
         'Pressure-point work on the feet.',
         'Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes.'),
-      S('Foot Massage', 'focused', '30 min', '100 AED',
-        'A relaxing massage for tired feet.',
-        'A relaxing massage for the feet and lower legs.'),
-      S('Relaxing Massage — Home Service', 'massage', '60 min', '200 AED',
-        'Our relaxing massage, at your home.',
-        'The relaxing massage from our menu, given by our therapist at your home or hotel.'),
-      S('Lymphatic Drainage Massage — Home Service', 'massage', '60 min', '300 AED',
+      S('Foot Rejuvenating', 'focused', '30 min', '100 AED',
+        'Relaxing rejuvenating work for tired feet.',
+        'Relaxing rejuvenating work for the feet and lower legs.',
+        { slug: 'foot-massage' }),
+      S('Relaxing Body Rejuvenating — Home Service', 'massage', '60 min', '200 AED',
+        'Relaxing body rejuvenating, at your home.',
+        'Relaxing body rejuvenating from our menu, given by our therapist at your home or hotel.',
+        { slug: 'relaxing-massage-home-service' }),
+      S('Lymphatic Drainage Body Rejuvenating — Home Service', 'massage', '60 min', '300 AED',
         'Lymphatic drainage, at your home.',
-        'Lymphatic drainage massage, given by our therapist at your home or hotel.'),
-      S('Postpartum Massage — Home Service', 'massage', '60 min', '300 AED',
-        'Postpartum massage, at your home.',
-        'Gentle postpartum massage at home, so you do not need to leave the baby.'),
+        'Lymphatic drainage body rejuvenating, given by our therapist at your home or hotel.',
+        { slug: 'lymphatic-drainage-massage-home-service' }),
+      S('Postpartum Body Rejuvenating — Home Service', 'massage', '60 min', '300 AED',
+        'Postpartum body rejuvenating, at your home.',
+        'Gentle postpartum body rejuvenating at home, so you do not need to leave the baby.',
+        { slug: 'postpartum-massage-home-service' }),
     ] }),
 
     C({ key: 'slimming', name: 'Slimming & Body Contouring', slot: 'svc-cat-slimming', ddSlot: 'dd-cat-Slimming',
       img: 'eco-her-products-1.jpg',
       blurb: 'Endospheres, Maderotherapy, RF and slimming massage to sculpt, drain and firm the body.',
       items: [
-      S('Endospheres Massage', 'tech', '60 min', '350 AED',
+      S('Endospheres Body Rejuvenating', 'tech', '60 min', '350 AED',
         'Compressive microvibration for drainage and tone.',
-        'A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone.'),
+        'A roller of silicone spheres delivers compressive microvibration across the body, working on circulation, fluid retention and skin tone.',
+        { slug: 'endospheres-massage' }),
       S('Endospheres Face', 'tech', '30 min', '150 AED',
         'Microvibration for a de-puffed, lifted face.',
         'A smaller Endospheres handpiece worked over the face and neck to support drainage, tone and definition along the jaw.'),
@@ -745,9 +781,10 @@
       S('RF Slimming', 'tech', '60 min', '400 AED',
         'Radiofrequency for firmness and contour.',
         'Radiofrequency heat applied to the deeper layers of the skin to support firmness and contour. Best taken as a course.'),
-      S('Slimming Massage (Manual Anti-Cellulite)', 'tech', '60 min', '300 AED',
-        'Firm manual massage for cellulite and contour.',
-        'Brisk, firm manual work over the thighs, hips and abdomen to stimulate circulation and drainage.'),
+      S('Slimming Body Rejuvenating (Manual Anti-Cellulite)', 'tech', '60 min', '300 AED',
+        'Firm manual rejuvenating work for cellulite and contour.',
+        'Brisk, firm manual work over the thighs, hips and abdomen to stimulate circulation and drainage.',
+        { slug: 'slimming-massage-manual-anti-cellulite' }),
       S('Maderotherapy Free Trial', 'tech', '15 min', 'Complimentary',
         'Try Maderotherapy free for fifteen minutes.',
         'A complimentary fifteen-minute taste of Maderotherapy, so you can feel it before booking a course.'),
@@ -772,25 +809,25 @@
       S('Herbal Moroccan Bath Add-On', 'bath', '60 min', '100 AED',
         'A herbal upgrade to your Moroccan bath.',
         'Herbal products added to your Moroccan bath for a fragrant, soothing finish.'),
-      S('Beauty Spa Full Set (Slimming Body Mask & Scrub)', 'bath', '60 min', '300 AED',
+      S('Beauty Spa Full Set (Slimming Body Mask & Scrub)', 'body', '60 min', '300 AED',
         'Slimming scrub and body mask by Beauty Spa.',
         'A full Beauty Spa body set: slimming scrub, then a body mask to tone and smooth the skin.'),
-      S('Slimming Body Wrap by Beauty Spa', 'bath', '60 min', '350 AED',
+      S('Slimming Body Wrap by Beauty Spa', 'body', '60 min', '350 AED',
         'A warming slimming wrap by Beauty Spa.',
         'The skin is coated in an active slimming formula and wrapped to hold the warmth in, then unwrapped and finished.'),
-      S('Body Scrub', 'bath', '30 min', '160 AED',
+      S('Body Scrub', 'body', '30 min', '160 AED',
         'A full-body exfoliation.',
         'A full-body scrub that lifts dead skin and leaves the body soft and smooth.'),
-      S('Body Mask', 'bath', '60 min', '100 AED',
+      S('Body Mask', 'body', '60 min', '100 AED',
         'A nourishing full-body mask.',
         'A body mask applied after cleansing to hydrate and nourish the skin.'),
-      S('Chocolate Body Mask', 'bath', '30 min', '100 AED',
+      S('Chocolate Body Mask', 'body', '30 min', '100 AED',
         'A rich chocolate body mask.',
         'A warm chocolate body mask that softens and nourishes the skin.'),
-      S('Body Bleach', 'bath', '40 min', '160 AED',
+      S('Body Bleach', 'body', '40 min', '160 AED',
         'Lightening for body hair and tone.',
         'Body hair lightened and skin tone evened with a gentle bleach.'),
-      S('Back Bleach', 'bath', '30 min', '80 AED',
+      S('Back Bleach', 'body', '30 min', '80 AED',
         'Lightening for the back.',
         'Hair on the back lightened with a gentle bleach.'),
       S('Infrared Sauna', 'water', '30 min', '150 AED',
@@ -798,40 +835,50 @@
         'Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna.'),
     ] }),
 
-    C({ key: 'pkg', name: 'Packages & Offers', slot: 'svc-cat-pkg', ddSlot: 'dd-cat-Packages',
+    C({ key: 'pkg', name: 'Ecosophy Signature Packages & Combo Offers', slot: 'svc-cat-pkg', ddSlot: 'dd-cat-Packages',
       img: 'eco-her-jacuzzi-1.jpg',
       blurb: 'Signature packages, offers and multi-session courses that combine our treatments at a better price.',
       items: [
-      S('Moroccan Bath + 1-Hour Balinese Massage', 'pkg', '', '300 AED',
-        'Traditional Moroccan bath, then a full Balinese massage.',
-        'The traditional Moroccan bath to cleanse the body, followed by a one-hour full-body Balinese massage to calm the mind.'),
-      S('Classic Moroccan Bath + 20-Min Infrared Sauna + Relaxing Massage', 'pkg', '120 min', '300 AED',
-        'Bath, sauna and massage in one visit.',
-        'A classic Moroccan bath, twenty minutes in the infrared sauna, and a relaxing massage to close.'),
+      S('Moroccan Bath + 1-Hour Balinese Body Rejuvenating', 'pkg', '', '300 AED',
+        'Traditional Moroccan bath, then full-body Balinese rejuvenating.',
+        'The traditional Moroccan bath to cleanse the body, followed by one hour of full-body Balinese body rejuvenating to calm the mind.',
+        { slug: 'moroccan-bath-plus-1-hour-balinese-massage', parts: [P('Traditional Moroccan bath', 'classic-moroccan-bath'), P('1 hour of full-body Balinese body rejuvenating', 'balinese-relaxing-massage')] }),
+      S('Classic Moroccan Bath + 20-Min Infrared Sauna + Relaxing Body Rejuvenating', 'pkg', '120 min', '300 AED',
+        'Bath, sauna and body rejuvenating in one visit.',
+        'A classic Moroccan bath, twenty minutes in the infrared sauna, and relaxing body rejuvenating to close.',
+        { slug: 'classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage', parts: [P('Classic Moroccan bath', 'classic-moroccan-bath'), P('20 minutes in the infrared sauna', 'infrared-sauna'), P('Relaxing body rejuvenating', 'relaxing-massage')] }),
       S('Deluxe Moroccan Bath by La Sultane de Saba + Signature Pedicure', 'pkg', '', '300 AED',
         'The deluxe bath and our signature pedicure.',
-        'The deluxe Moroccan bath with La Sultane de Saba products, followed by the Ecosophy signature pedicure.'),
+        'The deluxe Moroccan bath with La Sultane de Saba products, followed by the Ecosophy signature pedicure.',
+        { parts: [P('Deluxe Moroccan bath by La Sultane de Saba', 'la-sultane-de-saba-ecosophy-deluxe'), P('Ecosophy signature pedicure', 'ecosophy-signature-pedicure')] }),
       S('Ecosophy Escape', 'pkg', '', '450 AED',
-        'Moroccan bath, massage, signature pedicure and a Klapp facial.',
-        'A Moroccan bath, a one-hour full-body massage, the Ecosophy signature pedicure and a Klapp facial, in one visit.'),
+        'Moroccan bath, body rejuvenating, signature pedicure and a Klapp facial.',
+        'A Moroccan bath, one hour of full-body rejuvenating, the Ecosophy signature pedicure and a Klapp facial, in one visit.',
+        { parts: [P('Moroccan bath', 'classic-moroccan-bath'), P('1 hour of full-body rejuvenating', 'relaxing-massage'), P('Ecosophy signature pedicure', 'ecosophy-signature-pedicure'), P('KLAPP facial', '', 'A facial with KLAPP professional skincare.')] }),
       S('Ecosophy Elegance Trio', 'pkg', '', '550 AED',
         'Lash extensions, hard gel manicure and brow lifting.',
-        'Eyelash extensions in any volume, an overlay hard gel manicure and a brow lift, booked together.'),
+        'Eyelash extensions in any volume, an overlay hard gel manicure and a brow lift, booked together.',
+        { parts: [P('Eyelash extensions in any volume', 'any-volume-lashes'), P('Overlay hard gel manicure', 'overlay-manicure'), P('Brow lifting', 'eyebrow-lifting')] }),
       S('Ecosophy Pure Luxe Day', 'pkg', '', '550 AED',
-        'Lashes, Moroccan bath, massage and a classic manicure.',
-        'Eyelash extensions in any volume, a Moroccan bath, a one-hour full-body massage and a classic manicure.'),
+        'Lashes, Moroccan bath, body rejuvenating and a classic manicure.',
+        'Eyelash extensions in any volume, a Moroccan bath, one hour of full-body rejuvenating and a classic manicure.',
+        { parts: [P('Eyelash extensions in any volume', 'any-volume-lashes'), P('Moroccan bath', 'classic-moroccan-bath'), P('1 hour of full-body rejuvenating', 'relaxing-massage'), P('Classic manicure', 'classic-manicure')] }),
       S('Glass Skin Package', 'pkg', '', '600 AED',
         'Royal HydraFacial, Dermapen with exosomes, Endospheres face and a Moroccan bath.',
-        'A Royal HydraFacial, Dermapen (Dr. Pen) with exosomes, Endospheres face therapy and a classic Moroccan bath.'),
+        'A Royal HydraFacial, Dermapen (Dr. Pen) with exosomes, Endospheres face therapy and a classic Moroccan bath.',
+        { parts: [P('Royal HydraFacial', 'royal-hydrafacial'), P('Dermapen (Dr. Pen) with exosomes', 'dermapen-by-dr-pen'), P('Endospheres face therapy', 'endospheres-face'), P('Classic Moroccan bath', 'classic-moroccan-bath')] }),
       S('Marble Body Package', 'pkg', '', '599 AED',
         'Maderotherapy, lymphatic drainage, Endospheres and an express Klapp facial.',
-        'Our signature body-contouring experience: full-body Maderotherapy, lymphatic drainage massage, full-body Endospheres lymphatic drainage, and an express hydrating Klapp facial.'),
+        'Our signature body-contouring experience: full-body Maderotherapy, lymphatic drainage body rejuvenating, full-body Endospheres lymphatic drainage, and an express hydrating Klapp facial.',
+        { parts: [P('Full-body Maderotherapy', 'maderotherapy'), P('Lymphatic drainage body rejuvenating', 'lymphatic-drainage'), P('Endospheres lymphatic drainage therapy (full body)', 'endospheres-massage'), P('Express hydrating facial (KLAPP)', '', 'A short hydrating facial with KLAPP professional skincare.')] }),
       S('Signature Radiance Ritual', 'pkg', '4 sessions', '800 AED',
         'Four facial sessions for one radiant result.',
-        'Four sessions: an FCL peel, carboxytherapy, a Royal HydraFacial and Endospheres face lymphatic drainage, to refresh, brighten and lift the skin.'),
+        'Four sessions: an FCL peel, carboxytherapy, a Royal HydraFacial and Endospheres face lymphatic drainage, to refresh, brighten and lift the skin.',
+        { visits: 'separate', parts: [P('FCL peel', 'fcl-peel', 'Refreshes dull skin, smooths texture and reveals a brighter tone.'), P('Carboxytherapy', 'carboxytherapy', 'Boosts oxygen and circulation for a healthy, rosy glow.'), P('Royal HydraFacial', 'royal-hydrafacial', 'Deep-cleanses, hydrates and infuses the skin with nourishing serums.'), P('Endospheres face lymphatic drainage', 'endospheres-face', 'De-puffs, sculpts and lifts for a fresh, defined look.')] }),
       S('Classic Mani & Pedi Offer', 'pkg', '60 min', '100 AED',
         'A classic manicure and pedicure at an offer price.',
-        'A classic manicure and a classic pedicure together, at our offer price.'),
+        'A classic manicure and a classic pedicure together, at our offer price.',
+        { parts: [P('Classic manicure', 'classic-manicure'), P('Classic pedicure', '', 'Feet soaked, nails cut and shaped, and cuticles tidied.')] }),
       S('RF Body Contouring — 5 Sessions', 'tech', '5 sessions', '1,500 AED',
         'A course of five RF body contouring sessions.',
         'Five radiofrequency body contouring sessions to firm and sculpt, spaced for the best result.'),
@@ -854,64 +901,78 @@
 
   var HIM_CATS = [
 
-    C({ key: 'massage', name: 'Massage & Body Wellness', slot: 'gsvc-cat-massage', ddSlot: 'gdd-cat-Massages',
+    C({ key: 'massage', name: 'Body Wellness', slot: 'gsvc-cat-massage', ddSlot: 'gdd-cat-Massages',
       img: '775244964_18119167235477475_6941524398570787900_n.jpg',
       blurb: 'Sports recovery, deep tissue and full body wellness, with therapists trained in Bali and Kerala.',
       items: [
       S('Sport Massage', 'massage', '60 min', '200 AED',
         'Stretch work, deep tissue and heat therapy in one session.',
         'Assisted stretching, deep tissue through the legs and back, and heat where it is needed. Built for training loads rather than for general relaxation.'),
-      S('Relaxing Balinese', 'massage', '60 min', '180 AED',
+      S('Balinese Body Rejuvenating', 'massage', '60 min', '180 AED',
         'Slow oil-based bodywork with therapists from Bali.',
-        'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.'),
-      S('Deep Tissue', 'massage', '60 min', '250 AED',
+        'Traditional Balinese technique: palm pressure, thumb work and slow stretches over warm oil, delivered by therapists who trained in it at home.',
+        { slug: 'relaxing-balinese' }),
+      S('Deep Tissue Body Rejuvenating', 'massage', '60 min', '250 AED',
         'Firm pressure that works into knots and tight muscle.',
-        'Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that a lighter massage never quite reaches.'),
-      S('Hot Stone', 'massage', '60 min', '300 AED',
+        'Firm, slow pressure into the layers beneath the surface. Best if you sit at a desk, train hard, or carry tension that lighter work never quite reaches.',
+        { slug: 'deep-tissue' }),
+      S('Hot Stone Body Rejuvenating', 'massage', '60 min', '300 AED',
         'Warm basalt stones ease deep muscular tightness.',
-        'Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.'),
-      S('Lymphatic Drainage', 'massage', '60 min', '300 AED',
+        'Heated basalt stones are placed along the back and used as an extension of the therapist\u2019s hands. The heat opens tight muscle before any real pressure is applied.',
+        { slug: 'hot-stone' }),
+      S('Lymphatic Drainage Body Rejuvenating', 'massage', '60 min', '300 AED',
         'Gentle rhythmic work to reduce fluid and puffiness.',
-        'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after training.'),
+        'Very light, rhythmic strokes that follow the lymphatic pathways. Useful for fluid retention, post-travel puffiness and recovery after training.',
+        { slug: 'lymphatic-drainage' }),
       S('Maderotherapy', 'tech', '60 min', '250 AED',
         'Wooden tools contour and stimulate the body.',
         'Contoured wooden tools are rolled and pressed over the body to stimulate circulation and lymphatic drainage. Firm, and most effective taken as a course.'),
-      S('Feet Massage', 'focused', '30 min', '100 AED',
+      S('Feet Rejuvenating', 'focused', '30 min', '100 AED',
         'Pressure-point work on the feet, felt everywhere.',
-        'Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes, and most guests feel it well beyond their feet.'),
-      S('Holistic Massage', 'massage', '60 min', '300 AED',
-        'Full-body massage that works on body and mind together.',
-        'A full-body massage that blends techniques, pressure and pace to how you arrive on the day, aimed at the whole person rather than one sore spot.'),
-      S('Neck & Shoulder Massage', 'focused', '60 min', '100 AED',
+        'Sustained pressure on specific points across the soles. You stay fully dressed apart from your shoes, and most guests feel it well beyond their feet.',
+        { slug: 'feet-massage' }),
+      S('Holistic Body Rejuvenating', 'massage', '60 min', '300 AED',
+        'Full-body rejuvenating that works on body and mind together.',
+        'A full-body session that blends techniques, pressure and pace to how you arrive on the day, aimed at the whole person rather than one sore spot.',
+        { slug: 'holistic-massage' }),
+      S('Neck & Shoulder Rejuvenating', 'focused', '60 min', '100 AED',
         'An hour on the neck, shoulders and upper back.',
-        'All the attention on the area that carries a desk, a steering wheel and a phone: the neck, the tops of the shoulders and the upper back.'),
-      S('Face Massage', 'focused', '60 min', '150 AED',
-        'Manual massage of the face, jaw and scalp.',
-        'Slow manual work across the face, jaw, temples and scalp. Releases a clenched jaw and leaves the skin brighter for the rest of the day.'),
-      S('30 Minutes Massage', 'focused', '30 min', '110 AED',
-        'A short massage on the area that needs it most.',
-        'Half an hour, spent wherever you need it: back, legs, neck or feet. The quickest way to fit a massage into a working day.'),
-      S('Medical Therapy', 'massage', '60 min', '250 AED',
-        'Therapeutic massage for a specific ache or stiffness.',
-        'Targeted therapeutic work on a specific complaint, from a stiff lower back to tight hamstrings, planned after a short conversation about where it hurts.'),
-      S('Slimming Massage', 'tech', '60 min', '300 AED',
-        'Firm, brisk massage over the areas that hold fat and fluid.',
-        'Brisk, firm manual work over the abdomen, waist and thighs to stimulate circulation and drainage. Most effective taken as a course.'),
+        'All the attention on the area that carries a desk, a steering wheel and a phone: the neck, the tops of the shoulders and the upper back.',
+        { slug: 'neck-shoulder-massage' }),
+      S('Face Rejuvenating', 'focused', '60 min', '150 AED',
+        'Manual rejuvenating work on the face, jaw and scalp.',
+        'Slow manual work across the face, jaw, temples and scalp. Releases a clenched jaw and leaves the skin brighter for the rest of the day.',
+        { slug: 'face-massage' }),
+      S('30-Minute Body Rejuvenating', 'focused', '30 min', '110 AED',
+        'A short body rejuvenating session on the area that needs it most.',
+        'Half an hour, spent wherever you need it: back, legs, neck or feet. The quickest way to fit a session into a working day.',
+        { slug: '30-minutes-massage' }),
+      S('Medical Therapy Body Rejuvenating', 'massage', '60 min', '250 AED',
+        'Therapeutic rejuvenating work for a specific ache or stiffness.',
+        'Targeted therapeutic work on a specific complaint, from a stiff lower back to tight hamstrings, planned after a short conversation about where it hurts.',
+        { slug: 'medical-therapy' }),
+      S('Slimming Body Rejuvenating', 'tech', '60 min', '300 AED',
+        'Firm, brisk rejuvenating work over the areas that hold fat and fluid.',
+        'Brisk, firm manual work over the abdomen, waist and thighs to stimulate circulation and drainage. Most effective taken as a course.',
+        { slug: 'slimming-massage' }),
       S('Detox Slimming Body Wraps', 'tech', '60 min', '300 AED',
         'A warming body wrap to draw out fluid and tighten the skin.',
         'The skin is prepared, coated in an active slimming formula and wrapped to hold the warmth in, then unwrapped and finished with a light massage.'),
       S('Belly Therapy Plan', 'tech', '30 min', '200 AED',
         'Focused work on the abdomen for tone and bloating.',
         'Half an hour spent entirely on the abdomen: drainage strokes, firm manual work and heat, aimed at bloating and a softer midsection.'),
-      S('Home Service Massage', 'massage', '60 min', '350 AED',
-        'A one-hour massage delivered to your home or hotel.',
-        'Our therapist comes to you with a table, linens and oils, and gives a full hour of massage wherever you are staying.'),
-      S('Balinese Massage Home Service', 'massage', '60 min', '210 AED',
-        'Traditional Balinese massage, at your home.',
-        'A full hour of Balinese bodywork, palm pressure and slow stretches over warm oil, delivered by our therapist at your home.'),
-      S('Home Service Holistic Massage', 'massage', '60 min', '1,000 AED',
-        'Our holistic full-body massage, at your home.',
-        'The holistic massage from our menu, taken at home: a therapist, a table and a full hour adapted to how you feel on the day.'),
+      S('Home Service Body Rejuvenating', 'massage', '60 min', '350 AED',
+        'A one-hour body rejuvenating session at your home or hotel.',
+        'Our therapist comes to you with a table, linens and oils, and gives a full hour of body rejuvenating wherever you are staying.',
+        { slug: 'home-service-massage' }),
+      S('Balinese Body Rejuvenating — Home Service', 'massage', '60 min', '210 AED',
+        'Traditional Balinese body rejuvenating, at your home.',
+        'A full hour of Balinese bodywork, palm pressure and slow stretches over warm oil, delivered by our therapist at your home.',
+        { slug: 'balinese-massage-home-service' }),
+      S('Holistic Body Rejuvenating — Home Service', 'massage', '60 min', '1,000 AED',
+        'Our holistic full-body rejuvenating, at your home.',
+        'The holistic session from our menu, taken at home: a therapist, a table and a full hour adapted to how you feel on the day.',
+        { slug: 'home-service-holistic-massage' }),
     ] }),
 
     C({ key: 'bath', name: 'Moroccan Bath & Relaxation', slot: 'gsvc-cat-spa', ddSlot: 'gdd-cat-Spa',
@@ -927,12 +988,14 @@
       S('Sauna', 'water', '30 min', '150 AED',
         'Gentle heat to support muscle recovery, improve circulation and ease tension.',
         'Infrared warms the body directly rather than heating the air, so it feels gentler than a traditional sauna while still doing the work.'),
-      S('Sauna and Massage', 'pkg', '90 min', '300 AED',
-        'Infrared heat, followed by bodywork.',
-        'Time in the infrared cabin to open the muscle, then a massage while it is still warm. The combination most of our regulars settle on.'),
+      S('Sauna & Body Rejuvenating Program', 'pkg', '90 min', '300 AED',
+        'Infrared sauna, followed by body rejuvenating.',
+        'Time in the infrared sauna to warm the muscles, then a body rejuvenating session while they are still warm.',
+        { slug: 'sauna-and-massage', parts: [P('Infrared sauna', 'sauna'), P('Body rejuvenating', '', 'A body rejuvenating session while the muscles are still warm from the sauna.')] }),
       S('Sauna and HydraFacial', 'pkg', '90 min', '450 AED',
         'Infrared sauna, followed by a HydraFacial.',
-        'Time in the infrared cabin to warm and open the skin, then a HydraFacial to cleanse, extract and hydrate while it is still receptive.'),
+        'Time in the infrared cabin to warm and open the skin, then a HydraFacial to cleanse, extract and hydrate while it is still receptive.',
+        { parts: [P('Infrared sauna', 'sauna'), P('HydraFacial', 'hydrafacial-basic')] }),
     ] }),
 
     C({ key: 'aesthetic', name: 'Advanced Aesthetic Care', slot: 'gsvc-cat-aesthetic', ddSlot: 'gdd-cat-Aesthetic',
@@ -992,34 +1055,42 @@
         'Fifteen minutes of compressive microvibration, free of charge, so you know exactly what the treatment feels like before you book one.'),
     ] }),
 
-    C({ key: 'pkg', name: 'Packages', slot: 'gsvc-cat-pkg', ddSlot: 'gdd-cat-Packages',
+    C({ key: 'pkg', name: 'Ecosophy Signature Packages & Combo Offers', slot: 'gsvc-cat-pkg', ddSlot: 'gdd-cat-Packages',
       img: '748718184_18114511022477475_8211076763529339827_n.jpg',
       blurb: 'Two or three treatments combined into one visit.',
       items: [
-      S('Standard Package: Moroccan Bath + Relaxing Body Massage', 'pkg', '60 min', '300 AED',
-        'A Moroccan bath followed by a full-body massage.',
-        'The bath opens and softens the skin, the massage takes over while muscles are still warm. The most popular combination we offer.'),
-      S('Quick Recovery: Moroccan Bath + Massage', 'pkg', '120 min', '280 AED',
-        'A Moroccan bath and a massage, for tired muscles.',
-        'The bath to soften and warm, then a massage focused on recovery. Built for after a long week or a hard training block.'),
+      S('Standard Package: Moroccan Bath + Relaxing Body Rejuvenating', 'pkg', '60 min', '300 AED',
+        'A Moroccan bath followed by relaxing body rejuvenating.',
+        'A Moroccan bath, then relaxing body rejuvenating while the muscles are still warm.',
+        { slug: 'standard-package-moroccan-bath-plus-relaxing-body-massage', parts: [P('Moroccan bath', '', 'Steam, black soap and a full-body exfoliation.'), P('Relaxing body rejuvenating', '', 'Relaxing full-body work while the muscles are still warm from the bath.')] }),
+      S('Moroccan Bath + Body Rejuvenating', 'pkg', '120 min', '280 AED',
+        'A Moroccan bath and body rejuvenating, for tired muscles.',
+        'A Moroccan bath to soften and warm, then body rejuvenating focused on recovery.',
+        { slug: 'quick-recovery-moroccan-bath-plus-massage', parts: [P('Moroccan bath', '', 'Steam, black soap and a full-body exfoliation.'), P('Body rejuvenating', '', 'Body rejuvenating focused on recovery, after the bath.')] }),
       S('Premium Package', 'pkg', '180 min', '450 AED',
         'Moroccan bath, body rejuvenation and an Academie facial.',
-        'A Moroccan bath, one hour of full-body rejuvenation, and a hydrating Academie facial to finish. Three hours, head to toe.'),
+        'A Moroccan bath, one hour of full-body rejuvenation, and a hydrating Academie facial to finish. Three hours, head to toe.',
+        { parts: [P('Moroccan bath', '', 'Steam, black soap and a full-body exfoliation.'), P('1 hour of body rejuvenating', '', 'One hour of full-body rejuvenating.'), P('Academie hydrating facial', 'academie-facial')] }),
       S('Rejuvenation Package', 'pkg', '180 min', '550 AED',
         'Moroccan bath, manicure, body rejuvenation and a Royal HydraFacial.',
-        'A Moroccan bath, a manicure, one hour of full-body rejuvenation and a Royal HydraFacial, taken in one unhurried visit.'),
+        'A Moroccan bath, a manicure, one hour of full-body rejuvenation and a Royal HydraFacial, taken in one unhurried visit.',
+        { parts: [P('Moroccan bath', '', 'Steam, black soap and a full-body exfoliation.'), P('Manicure', '', 'Nails cut, shaped and cleaned, with cuticle care.'), P('1 hour of body rejuvenating', '', 'One hour of full-body rejuvenating.'), P('Royal HydraFacial', 'hydrafacial-royal')] }),
       S('Signature Package', 'pkg', '240 min', '600 AED',
         'Smart manicure and pedicure, Royal HydraFacial, Emsculpt and a Moroccan hammam.',
-        'Our signature afternoon: a smart pedicure and manicure, a Royal HydraFacial, an Emsculpt session and a Moroccan hammam.'),
+        'Our signature afternoon: a smart pedicure and manicure, a Royal HydraFacial, an Emsculpt session and a Moroccan hammam.',
+        { parts: [P('Smart pedicure and manicure', '', 'Dry, blade-free smart pedicure and manicure.'), P('Royal HydraFacial', 'hydrafacial-royal'), P('Emsculpt', 'emsculpt'), P('Moroccan hammam', '', 'Steam, black soap and a full-body exfoliation.')] }),
       S('Marble Body Package', 'pkg', '240 min', '600 AED',
-        'Emsculpt, Endospheres, sports massage and sauna.',
-        'A body-focused circuit: Emsculpt for muscle, Endospheres for tone and circulation, a sports massage and time in the sauna.'),
+        'Emsculpt, Endospheres, sports body rejuvenating and sauna.',
+        'A body-focused circuit: Emsculpt for muscle, Endospheres for tone and circulation, sports body rejuvenating and time in the infrared sauna.',
+        { parts: [P('Emsculpt', 'emsculpt'), P('Endospheres', 'endospheres-therapy'), P('Sports body rejuvenating', 'sport-massage'), P('Infrared sauna', 'sauna')] }),
       S('Luxury Package', 'pkg', '', '650 AED',
         'Endospheres, body rejuvenation, Moroccan bath, manicure and a Royal HydraFacial.',
-        'Thirty minutes of Endospheres therapy, one hour of body rejuvenation, a Moroccan bath, a classic manicure and a Royal HydraFacial.'),
+        'Thirty minutes of Endospheres therapy, one hour of body rejuvenation, a Moroccan bath, a classic manicure and a Royal HydraFacial.',
+        { parts: [P('30 minutes of Endospheres therapy', 'endospheres-therapy'), P('1 hour of body rejuvenating', '', 'One hour of full-body rejuvenating.'), P('Moroccan bath', '', 'Steam, black soap and a full-body exfoliation.'), P('Classic manicure', '', 'Nails cut, shaped and cleaned, with cuticle care.'), P('Royal HydraFacial', 'hydrafacial-royal')] }),
       S('VIP Experience', 'pkg', '', '800 AED',
         'Our most complete visit, from Emsculpt to a Moroccan bath.',
-        'Endospheres therapy, Emsculpt, a Carboxytherapy CO2 facial, one hour of full-body rejuvenation, an Alessandro spa manicure or pedicure, and a classic Moroccan bath.'),
+        'Endospheres therapy, Emsculpt, a Carboxytherapy CO2 facial, one hour of full-body rejuvenation, an Alessandro spa manicure or pedicure, and a classic Moroccan bath.',
+        { parts: [P('Endospheres therapy', 'endospheres-therapy'), P('Emsculpt', 'emsculpt'), P('Carboxytherapy CO2 facial', 'carboxytherapy-co2-treatment'), P('1 hour of full-body rejuvenating', '', 'One hour of full-body rejuvenating.'), P('Alessandro spa manicure or pedicure', '', 'An Alessandro spa manicure or pedicure - your choice.'), P('Classic Moroccan bath', 'classic-moroccan-hammam')] }),
     ] }),
 
     C({ key: 'removal', name: 'Shaving & Waxing', slot: 'gsvc-cat-removal', ddSlot: 'gdd-cat-Removal',
@@ -1056,24 +1127,30 @@
       S('Moroccan Hammam — 5 Sessions', 'bath', '5 × 60 min', '500 AED',
         'Five Moroccan hammam visits.',
         'Five classic Moroccan hammam sessions. The way our regulars keep their skin in shape.'),
-      S('Relaxing Balinese — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
-        'Five one-hour Balinese massages.',
-        'Five full hours of relaxing Balinese massage, booked whenever you need one.'),
-      S('Sport Massage — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
-        'Five one-hour sports massages.',
-        'Five sports massage sessions, timed around your training to keep recovery on track.'),
-      S('Deep Tissue — 3 Sessions', 'massage', '3 × 60 min', '540 AED',
-        'Three one-hour deep tissue massages.',
-        'Three deep tissue sessions, enough to work properly into long-standing tension.'),
-      S('Deep Tissue — 5 Sessions', 'massage', '5 × 60 min', '900 AED',
-        'Five one-hour deep tissue massages.',
-        'Five deep tissue sessions, for tension that keeps coming back.'),
-      S('Holistic Massage — 5 Sessions', 'massage', '5 × 60 min', '900 AED',
-        'Five one-hour holistic massages.',
-        'Five full-body holistic massages, each adapted to how you arrive on the day.'),
-      S('Slimming Massage — 5 Sessions', 'tech', '5 × 60 min', '900 AED',
-        'A course of five slimming massages.',
-        'Five slimming massage sessions. Taken close together, the results build on each other.'),
+      S('Relaxing Balinese Body Rejuvenating — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
+        'Five one-hour Balinese body rejuvenating sessions.',
+        'Five one-hour relaxing Balinese body rejuvenating sessions, booked whenever you need one.',
+        { slug: 'relaxing-balinese-5-sessions' }),
+      S('Sports Body Rejuvenating — 5 Sessions', 'massage', '5 × 60 min', '700 AED',
+        'Five one-hour sports body rejuvenating sessions.',
+        'Five one-hour sports body rejuvenating sessions, timed around your training.',
+        { slug: 'sport-massage-5-sessions' }),
+      S('Deep Tissue Body Rejuvenating — 3 Sessions', 'massage', '3 × 60 min', '540 AED',
+        'Three one-hour deep tissue body rejuvenating sessions.',
+        'Three deep tissue sessions, enough to work properly into long-standing tension.',
+        { slug: 'deep-tissue-3-sessions' }),
+      S('Deep Tissue Body Rejuvenating — 5 Sessions', 'massage', '5 × 60 min', '900 AED',
+        'Five one-hour deep tissue body rejuvenating sessions.',
+        'Five deep tissue sessions, for tension that keeps coming back.',
+        { slug: 'deep-tissue-5-sessions' }),
+      S('Holistic Body Rejuvenating — 5 Sessions', 'massage', '5 × 60 min', '900 AED',
+        'Five one-hour holistic body rejuvenating sessions.',
+        'Five one-hour full-body holistic sessions, each adapted to how you arrive on the day.',
+        { slug: 'holistic-massage-5-sessions' }),
+      S('Slimming Body Rejuvenating — 5 Sessions', 'tech', '5 × 60 min', '900 AED',
+        'A course of five slimming body rejuvenating sessions.',
+        'Five one-hour slimming body rejuvenating sessions.',
+        { slug: 'slimming-massage-5-sessions' }),
       S('Detox Slimming Body Wraps — 5 Sessions', 'tech', '5 × 60 min', '1,000 AED',
         'A course of five detox body wraps.',
         'Five detox slimming body wraps, the number it takes to see a real change in tone and fluid.'),
@@ -1101,561 +1178,133 @@
     ] }),
   ];
 
-  // Per-treatment photos: every treatment has its own. Fifteen are the
-  // client's photographs of that exact service (eco-*-svc-*); the rest are
-  // generated images made for each treatment (svc-<side>-<slug>.jpg).
+  // Per-treatment photos, exactly as the client approved them in the photo
+  // handoff of 18 October 2026 (menservice.images/, womenservice.images/ -
+  // SERVICE PHOTO MAPPING.txt on each side). Every one is the centre's own
+  // photograph; there are no stock or generated images here, and the client
+  // asked that none be used. Photos repeat across related treatments and
+  // courses on purpose - one category photograph is fine, a unique photo per
+  // variation is not required. Packages use the treatment-room photo because
+  // no single photo shows a whole package.
   // Keyed by photo, each listing the slugs of the treatments that use it. A
-  // treatment not listed keeps its category / type photo. A slug is the
-  // slugified name, so renaming a treatment means updating its entry here.
+  // treatment not listed falls back to its category photo. Slugs are stable
+  // (see S()), so a rename does not need an update here.
   var PHOTOS = {
     him: {
-      'svc-him-sport-massage-soft.jpg': [
-        'sport-massage',
-      ],
-      'eco-him-svc-img-1111.jpg': [
-        'relaxing-balinese',
-      ],
-      'svc-him-deep-tissue-soft.jpg': [
-        'deep-tissue',
-      ],
-      'svc-him-hot-stone-soft.jpg': [
-        'hot-stone',
-      ],
-      'svc-him-lymphatic-drainage-soft.jpg': [
-        'lymphatic-drainage',
-      ],
-      'svc-him-maderotherapy-soft.jpg': [
-        'maderotherapy',
-      ],
-      'svc-him-feet-massage-soft.jpg': [
-        'feet-massage',
-      ],
-      'svc-him-holistic-massage-soft.jpg': [
-        'holistic-massage',
-      ],
       'eco-him-svc-img-1110.png': [
-        'neck-shoulder-massage',
+        'sport-massage', 'relaxing-balinese', 'deep-tissue',
+        'maderotherapy', 'holistic-massage', 'neck-shoulder-massage',
+        '30-minutes-massage', 'medical-therapy', 'home-service-massage',
+        'balinese-massage-home-service', 'home-service-holistic-massage', 'relaxing-balinese-5-sessions',
+        'sport-massage-5-sessions', 'deep-tissue-3-sessions', 'deep-tissue-5-sessions',
+        'holistic-massage-5-sessions', 'maderotherapy-10-sessions',
       ],
-      'svc-him-face-massage-soft.jpg': [
-        'face-massage',
-      ],
-      'svc-him-30-minutes-massage-soft.jpg': [
-        '30-minutes-massage',
-      ],
-      'svc-him-medical-therapy-soft.jpg': [
-        'medical-therapy',
-      ],
-      'svc-him-slimming-massage-soft.jpg': [
-        'slimming-massage',
-      ],
-      'svc-him-detox-slimming-body-wraps-soft.jpg': [
-        'detox-slimming-body-wraps',
-      ],
-      'svc-him-belly-therapy-plan-soft.jpg': [
-        'belly-therapy-plan',
-      ],
-      'svc-him-home-service-massage-soft.jpg': [
-        'home-service-massage',
-      ],
-      'svc-him-balinese-massage-home-service-soft.jpg': [
-        'balinese-massage-home-service',
-      ],
-      'svc-him-home-service-holistic-massage-soft.jpg': [
-        'home-service-holistic-massage',
-      ],
-      'eco-him-svc-photo-2026-07-25-02-03-59.jpg': [
-        'classic-moroccan-hammam',
-      ],
-      'svc-him-royal-moroccan-hammam-soft.jpg': [
-        'royal-moroccan-hammam',
-      ],
-      'eco-him-svc-photo-2026-08-02-15-48-52.jpg': [
-        'sauna',
-      ],
-      'svc-him-sauna-and-massage-soft.jpg': [
-        'sauna-and-massage',
-      ],
-      'svc-him-sauna-and-hydrafacial-soft.jpg': [
-        'sauna-and-hydrafacial',
-      ],
-      'eco-him-svc-photo-2026-08-02-15-49-50.jpg': [
-        'hydrafacial-basic',
-      ],
-      'svc-him-deep-cleansing-soft.jpg': [
-        'deep-cleansing',
-      ],
-      'svc-him-ecosophy-signature-facial-soft.jpg': [
-        'ecosophy-signature-facial',
+      'eco-him-svc-treatment-room.jpg': [
+        'hot-stone', 'feet-massage', 'face-massage',
+        'detox-slimming-body-wraps', 'belly-therapy-plan', 'endosphere-face-massage',
+        'dermapen-by-dermapen-world', 'basic-dermapen', 'carboxytherapy-co2-treatment',
+        'academie-facial', 'anti-aging-and-whitening-facial', 'standard-package-moroccan-bath-plus-relaxing-body-massage',
+        'quick-recovery-moroccan-bath-plus-massage', 'premium-package', 'rejuvenation-package',
+        'signature-package', 'marble-body-package', 'luxury-package',
+        'vip-experience', 'body-shaving', 'chest-back-shaving',
+        'back-shaving', 'underarm-shaving', 'full-leg-waxing',
+        'body-waxing', 'detox-slimming-body-wraps-5-sessions', 'smart-pedicure-5-sessions',
       ],
       'eco-him-svc-photo-2026-07-25-02-03-04.jpg': [
-        'endospheres-therapy',
+        'lymphatic-drainage', 'slimming-massage', 'endospheres-therapy',
+        'free-trial-endosphere', 'slimming-massage-5-sessions', 'endospheres-therapy-5-sessions',
       ],
-      'svc-him-endosphere-face-massage-soft.jpg': [
-        'endosphere-face-massage',
+      'eco-him-svc-photo-2026-07-25-02-03-59.jpg': [
+        'classic-moroccan-hammam', 'royal-moroccan-hammam', 'moroccan-hammam-3-sessions',
+        'moroccan-hammam-5-sessions',
       ],
-      'svc-him-hydrafacial-royal-soft.jpg': [
-        'hydrafacial-royal',
+      'eco-him-svc-photo-2026-08-02-15-48-52.jpg': [
+        'sauna', 'sauna-and-massage', 'sauna-and-hydrafacial',
       ],
-      'svc-him-dermapen-by-dermapen-world-soft.jpg': [
-        'dermapen-by-dermapen-world',
-      ],
-      'svc-him-basic-dermapen-soft.jpg': [
-        'basic-dermapen',
-      ],
-      'svc-him-carboxytherapy-co2-treatment-soft.jpg': [
-        'carboxytherapy-co2-treatment',
+      'eco-him-svc-photo-2026-08-02-15-49-50.jpg': [
+        'hydrafacial-basic', 'deep-cleansing', 'ecosophy-signature-facial',
+        'hydrafacial-royal', 'add-on-deep-cleansing', 'hydrafacial-5-sessions',
       ],
       'eco-him-svc-photo-2026-07-25-02-02-55.jpg': [
         'express-facial',
       ],
-      'svc-him-academie-facial-soft.jpg': [
-        'academie-facial',
-      ],
-      'svc-him-anti-aging-and-whitening-facial-soft.jpg': [
-        'anti-aging-and-whitening-facial',
-      ],
-      'svc-him-add-on-deep-cleansing-soft.jpg': [
-        'add-on-deep-cleansing',
-      ],
       'eco-him-svc-img-0099.png': [
-        'emsculpt',
+        'emsculpt', 'emsculpt-5-sessions',
       ],
       'eco-him-svc-photo-2026-08-02-15-49-59.jpg': [
-        'emsculpt-and-slimming',
-      ],
-      'svc-him-free-trial-emsculpt-and-slimming-soft.jpg': [
-        'free-trial-emsculpt-and-slimming',
-      ],
-      'svc-him-free-trial-endosphere-soft.jpg': [
-        'free-trial-endosphere',
-      ],
-      'svc-him-standard-package-moroccan-bath-plus-relaxing-body-massage-soft.jpg': [
-        'standard-package-moroccan-bath-plus-relaxing-body-massage',
-      ],
-      'svc-him-quick-recovery-moroccan-bath-plus-massage-soft.jpg': [
-        'quick-recovery-moroccan-bath-plus-massage',
-      ],
-      'svc-him-premium-package-soft.jpg': [
-        'premium-package',
-      ],
-      'svc-him-rejuvenation-package-soft.jpg': [
-        'rejuvenation-package',
-      ],
-      'svc-him-signature-package-soft.jpg': [
-        'signature-package',
-      ],
-      'svc-him-marble-body-package-soft.jpg': [
-        'marble-body-package',
-      ],
-      'svc-him-luxury-package-soft.jpg': [
-        'luxury-package',
-      ],
-      'svc-him-vip-experience-soft.jpg': [
-        'vip-experience',
-      ],
-      'svc-him-body-shaving-soft.jpg': [
-        'body-shaving',
-      ],
-      'svc-him-chest-back-shaving-soft.jpg': [
-        'chest-back-shaving',
-      ],
-      'svc-him-back-shaving-soft.jpg': [
-        'back-shaving',
-      ],
-      'svc-him-underarm-shaving-soft.jpg': [
-        'underarm-shaving',
-      ],
-      'svc-him-full-leg-waxing-soft.jpg': [
-        'full-leg-waxing',
-      ],
-      'svc-him-body-waxing-soft.jpg': [
-        'body-waxing',
-      ],
-      'svc-him-moroccan-hammam-3-sessions-soft.jpg': [
-        'moroccan-hammam-3-sessions',
-      ],
-      'svc-him-moroccan-hammam-5-sessions-soft.jpg': [
-        'moroccan-hammam-5-sessions',
-      ],
-      'svc-him-relaxing-balinese-5-sessions-soft.jpg': [
-        'relaxing-balinese-5-sessions',
-      ],
-      'svc-him-sport-massage-5-sessions-soft.jpg': [
-        'sport-massage-5-sessions',
-      ],
-      'svc-him-deep-tissue-3-sessions-soft.jpg': [
-        'deep-tissue-3-sessions',
-      ],
-      'svc-him-deep-tissue-5-sessions-soft.jpg': [
-        'deep-tissue-5-sessions',
-      ],
-      'svc-him-holistic-massage-5-sessions-soft.jpg': [
-        'holistic-massage-5-sessions',
-      ],
-      'svc-him-slimming-massage-5-sessions-soft.jpg': [
-        'slimming-massage-5-sessions',
-      ],
-      'svc-him-detox-slimming-body-wraps-5-sessions-soft.jpg': [
-        'detox-slimming-body-wraps-5-sessions',
-      ],
-      'svc-him-maderotherapy-10-sessions-soft.jpg': [
-        'maderotherapy-10-sessions',
-      ],
-      'svc-him-endospheres-therapy-5-sessions-soft.jpg': [
-        'endospheres-therapy-5-sessions',
-      ],
-      'svc-him-emsculpt-5-sessions-soft.jpg': [
-        'emsculpt-5-sessions',
-      ],
-      'svc-him-emsculpt-and-slimming-5-sessions-soft.jpg': [
-        'emsculpt-and-slimming-5-sessions',
-      ],
-      'svc-him-emsculpt-and-slimming-10-sessions-soft.jpg': [
+        'emsculpt-and-slimming', 'free-trial-emsculpt-and-slimming', 'emsculpt-and-slimming-5-sessions',
         'emsculpt-and-slimming-10-sessions',
-      ],
-      'svc-him-hydrafacial-5-sessions-soft.jpg': [
-        'hydrafacial-5-sessions',
-      ],
-      'svc-him-smart-pedicure-5-sessions-soft.jpg': [
-        'smart-pedicure-5-sessions',
       ],
     },
     her: {
-      'svc-her-cut-and-file-soft.jpg': [
-        'cut-and-file',
-      ],
-      'svc-her-classic-manicure-soft.jpg': [
-        'classic-manicure',
-      ],
-      'svc-her-classic-smart-russian-manicure-machine-soft.jpg': [
-        'classic-smart-russian-manicure-machine',
-      ],
-      'svc-her-spa-manicure-alessandro-soft.jpg': [
-        'spa-manicure-alessandro',
-      ],
-      'svc-her-soft-gel-manicure-soft.jpg': [
-        'soft-gel-manicure',
-      ],
-      'svc-her-overlay-manicure-soft.jpg': [
-        'overlay-manicure',
-      ],
-      'svc-her-japanese-manicure-soft.jpg': [
-        'japanese-manicure',
-      ],
-      'svc-her-biab-manicure-soft.jpg': [
-        'biab-manicure',
-      ],
-      'svc-her-gel-polish-application-colour-change-only-soft.jpg': [
-        'gel-polish-application-colour-change-only',
-      ],
-      'svc-her-nail-extension-acrylic-gel-gel-polygel-acrygel-soft.jpg': [
-        'nail-extension-acrylic-gel-gel-polygel-acrygel',
-      ],
-      'svc-her-3d-nail-extension-soft.jpg': [
-        '3d-nail-extension',
-      ],
-      'svc-her-extra-long-nail-extension-v2-soft.jpg': [
-        'extra-long-nail-extension',
-      ],
-      'svc-her-plastic-nails-false-nail-extension-gel-soft.jpg': [
-        'plastic-nails-false-nail-extension-gel',
-      ],
-      'svc-her-refill-nail-extension-soft.jpg': [
-        'refill-nail-extension',
-      ],
-      'svc-her-refill-nail-extension-extra-long-v2-soft.jpg': [
-        'refill-nail-extension-extra-long',
-      ],
-      'svc-her-fake-nails-glue-on-regular-polish-soft.jpg': [
-        'fake-nails-glue-on-regular-polish',
-      ],
-      'svc-her-false-nail-tips-stick-on-only-soft.jpg': [
-        'false-nail-tips-stick-on-only',
-      ],
-      'svc-her-classic-manicure-plus-fake-nails-application-soft.jpg': [
-        'classic-manicure-plus-fake-nails-application',
-      ],
-      'svc-her-repair-per-nail-extension-soft.jpg': [
-        'repair-per-nail-extension',
-      ],
-      'svc-her-soft-gel-by-top-master-soft.jpg': [
-        'soft-gel-by-top-master',
-      ],
-      'svc-her-french-add-on-soft.jpg': [
-        'french-add-on',
-      ],
-      'svc-her-ombre-add-on-soft.jpg': [
-        'ombre-add-on',
-      ],
-      'svc-her-cat-eye-add-on-soft.jpg': [
-        'cat-eye-add-on',
-      ],
-      'svc-her-chrome-powder-add-on-soft.jpg': [
-        'chrome-powder-add-on',
-      ],
-      'svc-her-sticker-per-nail-add-on-soft.jpg': [
-        'sticker-per-nail-add-on',
-      ],
-      'svc-her-drawing-design-per-nail-add-on-soft.jpg': [
-        'drawing-design-per-nail-add-on',
-      ],
-      'svc-her-regular-nail-polish-add-on-hands-soft.jpg': [
-        'regular-nail-polish-add-on-hands',
-      ],
-      'svc-her-regular-nail-polish-add-on-feet-soft.jpg': [
-        'regular-nail-polish-add-on-feet',
-      ],
-      'svc-her-soft-gel-removal-soft.jpg': [
-        'soft-gel-removal',
-      ],
-      'svc-her-hard-gel-removal-soft.jpg': [
-        'hard-gel-removal',
-      ],
-      'svc-her-regular-nail-polish-removal-soft.jpg': [
-        'regular-nail-polish-removal',
-      ],
-      'svc-her-callus-removal-kinetics-soft.jpg': [
-        'callus-removal-kinetics',
-      ],
-      'svc-her-spa-pedicure-soft.jpg': [
-        'spa-pedicure',
-      ],
-      'svc-her-ecosophy-signature-pedicure-soft.jpg': [
-        'ecosophy-signature-pedicure',
-      ],
-      'svc-her-signature-pedicure-machine-heels-soft.jpg': [
-        'signature-pedicure-machine-heels',
-      ],
-      'svc-her-smart-pedicure-gel-machine-pedicure-soft.jpg': [
-        'smart-pedicure-gel-machine-pedicure',
-      ],
-      'svc-her-smart-pedicure-without-gel-colour-soft.jpg': [
-        'smart-pedicure-without-gel-colour',
-      ],
-      'svc-her-gel-pedicure-soft.jpg': [
-        'gel-pedicure',
-      ],
-      'svc-her-hard-gel-pedicure-soft.jpg': [
-        'hard-gel-pedicure',
-      ],
-      'svc-her-foot-reflexology-massage-pedicure-add-on-soft.jpg': [
-        'foot-reflexology-massage-pedicure-add-on',
-      ],
-      'svc-her-spa-mani-pedi-combo-soft.jpg': [
-        'spa-mani-pedi-combo',
-      ],
-      'svc-her-russian-manicure-russian-pedicure-soft.jpg': [
-        'russian-manicure-russian-pedicure',
-      ],
-      'svc-her-russian-smart-pedicure-plus-classic-manicure-soft.jpg': [
-        'russian-smart-pedicure-plus-classic-manicure',
-      ],
-      'svc-her-overlay-manicure-home-service-soft.jpg': [
-        'overlay-manicure-home-service',
-      ],
-      'svc-her-soft-gel-manicure-home-service-soft.jpg': [
-        'soft-gel-manicure-home-service',
-      ],
-      'svc-her-gel-nail-extensions-home-service-soft.jpg': [
-        'gel-nail-extensions-home-service',
-      ],
-      'svc-her-gel-pedicure-home-service-soft.jpg': [
-        'gel-pedicure-home-service',
-      ],
-      'svc-her-spa-pedicure-home-service-soft.jpg': [
-        'spa-pedicure-home-service',
-      ],
-      'svc-her-classic-mani-pedi-home-service-soft.jpg': [
-        'classic-mani-pedi-home-service',
-      ],
-      'svc-her-hand-polish-home-service-soft.jpg': [
-        'hand-polish-home-service',
-      ],
-      'svc-her-feet-polish-home-service-soft.jpg': [
-        'feet-polish-home-service',
-      ],
-      'svc-her-classic-natural-lashes-soft.jpg': [
-        'classic-natural-lashes',
-      ],
-      'svc-her-2d-lashes-soft.jpg': [
-        '2d-lashes',
-      ],
-      'svc-her-3d-lashes-soft.jpg': [
-        '3d-lashes',
-      ],
-      'svc-her-mega-volume-soft.jpg': [
-        'mega-volume',
-      ],
-      'svc-her-any-volume-lashes-soft.jpg': [
-        'any-volume-lashes',
-      ],
-      'svc-her-special-offer-any-volume-soft.jpg': [
-        'special-offer-any-volume',
-      ],
-      'svc-her-silk-lashes-soft.jpg': [
-        'silk-lashes',
-      ],
-      'svc-her-half-set-lashes-soft.jpg': [
-        'half-set-lashes',
-      ],
-      'svc-her-led-lashes-soft.jpg': [
-        'led-lashes',
-      ],
-      'svc-her-rays-kim-kardashian-pattern-soft.jpg': [
-        'rays-kim-kardashian-pattern',
-      ],
-      'svc-her-kylie-pattern-soft.jpg': [
-        'kylie-pattern',
-      ],
-      'svc-her-anime-pattern-soft.jpg': [
-        'anime-pattern',
-      ],
-      'svc-her-wet-pattern-soft.jpg': [
-        'wet-pattern',
-      ],
-      'svc-her-lower-lashes-soft.jpg': [
-        'lower-lashes',
-      ],
-      'svc-her-lash-tint-soft.jpg': [
-        'lash-tint',
-      ],
-      'svc-her-eyelash-lifting-soft.jpg': [
-        'eyelash-lifting',
-      ],
-      'svc-her-eyelash-brow-lifting-combo-soft.jpg': [
-        'eyelash-brow-lifting-combo',
-      ],
-      'svc-her-lash-refill-within-1-week-soft.jpg': [
-        'lash-refill-within-1-week',
-      ],
-      'svc-her-led-lash-refill-within-1-week-soft.jpg': [
-        'led-lash-refill-within-1-week',
-      ],
-      'svc-her-lash-refill-within-14-days-classic-2d-soft.jpg': [
-        'lash-refill-within-14-days-classic-2d',
-      ],
-      'svc-her-lash-refill-within-14-days-3d-mega-volume-soft.jpg': [
-        'lash-refill-within-14-days-3d-mega-volume',
-      ],
-      'svc-her-led-lash-refill-15-days-soft.jpg': [
-        'led-lash-refill-15-days',
-      ],
-      'svc-her-lash-refill-after-21-days-soft.jpg': [
-        'lash-refill-after-21-days',
-      ],
-      'svc-her-lash-refill-within-25-days-3d-mega-volume-soft.jpg': [
-        'lash-refill-within-25-days-3d-mega-volume',
-      ],
-      'svc-her-led-lash-refill-26-days-and-above-soft.jpg': [
-        'led-lash-refill-26-days-and-above',
-      ],
-      'svc-her-lash-refill-after-30-days-soft.jpg': [
-        'lash-refill-after-30-days',
-      ],
-      'svc-her-weekly-lash-soft.jpg': [
-        'weekly-lash',
-      ],
-      'svc-her-eyelash-removal-soft.jpg': [
-        'eyelash-removal',
-      ],
-      'svc-her-lash-extension-home-service-soft.jpg': [
+      // The client’s own lash photographs (23 October): two shoots, each in two
+      // crops. Volume and pattern sets show the volume set; classic, lifts, tint
+      // and refills the natural set. Newer than the handoff, which kept the
+      // older website photo for this section.
+      'eco-her-svc-lashes-volume-1.jpg': [
+        '3d-lashes', 'any-volume-lashes', 'led-lashes',
+        'kylie-pattern', 'wet-pattern', 'lash-refill-within-14-days-3d-mega-volume',
+        'led-lash-refill-within-1-week', 'led-lash-refill-26-days-and-above',
+      ],
+      'eco-her-svc-lashes-volume-2.jpg': [
+        'mega-volume', 'special-offer-any-volume', 'rays-kim-kardashian-pattern',
+        'anime-pattern', 'lash-refill-within-25-days-3d-mega-volume', 'led-lash-refill-15-days',
         'lash-extension-home-service',
       ],
-      'svc-her-eyebrow-lifting-soft.jpg': [
-        'eyebrow-lifting',
+      'eco-her-svc-lashes-natural-1.jpg': [
+        'classic-natural-lashes', 'silk-lashes', 'lower-lashes',
+        'eyelash-lifting', 'lash-refill-within-1-week', 'lash-refill-after-21-days',
+        'weekly-lash',
       ],
-      'svc-her-eyebrow-lifting-full-set-tinting-cleaning-lifting-soft.jpg': [
-        'eyebrow-lifting-full-set-tinting-cleaning-lifting',
+      'eco-her-svc-lashes-natural-2.jpg': [
+        '2d-lashes', 'half-set-lashes', 'lash-tint',
+        'eyelash-brow-lifting-combo', 'lash-refill-within-14-days-classic-2d', 'lash-refill-after-30-days',
+        'eyelash-removal',
       ],
-      'svc-her-eyebrow-architecture-plus-tinting-colouring-soft.jpg': [
-        'eyebrow-architecture-plus-tinting-colouring',
+      'eco-her-nails-1.jpg': [
+        'cut-and-file', 'classic-manicure', 'classic-smart-russian-manicure-machine',
+        'spa-manicure-alessandro', 'soft-gel-manicure', 'overlay-manicure',
+        'japanese-manicure', 'biab-manicure', 'gel-polish-application-colour-change-only',
+        'nail-extension-acrylic-gel-gel-polygel-acrygel', '3d-nail-extension', 'extra-long-nail-extension',
+        'plastic-nails-false-nail-extension-gel', 'refill-nail-extension', 'refill-nail-extension-extra-long',
+        'fake-nails-glue-on-regular-polish', 'false-nail-tips-stick-on-only', 'classic-manicure-plus-fake-nails-application',
+        'repair-per-nail-extension', 'soft-gel-by-top-master', 'french-add-on',
+        'ombre-add-on', 'cat-eye-add-on', 'chrome-powder-add-on',
+        'sticker-per-nail-add-on', 'drawing-design-per-nail-add-on', 'regular-nail-polish-add-on-hands',
+        'regular-nail-polish-add-on-feet', 'soft-gel-removal', 'hard-gel-removal',
+        'regular-nail-polish-removal', 'callus-removal-kinetics', 'spa-pedicure',
+        'ecosophy-signature-pedicure', 'signature-pedicure-machine-heels', 'smart-pedicure-gel-machine-pedicure',
+        'smart-pedicure-without-gel-colour', 'gel-pedicure', 'hard-gel-pedicure',
+        'spa-mani-pedi-combo', 'russian-manicure-russian-pedicure', 'russian-smart-pedicure-plus-classic-manicure',
+        'overlay-manicure-home-service', 'soft-gel-manicure-home-service', 'gel-nail-extensions-home-service',
+        'gel-pedicure-home-service', 'spa-pedicure-home-service', 'classic-mani-pedi-home-service',
+        'hand-polish-home-service', 'feet-polish-home-service',
       ],
-      'svc-her-eyebrow-modelling-soft.jpg': [
-        'eyebrow-modelling',
+      'eco-her-massage-1.jpg': [
+        'foot-reflexology-massage-pedicure-add-on', 'relaxing-massage', 'balinese-relaxing-massage',
+        'swedish-massage', 'deep-tissue', 'hot-stone-massage',
+        'aromatherapy', 'aromatherapy-with-hot-stone', 'lymphatic-drainage',
+        'face-lymphatic-massage', 'prenatal-massage', 'postpartum-massage',
+        'head-massage', 'back-massage', 'reflexology-feet',
+        'foot-massage', 'relaxing-massage-home-service', 'lymphatic-drainage-massage-home-service',
+        'postpartum-massage-home-service',
       ],
-      'svc-her-eyebrow-cleaning-soft.jpg': [
-        'eyebrow-cleaning',
+      'eco-her-nails-2.jpg': [
+        'eyebrow-lifting', 'eyebrow-lifting-full-set-tinting-cleaning-lifting', 'eyebrow-architecture-plus-tinting-colouring',
+        'eyebrow-modelling', 'eyebrow-cleaning', 'eyebrow-colour',
+        'brow-clean-plus-colour-combo', 'eyebrow-bleaching-muslim-brow-architecture', 'eyebrow-lifting-home-service',
       ],
-      'svc-her-eyebrow-colour-soft.jpg': [
-        'eyebrow-colour',
+      'eco-her-spa-08.jpg': [
+        'eyebrow-threading-cleaning', 'face-threading', 'full-face-mousse',
+        'upper-lip-threading', 'chin-threading', 'brow-bleaching',
+        'full-body-wax', 'full-leg-wax', 'half-leg-wax',
+        'full-arm-wax', 'half-arm-wax', 'underarm-wax',
+        'bikini-zone-wax', 'back-wax', 'upper-lip-wax',
+        'chin-wax', 'nose-waxing', 'waxing-home-service',
       ],
-      'svc-her-brow-clean-plus-colour-combo-soft.jpg': [
-        'brow-clean-plus-colour-combo',
-      ],
-      'svc-her-eyebrow-bleaching-muslim-brow-architecture-soft.jpg': [
-        'eyebrow-bleaching-muslim-brow-architecture',
-      ],
-      'svc-her-eyebrow-lifting-home-service-soft.jpg': [
-        'eyebrow-lifting-home-service',
-      ],
-      'svc-her-eyebrow-threading-cleaning-soft.jpg': [
-        'eyebrow-threading-cleaning',
-      ],
-      'svc-her-face-threading-soft.jpg': [
-        'face-threading',
-      ],
-      'svc-her-full-face-mousse-soft.jpg': [
-        'full-face-mousse',
-      ],
-      'svc-her-upper-lip-threading-soft.jpg': [
-        'upper-lip-threading',
-      ],
-      'svc-her-chin-threading-soft.jpg': [
-        'chin-threading',
-      ],
-      'svc-her-brow-bleaching-soft.jpg': [
-        'brow-bleaching',
-      ],
-      'svc-her-full-body-wax-soft.jpg': [
-        'full-body-wax',
-      ],
-      'svc-her-full-leg-wax-soft.jpg': [
-        'full-leg-wax',
-      ],
-      'svc-her-half-leg-wax-soft.jpg': [
-        'half-leg-wax',
-      ],
-      'svc-her-full-arm-wax-soft.jpg': [
-        'full-arm-wax',
-      ],
-      'svc-her-half-arm-wax-soft.jpg': [
-        'half-arm-wax',
-      ],
-      'svc-her-underarm-wax-soft.jpg': [
-        'underarm-wax',
-      ],
-      'svc-her-bikini-zone-wax-soft.jpg': [
-        'bikini-zone-wax',
-      ],
-      'svc-her-back-wax-soft.jpg': [
-        'back-wax',
-      ],
-      'svc-her-upper-lip-wax-soft.jpg': [
-        'upper-lip-wax',
-      ],
-      'svc-her-chin-wax-soft.jpg': [
-        'chin-wax',
-      ],
-      'svc-her-nose-waxing-soft.jpg': [
-        'nose-waxing',
-      ],
-      'svc-her-waxing-home-service-soft.jpg': [
-        'waxing-home-service',
-      ],
-      'svc-her-semi-permanent-eyebrow-colour-soft.jpg': [
-        'semi-permanent-eyebrow-colour',
-      ],
-      'svc-her-eyeliner-soft.jpg': [
-        'eyeliner',
-      ],
-      'svc-her-dark-lips-neutralisation-soft.jpg': [
-        'dark-lips-neutralisation',
-      ],
-      'svc-her-lips-spa-soft.jpg': [
-        'lips-spa',
-      ],
-      'svc-her-eyebrow-pigment-removal-soft.jpg': [
-        'eyebrow-pigment-removal',
+      'eco-her-makeup-2.jpg': [
+        'semi-permanent-eyebrow-colour', 'eyeliner', 'dark-lips-neutralisation',
+        'lips-spa', 'eyebrow-pigment-removal',
       ],
       'eco-her-svc-img-3478.jpg': [
         'basic-make-up',
@@ -1666,360 +1315,64 @@
       'eco-her-svc-img-3483.jpg': [
         'make-up-hair-style-package',
       ],
-      'svc-her-haircut-soft.jpg': [
-        'haircut',
-      ],
-      'svc-her-hair-trim-soft.jpg': [
-        'hair-trim',
-      ],
-      'svc-her-fringe-cut-soft.jpg': [
-        'fringe-cut',
-      ],
-      'svc-her-baby-trim-soft.jpg': [
-        'baby-trim',
-      ],
-      'svc-her-hair-wash-soft.jpg': [
-        'hair-wash',
-      ],
-      'svc-her-blow-dry-long-basic-soft.jpg': [
-        'blow-dry-long-basic',
-      ],
-      'svc-her-blow-dry-medium-length-basic-soft.jpg': [
-        'blow-dry-medium-length-basic',
-      ],
-      'svc-her-blow-dry-curls-soft.jpg': [
-        'blow-dry-curls',
-      ],
-      'svc-her-hair-styling-soft.jpg': [
-        'hair-styling',
-      ],
-      'svc-her-full-hair-colour-short-length-soft.jpg': [
-        'full-hair-colour-short-length',
-      ],
-      'svc-her-full-hair-colour-medium-soft.jpg': [
-        'full-hair-colour-medium',
-      ],
-      'svc-her-full-hair-colour-medium-length-soft.jpg': [
-        'full-hair-colour-medium-length',
-      ],
-      'svc-her-root-colour-soft.jpg': [
-        'root-colour',
-      ],
-      'svc-her-hair-colour-application-soft.jpg': [
-        'hair-colour-application',
-      ],
-      'svc-her-highlights-short-hair-soft.jpg': [
-        'highlights-short-hair',
-      ],
-      'svc-her-hair-bleach-roots-soft.jpg': [
-        'hair-bleach-roots',
-      ],
-      'svc-her-toner-rinsage-soft.jpg': [
-        'toner-rinsage',
-      ],
-      'svc-her-estel-colour-off-medium-length-soft.jpg': [
-        'estel-colour-off-medium-length',
-      ],
-      'svc-her-estel-colour-off-long-length-soft.jpg': [
-        'estel-colour-off-long-length',
-      ],
-      'svc-her-estel-colour-off-extra-long-soft.jpg': [
-        'estel-colour-off-extra-long',
-      ],
-      'svc-her-hair-keratin-soft.jpg': [
-        'hair-keratin',
-      ],
-      'svc-her-keratin-roots-soft.jpg': [
-        'keratin-roots',
-      ],
-      'svc-her-hair-protein-soft.jpg': [
-        'hair-protein',
-      ],
-      'svc-her-hair-botox-soft.jpg': [
-        'hair-botox',
-      ],
-      'svc-her-remount-hair-treatment-soft.jpg': [
-        'remount-hair-treatment',
-      ],
-      'svc-her-estel-cloud-hair-treatment-soft.jpg': [
-        'estel-cloud-hair-treatment',
-      ],
-      'svc-her-estel-banya-treatment-soft.jpg': [
-        'estel-banya-treatment',
-      ],
-      'svc-her-flowers-hair-treatment-soft.jpg': [
-        'flowers-hair-treatment',
-      ],
-      'svc-her-korean-hair-spa-soft.jpg': [
-        'korean-hair-spa',
-      ],
-      'svc-her-more-therapy-scalp-scrub-short-hair-soft.jpg': [
-        'more-therapy-scalp-scrub-short-hair',
-      ],
-      'svc-her-more-therapy-scalp-scrub-medium-hair-soft.jpg': [
-        'more-therapy-scalp-scrub-medium-hair',
-      ],
-      'svc-her-more-therapy-scalp-scrub-long-extra-long-soft.jpg': [
-        'more-therapy-scalp-scrub-long-extra-long',
-      ],
-      'svc-her-hair-treatment-add-on-for-moroccan-bath-soft.jpg': [
-        'hair-treatment-add-on-for-moroccan-bath',
-      ],
-      'svc-her-extension-removal-per-piece-soft.jpg': [
-        'extension-removal-per-piece',
-      ],
-      'svc-her-extension-cleaning-per-piece-soft.jpg': [
-        'extension-cleaning-per-piece',
-      ],
-      'svc-her-remove-clean-refit-extensions-per-piece-soft.jpg': [
-        'remove-clean-refit-extensions-per-piece',
-      ],
-      'svc-her-royal-hydrafacial-soft.jpg': [
-        'royal-hydrafacial',
-      ],
-      'svc-her-basic-hydrafacial-soft.jpg': [
-        'basic-hydrafacial',
-      ],
-      'svc-her-deep-cleansing-facial-soft.jpg': [
-        'deep-cleansing-facial',
-      ],
-      'svc-her-express-facial-soft.jpg': [
-        'express-facial',
-      ],
-      'svc-her-anti-aging-facial-soft.jpg': [
-        'anti-aging-facial',
-      ],
-      'svc-her-red-carpet-facial-soft.jpg': [
-        'red-carpet-facial',
-      ],
-      'svc-her-microcurrent-face-lift-soft.jpg': [
-        'microcurrent-face-lift',
-      ],
-      'svc-her-ultrasonic-cleansing-facial-soft.jpg': [
-        'ultrasonic-cleansing-facial',
-      ],
-      'svc-her-carbon-peel-non-invasive-soft.jpg': [
-        'carbon-peel-non-invasive',
-      ],
-      'svc-her-fcl-peel-soft.jpg': [
-        'fcl-peel',
-      ],
-      'svc-her-dermabrasion-soft.jpg': [
-        'dermabrasion',
-      ],
-      'svc-her-carboxytherapy-soft.jpg': [
-        'carboxytherapy',
-      ],
-      'svc-her-led-light-therapy-plus-botox-mask-soft.jpg': [
-        'led-light-therapy-plus-botox-mask',
-      ],
-      'svc-her-algae-mask-soft.jpg': [
-        'algae-mask',
-      ],
-      'svc-her-klapp-repagen-treatment-soft.jpg': [
-        'klapp-repagen-treatment',
-      ],
-      'svc-her-klapp-repagen-combined-with-hydrafacial-soft.jpg': [
-        'klapp-repagen-combined-with-hydrafacial',
-      ],
-      'svc-her-klapp-aloe-vera-soft.jpg': [
-        'klapp-aloe-vera',
-      ],
-      'svc-her-dermapen-by-dermapen-world-soft.jpg': [
-        'dermapen-by-dermapen-world',
-      ],
-      'svc-her-dermapen-by-dr-pen-soft.jpg': [
-        'dermapen-by-dr-pen',
-      ],
-      'svc-her-skin-booster-soft.jpg': [
-        'skin-booster',
-      ],
-      'svc-her-biorevitalisation-soft.jpg': [
-        'biorevitalisation',
-      ],
-      'svc-her-mesotherapy-soft.jpg': [
-        'mesotherapy',
-      ],
-      'svc-her-diamond-facial-soft.jpg': [
-        'diamond-facial',
-      ],
-      'svc-her-chemical-peel-soft.jpg': [
-        'chemical-peel',
-      ],
-      'svc-her-almond-peeling-soft.jpg': [
-        'almond-peeling',
-      ],
-      'svc-her-lip-rejuvenation-soft.jpg': [
-        'lip-rejuvenation',
-      ],
-      'svc-her-intimate-whitening-soft.jpg': [
-        'intimate-whitening',
-      ],
-      'svc-her-relaxing-massage-soft.jpg': [
-        'relaxing-massage',
-      ],
-      'svc-her-balinese-relaxing-massage-soft.jpg': [
-        'balinese-relaxing-massage',
-      ],
-      'svc-her-swedish-massage-soft.jpg': [
-        'swedish-massage',
-      ],
-      'svc-her-deep-tissue-soft.jpg': [
-        'deep-tissue',
-      ],
-      'svc-her-hot-stone-massage-soft.jpg': [
-        'hot-stone-massage',
-      ],
-      'svc-her-aromatherapy-soft.jpg': [
-        'aromatherapy',
-      ],
-      'svc-her-aromatherapy-with-hot-stone-soft.jpg': [
-        'aromatherapy-with-hot-stone',
-      ],
-      'svc-her-lymphatic-drainage-soft.jpg': [
-        'lymphatic-drainage',
-      ],
-      'svc-her-face-lymphatic-massage-soft.jpg': [
-        'face-lymphatic-massage',
-      ],
-      'svc-her-prenatal-massage-soft.jpg': [
-        'prenatal-massage',
-      ],
-      'svc-her-postpartum-massage-soft.jpg': [
-        'postpartum-massage',
-      ],
-      'svc-her-water-bed-relaxing-treatment-soft.jpg': [
-        'water-bed-relaxing-treatment',
-      ],
-      'svc-her-jacuzzi-massage-soft.jpg': [
-        'jacuzzi-massage',
-      ],
-      'svc-her-head-massage-soft.jpg': [
-        'head-massage',
-      ],
-      'svc-her-back-massage-soft.jpg': [
-        'back-massage',
-      ],
-      'svc-her-reflexology-feet-soft.jpg': [
-        'reflexology-feet',
-      ],
-      'svc-her-foot-massage-soft.jpg': [
-        'foot-massage',
-      ],
-      'svc-her-relaxing-massage-home-service-soft.jpg': [
-        'relaxing-massage-home-service',
-      ],
-      'svc-her-lymphatic-drainage-massage-home-service-soft.jpg': [
-        'lymphatic-drainage-massage-home-service',
-      ],
-      'svc-her-postpartum-massage-home-service-soft.jpg': [
-        'postpartum-massage-home-service',
-      ],
-      'svc-her-endospheres-massage-soft.jpg': [
-        'endospheres-massage',
-      ],
-      'svc-her-endospheres-face-soft.jpg': [
-        'endospheres-face',
-      ],
-      'svc-her-maderotherapy-soft.jpg': [
-        'maderotherapy',
-      ],
-      'svc-her-maderotherapy-home-service-soft.jpg': [
-        'maderotherapy-home-service',
-      ],
-      'svc-her-rf-slimming-soft.jpg': [
-        'rf-slimming',
-      ],
-      'svc-her-slimming-massage-manual-anti-cellulite-soft.jpg': [
-        'slimming-massage-manual-anti-cellulite',
-      ],
-      'svc-her-maderotherapy-free-trial-soft.jpg': [
-        'maderotherapy-free-trial',
-      ],
-      'svc-her-endospheres-free-trial-soft.jpg': [
-        'endospheres-free-trial',
+      'eco-her-hair-1.jpg': [
+        'haircut', 'hair-trim', 'fringe-cut',
+        'baby-trim', 'hair-wash', 'blow-dry-long-basic',
+        'blow-dry-medium-length-basic', 'blow-dry-curls', 'hair-styling',
+        'full-hair-colour-short-length', 'full-hair-colour-medium', 'full-hair-colour-medium-length',
+        'root-colour', 'hair-colour-application', 'highlights-short-hair',
+        'hair-bleach-roots', 'toner-rinsage', 'estel-colour-off-medium-length',
+        'estel-colour-off-long-length', 'estel-colour-off-extra-long', 'hair-keratin',
+        'keratin-roots', 'hair-protein', 'hair-botox',
+        'remount-hair-treatment', 'estel-cloud-hair-treatment', 'estel-banya-treatment',
+        'flowers-hair-treatment', 'korean-hair-spa', 'more-therapy-scalp-scrub-short-hair',
+        'more-therapy-scalp-scrub-medium-hair', 'more-therapy-scalp-scrub-long-extra-long', 'hair-treatment-add-on-for-moroccan-bath',
+        'extension-removal-per-piece', 'extension-cleaning-per-piece', 'remove-clean-refit-extensions-per-piece',
+      ],
+      'eco-her-facial-1.jpg': [
+        'royal-hydrafacial', 'basic-hydrafacial', 'deep-cleansing-facial',
+        'express-facial', 'anti-aging-facial', 'red-carpet-facial',
+        'microcurrent-face-lift', 'ultrasonic-cleansing-facial', 'carbon-peel-non-invasive',
+        'fcl-peel', 'dermabrasion', 'carboxytherapy',
+        'led-light-therapy-plus-botox-mask', 'algae-mask', 'klapp-repagen-treatment',
+        'klapp-repagen-combined-with-hydrafacial', 'klapp-aloe-vera', 'dermapen-by-dermapen-world',
+        'dermapen-by-dr-pen', 'skin-booster', 'biorevitalisation',
+        'mesotherapy', 'diamond-facial', 'chemical-peel',
+        'almond-peeling', 'lip-rejuvenation', 'intimate-whitening',
+      ],
+      'eco-her-jacuzzi-1.jpg': [
+        'water-bed-relaxing-treatment', 'jacuzzi-massage',
+      ],
+      'eco-her-svc-photo-2026-08-02-21-17-26.jpg': [
+        'endospheres-massage', 'endospheres-face', 'maderotherapy',
+        'maderotherapy-home-service', 'rf-slimming', 'slimming-massage-manual-anti-cellulite',
+        'maderotherapy-free-trial', 'endospheres-free-trial', 'ecosophy-pure-luxe-day',
+        'marble-body-package', 'rf-body-contouring-5-sessions', 'endospheres-lymphatic-drainage-5-sessions',
+        'endospheres-10-sessions', 'maderotherapy-5-sessions', 'maderotherapy-10-sessions',
       ],
       'eco-her-svc-photo-2026-08-02-21-11-19.jpg': [
-        'classic-moroccan-bath',
+        'classic-moroccan-bath', 'la-sultane-de-saba-ecosophy-deluxe', 'herbal-moroccan-bath-add-on',
+        'moroccan-bath-plus-1-hour-balinese-massage', 'deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure', 'ecosophy-escape',
       ],
       'eco-her-svc-photo-2026-08-02-21-11-31.jpg': [
         'royal-moroccan-bath',
       ],
-      'svc-her-la-sultane-de-saba-ecosophy-deluxe-soft.jpg': [
-        'la-sultane-de-saba-ecosophy-deluxe',
+      'eco-her-svc-photo-2026-08-02-21-17-06.jpg': [
+        'beauty-spa-full-set-slimming-body-mask-scrub', 'body-scrub', 'body-mask',
       ],
-      'svc-her-herbal-moroccan-bath-add-on-soft.jpg': [
-        'herbal-moroccan-bath-add-on',
-      ],
-      'svc-her-beauty-spa-full-set-slimming-body-mask-scrub-soft.jpg': [
-        'beauty-spa-full-set-slimming-body-mask-scrub',
-      ],
-      'svc-her-slimming-body-wrap-by-beauty-spa-soft.jpg': [
-        'slimming-body-wrap-by-beauty-spa',
-      ],
-      'svc-her-body-scrub-soft.jpg': [
-        'body-scrub',
-      ],
-      'svc-her-body-mask-soft.jpg': [
-        'body-mask',
-      ],
-      'svc-her-chocolate-body-mask-soft.jpg': [
-        'chocolate-body-mask',
-      ],
-      'svc-her-body-bleach-soft.jpg': [
-        'body-bleach',
-      ],
-      'svc-her-back-bleach-soft.jpg': [
+      'eco-her-svc-photo-2026-08-02-21-17-42.jpg': [
+        'slimming-body-wrap-by-beauty-spa', 'chocolate-body-mask', 'body-bleach',
         'back-bleach',
       ],
       'eco-her-svc-img-7733.jpg': [
         'infrared-sauna',
       ],
-      'svc-her-moroccan-bath-plus-1-hour-balinese-massage-soft.jpg': [
-        'moroccan-bath-plus-1-hour-balinese-massage',
-      ],
-      'svc-her-classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage-soft.jpg': [
-       
+      'eco-her-svc-img-7739.jpg': [
         'classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage',
       ],
-      'svc-her-deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure-soft.jpg': [
-        'deluxe-moroccan-bath-by-la-sultane-de-saba-plus-signature-pedicure',
-      ],
-      'svc-her-ecosophy-escape-soft.jpg': [
-        'ecosophy-escape',
-      ],
-      'svc-her-ecosophy-elegance-trio-soft.jpg': [
-        'ecosophy-elegance-trio',
-      ],
-      'svc-her-ecosophy-pure-luxe-day-soft.jpg': [
-        'ecosophy-pure-luxe-day',
-      ],
-      'svc-her-glass-skin-package-soft.jpg': [
-        'glass-skin-package',
-      ],
-      'svc-her-marble-body-package-soft.jpg': [
-        'marble-body-package',
-      ],
-      'svc-her-signature-radiance-ritual-soft.jpg': [
-        'signature-radiance-ritual',
-      ],
-      'svc-her-classic-mani-pedi-offer-soft.jpg': [
+      'eco-her-svc-photo-2026-08-02-21-16-51.jpg': [
+        'ecosophy-elegance-trio', 'glass-skin-package', 'signature-radiance-ritual',
         'classic-mani-pedi-offer',
-      ],
-      'svc-her-rf-body-contouring-5-sessions-soft.jpg': [
-        'rf-body-contouring-5-sessions',
-      ],
-      'svc-her-endospheres-lymphatic-drainage-5-sessions-soft.jpg': [
-        'endospheres-lymphatic-drainage-5-sessions',
-      ],
-      'svc-her-endospheres-10-sessions-soft.jpg': [
-        'endospheres-10-sessions',
-      ],
-      'svc-her-maderotherapy-5-sessions-soft.jpg': [
-        'maderotherapy-5-sessions',
-      ],
-      'svc-her-maderotherapy-10-sessions-soft.jpg': [
-        'maderotherapy-10-sessions',
       ],
     },
   };
@@ -2036,16 +1389,23 @@
     him: { cats: HIM_CATS },
     slugify: slugify,
 
+    // The address the site is published under. Canonical links, the sitemap
+    // and the Pages Functions all take it from here (via tools/seo.mjs), so a
+    // move to the launch domain is this one line plus `node tools/seo.mjs`.
+    site: 'https://ecosophy.pages.dev',
+
     // Every treatment on one side, flattened, with its category and slug -
     // what the detail-page templates iterate over.
     flat: function (side) {
       var out = [];
       (this[side].cats || []).forEach(function (c) {
         c.items.forEach(function (it) {
+          var slug = it.slug || slugify(it.name);
           out.push({
             name: it.name, cat: c.name, catKey: c.key, type: it.type,
             duration: it.duration, price: it.price, desc: it.desc, long: it.long,
-            slug: slugify(it.name), img: PHOTO_OF[side][slugify(it.name)] || '',
+            parts: it.parts, visits: it.visits,
+            slug: slug, img: PHOTO_OF[side][slug] || c.img,
           });
         });
       });
@@ -2060,7 +1420,7 @@
           name: c.name, slot: c.slot, img: c.img, credit: '', chref: '', blurb: c.blurb,
           items: c.items.map(function (it) {
             return {
-              name: it.name, desc: it.desc, price: it.price,
+              name: it.name, desc: it.desc, price: it.price, slug: it.slug || slugify(it.name),
               duration: it.duration ? it.duration.toUpperCase() : 'BY REQUEST',
             };
           }),
@@ -2075,9 +1435,10 @@
         return {
           name: c.name, slot: c.ddSlot, pic: [c.img, '', ''], blurb: c.blurb,
           items: c.items.map(function (it) {
+            var slug = it.slug || slugify(it.name);
             return {
               name: it.name, type: it.type, duration: it.duration, price: it.price, desc: it.desc,
-              img: PHOTO_OF[side][slugify(it.name)] || '',
+              slug: slug, img: PHOTO_OF[side][slug] || c.img,
             };
           }),
         };
@@ -2087,328 +1448,552 @@
 
   // ---------------------------------------------------------- detail pages
   //
-  // /service and /gent-service are one template each, driven by the treatment's
-  // `type`. The two pages already carry templates for the types that existed
-  // before (massage, focused, bath, water, tech, pkg, and facial on the men's
-  // side); these are the ones the new categories need. Each page merges these
-  // over its own table, so anything defined here wins and anything missing
-  // falls back to what the page already had.
+  // /service and /gent-service are one template each. Everything they say
+  // about a treatment comes from here: the treatment's own row above, plus the
+  // copy for its `type` below. Two rules hold for all of it:
+  //
+  // - Nothing in a type's copy may be untrue for any treatment of that type.
+  //   A type covers very different things (Cut and File and a 3D extension are
+  //   both `nails`), so type copy stays general and the treatment's own
+  //   description carries the specifics.
+  // - No invented timings. The pages used to list four or five "stages" per
+  //   type with minutes against each, which disagreed with the treatment's real
+  //   duration on 206 pages. Stages are now shown only for packages, where
+  //   they are the package's real components, and never with minutes. The one
+  //   duration on a page is the treatment's own, from its menu row.
 
-  // Photos the new types hang their hero and gallery off.
-  w.ECO.her.imgs = {
-    nails:  [UP + 'eco-her-nails-1.jpg', '', ''],
-    lashes: [UP + 'eco-her-makeup-1.jpg', '', ''],
-    brows:  [UP + 'eco-her-nails-2.jpg', '', ''],
-    spmu:   [UP + 'eco-her-makeup-2.jpg', '', ''],
-    hair:   [UP + 'eco-her-hair-1.jpg', '', ''],
-    removal: [UP + 'eco-her-spa-08.jpg', '', ''],
-    makeup: [UP + 'eco-her-bridal.jpg', '', ''],
+  // The rooms each side photographs, for the "THE ROOM" gallery. All are the
+  // centre's own photographs; the men's are the room, equipment and product
+  // photos from the 18 October handoff (menservice.images/gents photo/).
+  w.ECO.him.rooms = {
+    room:     [UP + 'eco-him-svc-treatment-room.jpg', 'TREATMENT ROOM'],
+    hammam:   [UP + 'eco-him-svc-photo-2026-07-25-02-03-59.jpg', 'THE HAMMAM'],
+    water:    [UP + 'eco-him-svc-photo-2026-08-02-15-48-52.jpg', 'WATER SUITE'],
+    facialEq: [UP + 'eco-him-room-facial-equipment.jpg', 'FACIAL EQUIPMENT'],
+    bodyEq:   [UP + 'eco-him-room-body-equipment.jpg', 'BODY EQUIPMENT'],
+    products: [UP + 'eco-him-room-products-1.jpg', 'PRODUCTS'],
+  };
+  w.ECO.her.rooms = {
+    room:     [UP + 'eco-her-massage-1.jpg', 'TREATMENT ROOM'],
+    hammam:   [UP + 'eco-her-hammam-1.jpg', 'THE HAMMAM'],
+    skin:     [UP + 'eco-her-facial-1.jpg', 'THE SKIN ROOM'],
+    water:    [UP + 'eco-her-jacuzzi-1.jpg', 'WATER SUITE'],
+    nails:    [UP + 'eco-her-nails-1.jpg', 'THE NAIL STUDIO'],
+    lashes:   [UP + 'eco-her-svc-lashes-natural-2.jpg', 'THE LASH ROOM'],
+    hair:     [UP + 'eco-her-hair-1.jpg', 'THE HAIR STUDIO'],
+    makeup:   [UP + 'eco-her-makeup-2.jpg', 'MAKE-UP'],
+    products: [UP + 'eco-her-products-1.jpg', 'PRODUCTS'],
   };
 
-  // The men's detail pages were pointing every treatment at the women's photo
-  // library - the whole IMG table was eco-her-*. These are the men's own.
-  w.ECO.him.imgs = {
-    massage:  [UP + '775244964_18119167235477475_6941524398570787900_n.jpg', '', ''],
-    bath:     [UP + 'eco-him-07.jpg', '', ''],
-    facial:   [UP + 'imgi_33_man-getting-a-facial-treatment.jpg', '', ''],
-    water:    [UP + '748718184_18114511022477475_8211076763529339827_n.jpg', '', ''],
-    tech:     [UP + 'gent-gal-detail-2.jpg', '', ''],
-    grooming: [UP + 'photo_2026-08-02_19-37-29.jpg', '', ''],
-    removal:  [UP + 'eco-him-machine.jpg', '', ''],
+  // Five room photos for a treatment's gallery, its own room first.
+  w.ECO.gallery = function (side, first) {
+    var rooms = this[side].rooms, keys = Object.keys(rooms);
+    var order = [first].concat(keys).filter(function (k, i, a) { return rooms[k] && a.indexOf(k) === i; });
+    return order.slice(0, 5).map(function (k) { return { key: k, img: rooms[k][0], label: rooms[k][1] }; });
   };
+
+  // Shared amenity lines. Listed separately so a home-service treatment can
+  // drop the ones that only exist at the centre.
+  var AT_CENTRE = /room|lounge|tea|robe|slippers|towels|underwear|suite|studio|hammam|bed/i;
+
+  var HER_WHO = 'Female therapist';
 
   w.ECO.her.types = {
-
     facial: {
-      kicker: 'skin',
-      room: 'PRIVATE TREATMENT ROOM',
-      img: 'facial',
-      heading: 'A FACIAL PLANNED AROUND YOUR SKIN, NOT A MENU',
-      steps: [
-        ['Consultation and analysis', '10 MIN', 'Your skin is cleansed and looked at properly under a lamp before anything is decided.'],
-        ['Preparation', '10 MIN', 'Cleansing, exfoliation and, where it is needed, steam to soften congestion.'],
-        ['The treatment', '30 MIN', 'The device, peel or protocol agreed at consultation, worked at the depth your skin will take.'],
-        ['Calm and protect', '10 MIN', 'A mask, LED where it helps, then moisturiser and SPF before you leave.'],
-      ],
-      includes: ['Private treatment room', 'A full skin consultation and analysis', 'Professional-grade products throughout', 'Aftercare written down, not just explained', 'Herbal tea and water afterwards', 'Use of the rest lounge'],
+      kicker: 'skin', room: 'PRIVATE TREATMENT ROOM', img: 'skin', who: HER_WHO,
+      heading: 'SKIN TREATMENTS PLANNED AROUND YOUR SKIN',
+      includes: ['Private treatment room', 'A skin consultation before treatment', 'Professional-grade products throughout', 'Aftercare advice before you leave'],
       benefits: [
-        ['Chosen for your skin', 'Nothing is applied until your skin has been looked at. The protocol on the day can differ from the one you booked.'],
-        ['Honest about courses', 'If one session will not do it, you are told that at the consultation rather than after the third visit.'],
-        ['Professional lines only', 'KLAPP, Dermapen and the rest are professional products, used at professional strength.'],
-        ['Nothing to hide afterwards', 'Most of this menu leaves no visible downtime. Where there is any, we tell you before you book.'],
+        ['Chosen for your skin', 'Your skin is looked at before anything is applied, and the treatment is agreed with you.'],
+        ['Honest about courses', 'Some treatments work over several sessions. If yours is one of them, you are told at the consultation.'],
+        ['Professional lines', 'Professional skincare and devices, used by trained therapists.'],
+        ['Downtime explained first', 'Where a treatment leaves visible redness or downtime, we tell you before you book.'],
       ],
-      reviews: [
-        ['My skin has not been this calm in years, and she actually explained why.', 'Mariam S.', '2 WEEKS AGO'],
-        ['Booked a course of three and the difference by the last one was obvious in photographs.', 'Aisha B.', 'LAST MONTH'],
-        ['No hard selling, no products pushed at the end. Just a very good facial.', 'Dana F.', 'LAST MONTH'],
-        ['I came in with congestion I had given up on. It is gone.', 'Reem H.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE SKIN ROOM',
-      galleryNote: 'Clinical equipment and professional lines, in a room that still feels like a spa.',
+      faq: [['How soon will I see a difference?', 'It depends on the treatment. Cleansing and hydrating facials show the same day; microneedling and peels work over the following weeks. Your therapist will tell you which applies before you start.']],
+      galleryHeading: 'INSIDE THE SKIN ROOM', galleryNote: 'Professional equipment, in a private treatment room.',
     },
-
     nails: {
-      kicker: 'nails',
-      room: 'THE NAIL STUDIO',
-      img: 'nails',
-      heading: 'PRECISION WORK, BY MASTERS WHO TAKE THEIR TIME',
-      steps: [
-        ['Consultation', '5 MIN', 'Shape, length and finish agreed, and a look at how your nails are growing.'],
-        ['Preparation', '20 MIN', 'Cuticle work with an e-file, sidewalls cleaned, and the nail plate prepared properly.'],
-        ['The work', '40 MIN', 'Overlay, extension or colour, built in thin even layers and cured as it goes.'],
-        ['Finish', '10 MIN', 'Shaping, a final gloss, cuticle oil and a hand massage.'],
-      ],
-      includes: ['Your own master for the whole appointment', 'Sterilised tools, one set per guest', 'E-file cuticle work, not soaking and cutting', 'Professional gel and polish systems', 'Cuticle oil and hand care to finish', 'Herbal tea while you work'],
+      kicker: 'nails', room: 'THE NAIL STUDIO', img: 'nails', who: 'Nail master',
+      heading: 'NAIL CARE BY MASTERS WHO TAKE THEIR TIME',
+      includes: ['Your own nail master for the appointment', 'Sterilised tools, one set per guest', 'Single-use files and buffers'],
       benefits: [
-        ['Russian-speaking masters', 'Trained in the precision technique the method is named for, and doing it every day.'],
-        ['It lasts', 'A clean cuticle and a properly prepared plate are why the set still looks new three weeks later.'],
+        ['Russian-speaking masters', 'Our nail masters work in the precise technique they trained in, every day.'],
         ['Sterilisation you can see', 'Tools are pouched and autoclaved. Files and buffers are single use.'],
-        ['Kind to the nail', 'Removal is done by soak or fine bit, never by force. Nails come out of a set healthier than they went in.'],
+        ['Kind to the nail', 'Nothing is forced or rushed. Your master works at a pace your nails can take.'],
       ],
-      reviews: [
-        ['Best manicure I have had in the UAE. The cuticle work is on another level.', 'Kseniya P.', '2 WEEKS AGO'],
-        ['Three weeks in and there is not a chip on it.', 'Noura K.', 'LAST MONTH'],
-        ['She fixed damage from a previous salon and never once made me feel bad about it.', 'Hind A.', 'LAST MONTH'],
-        ['I drive over from Dubai for this, which should tell you enough.', 'Sara D.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE NAIL STUDIO',
-      galleryNote: 'Good light, sterilised tools, and a master who is not watching the clock.',
+      faq: [['Can I add a design or a colour?', 'Yes. French, ombre, cat eye, chrome, stickers and hand-drawn designs are on the menu as add-ons. Tell us when you book and the time is added to your appointment.']],
+      galleryHeading: 'INSIDE THE NAIL STUDIO', galleryNote: 'Good light and sterilised tools.',
     },
-
     lashes: {
-      kicker: 'eyes',
-      room: 'THE LASH ROOM',
-      img: 'lashes',
-      heading: 'A SET MAPPED TO YOUR EYE, NOT TO A CHART',
-      steps: [
-        ['Consultation and mapping', '15 MIN', 'Eye shape measured, the map drawn on the pad, and the shape agreed before anything is applied.'],
-        ['Preparation', '10 MIN', 'Lashes cleansed and separated, lower lashes taped down, and the eye made comfortable.'],
-        ['Application', '90 MIN', 'Extensions or fans placed one lash at a time, with your eyes closed and the room quiet.'],
-        ['Check and aftercare', '10 MIN', 'Brushed through, checked in the mirror with you, and aftercare explained.'],
-      ],
-      includes: ['Your own lash master for the whole appointment', 'Eye-shape mapping before application', 'Premium extensions in the curl and weight chosen for you', 'A reclining bed in a quiet, dim room', 'An aftercare brush to take home', 'Herbal tea afterwards'],
+      kicker: 'eyes', room: 'THE LASH ROOM', img: 'lashes', who: 'Lash master',
+      heading: 'LASH WORK MATCHED TO YOUR OWN LASHES',
+      includes: ['Your own lash master for the appointment', 'A reclining bed in a quiet room', 'Aftercare advice before you leave'],
       benefits: [
-        ['Mapped, not guessed', 'The shape is measured against your eye and shown to you before a lash goes on.'],
-        ['Your own lashes come first', 'Weight and length are limited to what your natural lashes will carry. We will say no to a set that would damage them.'],
-        ['Comfortable for two hours', 'A proper lash bed, a supported neck and a room kept quiet. Most guests fall asleep.'],
-        ['Refills on a rhythm', 'Two to three weeks keeps a set looking new. Book the refill as you leave and it stays that way.'],
+        ['Your own lashes come first', 'Extensions and lifts are matched to what your natural lashes can carry. We will tell you if a set would be too heavy.'],
+        ['The look agreed first', 'Shape and style are agreed with you before anything is applied.'],
+        ['Quiet and comfortable', 'A proper lash bed in a quiet room.'],
+        ['Refills on a rhythm', 'Refills are booked by how long it has been since your last set, from within a week to 30 days and above.'],
       ],
-      reviews: [
-        ['She talked me out of mega volume and into what actually suited me. Right call.', 'Lana V.', '2 WEEKS AGO'],
-        ['The mapping makes all the difference. My eyes look open rather than heavy.', 'Amina R.', 'LAST MONTH'],
-        ['Slept through the whole appointment and woke up to the best lashes I have had.', 'Fatima R.', 'LAST MONTH'],
-        ['Four weeks on and still full enough that I keep pushing the refill back.', 'Yulia M.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE LASH ROOM',
-      galleryNote: 'A reclining bed, dim light, and two hours of very close work.',
+      faq: [['Will extensions damage my own lashes?', 'Not when the weight is matched to what your lashes can carry. That is why the shape and weight are agreed first, and why we sometimes recommend a lighter set than you asked for.']],
+      galleryHeading: 'INSIDE THE LASH ROOM', galleryNote: 'A reclining bed, soft light and very close work.',
     },
-
     brows: {
-      kicker: 'brows',
-      room: 'THE BROW STUDIO',
-      img: 'brows',
+      kicker: 'brows', room: 'THE BROW STUDIO', img: 'room', who: 'Top Brow Master',
       heading: 'BROWS DESIGNED FROM YOUR OWN FACE',
-      steps: [
-        ['Measure and map', '10 MIN', 'Your Top Brow Master measures the face and marks the line, then shows it to you.'],
-        ['Shaping', '15 MIN', 'Wax, thread or tweezers, chosen for your skin rather than for speed.'],
-        ['Colour or lift', '15 MIN', 'Tint, lamination or both, where they were agreed at the start.'],
-        ['Finish', '10 MIN', 'Brushed through, any last hairs taken, and how to keep it between visits.'],
-      ],
-      includes: ['Consultation and mapping before any hair is removed', 'Shaping by wax, thread or tweezers', 'Soothing post-treatment care for the skin', 'Brow brushing and finishing', 'Advice on what to grow out and what to keep', 'Herbal tea afterwards'],
+      includes: ['The shape agreed with you before work starts', 'Your brow master for the appointment', 'Soothing care for the skin afterwards'],
       benefits: [
-        ['You see the shape first', 'Nothing is removed until the line is drawn and you have agreed to it.'],
-        ['A plan, not just a tidy-up', 'Over-plucked brows are grown back in stages, with a shape that works at every stage.'],
-        ['One master', 'The same brow master every visit, so the shape develops instead of resetting.'],
-        ['Gentle on the skin', 'Method is chosen for your skin type. Sensitive skin is threaded, not waxed.'],
+        ['You see the shape first', 'The shape is agreed with you before anything is done.'],
+        ['A plan, not just a tidy-up', 'Over-plucked brows can be grown back in stages, with a shape that works at every stage.'],
+        ['Gentle on the skin', 'The method is chosen for your skin.'],
       ],
-      reviews: [
-        ['First time anyone has mapped my brows before touching them. The difference is obvious.', 'Shaikha A.', '2 WEEKS AGO'],
-        ['She is growing out years of bad shaping for me and it already looks better.', 'Maryam T.', 'LAST MONTH'],
-        ['Lamination changed my face more than anything else I have had done.', 'Olga K.', 'LAST MONTH'],
-        ['Quick, precise, and no real pain to speak of.', 'Leen M.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE BROW STUDIO',
-      galleryNote: 'Measurement, mapping, and a shape you approve before it happens.',
+      faq: [['My brows are over-plucked. Is it worth coming in?', 'Yes. We shape what is there now and give you a plan for growing the rest back, so it looks better at every stage rather than only at the end.']],
+      galleryHeading: 'INSIDE THE STUDIO', galleryNote: 'A shape you approve before anything is done.',
     },
-
     spmu: {
-      kicker: 'semi-permanent',
-      room: 'PRIVATE TREATMENT ROOM',
-      img: 'spmu',
+      kicker: 'semi-permanent', room: 'PRIVATE TREATMENT ROOM', img: 'makeup', who: HER_WHO,
       heading: 'PIGMENT WORK THAT STARTS WITH A CONSULTATION',
-      steps: [
-        ['Consultation', '20 MIN', 'Technique, shape and shade discussed, with your skin type deciding what will actually hold.'],
-        ['Mapping and drawing', '25 MIN', 'The brow is measured and drawn on. Nothing goes further until you are happy with it.'],
-        ['Pigment', '75 MIN', 'Numbing, then the pigment worked in layers, with checks as it builds.'],
-        ['Aftercare', '10 MIN', 'Healing explained in detail and written down, with the touch-up booked in.'],
-      ],
-      includes: ['A full consultation before anything is booked', 'Mapping and a drawn-on preview', 'Topical numbing throughout', 'Single-use needles and pigment cups', 'Written aftercare and a healing balm', 'A touch-up appointment within eight weeks'],
+      includes: ['Private treatment room', 'A full consultation before treatment', 'Aftercare explained before you leave'],
       benefits: [
-        ['Nothing permanent happens on impulse', 'If the shape is not right on the pad, it does not go into the skin.'],
-        ['Built light, then deepened', 'We start softer than the target and build at the touch-up. Pigment is easy to add and slow to take away.'],
-        ['Matched to your skin', 'Oily skin blurs hair strokes. Your artist will tell you that and recommend powder or combination instead.'],
-        ['The touch-up is part of it', 'The result is judged after healing and the touch-up, not on the day you leave.'],
+        ['Nothing happens on impulse', 'Shape, shade and what to expect are agreed at the consultation, before any work starts.'],
+        ['Matched to your skin', 'Skin type affects how pigment heals and holds. You are told honestly what to expect.'],
+        ['Healing explained', 'You are told how the area heals and how to look after it before you leave.'],
       ],
-      reviews: [
-        ['She spent forty minutes on the drawing alone. That is why it looks right.', 'Noor A.', '3 WEEKS AGO'],
-        ['Healed exactly as she described, week by week.', 'Hessa M.', 'LAST MONTH'],
-        ['I was terrified of it looking drawn on. It does not, at all.', 'Rania S.', 'LAST MONTH'],
-        ['She corrected work from another salon and matched the colour perfectly.', 'Mona E.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE STUDIO',
-      galleryNote: 'Mapping on the pad, single-use tooling, and a shape agreed before pigment.',
+      faq: [['Is there a consultation first?', 'Yes. Every semi-permanent treatment starts with a consultation, where your artist explains what to expect, how it heals and whether a follow-up visit is advisable.']],
+      galleryHeading: 'INSIDE THE STUDIO', galleryNote: 'A private room, and a consultation before any pigment work.',
     },
-
     hair: {
-      kicker: 'hair',
-      room: 'THE HAIR STUDIO',
-      img: 'hair',
+      kicker: 'hair', room: 'THE HAIR STUDIO', img: 'hair', who: HER_WHO,
       heading: 'CUT, COLOUR AND CARE FOR THE HAIR YOU HAVE',
-      steps: [
-        ['Consultation', '10 MIN', 'What your hair does on its own, what you want it to do, and what is realistic today.'],
-        ['Wash and prepare', '10 MIN', 'Shampoo and treatment chosen for your scalp and the condition of the lengths.'],
-        ['The work', '60 MIN', 'Cut, colour or treatment, worked in sections and checked as it goes.'],
-        ['Finish', '20 MIN', 'Dried and styled so you leave able to see the shape, and told how to repeat it at home.'],
-      ],
-      includes: ['Consultation and strand assessment', 'Professional shampoo and treatment', 'Cut, colour or treatment as booked', 'A full blow-dry finish', 'Homecare advice, without the hard sell', 'Herbal tea while you wait out a colour'],
+      includes: ['A consultation before work starts', 'Professional hair products', 'Homecare advice, without the hard sell'],
       benefits: [
-        ['Honest about what is achievable', 'A colour that needs two visits is planned as two visits, not attempted in one and rescued later.'],
-        ['Condition first', 'Bleach and heat are used against what your hair can take, not against a photograph.'],
-        ['Cut for how it dries', 'The shape is cut to your hair\u2019s own behaviour, so it still works on a morning you do nothing.'],
-        ['Treatments that carry over', 'Keratin, protein and bond work are matched to your routine, so the result survives washing.'],
+        ['Honest about what is achievable', 'A colour change that needs two visits is planned as two visits.'],
+        ['Condition first', 'Bleach and heat are used according to what your hair can take.'],
+        ['Professional lines', 'Estel and the other professional treatment lines on our menu.'],
       ],
-      reviews: [
-        ['First colourist in years who told me no and gave me a plan instead.', 'Dina H.', '2 WEEKS AGO'],
-        ['The keratin halved my drying time and it is still going four months on.', 'Salma A.', 'LAST MONTH'],
-        ['My cut still looks like a cut six weeks later.', 'Alina G.', 'LAST MONTH'],
-        ['They rebuilt hair I thought I had ruined with bleach.', 'Huda R.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE HAIR STUDIO',
-      galleryNote: 'Good mirrors, good light, and colour mixed to a plan.',
+      faq: [['Can you fix colour done somewhere else?', 'Usually, and sometimes across two visits rather than one. We assess your hair first and tell you which it will be before starting.']],
+      galleryHeading: 'INSIDE THE HAIR STUDIO', galleryNote: 'Good mirrors and good light.',
     },
-
-    // Waxing and threading share one template. No guest reviews are written
-    // for it or for make-up: the detail page hides its reviews section when a
-    // type has none, rather than showing invented ones.
     removal: {
-      kicker: 'hair removal',
-      room: 'PRIVATE TREATMENT ROOM',
-      img: 'removal',
-      heading: 'SMOOTH SKIN, IN A ROOM OF YOUR OWN',
-      steps: [
-        ['Consultation', '5 MIN', 'The areas agreed, and a quick look at the skin and how the hair grows.'],
-        ['Preparation', '5 MIN', 'Skin cleansed so the wax or thread grips the hair, not the skin.'],
-        ['The treatment', '20 MIN', 'Wax or thread, worked area by area at a pace your skin can take.'],
-        ['Calm', '5 MIN', 'A soothing lotion, and advice on keeping ingrown hairs away.'],
-      ],
-      includes: ['A private room', 'Single-use wax spatulas and fresh thread', 'Skin prepared before and calmed after', 'Areas covered exactly as agreed', 'Aftercare for ingrown hairs', 'Herbal tea afterwards'],
+      kicker: 'hair removal', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: HER_WHO,
+      heading: 'SMOOTH, CLEAN RESULTS, GENTLY DONE',
+      includes: ['Single-use wax spatulas and fresh thread', 'Skin cleansed before and soothed after', 'Areas covered exactly as booked'],
       benefits: [
         ['Hygiene first', 'Wax is never double-dipped, and thread is fresh for every guest.'],
-        ['Kind to the skin', 'Sensitive skin can be threaded rather than waxed. Ask and we will switch.'],
-        ['Longer between visits', 'Wax and thread take the hair from the root, so skin stays smooth for weeks.'],
-        ['Discreet', 'Bikini and intimate areas are done in a closed private room by a female therapist.'],
+        ['Kind to the skin', 'Sensitive skin can be threaded rather than waxed. Ask and we will advise.'],
+        ['Female therapists', 'Every treatment is done by a female therapist.'],
       ],
-      reviews: [],
-      galleryHeading: 'INSIDE THE TREATMENT ROOM',
-      galleryNote: 'A private room, fresh tools, and a calm finish.',
+      faq: [['Wax or thread?', 'Threading suits the face and sensitive skin; waxing is quicker over larger areas like the legs, arms and body. We are happy to advise before you book.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'Fresh tools and a calm finish.',
     },
-
     makeup: {
-      kicker: 'make-up',
-      room: 'THE MAKE-UP STUDIO',
-      img: 'makeup',
+      kicker: 'make-up', room: 'THE MAKE-UP STUDIO', img: 'makeup', who: 'Make-up artist',
       heading: 'A LOOK BUILT FOR YOUR FACE AND YOUR OCCASION',
-      steps: [
-        ['Consultation', '10 MIN', 'The occasion, your outfit and the look you have in mind.'],
-        ['Skin preparation', '15 MIN', 'Cleansed, moisturised and primed so the make-up sits well and lasts.'],
-        ['The make-up', '45 MIN', 'Base, eyes, brows and lips, built up and checked in good light.'],
-        ['Finish', '10 MIN', 'Set to last, with any last adjustments before you leave.'],
-      ],
-      includes: ['A consultation before anything is applied', 'Skin preparation and primer', 'Professional products throughout', 'Lashes and brows finished', 'Setting for long wear', 'Herbal tea while you sit'],
+      includes: ['A consultation before anything is applied', 'Skin preparation before make-up', 'Professional products throughout'],
       benefits: [
-        ['Planned with you', 'The look is agreed before it is built, so there are no surprises in the mirror.'],
-        ['Made to last', 'Prepared and set skin holds the make-up through a long evening.'],
-        ['Good in photographs', 'Evening looks are built to read well on camera as well as in person.'],
-        ['Hair too, if you want it', 'Book the make-up and hair package and the whole look is done together.'],
+        ['Planned with you', 'The look is agreed before it is built.'],
+        ['Made to last', 'Prepared skin holds make-up through a long evening.'],
+        ['Hair too, if you want it', 'Book the Make-Up & Hair Style Package and both are done together.'],
       ],
-      reviews: [],
-      galleryHeading: 'INSIDE THE STUDIO',
-      galleryNote: 'Good light, good mirrors and professional products.',
+      faq: [['How early should I book before an event?', 'Book the appointment to finish an hour or so before you need to leave. For weddings and big occasions, message us on WhatsApp a few days ahead.']],
+      galleryHeading: 'INSIDE THE STUDIO', galleryNote: 'Good light and professional products.',
+    },
+    massage: {
+      kicker: 'body rejuvenating', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: 'Female therapist, Balinese-trained',
+      heading: 'UNHURRIED BODYWORK, AT THE PRESSURE YOU ASK FOR',
+      includes: ['Private treatment room', 'Professional oils, unscented on request', 'Robe, slippers and towels', 'Disposable underwear', 'Herbal tea and water afterwards'],
+      benefits: [
+        ['A therapist who listens', 'Pressure is agreed before the session and checked during it.'],
+        ['Balinese-trained team', 'Our therapists trained in Balinese technique and bring it to the whole menu.'],
+        ['No rushing', 'The time you booked is yours.'],
+      ],
+      faq: [['Is it suitable during pregnancy?', 'Book Prenatal Body Rejuvenating instead of a standard session, and tell us how far along you are when you book.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'Dim light and a private room.',
+    },
+    focused: {
+      kicker: 'focused work', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: 'Female therapist, Balinese-trained',
+      heading: 'FOCUSED WORK ON ONE AREA',
+      includes: ['Private treatment room', 'Professional oils, unscented on request', 'Herbal tea and water afterwards'],
+      benefits: [
+        ['Time where it is needed', 'The whole session goes into one area.'],
+        ['Easy to add on', 'Pairs well with a bath, facial or pedicure in the same visit.'],
+        ['Same therapists', 'Delivered by the same team as our full-body sessions.'],
+      ],
+      faq: [['Do I need to undress?', 'Not for the face, head and foot treatments. For back work, only partially.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'A private room, even for the shorter treatments.',
+    },
+    bath: {
+      kicker: 'moroccan bath', room: 'PRIVATE HAMMAM ROOM', img: 'hammam', who: HER_WHO,
+      heading: 'THE MOROCCAN BATH, DONE THE TRADITIONAL WAY',
+      includes: ['Private hammam room', 'Black soap and kessa exfoliation', 'Robe, slippers and towels', 'Disposable underwear'],
+      benefits: [
+        ['Softer skin', 'The kessa glove lifts away dead skin in one session.'],
+        ['Heat first', 'Steam softens the skin and relaxes the muscles before the scrub.'],
+        ['A room to yourself', 'The hammam is private for your session.'],
+      ],
+      faq: [['What do I wear during the bath?', 'Most guests wear the disposable underwear we provide. Your therapist is female and the room is private.']],
+      galleryHeading: 'INSIDE THE HAMMAM', galleryNote: 'Heated marble, steam and a private rinse area.',
+    },
+    body: {
+      kicker: 'body care', room: 'PRIVATE TREATMENT ROOM', img: 'hammam', who: HER_WHO,
+      heading: 'BODY TREATMENTS FOR SOFTER, BRIGHTER SKIN',
+      includes: ['Private treatment room', 'Professional body products', 'Robe and towels'],
+      benefits: [
+        ['Given the time it needs', 'Products are applied evenly and left for as long as they need.'],
+        ['Pairs with the bath', 'Body treatments combine well with a Moroccan bath in the same visit.'],
+        ['Female therapists', 'Every treatment is done by a female therapist.'],
+      ],
+      faq: [['Can I combine it with a Moroccan bath?', 'Yes. Many guests add a body treatment to a bath. Message us and we will plan the visit.']],
+      galleryHeading: 'INSIDE THE SPA', galleryNote: 'The hammam and treatment rooms where body treatments are done.',
+    },
+    water: {
+      kicker: 'warmth and water', room: 'PRIVATE WATER SUITE', img: 'water', who: '',
+      heading: 'WARMTH, WATER AND TIME TO REST',
+      includes: ['Private use during your session', 'Robe, slippers and towels', 'Water throughout'],
+      benefits: [
+        ['Rest without effort', 'Warmth does the work while you lie still.'],
+        ['Good before other treatments', 'Warm muscles respond better to the bodywork that follows.'],
+        ['Private', 'Booked to you alone for your session.'],
+      ],
+      faq: [['Is it suitable for everyone?', 'Tell us when you book if you are pregnant or have a heart condition or high blood pressure, and we will advise before your visit.']],
+      galleryHeading: 'INSIDE THE WATER SUITE', galleryNote: 'Jacuzzi, infrared sauna and a quiet place to rest.',
+    },
+    tech: {
+      kicker: 'body contouring', room: 'PRIVATE TREATMENT ROOM', img: 'products', who: HER_WHO,
+      heading: 'CONTOURING WORK, PLANNED WITH YOU',
+      includes: ['A consultation before your first session', 'Private treatment room', 'All products and consumables'],
+      benefits: [
+        ['Explained, not sold', 'Your therapist explains what the treatment can and cannot do before you commit.'],
+        ['Results build over a course', 'Contouring works best as a series, which is why courses are on the menu.'],
+        ['Try it first', 'Free trials of Endospheres and Maderotherapy are on the menu.'],
+      ],
+      faq: [['How many sessions will I need?', 'It depends on your goal. Your therapist will give you an honest estimate at the consultation.']],
+      galleryHeading: 'INSIDE THE THERAPY ROOM', galleryNote: 'Professional equipment, in a private room.',
+    },
+    pkg: {
+      kicker: 'the package', room: '', img: 'room', who: '',
+      galleryHeading: 'INSIDE THE CENTRE', galleryNote: 'The rooms where the treatments in this package take place.',
     },
   };
 
+  var HIM_WHO = 'Balinese-trained therapist';
+
   w.ECO.him.types = {
-
-    grooming: {
-      kicker: 'grooming',
-      room: 'THE GROOMING ROOM',
-      img: 'grooming',
-      heading: 'HANDS, FEET AND DETAIL, DONE PROPERLY',
-      steps: [
-        ['Consultation', '5 MIN', 'A look at the nails and skin, and at whatever has actually been bothering you.'],
-        ['Preparation', '15 MIN', 'Soak or dry prep, nails cut and shaped, cuticles cleaned.'],
-        ['The work', '25 MIN', 'Hard skin, calluses and problem nails treated, then a scrub and massage.'],
-        ['Finish', '10 MIN', 'A matte buff, balm, and how to keep on top of it between visits.'],
-      ],
-      includes: ['A private grooming room, not a shop floor', 'Sterilised tools, one set per guest', 'Nail cutting, shaping and cuticle work', 'Callus and hard skin treatment', 'A scrub and massage for hands or feet', 'A matte finish, never a shine'],
+    massage: {
+      kicker: 'bodywork', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: HIM_WHO,
+      heading: 'UNHURRIED BODYWORK, AT THE PRESSURE YOU ASK FOR',
+      includes: ['Private treatment room', 'Professional oils, unscented on request', 'Robe, slippers and towels', 'Disposable underwear', 'Herbal tea and water afterwards'],
       benefits: [
-        ['Nothing decorative', 'No colour and no shine. A matte buff, and hands that simply look looked after.'],
-        ['Sterilisation you can see', 'Tools are pouched and autoclaved. Files and buffers are single use.'],
-        ['Problem nails treated', 'Ingrown, thickened and damaged nails are dealt with properly, with a plan to keep them right.'],
-        ['Private and quick', 'A room of your own, and most treatments finished inside the hour.'],
+        ['A therapist who listens', 'Pressure is agreed before the session and checked during it.'],
+        ['Balinese-trained team', 'Our therapists trained in Balinese technique and bring it to the whole menu.'],
+        ['No rushing', 'The time you booked is yours.'],
       ],
-      reviews: [
-        ['I had put this off for years. Should not have.', 'Faisal A.', '2 WEEKS AGO'],
-        ['They sorted an ingrown nail that had bothered me for months.', 'Tariq H.', 'LAST MONTH'],
-        ['Private room, no fuss, in and out in fifty minutes.', 'Ahmed S.', 'LAST MONTH'],
-        ['My hands look like they belong to someone who sleeps.', 'Majid K.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE GROOMING ROOM',
-      galleryNote: 'A private room, sterilised tooling, and a matte finish.',
+      faq: [['Can I book on a training day?', 'Yes. Tell your therapist what you trained and they will keep the pressure clear of anything still inflamed.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'A private room, booked to you for your session.',
     },
-
-    removal: {
-      kicker: 'hair removal',
-      room: 'PRIVATE TREATMENT ROOM',
-      img: 'removal',
-      heading: 'SMOOTH SKIN, WITHOUT THE RAZOR BURN',
-      steps: [
-        ['Consultation', '5 MIN', 'The areas agreed, and a quick look at the skin and how the hair grows.'],
-        ['Preparation', '10 MIN', 'Skin cleansed and long hair trimmed down so nothing pulls.'],
-        ['The treatment', '30 MIN', 'Shave or wax, worked area by area at a pace your skin can take.'],
-        ['Calm', '10 MIN', 'A soothing balm, and advice on keeping ingrown hairs away.'],
+    focused: {
+      kicker: 'focused work', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: HIM_WHO,
+      heading: 'FOCUSED WORK ON ONE AREA',
+      includes: ['Private treatment room', 'Professional oils, unscented on request', 'Herbal tea and water afterwards'],
+      benefits: [
+        ['Time where it is needed', 'The whole session goes into the area that needs it.'],
+        ['Easy to add on', 'Pairs well with a bath or facial in the same visit.'],
+        ['Same therapists', 'Delivered by the same Balinese-trained team as our full-body sessions.'],
       ],
-      includes: ['A private room, not a shop floor', 'Fresh blades and single-use wax spatulas', 'Skin prepared before and calmed after', 'Areas covered exactly as agreed', 'Aftercare for ingrown hairs', 'Herbal tea afterwards'],
+      faq: [['Do I need to undress?', 'For neck, shoulder and back work, only partially. Feet and face treatments are done fully clothed.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'A private room, even for the shorter treatments.',
+    },
+    bath: {
+      kicker: 'moroccan hammam', room: 'PRIVATE HAMMAM ROOM', img: 'hammam', who: '',
+      heading: 'THE MOROCCAN HAMMAM, DONE THE TRADITIONAL WAY',
+      includes: ['Private hammam room', 'Beldi black soap and kessa exfoliation', 'Robe, slippers and towels', 'Disposable underwear'],
+      benefits: [
+        ['Softer skin', 'The kessa glove lifts away dead skin in one session.'],
+        ['Heat first', 'Steam softens the skin and loosens the muscles before the scrub.'],
+        ['A room to yourself', 'The hammam is private for your session.'],
+      ],
+      faq: [['What do I wear during the bath?', 'Most guests wear the disposable underwear we provide. The room is private and used by one guest at a time.']],
+      galleryHeading: 'INSIDE THE HAMMAM', galleryNote: 'Heated marble, steam and a private rinse area.',
+    },
+    water: {
+      kicker: 'heat', room: 'PRIVATE WATER SUITE', img: 'water', who: '',
+      heading: 'HEAT, AND NOTHING ELSE TO DO',
+      includes: ['Private use of the sauna', 'Robe, slippers and towels', 'Water throughout'],
+      benefits: [
+        ['Recovery without effort', 'Heat does the work while you sit still.'],
+        ['Good before bodywork', 'Warm muscles respond better to the bodywork that follows.'],
+        ['Private', 'Booked to you alone for your session.'],
+      ],
+      faq: [['How hot does it get?', 'The infrared sauna runs at around 55°C, and it can be lowered. Just ask.']],
+      galleryHeading: 'INSIDE THE WATER SUITE', galleryNote: 'The infrared sauna and a private rinse area.',
+    },
+    tech: {
+      kicker: 'advanced therapy', room: 'PRIVATE THERAPY ROOM', img: 'bodyEq', who: '',
+      heading: 'CONTOURING AND RECOVERY WORK, PLANNED WITH YOU',
+      includes: ['A consultation before your first session', 'Private therapy room', 'All products and consumables'],
+      benefits: [
+        ['Explained, not sold', 'Your therapist explains what the treatment can and cannot do before you commit.'],
+        ['Results build over a course', 'These treatments work best as a series, which is why courses are on the menu.'],
+        ['Try it first', 'Free trials of Emsculpt and Slimming, and of Endospheres, are on the menu.'],
+      ],
+      faq: [['How many sessions will I need?', 'It depends on your goal. Your therapist will give you an honest estimate at the consultation.']],
+      galleryHeading: 'INSIDE THE THERAPY ROOM', galleryNote: 'Professional equipment, in a private room.',
+    },
+    facial: {
+      kicker: 'skin, properly handled', room: 'PRIVATE TREATMENT ROOM', img: 'facialEq', who: '',
+      heading: 'SKIN TREATMENTS PLANNED AROUND YOUR SKIN',
+      includes: ['Private treatment room', 'A skin consultation before treatment', 'Professional products throughout', 'Aftercare advice before you leave'],
+      benefits: [
+        ['Made for shaving skin', 'Ingrown hairs, razor irritation and congestion along the jaw are taken into account.'],
+        ['No product pressure', 'You get advice on what to use at home. Whether you buy anything is up to you.'],
+        ['Downtime explained first', 'Where a treatment leaves visible redness or downtime, we tell you before you book.'],
+      ],
+      faq: [['How soon will I see a difference?', 'It depends on the treatment. Cleansing and hydrating facials show the same day; microneedling works over the following weeks. Your therapist will tell you which applies before you start.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'Professional facial equipment, in a private room.',
+    },
+    grooming: {
+      kicker: 'grooming', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: '',
+      heading: 'FEET LOOKED AFTER, PROPERLY',
+      includes: ['Private treatment room', 'Sterilised tools, one set per guest', 'Dry, blade-free smart pedicure technique'],
+      benefits: [
+        ['Nothing decorative', 'No colour and no shine.'],
+        ['Sterilisation you can see', 'Tools are pouched and autoclaved. Files and buffers are single use.'],
+        ['Private', 'A room of your own, not a shop floor.'],
+      ],
+      faq: [['Is it a barbershop?', 'No. This is foot care in a private treatment room, with no colour and no shine.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'A private room and sterilised tools.',
+    },
+    removal: {
+      kicker: 'hair removal', room: 'PRIVATE TREATMENT ROOM', img: 'room', who: '',
+      heading: 'SMOOTH SKIN, WITHOUT THE RAZOR BURN',
+      includes: ['Private treatment room', 'Fresh blades and single-use wax spatulas', 'Skin prepared before and calmed after', 'Areas covered exactly as booked'],
       benefits: [
         ['Done by professionals', 'The awkward-to-reach areas, done evenly and without nicks.'],
         ['Hygiene first', 'Fresh blades for every guest, and wax never double-dipped.'],
-        ['Kind to the skin', 'Preparation and a calming finish keep redness and razor burn down.'],
         ['Longer between visits', 'Waxing takes the hair from the root, so skin stays smooth for weeks rather than days.'],
       ],
-      reviews: [
-        ['Back shave done in twenty minutes, not a single nick.', 'Omar R.', '2 WEEKS AGO'],
-        ['Full body wax, far quicker and kinder than I expected.', 'Khalid M.', 'LAST MONTH'],
-        ['Discreet, private and properly professional.', 'Yousef A.', 'LAST MONTH'],
-        ['Finally no more razor burn before the beach.', 'Saeed N.', '2 MONTHS AGO'],
-      ],
-      galleryHeading: 'INSIDE THE TREATMENT ROOM',
-      galleryNote: 'A private room, fresh tools, and a calm finish.',
+      faq: [['Shave or wax?', 'Shaving is quickest and lasts days; waxing takes a little longer and lasts a few weeks. We are happy to talk it through before you book.']],
+      galleryHeading: 'INSIDE THE TREATMENT ROOM', galleryNote: 'A private room, fresh tools and a calm finish.',
+    },
+    pkg: {
+      kicker: 'the package', room: '', img: 'room', who: '',
+      galleryHeading: 'INSIDE THE CENTRE', galleryNote: 'The rooms where the treatments in this package take place.',
     },
   };
 
-  // One extra question on each detail page, chosen by treatment type.
-  w.ECO.her.faqs = {
-    facial: [['How soon will I see a difference?', 'After a HydraFacial or a cleanse, the same day. Microneedling, peels and PDRN work over weeks, and your therapist will tell you honestly which one you are booking.']],
-    nails:  [['How long does a set last?', 'Two to three weeks for gel polish, three to four for BIAB and extensions. Book the infill as you leave and the nail underneath stays healthy.']],
-    lashes: [['Will extensions damage my own lashes?', 'Not when the weight is matched to what your lashes carry. That is why the set is mapped first, and why we will sometimes recommend a lighter one than you asked for.']],
-    brows:  [['My brows are over-plucked. Is it worth coming in?', 'Yes. We shape what is there now and give you a plan for growing the rest back, so it looks better at every stage rather than only at the end.']],
-    spmu:   [['How long does it last, and does it hurt?', 'One to three years depending on technique and skin, with a colour refresh in between. Topical numbing is used throughout and most guests describe it as scratchy rather than painful.']],
-    removal: [['Wax or thread?', 'Threading suits the face and sensitive skin; waxing is quicker over larger areas like the legs, arms and body. We are happy to advise before you book.']],
-    makeup: [['How early should I book before an event?', 'Book the appointment to finish an hour or so before you need to leave. For weddings and big occasions, message us on WhatsApp a few days ahead.']],
-    hair:   [['Can you fix colour done somewhere else?', 'Usually, and sometimes across two visits rather than one. We assess a strand first and tell you which it will be before starting.']],
+  // Questions every detail page carries, around the type's own one.
+  w.ECO.her.faqShared = [
+    ['How do I book?', 'Choose a day and a preferred time below and send the request. It opens WhatsApp with your details filled in, and we reply there to confirm your appointment.'],
+    ['Can I book with a friend?', 'Yes. Message us on WhatsApp with both names and we will tell you which times work for two.'],
+    ['Are all your therapists female?', 'Yes. Ecosophy Beauty Center & SPA is a women-only centre, and every therapist and receptionist here is female.'],
+  ];
+  w.ECO.him.faqShared = [
+    ['How do I book?', 'Choose a day and a preferred time below and send the request. It opens WhatsApp with your details filled in, and we reply there to confirm your appointment.'],
+    ['Can I book with a friend?', 'Yes. Message us on WhatsApp with both names and we will tell you which times work for two.'],
+    ['Is the gent spa men-only?', 'Yes. Ecosophy Aesthetic Spa Men Care Center is a men-only floor with its own entrance, lounge and treatment rooms.'],
+  ];
+
+  var NUM = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'];
+  var isHome = function (svc) { return /home service/i.test(svc.name); };
+
+  // Everything a detail page says about one treatment. `svc` is a flat() row.
+  w.ECO.content = function (side, svc) {
+    var T = this[side].types, t = T[svc.type] || T.massage;
+    var home = isHome(svc);
+    var dur = this.durationLabel(svc.duration);
+
+    if (svc.type === 'pkg' && svc.parts) {
+      var bySlug = {};
+      this.flat(side).forEach(function (s) { bySlug[s.slug] = s; });
+      var base = side === 'him' ? '/gent-service?s=' : '/service?s=';
+      var parts = svc.parts.map(function (p) {
+        var ref = p.link ? bySlug[p.link] : null;
+        return { name: p.name, desc: p.desc || (ref ? ref.desc : ''), long: ref ? ref.long : '', href: ref ? base + ref.slug : '' };
+      });
+      var n = parts.length, sep = svc.visits === 'separate';
+      var names = parts.map(function (p) { return p.name; });
+      return {
+        kicker: t.kicker, room: sep ? n + ' SEPARATE SESSIONS' : 'ONE VISIT', imgKey: t.img, who: '',
+        heading: sep ? NUM[n] + ' SESSIONS, ONE PLAN' : 'A ' + NUM[n] + '-PART PACKAGE, IN ONE VISIT',
+        stepsHeading: sep ? 'THE ' + NUM[n] + ' SESSIONS' : 'WHAT THE PACKAGE INCLUDES',
+        steps: parts.map(function (p, i) { return { no: (i < 9 ? '0' : '') + (i + 1), name: p.name, desc: p.desc, href: p.href }; }),
+        includes: names.concat(['All products used in each treatment']),
+        // What each component does, in the package's own order.
+        benefits: parts.map(function (p) { return [p.name, p.long || p.desc]; }),
+        faq: [
+          [sep ? 'How are the sessions spaced?' : 'How long should I allow?',
+            sep ? 'The ' + n + ' sessions are booked separately. Message us on WhatsApp and we will plan the dates with you.'
+              : (svc.duration ? 'Allow ' + dur.toLowerCase() + ' for the whole package.' : 'Message us on WhatsApp and we will tell you how long to allow for the whole package.')],
+          ['Can I take the treatments on different days?', 'Ask us on WhatsApp before you book, and we will tell you what is possible for this package.'],
+        ],
+        galleryHeading: t.galleryHeading, galleryNote: t.galleryNote,
+      };
+    }
+
+    var includes = (t.includes || []).filter(function (x) { return !home || !AT_CENTRE.test(x); });
+    if (home) includes = ['Your therapist comes to your home or hotel'].concat(includes);
+    return {
+      kicker: t.kicker, room: home ? 'AT YOUR HOME' : t.room, imgKey: t.img, who: t.who || '',
+      heading: t.heading, stepsHeading: '', steps: [],
+      includes: includes, benefits: t.benefits || [], faq: t.faq || [],
+      galleryHeading: t.galleryHeading, galleryNote: t.galleryNote,
+    };
   };
-  w.ECO.him.faqs = {
-    grooming: [['Is it a barbershop?', 'No. This is hand, foot and skin care in a private treatment room, with no colour and no shine. Most guests come monthly.']],
-    removal:  [['Shave or wax?', 'Shaving is quickest and lasts days; waxing takes a little longer and lasts a few weeks. We are happy to talk it through before you book.']],
+
+  // "60 min" -> "60 minutes", "5 × 60 min" -> "5 × 60 minutes", "" -> "By request".
+  w.ECO.durationLabel = function (d) {
+    return d ? String(d).replace(/\bmin\b/, 'minutes') : 'By request';
+  };
+
+  // ----------------------------------------------------------- legacy links
+  //
+  // Treatment identifiers handed out before a rename (report Appendix D, and
+  // the links in the 18 October photo handoff). They resolve to the current
+  // treatment - on the page, and as a 301 from functions/ - so an old link
+  // still opens the treatment it always meant. Anything neither current nor
+  // listed here gets a not-found page. It must never fall back to another
+  // treatment, which is what used to happen: every unknown link opened the
+  // first treatment in the list and prepared a booking for it.
+  w.ECO.legacy = {
+    him: {
+      'sports-recovery-ritual': 'sport-massage',
+      'balinese-massage': 'relaxing-balinese',
+      'deep-tissue-massage': 'deep-tissue',
+      'hot-stone-massage': 'hot-stone',
+      'lymphatic-drainage-massage': 'lymphatic-drainage',
+      '30-minute-massage': '30-minutes-massage',
+      'medical-therapy-massage': 'medical-therapy',
+      'detox-slimming-body-wrap': 'detox-slimming-body-wraps',
+      'holistic-massage-home-service': 'home-service-holistic-massage',
+      'classic-moroccan-bath': 'classic-moroccan-hammam',
+      'royal-moroccan-bath': 'royal-moroccan-hammam',
+      'infrared-sauna-session': 'sauna',
+      'sauna-massage-program': 'sauna-and-massage',
+      'sauna-plus-hydrafacial': 'sauna-and-hydrafacial',
+      'hydrafacial': 'hydrafacial-basic',
+      'professional-skin-cleansing': 'deep-cleansing',
+      'men-s-signature-facial': 'ecosophy-signature-facial',
+      'endospheres-face': 'endosphere-face-massage',
+      'anti-aging-whitening-facial': 'anti-aging-and-whitening-facial',
+      'deep-cleansing-add-on': 'add-on-deep-cleansing',
+      'emsculpt-slimming': 'emsculpt-and-slimming',
+      'emsculpt-slimming-free-trial': 'free-trial-emsculpt-and-slimming',
+      'endospheres-free-trial': 'free-trial-endosphere',
+      'sports-massage-5-sessions': 'sport-massage-5-sessions',
+      'emsculpt-slimming-5-sessions': 'emsculpt-and-slimming-5-sessions',
+      'emsculpt-slimming-10-sessions': 'emsculpt-and-slimming-10-sessions',
+    },
+    her: {},
+  };
+
+  // The treatment an identifier names: { svc, from } where `from` is the
+  // legacy identifier it came in as, or null when nothing matches.
+  w.ECO.find = function (side, id) {
+    id = String(id || '').trim().toLowerCase();
+    var cur = (this.legacy[side] || {})[id] || id;
+    var list = this.flat(side);
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].slug === cur) return { svc: list[i], from: cur !== id ? id : null };
+    }
+    return null;
+  };
+
+  // ------------------------------------------------------- hours and booking
+  //
+  // Opening hours, per side, in minutes after midnight Dubai time. The men's
+  // centre was confirmed as 11:00 AM to midnight, daily; the women's centre
+  // keeps 10:00 AM to 10:00 PM.
+  w.ECO.hours = {
+    him: { open: 11 * 60, close: 24 * 60, label: 'Daily · 11:00 AM – Midnight' },
+    her: { open: 10 * 60, close: 22 * 60, label: 'Daily · 10:00 AM – 10:00 PM' },
+  };
+
+  w.ECO.booking = {
+    // Requests for today must start at least this far ahead.
+    LEAD_MIN: 30,
+
+    // Dubai is UTC+4 all year (no daylight saving), so its wall clock is UTC
+    // shifted by four hours - whatever time zone the visitor's device is in.
+    now: function () {
+      var t = new Date(Date.now() + 4 * 3600000);
+      return { y: t.getUTCFullYear(), mo: t.getUTCMonth(), d: t.getUTCDate(), dow: t.getUTCDay(),
+        mins: t.getUTCHours() * 60 + t.getUTCMinutes() };
+    },
+
+    // The next `n` days in Dubai, starting today.
+    days: function (n) {
+      var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var n0 = this.now(), out = [];
+      for (var i = 0; i < n; i++) {
+        var t = new Date(Date.UTC(n0.y, n0.mo, n0.d + i));
+        out.push({ offset: i, dow: DOW[t.getUTCDay()], num: t.getUTCDate(), mon: MON[t.getUTCMonth()],
+          label: (i === 0 ? 'Today' : DOW[t.getUTCDay()]) + ' ' + t.getUTCDate() + ' ' + MON[t.getUTCMonth()] });
+      }
+      return out;
+    },
+
+    // Minutes one session takes: "60 min" -> 60, "5 × 60 min" -> 60. Blank,
+    // or "4 sessions", is unknown: 60 is assumed only to keep the last start
+    // time sensible, and the request says the duration is to be confirmed.
+    sessionMinutes: function (d) {
+      var m = String(d || '').match(/(\d+)\s*min/);
+      return m ? +m[1] : 60;
+    },
+
+    label: function (mins) {
+      var h = Math.floor(mins / 60) % 24, m = mins % 60;
+      return (h % 12 || 12) + ':' + (m < 10 ? '0' : '') + m + ' ' + (h < 12 ? 'AM' : 'PM');
+    },
+
+    // Start times on day `offset`, on the hour, that finish by closing time.
+    // Times already past in Dubai (plus the lead time) are marked `past`.
+    // There is no live diary behind this: every open time is only a request,
+    // and the centre confirms on WhatsApp.
+    slots: function (side, offset, duration) {
+      var h = w.ECO.hours[side], len = this.sessionMinutes(duration);
+      var cutoff = offset === 0 ? this.now().mins + this.LEAD_MIN : -1;
+      var out = [];
+      for (var t = h.open; t + len <= h.close; t += 60) {
+        out.push({ mins: t, label: this.label(t), past: t < cutoff });
+      }
+      return out;
+    },
+
+    // First day (0 = today) that still has a bookable time.
+    firstOpenDay: function (side, duration) {
+      var s = this.slots(side, 0, duration);
+      for (var i = 0; i < s.length; i++) if (!s[i].past) return 0;
+      return 1;
+    },
+
+    // A plausible phone number, or null. Accepts UAE mobiles and landlines
+    // written locally (050 123 4567, 04 123 4567) or with +971 / 00971, and
+    // other countries in international form (+44 7700 900123). Returns it in
+    // international form for the message.
+    phone: function (raw) {
+      var s = String(raw || '').trim();
+      if (!s || /[^0-9+\s().\-]/.test(s)) return null;
+      var d = s.replace(/[\s().\-]/g, '');
+      if (/^00/.test(d)) d = '+' + d.slice(2);
+      if (/^\+/.test(d)) {
+        if (!/^\+\d{8,15}$/.test(d)) return null;
+        if (/^\+971/.test(d) && !/^\+971(5\d{8}|[2-9]\d{7})$/.test(d)) return null;
+        return d;
+      }
+      if (/^05\d{8}$/.test(d)) return '+971' + d.slice(1);
+      if (/^5\d{8}$/.test(d)) return '+971' + d;
+      if (/^0[2-9]\d{7}$/.test(d)) return '+971' + d.slice(1);
+      return null;
+    },
+
+    // The WhatsApp link a request opens. Prices go in only on the men's side,
+    // which publishes them.
+    waHref: function (side, number, r) {
+      var lines = ['Hello Ecosophy, I would like to request a booking.', '',
+        'Treatment: ' + r.service + (r.duration ? ' (' + r.duration + (side === 'him' && r.price ? ' · ' + r.price : '') + ')' : (side === 'him' && r.price ? ' (' + r.price + ')' : '')),
+        'Day: ' + r.day, 'Preferred time: ' + r.time, 'Name: ' + r.name, 'Mobile: ' + r.phone];
+      if (r.note) lines.push('', r.note);
+      return 'https://wa.me/' + String(number).replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(lines.join('\n'));
+    },
   };
 })(window);

@@ -70,6 +70,11 @@ a:hover { color:#B98F3E; }
 @media (max-width: 760px) {
   .hdr-wordmark { height:46px !important; }
 }
+/* Booking controls: real buttons and inputs, so they take keyboard focus.
+   The ring is drawn on :focus-visible only, not on every mouse click. */
+.bk-chip:focus-visible, .bk-submit:focus-visible, .bk-input:focus-visible { outline:2px solid #B98F3E; outline-offset:2px; }
+.bk-input:focus { outline:none; border-color:#B98F3E !important; }
+.bk-chip:disabled { cursor:not-allowed; }
 </style>
 <script>
 (function(){
@@ -514,10 +519,7 @@ a:hover { color:#B98F3E; }
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
-          <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
-          <span style="padding:6px 11px; color:#E4C778;">AR</span>
-        </div>
+        <!-- The EN/AR selector is removed until the site has Arabic content: it used to change nothing. -->
         <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:10px 18px; font-size:11px; letter-spacing:2px; font-weight:600; white-space:nowrap;">{{ waLabel }}</a>
       </div>
     </div>
@@ -578,23 +580,28 @@ a:hover { color:#B98F3E; }
       <h1 style="font-family:'Italiana','Prata',serif; font-weight:400; font-size:clamp(34px,4.6vw,64px); color:#E4C778; margin:0; line-height:1.06; letter-spacing:.05em; text-shadow:0 8px 34px rgba(0,0,0,.7); max-width:14ch; text-wrap:balance;">{{ nameUpper }}</h1>
       <div style="font-size:15px; color:#CBD6C4; line-height:1.85; max-width:480px; margin-top:16px; text-wrap:pretty;">{{ intro }}</div>
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(16px,3vw,38px); margin-top:30px;">
-        <div style="flex:0 0 auto;">
+        <div style="flex:0 0 auto; display:{{ durationShow }};">
           <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">{{ durationLong }}</div>
           <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ roomLabel }}</div>
         </div>
-        <div style="width:1px; height:44px; background:rgba(201,168,96,.32); display:{{ reviewsShow }};"></div>
-        <div style="flex:0 0 auto; display:{{ reviewsShow }};">
-          <div style="font-size:16px; color:#E6EDE1; white-space:nowrap;">★★★★★ {{ rating }}</div>
-          <div style="font-size:var(--fs-md); letter-spacing:1.8px; color:#93A392; margin-top:6px;">{{ reviewCountLabel }}</div>
-        </div>
       </div>
-      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:32px;">
+      <!-- No rating here: the number used to be derived from the length of the
+           treatment's slug, not from any guest review. -->
+      <div style="display:{{ ctaShow }}; flex-wrap:wrap; gap:12px; margin-top:32px;">
         <a href="#book" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 36px; font-size:11.5px; letter-spacing:3px; font-weight:600;">BOOK THIS TREATMENT</a>
+        <a href="{{ waHref }}" style="border:1px solid rgba(201,168,96,.55); color:#E4C778; border-radius:26px; padding:15px 32px; font-size:11.5px; letter-spacing:3px;" style-hover="background:rgba(201,168,96,.14);">ASK ON WHATSAPP</a>
+      </div>
+      <div style="display:{{ missingShow }}; flex-wrap:wrap; gap:12px; margin-top:32px;">
+        <a href="/services" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 36px; font-size:11.5px; letter-spacing:3px; font-weight:600;">SEE ALL TREATMENTS</a>
         <a href="{{ waHref }}" style="border:1px solid rgba(201,168,96,.55); color:#E4C778; border-radius:26px; padding:15px 32px; font-size:11.5px; letter-spacing:3px;" style-hover="background:rgba(201,168,96,.14);">ASK ON WHATSAPP</a>
       </div>
     </div>
   </div>
 
+  <!-- Everything below the hero is for a treatment that exists. An identifier
+       that matches none shows the hero's not-found message and nothing else,
+       so it can never prepare a booking for some other treatment. -->
+  <sc-if value="{{ found }}" hint-placeholder-val="{{ true }}">
   <!-- -20vh, the same overlap as every other inside page. -->
   <div data-gsection style="position:relative; margin-top:-20vh; z-index:2;">
     <!-- Arch panel: domed while it rises over the hero, relaxing to a shallow
@@ -608,15 +615,19 @@ a:hover { color:#B98F3E; }
           <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">THE TREATMENT</div>
           <div style="font-family:'Italiana','Prata',serif; font-size:clamp(28px,3.6vw,44px); color:#14532D; margin-top:8px; line-height:1.1;">{{ overviewHeading }}</div>
           <div style="font-size:15px; color:#5A5340; line-height:1.95; margin-top:16px; max-width:620px; text-wrap:pretty;">{{ overviewBody }}</div>
-          <div style="display:flex; flex-direction:column; margin-top:34px;">
-            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
-              <div style="display:grid; grid-template-columns:52px 1fr auto; gap:18px; align-items:baseline; padding:20px 0; border-top:1px solid #E3D9C2;">
+          <!-- A package's real components, in order. Single treatments show
+               none: their description above is the confirmed one, and the old
+               per-type stages with invented minutes are gone. -->
+          <div style="display:{{ stepsShow }}; flex-direction:column; margin-top:34px;">
+            <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E; padding-bottom:14px;">{{ stepsHeading }}</div>
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+              <div style="display:grid; grid-template-columns:52px 1fr; gap:18px; align-items:baseline; padding:20px 0; border-top:1px solid #E3D9C2;">
                 <div style="font-family:'Prata',serif; font-size:15px; color:#C9A860;">{{ s.no }}</div>
                 <div>
                   <div style="font-family:'Prata',serif; font-size:16px; color:#14532D;">{{ s.name }}</div>
                   <div style="font-size:13px; color:#77704F; line-height:1.7; margin-top:5px; max-width:520px; text-wrap:pretty;">{{ s.desc }}</div>
+                  <a href="{{ s.href }}" style="display:{{ s.linkShow }}; margin-top:8px; font-size:var(--fs-md); letter-spacing:1.6px; color:#B98F3E; border-bottom:1px solid rgba(185,143,62,.45); padding-bottom:2px; width:max-content;">ABOUT THIS TREATMENT</a>
                 </div>
-                <div style="font-size:var(--fs-lg); letter-spacing:1.5px; color:#9A917A; white-space:nowrap;">{{ s.time }}</div>
               </div>
             </sc-for>
           </div>
@@ -639,7 +650,7 @@ a:hover { color:#B98F3E; }
               </div>
             </sc-for>
           </div>
-          <a href="#book" style="display:block; text-align:center; margin-top:26px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:24px; padding:14px 22px; font-size:11px; letter-spacing:2.6px; font-weight:600;">CHECK AVAILABILITY</a>
+          <a href="#book" style="display:block; text-align:center; margin-top:26px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:24px; padding:14px 22px; font-size:11px; letter-spacing:2.6px; font-weight:600;">REQUEST A TIME</a>
         </div>
       </div>
     </div>
@@ -703,83 +714,65 @@ a:hover { color:#B98F3E; }
         <div style="font-size:13.5px; color:#5A5340; margin-top:10px;">{{ bookingLine }}</div>
       </div>
 
-      <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
-        <div style="max-width:820px; margin:34px auto 0; background:#FFFDF7; border:1px solid #DED4BD; border-radius:22px; padding:clamp(22px,3.4vw,40px);">
-          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A;">1 · CHOOSE A DAY</div>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(84px,100%),1fr)); gap:10px; margin-top:14px;">
+      <!-- A request, not a reservation: there is no live diary behind this
+           form, so it shows no "reserved" slots. Times already past in Dubai
+           are disabled; everything else is a preferred time the centre
+           confirms on WhatsApp. -->
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ submit }}" sc-camel-no-validate="true" style="max-width:820px; margin:34px auto 0; background:#FFFDF7; border:1px solid #DED4BD; border-radius:22px; padding:clamp(22px,3.4vw,40px);">
+          <div id="bk-day-label" style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A;">1 · CHOOSE A DAY</div>
+          <div role="group" aria-labelledby="bk-day-label" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(84px,100%),1fr)); gap:10px; margin-top:14px;">
             <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
-              <div onClick="{{ d.pick }}" style="cursor:pointer; text-align:center; padding:14px 6px; border-radius:14px; border:1px solid {{ d.border }}; background:{{ d.bg }}; transition:background .2s;">
+              <button type="button" onClick="{{ d.pick }}" aria-pressed="{{ d.pressed }}" aria-label="{{ d.label }}" class="bk-chip" style="cursor:pointer; font-family:inherit; text-align:center; padding:14px 6px; border-radius:14px; border:1px solid {{ d.border }}; background:{{ d.bg }}; transition:background .2s;">
                 <div style="font-size:var(--fs-sm); letter-spacing:1.6px; color:{{ d.sub }};">{{ d.dow }}</div>
                 <div style="font-family:'Prata',serif; font-size:19px; color:{{ d.fg }}; margin-top:5px;">{{ d.num }}</div>
                 <div style="font-size:var(--fs-sm); color:{{ d.sub }}; margin-top:4px;">{{ d.mon }}</div>
-              </div>
+              </button>
             </sc-for>
           </div>
 
-          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:30px;">2 · CHOOSE A TIME</div>
-          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;">
+          <div id="bk-time-label" style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:30px;">2 · CHOOSE A PREFERRED TIME <span style="letter-spacing:1px; color:#B0A88E;">(DUBAI TIME)</span></div>
+          <div role="group" aria-labelledby="bk-time-label" aria-describedby="bk-time-err" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;">
             <sc-for list="{{ times }}" as="t" hint-placeholder-count="8">
-              <div onClick="{{ t.pick }}" style="cursor:{{ t.cursor }}; font-size:12.5px; padding:11px 20px; border-radius:22px; border:1px solid {{ t.border }}; background:{{ t.bg }}; color:{{ t.fg }}; text-decoration:{{ t.strike }};">{{ t.label }}</div>
+              <button type="button" onClick="{{ t.pick }}" disabled="{{ t.disabled }}" aria-pressed="{{ t.pressed }}" class="bk-chip" style="cursor:{{ t.cursor }}; font-family:inherit; font-size:12.5px; padding:11px 20px; border-radius:22px; border:1px solid {{ t.border }}; background:{{ t.bg }}; color:{{ t.fg }};">{{ t.label }}</button>
             </sc-for>
           </div>
+          <div style="display:{{ noTimesShow }}; font-size:12.5px; color:#77704F; margin-top:10px;">No more times today. Please choose another day.</div>
+          <div id="bk-time-err" role="alert" style="font-size:12px; color:#B4523E; margin-top:8px; min-height:15px;">{{ timeErr }}</div>
 
-          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:30px;">3 · YOUR DETAILS</div>
+          <div style="font-size:var(--fs-lg); letter-spacing:2.4px; color:#9A917A; margin-top:22px;">3 · YOUR DETAILS</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr)); gap:14px; margin-top:14px;">
-            <input value="{{ name }}" onChange="{{ setName }}" placeholder="Full name" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid #DED4BD; border-radius:12px; padding:15px 16px; outline:none;">
-            <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="Mobile number" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid #DED4BD; border-radius:12px; padding:15px 16px; outline:none;">
+            <label style="display:flex; flex-direction:column; gap:6px;">
+              <span style="font-size:var(--fs-md); letter-spacing:1.6px; color:#77704F;">FULL NAME</span>
+              <input value="{{ name }}" onChange="{{ setName }}" name="name" sc-camel-auto-complete="name" aria-invalid="{{ nameInvalid }}" aria-describedby="bk-name-err" placeholder="Your name" class="bk-input" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid {{ nameBorder }}; border-radius:12px; padding:15px 16px;">
+              <span id="bk-name-err" role="alert" style="font-size:12px; color:#B4523E; min-height:15px;">{{ nameErr }}</span>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px;">
+              <span style="font-size:var(--fs-md); letter-spacing:1.6px; color:#77704F;">MOBILE NUMBER</span>
+              <input value="{{ phone }}" onChange="{{ setPhone }}" onBlur="{{ touchPhone }}" name="tel" type="tel" sc-camel-input-mode="tel" sc-camel-auto-complete="tel" aria-invalid="{{ phoneInvalid }}" aria-describedby="bk-phone-err bk-phone-hint" placeholder="050 123 4567 or +44 7700 900123" class="bk-input" style="font-family:'Manrope',sans-serif; font-size:14px; color:#2A332C; background:#F6F1E6; border:1px solid {{ phoneBorder }}; border-radius:12px; padding:15px 16px;">
+              <span id="bk-phone-hint" style="font-size:11.5px; color:#9A917A;">UAE numbers as 05x, or any country with its + code.</span>
+              <span id="bk-phone-err" role="alert" style="font-size:12px; color:#B4523E; min-height:15px;">{{ phoneErr }}</span>
+            </label>
           </div>
 
-          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-top:26px;">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-top:18px;">
             <div style="font-size:12.5px; color:#77704F;">{{ summary }}</div>
-            <div onClick="{{ submit }}" style="cursor:pointer; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 38px; font-size:11.5px; letter-spacing:3px; font-weight:600;">REQUEST BOOKING</div>
+            <button type="submit" aria-disabled="{{ notReady }}" class="bk-submit" style="cursor:pointer; font-family:inherit; border:none; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 38px; font-size:11.5px; letter-spacing:3px; font-weight:600; opacity:{{ submitOpacity }};">SEND REQUEST ON WHATSAPP</button>
           </div>
-          <div style="font-size:12px; color:#B4523E; margin-top:12px; min-height:16px;">{{ errorMsg }}</div>
-        </div>
+          <div style="font-size:11.5px; color:#9A917A; margin-top:14px;">This opens WhatsApp with your request filled in. Nothing is booked until we confirm the time with you there.</div>
+        </form>
       </sc-if>
 
-      <sc-if value="{{ booked }}" hint-placeholder-val="{{ false }}">
-        <div style="max-width:620px; margin:34px auto 0; text-align:center; background:#FFFDF7; border:1px solid #C9A860; border-radius:22px; padding:clamp(30px,4vw,52px); animation:dIn .35s ease both;">
-          <div style="font-family:'Great Vibes',cursive; font-size:38px; color:#B98F3E;">Thank you</div>
-          <div style="font-family:'Italiana','Prata',serif; font-size:26px; color:#14532D; margin-top:6px;">REQUEST RECEIVED</div>
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="max-width:620px; margin:34px auto 0; text-align:center; background:#FFFDF7; border:1px solid #C9A860; border-radius:22px; padding:clamp(30px,4vw,52px); animation:dIn .35s ease both;">
+          <div style="font-family:'Great Vibes',cursive; font-size:38px; color:#B98F3E;">Almost there</div>
+          <div style="font-family:'Italiana','Prata',serif; font-size:26px; color:#14532D; margin-top:6px;">SEND IT ON WHATSAPP</div>
           <div style="font-size:14px; color:#5A5340; line-height:1.85; margin-top:12px;">{{ confirmLine }}</div>
-          <div style="font-size:13px; color:#77704F; line-height:1.8; margin-top:14px;">We will confirm on WhatsApp within a few minutes.</div>
-          <div onClick="{{ reset }}" style="cursor:pointer; display:inline-block; margin-top:22px; font-size:var(--fs-lg); letter-spacing:2.4px; color:#14532D; border-bottom:1px solid #C9A860; padding-bottom:4px;">MAKE ANOTHER BOOKING</div>
+          <div style="font-size:13px; color:#77704F; line-height:1.8; margin-top:14px;">WhatsApp has opened with your request. Press send there, and we will reply to confirm the time.</div>
+          <a href="{{ sentHref }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:20px; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:24px; padding:13px 28px; font-size:11px; letter-spacing:2.6px; font-weight:600;">OPEN WHATSAPP AGAIN</a>
+          <div><button type="button" onClick="{{ reset }}" style="cursor:pointer; font-family:inherit; background:none; border:none; border-bottom:1px solid #C9A860; display:inline-block; margin-top:20px; font-size:var(--fs-lg); letter-spacing:2.4px; color:#14532D; padding:0 0 4px;">CHANGE THE REQUEST</button></div>
         </div>
       </sc-if>
-    </div>
-  </div>
-
-  <div id="reviews" data-screen-label="Reviews" style="display:{{ reviewsShow }}; position:relative; max-width:1180px; margin:0 auto; padding:clamp(70px,9vw,130px) 20px; overflow:clip;">
-    <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; right:14px; top:40%; transform:translateY(-50%); width:min(16vw,190px); opacity:.085;">
-    <img src="assets/mark-woman-green.png" alt="" style="pointer-events:none; position:absolute; left:4%; bottom:4%; width:min(11vw,125px); opacity:.06;">
-    <div class="d-split" style="position:relative; display:grid; grid-template-columns:.8fr 1.2fr; gap:clamp(30px,5vw,64px); align-items:start;">
-      <div style="position:sticky; top:96px;">
-        <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#B98F3E;">GUEST REVIEWS</div>
-        <div style="font-family:'Italiana','Prata',serif; font-size:clamp(30px,4vw,52px); color:#14532D; margin-top:8px; line-height:1.05;">{{ ratingHeading }}</div>
-        <div style="font-size:19px; color:#C9A860; letter-spacing:3px; margin-top:8px;">★★★★★</div>
-        <div style="font-size:12.5px; color:#77704F; margin-top:8px;">{{ ratingSub }}</div>
-        <div style="display:flex; flex-direction:column; gap:9px; margin-top:24px;">
-          <sc-for list="{{ ratingBars }}" as="r" hint-placeholder-count="5">
-            <div style="display:grid; grid-template-columns:34px 1fr 38px; gap:12px; align-items:center;">
-              <span style="font-size:11px; color:#77704F;">{{ r.stars }}</span>
-              <span style="height:6px; border-radius:4px; background:#E3D9C2; display:block; position:relative; overflow:hidden;"><span style="position:absolute; left:0; top:0; bottom:0; width:{{ r.pct }}; background:#C9A860; border-radius:4px;"></span></span>
-              <span style="font-size:11px; color:#9A917A; text-align:right;">{{ r.count }}</span>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr)); gap:16px;">
-        <sc-for list="{{ reviews }}" as="rv" hint-placeholder-count="4">
-          <div style="background:#FFFDF7; border:1px solid #DED4BD; border-radius:18px; padding:24px 22px; display:flex; flex-direction:column;">
-            <div style="font-size:13px; color:#C9A860; letter-spacing:2px;">★★★★★</div>
-            <div style="font-size:14px; color:#3A4136; line-height:1.85; margin-top:12px; text-wrap:pretty;">{{ rv.text }}</div>
-            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:auto; padding-top:18px;">
-              <span style="font-family:'Prata',serif; font-size:13.5px; color:#14532D;">{{ rv.name }}</span>
-              <span style="font-size:var(--fs-md); letter-spacing:1.4px; color:#9A917A;">{{ rv.when }}</span>
-            </div>
-          </div>
-        </sc-for>
-      </div>
     </div>
   </div>
 
@@ -827,6 +820,8 @@ a:hover { color:#B98F3E; }
     </div>
   </div>
 
+  </sc-if>
+
   <div data-screen-label="Footer" style="position:relative; background:#0B1F16; border-top:1px solid rgba(201,168,96,.2); padding:clamp(72px,9vw,120px) 20px 72px; overflow:hidden;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; left:44%; top:50%; transform:translate(-50%,-50%); width:min(16vw,170px); opacity:.045;">
     <img src="assets/mark-woman-gold.png" alt="" style="pointer-events:none; position:absolute; right:2%; top:10%; width:min(8vw,80px); opacity:.05;">
@@ -847,7 +842,7 @@ a:hover { color:#B98F3E; }
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
-        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 10:00 AM – 10:00 PM</div>
+        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">{{ hoursLabel }}</div>
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HIM</div>
@@ -861,353 +856,218 @@ a:hover { color:#B98F3E; }
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 58 548 0899&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;service&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;}}">
-const IMG = {
-  massage: ['uploads/eco-her-massage-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by alan caishan on Unsplash','https://unsplash.com/@caishan119'],
-  bath: ['uploads/eco-her-hammam-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by paje victoria on Unsplash','https://unsplash.com/@pajevictoria'],
-  facial: ['uploads/eco-her-facial-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Rosa Rafael on Unsplash','https://unsplash.com/@rosarafael'],
-  water: ['uploads/eco-her-jacuzzi-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Roberto Nickson on Unsplash','https://unsplash.com/@rpnickson'],
-  tech: ['uploads/eco-her-products-1.jpg?q=80&w=1600&auto=format&fit=crop','Photo by Nico on Unsplash','https://unsplash.com/@nicobaby'],
-};
+// Everything this page says about a treatment comes from catalog.js: the
+// treatment's own row, the copy for its type (window.ECO.her.types), the room
+// photos (ECO.her.rooms) and the booking rules (ECO.booking). Nothing here is
+// specific to one treatment, so a name, photo or description changed in the
+// catalogue is changed on this page, in its booking form and in its WhatsApp
+// message at the same time.
+const E = window.ECO;
+const SIDE = 'her';
+const BASE = '/service';
 
-const TYPE = {
-  massage: {
-    kicker: 'bodywork',
-    room: 'PRIVATE TREATMENT ROOM',
-    img: 'massage',
-    heading: 'SIXTY MINUTES OF UNINTERRUPTED BODYWORK',
-    steps: [
-      ['Consultation and tea','10 MIN','You tell your therapist where you hold tension and how much pressure you want.'],
-      ['Warm-up','10 MIN','Long, slow strokes over oiled skin to bring blood to the surface and settle the nervous system.'],
-      ['The main work','35 MIN','Your therapist works through back, shoulders, legs and arms at the pressure you agreed.'],
-      ['Finish and rest','5 MIN','A quiet few minutes on the table, then water and tea in the lounge.'],
-    ],
-    includes: ['Private treatment room','Cold-pressed oil, unscented on request','Robe, slippers and towels','Disposable underwear','Herbal tea and water afterwards','Use of the rest lounge'],
-    benefits: [
-      ['A therapist who listens','Pressure is agreed before the session and checked during it. Nothing is done to you that you did not ask for.'],
-      ['Trained in Bali','Our team trained in Balinese technique and brings it to every treatment on the menu.'],
-      ['No rushing','The room is yours for the full booking. You are not moved on to make space for the next guest.'],
-      ['Quiet, warm, private','Heated table, dim light, one door. Phones stay in the locker.'],
-    ],
-    reviews: [
-      ['Booked on a whim after a long week and left completely reset. My shoulders have not felt this loose in months.','Layla A.','2 WEEKS AGO'],
-      ['The therapist actually asked about pressure and adjusted it. Small thing, rarely done properly.','Fatima R.','LAST MONTH'],
-      ['Clean room, warm table, no rushing. I have started coming every other week.','Noura K.','LAST MONTH'],
-      ['I have tried most spas in Ajman. This is the one I keep going back to.','Hessa M.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE TREATMENT ROOM',
-    galleryNote: 'Heated table, dim light and a private room that stays yours for the full session.',
-  },
-  focused: {
-    kicker: 'a focused half hour',
-    room: 'PRIVATE TREATMENT ROOM',
-    img: 'massage',
-    heading: 'THIRTY MINUTES ON ONE AREA',
-    steps: [
-      ['Quick consultation','3 MIN','A short conversation about where it hurts and how firm you want it.'],
-      ['Warming','7 MIN','Oil and light pressure to prepare the area.'],
-      ['Focused pressure','17 MIN','Concentrated work on the one area, with pressure checked as it deepens.'],
-      ['Finish','3 MIN','A slow release, then water and tea.'],
-    ],
-    includes: ['Private treatment room','Cold-pressed oil, unscented on request','Robe and towels','Herbal tea and water afterwards','Use of the rest lounge'],
-    benefits: [
-      ['Fits into a lunch break','Half an hour, in and out, no full undress required for most of these.'],
-      ['Real pressure, not a taster','A short booking is still a full treatment. The time goes into the area that needs it.'],
-      ['Easy to add on','Pairs with any bath or facial in the same visit at no extra room charge.'],
-      ['Same therapists','The half-hour treatments are delivered by the same Balinese-trained team.'],
-    ],
-    reviews: [
-      ['Perfect length. I come on my way home from work and it undoes the whole day.','Mariam S.','3 WEEKS AGO'],
-      ['Thirty minutes but she found every knot. Booked another before I left.','Aisha B.','LAST MONTH'],
-      ['Great value for the time. I add it on to my bath every visit now.','Reem T.','LAST MONTH'],
-      ['Quiet, professional and quick without feeling rushed.','Sara D.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE TREATMENT ROOM',
-    galleryNote: 'A private room and a heated table, even for the shorter treatments.',
-  },
-  bath: {
-    kicker: 'signature ritual',
-    room: 'PRIVATE HAMMAM ROOM',
-    img: 'bath',
-    heading: 'A HEAT RITUAL BEFORE IT IS A SCRUB',
-    steps: [
-      ['Warm steam','15 MIN','You settle into the heated hammam room while steam opens the pores.'],
-      ['Moroccan black soap','10 MIN','Olive-based beldi soap is applied head to toe and left to soften the skin.'],
-      ['Kessa exfoliation','15 MIN','The traditional glove lifts away dead skin in long, firm sweeps.'],
-      ['Rinse and finish','10 MIN','A warm rinse, oil massaged into the skin, then rest with mint tea.'],
-    ],
-    includes: ['Private hammam room','Beldi black soap and kessa glove','Argan oil finish','Robe, slippers and towels','Moroccan mint tea and dates','Use of the rest lounge'],
-    benefits: [
-      ['Softer skin, immediately','The kessa glove removes weeks of build-up in one session. Guests notice the difference the same evening.'],
-      ['Heat that unlocks tension','Steam before any pressure means muscles are already loose when the work begins.'],
-      ['A room to yourself','No shared benches. The hammam is booked to you alone for the full session.'],
-      ['Traditional, not improvised','Beldi soap, ghassoul clay and argan oil, sourced from Morocco and used the way they are used there.'],
-    ],
-    reviews: [
-      ['I have had Moroccan baths in Marrakech and this held up. Thorough without being rough, and the room was spotless.','Layla A.','2 WEEKS AGO'],
-      ['Booked it before a wedding and my skin looked completely different the next day. Worth every dirham.','Fatima R.','LAST MONTH'],
-      ['The mint tea at the end is a small thing but it makes you stay another twenty minutes instead of rushing out.','Noura K.','LAST MONTH'],
-      ['Came with my sister, side by side in the same room. Staff were kind about keeping everything private.','Hessa M.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE HAMMAM',
-    galleryNote: 'Heated marble, private steam and a rinse area — the room is yours for the full session.',
-  },
-  water: {
-    kicker: 'heat and water',
-    room: 'PRIVATE WATER SUITE',
-    img: 'water',
-    heading: 'HEAT, WATER AND NOTHING ELSE TO DO',
-    steps: [
-      ['Shower and settle','5 MIN','A rinse, a robe and a glass of water before you go in.'],
-      ['Heat','25 MIN','Time in the water or the cabin, at the temperature you are comfortable with.'],
-      ['Cool down','10 MIN','A cool rinse and a rest, which is where most of the benefit lands.'],
-      ['Tea','5 MIN','Herbal tea in the lounge before you dress.'],
-    ],
-    includes: ['Private use of the suite','Robe, slippers and towels','Cold towels and water throughout','Herbal tea afterwards','Use of the rest lounge'],
-    benefits: [
-      ['Recovery without effort','Heat does the work. You lie still and let circulation do the rest.'],
-      ['Good before a massage','Twenty-five minutes of heat makes any bodywork that follows noticeably more effective.'],
-      ['Private, never shared','The suite is booked to you or your group alone.'],
-      ['Easy on the body','Low-impact and suitable most days, including when you are too sore for deep pressure.'],
-    ],
-    reviews: [
-      ['I book this after long flights. Nothing else clears the stiffness as quickly.','Mariam S.','3 WEEKS AGO'],
-      ['Did it before a massage on the same visit and the difference was obvious.','Aisha B.','LAST MONTH'],
-      ['Spotlessly clean and completely private, which was my only worry.','Reem T.','LAST MONTH'],
-      ['Simple and very good. The cold towels afterwards are a nice touch.','Sara D.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE WATER SUITE',
-    galleryNote: 'Private jacuzzi, infrared cabin and a cool rinse area, booked to you alone.',
-  },
-  tech: {
-    kicker: 'advanced therapy',
-    room: 'PRIVATE THERAPY ROOM',
-    img: 'tech',
-    heading: 'A DEVICE-LED TREATMENT, DELIVERED BY HAND',
-    steps: [
-      ['Assessment','10 MIN','Your therapist looks at the area, explains what the device does, and agrees the intensity.'],
-      ['Preparation','5 MIN','Skin is cleansed and prepared so the device can work evenly.'],
-      ['Treatment','35 MIN','The device is worked over the area in passes, with intensity adjusted as you go.'],
-      ['Aftercare','10 MIN','Cooling, hydration, and a short conversation about how many sessions you may want.'],
-    ],
-    includes: ['Private therapy room','Full consultation before the first session','All product and device consumables','Robe and towels','Aftercare guidance in writing','Water and herbal tea'],
-    benefits: [
-      ['Results build over a course','One session is noticeable. A course of six to eight is where the change holds.'],
-      ['Explained, not sold','The therapist tells you what the device can and cannot do before you commit.'],
-      ['No downtime','You can go straight back to your day afterwards.'],
-      ['Comfortable throughout','Intensity is set by you and checked repeatedly during the session.'],
-    ],
-    reviews: [
-      ['Honest consultation. She told me how many sessions I would realistically need instead of overselling.','Mariam S.','3 WEEKS AGO'],
-      ['Comfortable the whole way through and I could see a difference after the third session.','Aisha B.','LAST MONTH'],
-      ['Very professional. Everything explained before it happened.','Reem T.','LAST MONTH'],
-      ['Booked a course and have kept it up. Happy with where it has got to.','Sara D.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE THERAPY ROOM',
-    galleryNote: 'Clinical equipment in a room that still feels like a spa, not a clinic.',
-  },
-  pkg: {
-    kicker: 'the full visit',
-    room: 'PRIVATE SUITE',
-    img: 'bath',
-    heading: 'TWO TREATMENTS, ONE UNBROKEN VISIT',
-    steps: [
-      ['Arrival','10 MIN','Tea, a robe and a short conversation about how you want the session to run.'],
-      ['First treatment','45 MIN','The bath or water ritual, taken at an unhurried pace.'],
-      ['Transition','5 MIN','A rinse and a moment to settle before the next stage begins.'],
-      ['Second treatment','60 MIN','Massage or facial, in the same suite, with the same therapist where possible.'],
-      ['Rest','10 MIN','Tea, dates and time in the lounge before you leave.'],
-    ],
-    includes: ['Private suite for the whole visit','Both treatments in full, no shortened stages','Robe, slippers and towels','All products and oils','Moroccan mint tea and dates','Use of the rest lounge'],
-    benefits: [
-      ['Cheaper than booking apart','The package price sits below the two treatments taken separately on different days.'],
-      ['The order matters','Heat first, pressure second. Booked together, each treatment makes the other work better.'],
-      ['No gap in between','You stay in the same suite. There is no waiting in a corridor between stages.'],
-      ['The right length for a day off','Two hours or so, which is long enough to feel like a proper break.'],
-    ],
-    reviews: [
-      ['Did the whole thing on a Friday morning and floated through the rest of the weekend.','Layla A.','2 WEEKS AGO'],
-      ['Better value than booking the two separately, and much better as an experience.','Fatima R.','LAST MONTH'],
-      ['Two hours went very quickly. I would book the longer package next time.','Noura K.','LAST MONTH'],
-      ['Gave this as a gift to my mother and she has been back twice since.','Hessa M.','2 MONTHS AGO'],
-    ],
-    galleryHeading: 'INSIDE THE SUITE',
-    galleryNote: 'Hammam, treatment table and rest lounge — the full circuit in one private space.',
-  },
-};
-
-Object.assign(IMG, window.ECO.her.imgs);
-Object.assign(TYPE, window.ECO.her.types);
-
-const slugify = s => s.toLowerCase().replace(/\+/g, ' plus ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-const SHARED_FAQ = [
-  ['What should I bring?','Nothing. Robe, slippers, towels and disposable underwear are provided. Leave jewellery at home or with reception.'],
-  ['Can I book with a friend?','Yes. Most of our rooms take two guests side by side. Message us on WhatsApp and we will hold the space for both of you.'],
-  ['How far in advance should I book?','Weekday afternoons are usually open same day. Thursday to Saturday evenings fill two or three days ahead.'],
-  ['Are all your therapists female?','Yes. Ecosophy Beauty Center & SPA is a women-only centre, and every therapist and receptionist here is female.'],
-];
-
-const TYPE_FAQ = Object.assign({}, window.ECO.her.faqs, {
-  massage: [['Is it safe during pregnancy?','Not the standard massage. Book our Prenatal Massage instead — tell us and we will switch the booking at no charge.']],
-  focused: [['Do I need to undress?','For the back and reflexology treatments, only partially. Head and Indian head massage are done fully clothed.']],
-  bath: [['What do I wear during the bath?','Most guests wear the disposable underwear we provide. Your therapist is female and the room is fully private.']],
-  water: [['How hot does it get?','The jacuzzi runs around 38°C and the infrared cabin around 55°C. Both can be lowered — just ask.']],
-  tech: [['How many sessions will I need?','Most guests see a real change over six to eight sessions. Your therapist will give you an honest estimate at the consultation.']],
-  pkg: [['Can I split the package across two visits?','It is designed as one visit, because the treatments work better back to back. If you need to split it, message us and we will arrange it.']],
-});
+// The ?s= identifier, resolved through the legacy table. Unknown -> null.
+function lookup(props) {
+  let want = props && props.service;
+  if (!want && typeof location !== 'undefined') {
+    try { want = new URLSearchParams(location.search).get('s'); } catch (e) {}
+  }
+  return E.find(SIDE, want);
+}
 
 class Component extends DCLogic {
-  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false, day: 1, time: null, name: '', phone: '', booked: false, error: '', faq: 0, lb: null };
-  svcList() {
-    return window.ECO.flat('her');
-  }
-  current(list) {
-    let want = this.props.service;
-    if (!want && typeof location !== 'undefined') {
-      try { want = new URLSearchParams(location.search).get('s'); } catch (e) {}
-    }
-    return list.find(s => s.slug === want) || list.find(s => s.slug === 'royal-moroccan-bath') || list[0];
-  }
+  state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false,
+    day: null, time: null, name: '', phone: '', phoneTouched: false, tried: false, sentHref: '', sent: false,
+    faq: 0, lb: null, tick: 0 };
   componentDidMount() {
     this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
     this._navScroll = () => { const past = (window.scrollY || 0) > 90; if (past !== this.state.scrolled) this.setState({ scrolled: past }); };
     window.addEventListener('resize', this._navResize);
     window.addEventListener('scroll', this._navScroll, { passive: true });
     this._navScroll();
-    const s = this.current(this.svcList());
-    if (s && typeof document !== 'undefined') document.title = s.name + ' · Ecosophy Beauty Center & SPA';
+    // Re-render once a minute so times that pass while the page is open are
+    // disabled without a reload.
+    this._clock = setInterval(() => this.setState(s => ({ tick: s.tick + 1 })), 60000);
+    const hit = lookup(this.props);
+    if (typeof document === 'undefined') return;
+    if (hit && hit.from && window.history && history.replaceState) {
+      // An old link: show the current address for the same treatment.
+      history.replaceState(null, '', BASE + '?s=' + hit.svc.slug + location.hash);
+    }
+    const title = hit ? hit.svc.name + ' · Ecosophy Beauty Center & SPA' : 'Treatment not found · Ecosophy Beauty Center & SPA';
+    document.title = title;
+    const setMeta = (sel, make, attr, val) => {
+      let el = document.head.querySelector(sel);
+      if (!el) { el = make(); document.head.appendChild(el); }
+      el.setAttribute(attr, val);
+    };
+    if (hit) {
+      // functions/ already writes these into the HTML for crawlers; this keeps
+      // them right after a client-side change of address too.
+      const url = E.site + BASE + '?s=' + hit.svc.slug;
+      setMeta('link[rel="canonical"]', () => { const l = document.createElement('link'); l.rel = 'canonical'; return l; }, 'href', url);
+      setMeta('meta[name="description"]', () => { const m = document.createElement('meta'); m.name = 'description'; return m; }, 'content', hit.svc.desc);
+    } else {
+      setMeta('meta[name="robots"]', () => { const m = document.createElement('meta'); m.name = 'robots'; return m; }, 'content', 'noindex');
+    }
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._navResize);
+    window.removeEventListener('scroll', this._navScroll);
+    clearInterval(this._clock);
   }
   renderVals() {
-    const list = this.svcList();
-    const svc = this.current(list);
-    const t = TYPE[svc.type] || TYPE.massage;
+    const hit = lookup(this.props);
+    const svc = hit ? hit.svc : null;
     const wa = this.props.whatsapp ?? '+971 58 548 0899';
-    const href = s => '/service?s=' + s.slug;
+    const waBase = 'https://wa.me/' + wa.replace(/[^0-9]/g, '');
+    const vw = this.state.vw || 1280;
+    const nav = {
+      navGap: vw < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
+      navShow: vw < 1280 ? 'none' : 'inline',
+      burgerShow: vw < 1280 ? 'flex' : 'none',
+      menuShow: this.state.menuOpen && vw < 1280 ? 'flex' : 'none',
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      badgeSlotW: this.state.scrolled ? (vw < 860 ? '150px' : '190px') : (vw < 860 ? '54px' : '78px'),
+      // The header badge, identical to the two home pages: a medallion at rest
+      // that collapses into a compact row once the page moves, so the bar reads
+      // the same everywhere. Sizes, gaps and the disc all animate together.
+      badgeSize: this.state.scrolled ? (vw < 860 ? '34px' : '40px') : (vw < 860 ? '54px' : '78px'),
+      badgeWordSize: this.state.scrolled ? (vw < 860 ? '19px' : '22px') : (vw < 860 ? '22px' : '26px'),
+      badgeDir: this.state.scrolled ? 'row' : 'column',
+      badgeGap: this.state.scrolled ? '10px' : '6px',
+      badgeMarkFill: this.state.scrolled ? '100%' : '74%',
+      badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
+      badgeWordOpacity: ((vw < 860) && this.state.menuOpen) ? 0 : 1,
+      badgeSubSize: 'var(--fs-xxs)',
+      badgeTop: this.state.scrolled ? (vw < 860 ? '14px' : '13px') : (vw < 860 ? '10px' : '12px'),
+      badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
+      badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
+      badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',
+      badgeSubShow: (this.state.scrolled || vw < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
+      waLabel: vw < 860 ? 'BOOK' : 'WHATSAPP',
+      whatsapp: wa, hoursLabel: E.hours[SIDE].label,
+    };
 
-    const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-    const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const today = new Date();
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(today.getTime() + i * 86400000);
-      const on = this.state.day === i;
-      days.push({
-        dow: i === 0 ? 'TODAY' : DOW[d.getDay()], num: d.getDate(), mon: MON[d.getMonth()],
-        label: (i === 0 ? 'Today' : DOW[d.getDay()]) + ' ' + d.getDate() + ' ' + MON[d.getMonth()],
-        bg: on ? '#14532D' : '#F6F1E6', border: on ? '#14532D' : '#DED4BD',
-        fg: on ? '#F1E7CC' : '#14532D', sub: on ? 'rgba(241,231,204,.65)' : '#9A917A',
-        pick: () => this.setState({ day: i, time: null, error: '' }),
+    if (!svc) {
+      // Not a treatment we offer (or not any more). Say so, and offer the menu.
+      return Object.assign(nav, {
+        found: false, missingShow: 'flex', ctaShow: 'none', priceShow: 'none', durationShow: 'none',
+        waHref: waBase + '?text=' + encodeURIComponent('Hello Ecosophy, I have a question about a treatment.'),
+        nameUpper: 'TREATMENT NOT FOUND', catUpper: 'NOT FOUND', catHref: '/services', kicker: 'sorry',
+        intro: 'This link does not match a treatment on our current menu. It may have been renamed or retired. See all treatments, or ask us on WhatsApp.',
+        price: '', priceUnit: '', durationLong: '', roomLabel: '',
+        heroSlot: 'det-not-found-hero', heroImg: E.her.rooms.room[0],
       });
     }
-    const SLOTS = ['11:00 AM','12:30 PM','2:00 PM','3:30 PM','5:00 PM','6:30 PM','8:00 PM','9:30 PM'];
-    const seed = svc.slug.length;
-    const taken = [(this.state.day * 3 + seed) % 8, (this.state.day * 5 + seed + 2) % 8];
-    const times = SLOTS.map((label, i) => {
-      const gone = taken.indexOf(i) >= 0;
-      const on = this.state.time === label;
-      return { label, cursor: gone ? 'not-allowed' : 'pointer',
-        bg: gone ? '#EFE9DB' : on ? '#14532D' : '#FFFDF7',
-        fg: gone ? '#B7AF98' : on ? '#F1E7CC' : '#3A4136',
-        border: gone ? '#E3D9C2' : on ? '#14532D' : '#DED4BD',
-        strike: gone ? 'line-through' : 'none',
-        pick: gone ? () => {} : () => this.setState({ time: label, error: '' }) };
-    });
-    const chosenDay = days[this.state.day];
 
-    const order = [t.img, 'bath', 'facial', 'water', 'massage', 'tech'].filter((v, i, a) => a.indexOf(v) === i).slice(0, 5);
-    const LABELS = { massage: 'TREATMENT ROOM', bath: 'THE HAMMAM', facial: 'PRODUCTS', water: 'WATER SUITE', tech: 'THE EQUIPMENT' };
-    const gallery = order.map((k, i) => ({
-      slot: 'det-' + svc.slug + '-g' + i, img: IMG[k][0], credit: IMG[k][1], chref: IMG[k][2],
-      label: LABELS[k], span: i === 0 ? 'span 2' : 'span 1', open: () => this.setState({ lb: i }),
+    const C = E.content(SIDE, svc);
+    const durLong = E.durationLabel(svc.duration);
+    const B = E.booking;
+
+    // --- booking: days, times, validation
+    const days = B.days(7);
+    const firstDay = B.firstOpenDay(SIDE, svc.duration);
+    const dayIx = this.state.day == null ? firstDay : this.state.day;
+    const slots = B.slots(SIDE, dayIx, svc.duration);
+    const chosen = slots.find(s => s.label === this.state.time && !s.past) || null;
+    const dayVals = days.map((d, i) => {
+      const on = dayIx === i;
+      return { dow: i === 0 ? 'TODAY' : d.dow.toUpperCase(), num: d.num, mon: d.mon.toUpperCase(), label: d.label,
+        pressed: on ? 'true' : 'false',
+        bg: on ? '#14532D' : '#F6F1E6', border: on ? '#14532D' : '#DED4BD',
+        fg: on ? '#F1E7CC' : '#14532D', sub: on ? 'rgba(241,231,204,.65)' : '#9A917A',
+        pick: () => this.setState({ day: i, time: null }) };
+    });
+    const times = slots.map(s => {
+      const on = chosen && chosen.label === s.label;
+      return { label: s.label, disabled: s.past, pressed: on ? 'true' : 'false', cursor: s.past ? 'not-allowed' : 'pointer',
+        bg: s.past ? '#EFE9DB' : on ? '#14532D' : '#FFFDF7',
+        fg: s.past ? '#B7AF98' : on ? '#F1E7CC' : '#3A4136',
+        border: s.past ? '#E3D9C2' : on ? '#14532D' : '#DED4BD',
+        pick: s.past ? () => {} : () => this.setState({ time: s.label }) };
+    });
+    const phone = B.phone(this.state.phone);
+    const nameOk = this.state.name.trim().length >= 2;
+    const showErr = this.state.tried;
+    const phoneErr = (showErr || (this.state.phoneTouched && this.state.phone.trim()))
+      ? (!this.state.phone.trim() ? 'Please add a mobile number.' : !phone ? 'Please enter a valid number, e.g. 050 123 4567 or +44 7700 900123.' : '') : '';
+    const nameErr = showErr && !nameOk ? 'Please add your name.' : '';
+    const timeErr = showErr && !chosen ? (this.state.time ? 'That time has passed. Please choose another.' : 'Please choose a time.') : '';
+    const ready = !!chosen && nameOk && !!phone;
+    const request = () => ({
+      service: svc.name, duration: svc.duration, price: svc.price,
+      day: days[dayIx].label, time: chosen ? chosen.label : '', name: this.state.name.trim(), phone: phone || '',
+      note: svc.duration ? '' : 'Please confirm how long to allow.',
+    });
+
+    const gallery = E.gallery(SIDE, C.imgKey).map((g, i) => ({
+      slot: 'det-' + svc.slug + '-g' + i, img: g.img, label: g.label,
+      span: i === 0 ? 'span 2' : 'span 1', open: () => this.setState({ lb: i }),
     }));
     const lb = this.state.lb == null ? null : gallery[this.state.lb];
 
-    const faqSrc = SHARED_FAQ.slice(0, 1).concat(TYPE_FAQ[svc.type] || []).concat(SHARED_FAQ.slice(1));
+    const faqSrc = E.her.faqShared.slice(0, 1).concat(C.faq).concat(E.her.faqShared.slice(1));
     const faqs = faqSrc.map(([q, a], i) => {
       const on = this.state.faq === i;
       return { q, a, sign: on ? '−' : '+', h: on ? '260px' : '0px', op: on ? 1 : 0, mt: on ? '12px' : '0px',
         toggle: () => this.setState(s => ({ faq: s.faq === i ? -1 : i })) };
     });
 
-    const ratings = [4.9, 4.8, 5.0, 4.7];
-    const rating = ratings[svc.slug.length % 4].toFixed(1);
-    const count = 60 + (svc.slug.length * 17) % 180;
-
-    const related = list.filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
-      href: href(s), name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST',
-      slot: 'det-' + svc.slug + '-rel' + i, img: s.img || IMG[(TYPE[s.type] || TYPE.massage).img][0], credit: '', chref: '',
+    const related = E.flat(SIDE).filter(s => s.cat === svc.cat && s.slug !== svc.slug).slice(0, 3).map((s, i) => ({
+      href: BASE + '?s=' + s.slug, name: s.name, desc: s.desc, duration: s.duration.toUpperCase() || 'BY REQUEST', price: '',
+      slot: 'det-' + svc.slug + '-rel' + i, img: s.img, credit: '', chref: '',
     }));
 
-    const ready = !!this.state.time && this.state.name.trim() && this.state.phone.trim();
-    const durLong = svc.duration ? svc.duration.replace('min', 'minutes') : 'By request';
+    const notes = [];
+    if (C.who) notes.push({ k: 'THERAPIST', v: C.who });
+    notes.push(C.room === 'AT YOUR HOME'
+      ? { k: 'WHERE', v: 'At your home or hotel' }
+      : { k: 'ARRIVE', v: '15 minutes early for a short consultation' });
+    notes.push({ k: 'DURATION', v: svc.duration ? durLong : 'By request: ask us how long to allow' });
+    notes.push({ k: 'CANCELLATION', v: 'Free up to 4 hours before your slot' });
 
-    return {
-      navGap: (this.state.vw || 1280) < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
-      navShow: (this.state.vw || 1280) < 1280 ? 'none' : 'inline',
-      burgerShow: (this.state.vw || 1280) < 1280 ? 'flex' : 'none',
-      menuShow: this.state.menuOpen && (this.state.vw || 1280) < 1280 ? 'flex' : 'none',
-      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
-      langShow: (this.state.vw || 1280) < 860 ? 'none' : 'flex',
-      badgeSlotW: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '150px' : '190px') : ((this.state.vw || 1280) < 860 ? '54px' : '78px'),
-      // The header badge, identical to the two home pages: a medallion at rest
-      // that collapses into a compact row once the page moves, so the bar reads
-      // the same everywhere. Sizes, gaps and the disc all animate together.
-      badgeSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '34px' : '40px') : ((this.state.vw || 1280) < 860 ? '54px' : '78px'),
-      badgeWordSize: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '19px' : '22px') : ((this.state.vw || 1280) < 860 ? '22px' : '26px'),
-      badgeDir: this.state.scrolled ? 'row' : 'column',
-      badgeGap: this.state.scrolled ? '10px' : '6px',
-      badgeMarkFill: this.state.scrolled ? '100%' : '74%',
-      badgeWordAlign: this.state.scrolled ? 'flex-start' : 'center',
-      badgeWordOpacity: (((this.state.vw || 1280) < 860) && this.state.menuOpen) ? 0 : 1,
-      badgeSubSize: 'var(--fs-xxs)',
-      badgeTop: this.state.scrolled ? ((this.state.vw || 1280) < 860 ? '14px' : '13px') : ((this.state.vw || 1280) < 860 ? '10px' : '12px'),
-      badgeCircleBg: this.state.scrolled ? 'transparent' : 'radial-gradient(circle at 50% 34%, #14532D, #0B1F16 78%)',
-      badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
-      badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',
-      badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
-      waLabel: (this.state.vw || 1280) < 860 ? 'BOOK' : 'WHATSAPP',
-      whatsapp: wa, waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent('Hello Ecosophy, I would like to book the ' + svc.name + '.'),
+    return Object.assign(nav, {
+      found: true, missingShow: 'none', ctaShow: 'flex', durationShow: 'block',
+      waHref: waBase + '?text=' + encodeURIComponent('Hello Ecosophy, I would like to ask about the ' + svc.name + '.'),
       nameUpper: svc.name.toUpperCase(), catUpper: svc.cat.toUpperCase(), catHref: '/services',
-      kicker: t.kicker, intro: svc.long, durationLong: durLong, roomLabel: t.room,
-      rating, reviewCountLabel: count + ' GUEST REVIEWS',
-      heroSlot: 'det-' + svc.slug + '-hero', heroImg: svc.img || IMG[t.img][0], heroCredit: IMG[t.img][1], heroChref: IMG[t.img][2],
-      overviewHeading: t.heading, overviewBody: svc.long + ' ' + (svc.type === 'pkg' ? 'Both stages run back to back in the same private suite.' : 'Your therapist stays with you for the whole session.'),
-      steps: t.steps.map((s, i) => ({ no: '0' + (i + 1), name: s[0], time: s[1], desc: s[2] })),
-      includes: t.includes.map(x => ({ t: x })),
-      notes: [
-        { k: 'THERAPIST', v: 'Female therapist, Balinese-trained' },
-        { k: 'ARRIVE', v: '15 minutes early for tea and a quick consultation' },
-        { k: 'DURATION', v: durLong + ' in the room' },
-        { k: 'CANCELLATION', v: 'Free up to 4 hours before your slot' },
-      ],
-      benefits: t.benefits.map(b => ({ t: b[0], d: b[1] })),
-      gallery, galleryHeading: t.galleryHeading, galleryNote: t.galleryNote,
+      kicker: C.kicker, intro: svc.long, durationLong: durLong, roomLabel: C.room,
+      price: '', priceShow: 'none',
+      priceUnit: svc.type === 'pkg' ? 'PACKAGE' : / \d+ Sessions$/.test(svc.name) ? 'COURSE' : 'SESSION',
+      heroSlot: 'det-' + svc.slug + '-hero', heroImg: svc.img,
+      overviewHeading: C.heading, overviewBody: svc.long,
+      stepsShow: C.steps.length ? 'flex' : 'none', stepsHeading: C.stepsHeading,
+      steps: C.steps.map(s => Object.assign({}, s, { linkShow: s.href ? 'inline-block' : 'none' })),
+      includes: C.includes.map(x => ({ t: x })),
+      notes,
+      benefits: C.benefits.map(b => ({ t: b[0], d: b[1] })),
+      gallery, galleryHeading: C.galleryHeading, galleryNote: C.galleryNote,
       lightboxOpen: !!lb, lightbox: lb || {}, closeLightbox: () => this.setState({ lb: null }),
-      days, times, name: this.state.name, phone: this.state.phone,
       bookingLine: svc.name + ' · ' + durLong,
+      days: dayVals, times, noTimesShow: slots.length && slots.every(s => s.past) ? 'block' : 'none',
+      name: this.state.name, phone: this.state.phone,
       setName: e => this.setState({ name: e.target.value }),
       setPhone: e => this.setState({ phone: e.target.value }),
-      summary: this.state.time ? chosenDay.label + ' at ' + this.state.time : 'Select a day and time to continue',
-      errorMsg: this.state.error,
-      submit: () => ready ? this.setState({ booked: true, error: '' })
-        : this.setState({ error: 'Please choose a time and add your name and mobile number.' }),
-      notBooked: !this.state.booked, booked: this.state.booked,
-      confirmLine: svc.name + ' · ' + chosenDay.label + (this.state.time ? ' at ' + this.state.time : ''),
-      reset: () => this.setState({ booked: false, time: null, name: '', phone: '' }),
-      ratingHeading: rating + ' OUT OF 5', ratingSub: 'Based on ' + count + ' reviews for this treatment',
-      ratingBars: [
-        { stars: '5 ★', pct: '92%', count: Math.round(count * 0.92) },
-        { stars: '4 ★', pct: '6%', count: Math.round(count * 0.06) },
-        { stars: '3 ★', pct: '2%', count: Math.round(count * 0.015) },
-        { stars: '2 ★', pct: '1%', count: Math.max(0, Math.round(count * 0.005)) },
-        { stars: '1 ★', pct: '0%', count: 0 },
-      ],
-      reviews: t.reviews.map(r => ({ text: r[0], name: r[1], when: r[2] })),
-      // Types with no reviews written (waxing, threading, make-up) hide the
-      // section and the hero rating instead of showing invented ones.
-      reviewsShow: t.reviews.length ? 'block' : 'none',
+      touchPhone: () => this.setState({ phoneTouched: true }),
+      nameErr, phoneErr, timeErr,
+      nameInvalid: nameErr ? 'true' : 'false', phoneInvalid: phoneErr ? 'true' : 'false',
+      nameBorder: nameErr ? '#B4523E' : '#DED4BD', phoneBorder: phoneErr ? '#B4523E' : '#DED4BD',
+      notReady: ready ? 'false' : 'true', submitOpacity: ready ? 1 : 0.55,
+      summary: chosen ? days[dayIx].label + ' at ' + chosen.label + ' (Dubai time)' : 'Choose a day and a time to continue',
+      // Checked again at the moment of sending: a time that passed while the
+      // form sat open is refused here, not sent.
+      submit: e => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!ready) { this.setState({ tried: true }); return; }
+        const href = B.waHref(SIDE, wa, request());
+        window.open(href, '_blank', 'noopener');
+        this.setState({ sent: true, sentHref: href, tried: false });
+      },
+      notSent: !this.state.sent, sent: this.state.sent, sentHref: this.state.sentHref,
+      confirmLine: svc.name + ' · ' + days[dayIx].label + (chosen ? ' at ' + chosen.label : ''),
+      reset: () => this.setState({ sent: false }),
       faqs, related,
-    };
+    });
   }
 }
 </script>

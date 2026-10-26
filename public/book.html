@@ -506,10 +506,7 @@ img { display:block; }
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
-          <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
-          <span style="padding:6px 11px; color:#E4C778;">AR</span>
-        </div>
+        <!-- The EN/AR selector is removed until the site has Arabic content: it used to change nothing. -->
         <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:10px 18px; font-size:11px; letter-spacing:2px; font-weight:600; white-space:nowrap;">{{ waLabel }}</a>
       </div>
     </div>
@@ -563,31 +560,34 @@ img { display:block; }
     <div data-garch="50,21" style="background:#0B1F16; overflow:hidden; display:flex; flex-direction:column;">
     <div style="max-width:780px; margin:0 auto; padding:clamp(60px,9vw,120px) clamp(20px,3vw,44px) clamp(80px,11vw,150px);">
       <div style="border:1px solid rgba(201,168,96,.3); border-radius:22px; padding:clamp(24px,4vw,42px); background:rgba(11,31,22,.7);">
+        <form onSubmit="{{ submit }}" sc-camel-no-validate="true">
         <div class="bk-eyebrow">REQUEST A BOOKING</div>
         <div style="font-family:'Italiana','Prata',serif; font-size:clamp(24px,3.4vw,40px); color:#F4EFE3; margin-top:8px;">{{ headline }}</div>
-        <div style="margin-top:26px;"><span class="bk-label">RITUAL</span>
+        <label style="display:block; margin-top:26px;"><span class="bk-label">TREATMENT</span>
           <select value="{{ ritual }}" onChange="{{ setRitual }}" class="bk-field">
-            <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.v }}</option></sc-for>
+            <sc-for list="{{ ritualOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
           </select>
+        </label>
+        <div style="font-size:11.5px; color:#8FA091; margin-top:8px; min-height:14px;">{{ durationNote }}</div>
+        <div class="bk-grid" style="margin-top:18px;">
+          <label style="display:block;"><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
+            <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}" disabled="{{ d.disabled }}">{{ d.t }}</option></sc-for>
+          </select></label>
+          <label style="display:block;"><span class="bk-label">PREFERRED TIME (DUBAI)</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
+            <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}" disabled="{{ t.disabled }}">{{ t.t }}</option></sc-for>
+          </select></label>
         </div>
         <div class="bk-grid" style="margin-top:18px;">
-          <div><span class="bk-label">DAY</span><select value="{{ day }}" onChange="{{ setDay }}" class="bk-field">
-            <sc-for list="{{ dayOptions }}" as="d" hint-placeholder-count="5"><option value="{{ d.v }}">{{ d.v }}</option></sc-for>
-          </select></div>
-          <div><span class="bk-label">TIME</span><select value="{{ time }}" onChange="{{ setTime }}" class="bk-field">
-            <sc-for list="{{ timeOptions }}" as="t" hint-placeholder-count="5"><option value="{{ t.v }}">{{ t.v }}</option></sc-for>
-          </select></div>
+          <label style="display:block;"><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" sc-camel-auto-complete="name" placeholder="Your name" class="bk-field"></label>
+          <label style="display:block;"><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" type="tel" sc-camel-input-mode="tel" sc-camel-auto-complete="tel" placeholder="050 123 4567 or +44 7700 900123" class="bk-field"></label>
         </div>
-        <div class="bk-grid" style="margin-top:18px;">
-          <div><span class="bk-label">NAME</span><input value="{{ name }}" onInput="{{ setName }}" placeholder="Your name" class="bk-field"></div>
-          <div><span class="bk-label">PHONE</span><input value="{{ phone }}" onInput="{{ setPhone }}" placeholder="05x xxx xxxx" class="bk-field"></div>
-        </div>
-        <div style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">Please choose a ritual and add your name.</div>
-        <div onClick="{{ submit }}" style="cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</div>
-        <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is charged here.</div>
+        <div role="alert" style="display:{{ errShow }}; font-size:11.5px; color:#E0A176; margin-top:16px;">{{ errMsg }}</div>
+        <button type="submit" aria-disabled="{{ notReady }}" style="display:block; width:100%; border:none; font-family:inherit; opacity:{{ submitOpacity }}; cursor:pointer; margin-top:24px; text-align:center; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.6px; font-weight:600;">{{ submitLabel }}</button>
+        <div style="font-size:11.5px; color:#8FA091; margin-top:14px; text-align:center;">Opens WhatsApp with your request. Nothing is booked or charged until we confirm the time with you there.</div>
+        </form>
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-top:34px; font-size:11.5px; color:#9FB0A0; letter-spacing:1.4px;">
-        <div>DAILY · 10:00 – 22:00</div><div>AJMAN, UAE</div>
+        <div>{{ hoursLine }}</div><div>AJMAN, UAE</div>
         <a href="{{ waHref }}" style="color:#E4C778;">OR MESSAGE US DIRECTLY</a>
       </div>
     </div>
@@ -630,63 +630,81 @@ img { display:block; }
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+971 58 548 0899&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
   state = { vw: typeof window !== 'undefined' ? window.innerWidth : 1280, scrolled: false, menuOpen: false,
-    ritual: '', day: '', time: '', name: '', phone: '', error: false };
+    ritual: '', day: '', time: '', name: '', phone: '', tried: false, tick: 0 };
   componentDidMount() {
     this._navResize = () => this.setState({ vw: window.innerWidth, menuOpen: false });
     this._navScroll = () => { const past = (window.scrollY || 0) > 90; if (past !== this.state.scrolled) this.setState({ scrolled: past }); };
     window.addEventListener('resize', this._navResize);
     window.addEventListener('scroll', this._navScroll, { passive: true });
     this._navScroll();
+    // Re-render once a minute so times that pass while the form is open are
+    // disabled without a reload.
+    this._clock = setInterval(() => this.setState(s => ({ tick: s.tick + 1 })), 60000);
   }
-  cats() {
-    return window.ECO.menuCats('her');
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._navResize);
+    window.removeEventListener('scroll', this._navScroll);
+    clearInterval(this._clock);
   }
   renderVals() {
+    const E = window.ECO, B = E.booking, SIDE = 'her';
     const wa = (this.props.whatsapp ?? '+971 58 548 0899');
     const vw = this.state.vw || 1280;
-    // Ritual list comes from the same cats() the menu and services pages use.
-    const rituals = [{ v: 'Choose a ritual' }];
-    this.cats().forEach(c => c.items.forEach(it => rituals.push({ v: it.name })));
-    const days = [{ v: 'Choose a day' }];
-    const fmt = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(); d.setDate(d.getDate() + i);
-      days.push({ v: fmt[d.getDay()] + ' ' + d.getDate() + ' ' + mon[d.getMonth()] });
-    }
-    const times = [{ v: 'Choose a time' }];
-    for (let h = 10; h <= 21; h++) times.push({ v: (h < 10 ? '0' : '') + h + ':00' });
-    const ready = this.state.ritual && this.state.ritual.indexOf('Choose') !== 0 && this.state.name.trim();
+    // The treatment list, names and durations all come from catalog.js, the
+    // same source as the menu and the detail pages. Chosen by slug, so a
+    // renamed treatment stays selected.
+    const svcs = E.flat(SIDE);
+    const svc = svcs.find(s => s.slug === this.state.ritual) || null;
+    const ritualOptions = [{ v: '', t: 'Choose a treatment' }].concat(svcs.map(s => ({ v: s.slug, t: s.name })));
+    // Days and times in Dubai. A request, not a reservation: there is no live
+    // diary, so nothing is shown as "reserved"; times already past are
+    // disabled, and the centre confirms the time on WhatsApp.
+    const days = B.days(14);
+    const dur = svc ? svc.duration : '';
+    const todayOpen = B.slots(SIDE, 0, dur).some(s => !s.past);
+    const dayIx = this.state.day === '' ? -1 : Number(this.state.day);
+    const slots = dayIx >= 0 ? B.slots(SIDE, dayIx, dur) : [];
+    const chosen = slots.find(s => s.label === this.state.time && !s.past) || null;
+    const dayOptions = [{ v: '', t: 'Choose a day', disabled: false }].concat(days.map(d => ({
+      v: String(d.offset), t: d.offset === 0 && !todayOpen ? d.label + ' (no times left)' : d.label, disabled: d.offset === 0 && !todayOpen })));
+    const timeOptions = [{ v: '', t: dayIx < 0 ? 'Choose a day first' : 'Choose a time', disabled: false }].concat(slots.map(s => ({
+      v: s.label, t: s.past ? s.label + ' (passed)' : s.label, disabled: s.past })));
+    const phone = B.phone(this.state.phone);
+    const errs = [];
+    if (!svc) errs.push('a treatment');
+    if (dayIx < 0 || !chosen) errs.push(this.state.time && dayIx >= 0 && !chosen ? 'a time that has not passed' : 'a day and time');
+    if (!this.state.name.trim()) errs.push('your name');
+    if (!phone) errs.push(this.state.phone.trim() ? 'a valid phone number (e.g. 050 123 4567 or +44 7700 900123)' : 'your phone number');
+    const ready = !errs.length;
+    const errMsg = 'Please add ' + (errs.length > 1 ? errs.slice(0, -1).join(', ') + ' and ' + errs[errs.length - 1] : errs[0] || '') + '.';
     return {
       headline: 'Tell us what you would like, and when.',
-      ritualOptions: rituals, dayOptions: days, timeOptions: times,
-      ritual: this.state.ritual, day: this.state.day, time: this.state.time,
+      ritualOptions, dayOptions, timeOptions,
+      ritual: this.state.ritual, day: this.state.day, time: chosen ? chosen.label : '',
       name: this.state.name, phone: this.state.phone,
-      setRitual: (e) => this.setState({ ritual: e.target.value, error: false }),
-      setDay: (e) => this.setState({ day: e.target.value }),
+      setRitual: (e) => this.setState({ ritual: e.target.value, time: '' }),
+      setDay: (e) => this.setState({ day: e.target.value, time: '' }),
       setTime: (e) => this.setState({ time: e.target.value }),
-      setName: (e) => this.setState({ name: e.target.value, error: false }),
+      setName: (e) => this.setState({ name: e.target.value }),
       setPhone: (e) => this.setState({ phone: e.target.value }),
-      errShow: this.state.error ? 'block' : 'none',
-      submitLabel: ready ? 'SEND REQUEST ON WHATSAPP' : 'REQUEST A BOOKING',
-      submit: () => {
-        if (!ready) { this.setState({ error: true }); return; }
-        const lines = [
-          'Booking request — ' + 'Ecosophy Beauty Center & SPA',
-          'Ritual: ' + this.state.ritual,
-          'When: ' + (this.state.day || 'any day') + ' · ' + (this.state.time || 'any time'),
-          'Name: ' + this.state.name,
-          'Phone: ' + (this.state.phone || '-'),
-        ];
-        const n = wa.replace(/[^0-9]/g, '');
-        window.open('https://wa.me/' + n + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+      errShow: this.state.tried && !ready ? 'block' : 'none', errMsg,
+      hoursLine: E.hours[SIDE].label.toUpperCase(),
+      durationNote: svc ? (svc.duration ? 'Takes ' + E.durationLabel(svc.duration).toLowerCase() + '.' : 'Duration by request: we will confirm how long to allow.') : '',
+      submitOpacity: ready ? 1 : 0.6, notReady: ready ? 'false' : 'true',
+      submitLabel: 'SEND REQUEST ON WHATSAPP',
+      // Checked again at the moment of sending, so a time that passed while
+      // the form sat open is refused rather than sent.
+      submit: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!ready) { this.setState({ tried: true }); return; }
+        window.open(B.waHref(SIDE, wa, { service: svc.name, duration: svc.duration, price: svc.price,
+          day: days[dayIx].label, time: chosen.label, name: this.state.name.trim(), phone,
+          note: svc.duration ? '' : 'Please confirm how long to allow.' }), '_blank', 'noopener');
       },
       navGap: vw < 860 ? '12px' : 'clamp(8px,0.85vw,13px)',
       navShow: vw < 1280 ? 'none' : 'inline',
       burgerShow: vw < 1280 ? 'flex' : 'none',
       menuShow: this.state.menuOpen && vw < 1280 ? 'flex' : 'none',
-      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
-      langShow: vw < 860 ? 'none' : 'flex',
       badgeSlotW: this.state.scrolled ? (vw < 860 ? '150px' : '190px') : (vw < 860 ? '54px' : '78px'),
       // The header badge, identical to the two home pages: a medallion at rest
       // that collapses into a compact row once the page moves, so the bar reads
@@ -704,8 +722,9 @@ class Component extends DCLogic {
       badgeCircleBorder: this.state.scrolled ? 'none' : '1px solid rgba(201,168,96,.55)',
       badgeCircleShadow: this.state.scrolled ? 'none' : '0 18px 34px -16px rgba(0,0,0,.9), inset 0 0 0 4px rgba(11,31,22,.9)',
       badgeSubShow: (this.state.scrolled || (this.state.vw || 1280) < 1520) ? 'none' : 'block',  // the subtitle widens the badge; drop it on narrower desktops so the links keep their clearance
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
       waLabel: vw < 860 ? 'BOOK' : 'WHATSAPP',
-      waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''),
+      waHref: 'https://wa.me/' + wa.replace(/[^0-9]/g, ''), whatsapp: wa,
     };
   }
 }

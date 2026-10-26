@@ -20,6 +20,7 @@
 <script src="/vendor/react-dom.production.min.js"></script>
 <script src="/vendor/babel.min.js"></script>
 <script src="/edit.js"></script>
+<script src="/catalog.js" charset="utf-8"></script>
 <script src="/support.js"></script>
 <script src="/image-slot.js"></script>
 </head>
@@ -577,10 +578,7 @@ img { display:block; }
       </a>
 
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.45); border-radius:20px; overflow:hidden; font-size:var(--fs-lg); letter-spacing:1.6px;">
-          <span style="padding:6px 11px; background:#E4C778; color:#20180A;">EN</span>
-          <span style="padding:6px 11px; color:#E4C778;">AR</span>
-        </div>
+        <!-- The EN/AR selector is removed until the site has Arabic content: it used to change nothing. -->
         <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:22px; padding:10px 18px; font-size:11px; letter-spacing:2px; font-weight:600; white-space:nowrap;">{{ waLabel }}</a>
       </div>
     </div>
@@ -694,10 +692,6 @@ img { display:block; }
             <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           </div>
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.45) 0%, rgba(11,31,22,0) 36%, rgba(11,31,22,.92) 100%);"></div>
-          <div style="pointer-events:none; position:absolute; top:11px; left:11px; display:flex; align-items:center; gap:5px; background:rgba(11,31,22,.55); border-radius:12px; padding:5px 10px;">
-            <span style="width:0; height:0; border-left:6px solid #EBD9A6; border-top:4px solid transparent; border-bottom:4px solid transparent;"></span>
-            <span style="font-size:var(--fs-xxs); letter-spacing:1.2px; color:#EBD9A6;">{{ r.length }}</span>
-          </div>
           <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
             <div style="font-size:var(--fs-xxs); letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
             <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
@@ -942,25 +936,25 @@ class Component extends DCLogic {
     const rJacuzzi     = L('uploads/eco-her-jacuzzi-1.jpg');
     const rSauna       = L('uploads/eco-her-sauna.jpg');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: rBathRoyal,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-bath', pic: rBathRoyal,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', length: '0:16', pic: rBathClassic,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', svc: 'classic-moroccan-bath', pic: rBathClassic,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial', length: '0:18', pic: rHydra,
+      { type: 'FACIALS', title: 'HydraFacial', svc: 'basic-hydrafacial', pic: rHydra,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', length: '0:29', pic: rSignature,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', svc: 'deep-cleansing-facial', pic: rSignature,
         caption: 'Our signature facial with a 60-minute Balinese massage.', cta: 'BOOK A FACIAL' },
-      { type: 'MASSAGE', title: 'Balinese Massage', length: '0:31', pic: rBalinese,
-        caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
-      { type: 'MASSAGE', title: 'Hot Stone Massage', length: '0:26', pic: rHotStone,
-        caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', length: '0:15', pic: rManicure,
+      { type: 'BODY REJUVENATING', title: 'Balinese Massage', svc: 'balinese-relaxing-massage', pic: rBalinese,
+        caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A SESSION' },
+      { type: 'BODY REJUVENATING', title: 'Hot Stone Massage', svc: 'hot-stone-massage', pic: rHotStone,
+        caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A SESSION' },
+      { type: 'NAILS & BROWS', title: 'BIAB Builder Manicure', svc: 'biab-manicure', pic: rManicure,
         caption: 'Long-lasting strength with a natural finish, by our top masters.', cta: 'BOOK NAILS' },
-      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', length: '0:14', pic: rBrow,
+      { type: 'NAILS & BROWS', title: 'Top Brow Master Shaping', svc: 'eyebrow-modelling', pic: rBrow,
         caption: 'Shape and tint by our Top Brow Master.', cta: 'BOOK BROWS' },
-      { type: 'THE SPA', title: 'Jacuzzi Therapy', length: '0:22', pic: rJacuzzi,
+      { type: 'THE SPA', title: 'Jacuzzi Therapy', svc: 'jacuzzi-massage', pic: rJacuzzi,
         caption: 'Warm hydrotherapy that soothes muscles and relaxes the whole body.', cta: 'BOOK THE SPA' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', length: '0:19', pic: rSauna,
+      { type: 'THE SPA', title: 'Infrared Sauna Session', svc: 'infrared-sauna', pic: rSauna,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
   }
@@ -991,13 +985,14 @@ class Component extends DCLogic {
       // same image.
       gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
         slot: 'her-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
-        title: it.title, length: it.length, type: it.type,
+        title: (window.ECO.find('her', it.svc) || { svc: { name: it.title } }).svc.name, type: it.type,
         open: () => this.setState({ gIdx: i, gProgress: 0 }),
       }))),
-      gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
+      gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' PHOTO' : ' PHOTOS'),
       gOpen: gi != null,
       gCurrent: cur && { slot: 'her-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
-        title: cur.title, caption: cur.caption, cta: cur.cta, type: cur.type },
+        title: (window.ECO.find('her', cur.svc) || { svc: { name: cur.title } }).svc.name,
+        caption: (window.ECO.find('her', cur.svc) || { svc: { desc: cur.caption } }).svc.desc, cta: cur.cta, type: cur.type },
       gBars: list.map((_, i) => ({ w: gi != null && i < gi ? '100%' : (i === gi ? Math.round((this.state.gProgress || 0) * 100) + '%' : '0%') })),
       gClose: () => this.setState({ gIdx: null, gProgress: 0 }),
       gNext: () => this.setState(s => ({ gIdx: s.gIdx + 1 < list.length ? s.gIdx + 1 : 0, gProgress: 0 })),

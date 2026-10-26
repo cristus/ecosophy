@@ -410,10 +410,7 @@ a:hover { color:#B98F3E; }
         </span>
       </a>
       <div style="display:flex; align-items:center; justify-content:flex-end; gap:12px; white-space:nowrap;">
-        <div style="display:{{ langShow }}; align-items:center; border:1px solid rgba(201,168,96,.4); border-radius:16px; overflow:hidden;">
-          <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
-          <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:6px 12px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
-        </div>
+        <!-- The EN/AR selector is removed until the site has Arabic content: it used to change nothing. -->
         <a href="{{ waHref }}" style="background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:20px; padding:{{ waPad }}; font-size:{{ waSize }}; letter-spacing:2px; font-weight:600;">{{ waLabel }}</a>
       </div>
     </div>
@@ -424,10 +421,7 @@ a:hover { color:#B98F3E; }
       <a href="/gent-gallery" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">GALLERY</a>
       <a href="/gent-book" onClick="{{ closeMenu }}" style="padding:13px 2px; font-size:12px; letter-spacing:2px; color:#E7EDE2;">BOOK</a>
       <a href="/for-her" style="padding:13px 2px; font-size:11px; letter-spacing:2px; color:#9FB0A0;">⇄ FOR HER</a>
-      <div style="display:flex; align-items:center; gap:0; margin-top:10px; border:1px solid rgba(201,168,96,.4); border-radius:16px; overflow:hidden; align-self:flex-start;">
-        <button onClick="{{ setEn }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ enBg }}; color:{{ enInk }};">EN</button>
-        <button onClick="{{ setAr }}" style="border:none; cursor:pointer; padding:7px 16px; font-family:'Manrope',sans-serif; font-size:var(--fs-md); letter-spacing:1.6px; background:{{ arBg }}; color:{{ arInk }};">AR</button>
-      </div>
+      <!-- The EN/AR selector is removed until the site has Arabic content: it used to change nothing. -->
     </div>
   </div>
 
@@ -650,18 +644,18 @@ a:hover { color:#B98F3E; }
               <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">CHOOSE A DAY</div>
               <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-top:12px;">
                 <sc-for list="{{ ddDays }}" as="d" hint-placeholder-count="7">
-                  <div onClick="{{ d.pick }}" style="cursor:pointer; flex:none; width:60px; text-align:center; padding:11px 0; border-radius:14px; background:{{ d.bg }}; color:{{ d.color }}; border:1px solid {{ d.border }};">
+                  <button type="button" onClick="{{ d.pick }}" style="font-family:inherit; cursor:pointer; flex:none; width:60px; text-align:center; padding:11px 0; border-radius:14px; background:{{ d.bg }}; color:{{ d.color }}; border:1px solid {{ d.border }};">
                     <div style="font-size:var(--fs-xs); letter-spacing:1.5px; opacity:.75;">{{ d.dow }}</div>
                     <div style="font-family:'Prata',serif; font-size:18px; margin-top:2px;">{{ d.num }}</div>
                     <div style="font-size:var(--fs-xxs); letter-spacing:1px; opacity:.7;">{{ d.mon }}</div>
-                  </div>
+                  </button>
                 </sc-for>
               </div>
 
               <div style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A; margin-top:24px;">CHOOSE A TIME</div>
               <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
                 <sc-for list="{{ ddTimes }}" as="t" hint-placeholder-count="8">
-                  <div onClick="{{ t.pick }}" style="cursor:{{ t.cursor }}; font-size:12.5px; padding:10px 17px; border-radius:20px; background:{{ t.bg }}; color:{{ t.color }}; border:1px solid {{ t.border }}; text-decoration:{{ t.deco }};">{{ t.label }}</div>
+                  <button type="button" onClick="{{ t.pick }}" disabled="{{ t.taken }}" style="font-family:inherit; cursor:{{ t.cursor }}; font-size:12.5px; padding:10px 17px; border-radius:20px; background:{{ t.bg }}; color:{{ t.color }}; border:1px solid {{ t.border }};">{{ t.label }}</button>
                 </sc-for>
               </div>
 
@@ -710,7 +704,7 @@ a:hover { color:#B98F3E; }
                 <span style="font-size:var(--fs-md); letter-spacing:2px; color:#9A917A;">GUEST</span>
                 <span style="font-size:12.5px; color:#3A4136; text-align:right;">{{ ddGuest }}</span>
               </div>
-              <div onClick="{{ ddSubmit }}" style="cursor:pointer; text-align:center; background:#14532D; color:#F4EFE3; border-radius:26px; padding:15px; font-size:11px; letter-spacing:2.5px; font-weight:600; margin-top:18px;">{{ ddSubmitLabel }}</div>
+              <button type="button" onClick="{{ ddSubmit }}" style="font-family:inherit; border:none; width:100%; cursor:pointer; text-align:center; background:#14532D; color:#F4EFE3; border-radius:26px; padding:15px; font-size:11px; letter-spacing:2.5px; font-weight:600; margin-top:18px;">{{ ddSubmitLabel }}</button>
               <sc-if value="{{ ddError }}" hint-placeholder-val="{{ false }}">
                 <div style="font-size:12px; color:#B0592F; line-height:1.6; margin-top:12px;">{{ ddErrorMsg }}</div>
               </sc-if>
@@ -725,7 +719,7 @@ a:hover { color:#B98F3E; }
           <div style="font-family:'Italiana','Prata',serif; font-size:24px; color:#F1E7CC; margin-top:8px;">{{ crumbSvc }}</div>
           <div style="font-size:13.5px; color:#D7DECF; line-height:1.9; margin-top:10px;">{{ ddWhen }} · {{ ddTotal }} · {{ ddGuest }}</div>
           <div style="font-size:12.5px; color:#9FB0A0; margin-top:10px; max-width:520px;">Your request opened in WhatsApp — send the message and our team will confirm your appointment.</div>
-          <div onClick="{{ ddReset }}" style="cursor:pointer; display:inline-block; font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860; margin-top:20px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">BACK TO THE MENU</div>
+          <button type="button" onClick="{{ ddReset }}" style="font-family:inherit; background:none; border:none; border-bottom:1px solid rgba(201,168,96,.5); cursor:pointer; display:inline-block; font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860; margin-top:20px; border-bottom:1px solid rgba(201,168,96,.5); padding-bottom:3px;">BACK TO THE MENU</button>
         </div>
       </sc-if>
     </div>
@@ -829,10 +823,6 @@ a:hover { color:#B98F3E; }
             <image-slot id="{{ r.slot }}" sc-camel-src="{{ r.img }}" credit="" credit-href="" shape="rect" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
           </div>
           <div style="pointer-events:none; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,31,22,.45) 0%, rgba(11,31,22,0) 36%, rgba(11,31,22,.92) 100%);"></div>
-          <div style="pointer-events:none; position:absolute; top:11px; left:11px; display:flex; align-items:center; gap:5px; background:rgba(11,31,22,.55); border-radius:12px; padding:5px 10px;">
-            <span style="width:0; height:0; border-left:6px solid #EBD9A6; border-top:4px solid transparent; border-bottom:4px solid transparent;"></span>
-            <span style="font-size:var(--fs-xxs); letter-spacing:1.2px; color:#EBD9A6;">{{ r.length }}</span>
-          </div>
           <div style="pointer-events:none; position:absolute; left:14px; right:14px; bottom:42px;">
             <div style="font-size:var(--fs-xxs); letter-spacing:1.6px; color:#9FB0A0;">{{ r.type }}</div>
             <div style="font-family:'Prata',serif; font-size:15px; color:#F4EFE3; line-height:1.25; margin-top:5px;">{{ r.title }}</div>
@@ -874,7 +864,10 @@ a:hover { color:#B98F3E; }
     </div>
   </sc-if>
 
-  <div id="reviews" data-screen-label="Testimonials" style="position:relative; background:#EDE6D5; overflow:hidden; padding:clamp(110px,13vw,190px) 20px;">
+  <!-- Hidden for launch: the rating, the review count, "verified on Google" and the
+       quotes here are placeholder copy, not guest reviews. Restore it (drop the
+       display:none) once it carries verified reviews with a working review link. -->
+  <div id="reviews" data-screen-label="Testimonials" style="display:none; position:relative; background:#EDE6D5; overflow:hidden; padding:clamp(110px,13vw,190px) 20px;">
     <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; right:4%; top:46%; transform:translateY(-50%); width:min(17vw,180px); opacity:.055;">
     <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; left:-3%; bottom:-8%; width:min(24vw,260px); opacity:.06;">
     <img src="assets/mark-man-green.png" alt="" style="pointer-events:none; position:absolute; left:8%; top:8%; width:min(10vw,110px); opacity:.05;">
@@ -997,16 +990,16 @@ a:hover { color:#B98F3E; }
               <div style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Prata',serif; font-size:12px; color:#C9A860;">02</span><span style="font-size:var(--fs-md); letter-spacing:3px; color:#9FB0A0;">PICK A DATE</span></div>
               <div style="margin-top:12px; border:1px solid rgba(244,239,227,.2); border-radius:16px; padding:16px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                  <div onClick="{{ prevMonth }}" style="cursor:{{ prevCursor }}; color:{{ prevColor }}; font-size:14px; padding:2px 10px; user-select:none;">‹</div>
+                  <button type="button" aria-label="Previous month" onClick="{{ prevMonth }}" style="font-family:inherit; background:none; border:none; cursor:{{ prevCursor }}; color:{{ prevColor }}; font-size:14px; padding:2px 10px; user-select:none;">‹</button>
                   <div style="font-family:'Italiana','Prata',serif; font-size:15px; letter-spacing:.14em; color:#F1E7CC;">{{ monthLabel }}</div>
-                  <div onClick="{{ nextMonth }}" style="cursor:pointer; color:#C9A860; font-size:14px; padding:2px 10px; user-select:none;">›</div>
+                  <button type="button" aria-label="Next month" onClick="{{ nextMonth }}" style="font-family:inherit; background:none; border:none; cursor:pointer; color:#C9A860; font-size:14px; padding:2px 10px; user-select:none;">›</button>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:14px;">
                   <sc-for list="{{ dowNames }}" as="d" hint-placeholder-count="7">
                     <div style="text-align:center; font-size:var(--fs-xxs); letter-spacing:1.5px; color:#7E8F81; padding-bottom:4px;">{{ d }}</div>
                   </sc-for>
                   <sc-for list="{{ calCells }}" as="c" hint-placeholder-count="35">
-                    <div onClick="{{ c.pick }}" style="cursor:{{ c.cursor }}; text-align:center; font-family:'Prata',serif; font-size:13px; line-height:1; padding:9px 0; border-radius:9px; border:1px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.color }}; transition:all .2s;">{{ c.label }}</div>
+                    <button type="button" onClick="{{ c.pick }}" disabled="{{ c.past }}" style="font-family:inherit; cursor:{{ c.cursor }}; text-align:center; font-family:'Prata',serif; font-size:13px; line-height:1; padding:9px 0; border-radius:9px; border:1px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.color }}; transition:all .2s;">{{ c.label }}</button>
                   </sc-for>
                 </div>
               </div>
@@ -1030,8 +1023,8 @@ a:hover { color:#B98F3E; }
               <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
                 <input value="{{ name }}" onChange="{{ setName }}" placeholder="Your name" style="background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:14px 20px; font-size:13px; color:#F1E7CC; outline:none;">
                 <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="Phone number" style="background:rgba(244,239,227,.08); border:1px solid rgba(244,239,227,.28); border-radius:26px; padding:14px 20px; font-size:13px; color:#F1E7CC; outline:none;">
-                <sc-if value="{{ formError }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px; color:#E0A176; padding:0 8px;">Please choose a ritual, a day, a time, and add your name and phone number.</div></sc-if>
-                <div onClick="{{ submitBooking }}" style="cursor:pointer; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.5px; text-align:center; font-weight:600;" style-hover="filter:brightness(1.06);">{{ submitLabel }}</div>
+                <sc-if value="{{ formError }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px; color:#E0A176; padding:0 8px;">Please choose a ritual, a day and a time, and add your name and a valid phone number (e.g. 050 123 4567 or +44 7700 900123).</div></sc-if>
+                <button type="button" onClick="{{ submitBooking }}" style="font-family:inherit; border:none; width:100%; cursor:pointer; background:linear-gradient(90deg,#C9A860,#E8CE8C); color:#20180A; border-radius:26px; padding:15px 20px; font-size:12px; letter-spacing:2.5px; text-align:center; font-weight:600;" style-hover="filter:brightness(1.06);">{{ submitLabel }}</button>
               </div>
             </div>
           </div>
@@ -1075,7 +1068,7 @@ a:hover { color:#B98F3E; }
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">HOURS</div>
-        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 10:00 AM – 10:00 PM</div>
+        <div style="font-size:12.5px; color:#D7DECF; line-height:2.1; margin-top:10px;">Daily · 11:00 AM – Midnight</div>
       </div>
       <div style="min-width:170px;">
         <div style="font-size:var(--fs-lg); letter-spacing:3px; color:#C9A860;">FOR HER</div>
@@ -1106,19 +1099,19 @@ class Component extends DCLogic {
     const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
     const machine = L('uploads/eco-him-machine.jpg');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', length: '0:24', pic: paje,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-hammam', pic: paje,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', length: '0:16', pic: stone,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', svc: 'classic-moroccan-hammam', pic: stone,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial', length: '0:18', pic: hume,
+      { type: 'FACIALS', title: 'HydraFacial', svc: 'hydrafacial-basic', pic: hume,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', length: '0:29', pic: fac,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', svc: 'ecosophy-signature-facial', pic: fac,
         caption: 'Deep cleanse and hydration built for beard-line and city skin.', cta: 'BOOK A FACIAL' },
-      { type: 'MASSAGE', title: 'Balinese Massage', length: '0:31', pic: caishan,
-        caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A MASSAGE' },
-      { type: 'MASSAGE', title: 'Hot Stone Massage', length: '0:26', pic: room,
-        caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A MASSAGE' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', length: '0:19', pic: machine,
+      { type: 'BODY REJUVENATING', title: 'Balinese Massage', svc: 'relaxing-balinese', pic: caishan,
+        caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A SESSION' },
+      { type: 'BODY REJUVENATING', title: 'Hot Stone Massage', svc: 'hot-stone', pic: room,
+        caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A SESSION' },
+      { type: 'THE SPA', title: 'Infrared Sauna Session', svc: 'sauna', pic: machine,
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
     ];
   }
@@ -1149,13 +1142,14 @@ class Component extends DCLogic {
       // same image.
       gReels: [0, 1, 2].flatMap(() => list.map((it, i) => ({
         slot: 'him-reel-' + it.title, img: it.pic[0], credit: it.pic[1], chref: it.pic[2],
-        title: it.title, length: it.length, type: it.type,
+        title: (window.ECO.find('him', it.svc) || { svc: { name: it.title } }).svc.name, type: it.type,
         open: () => this.setState({ gIdx: i, gProgress: 0 }),
       }))),
-      gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' REEL' : ' REELS'),
+      gCounter: (active || 'ALL RITUALS') + ' · ' + list.length + (list.length === 1 ? ' PHOTO' : ' PHOTOS'),
       gOpen: gi != null,
       gCurrent: cur && { slot: 'him-reelbig-' + cur.title, img: cur.pic[0], credit: cur.pic[1], chref: cur.pic[2],
-        title: cur.title, caption: cur.caption, cta: cur.cta, type: cur.type },
+        title: (window.ECO.find('him', cur.svc) || { svc: { name: cur.title } }).svc.name,
+        caption: (window.ECO.find('him', cur.svc) || { svc: { desc: cur.caption } }).svc.desc, cta: cur.cta, type: cur.type },
       gBars: list.map((_, i) => ({ w: gi != null && i < gi ? '100%' : (i === gi ? Math.round((this.state.gProgress || 0) * 100) + '%' : '0%') })),
       gClose: () => this.setState({ gIdx: null, gProgress: 0 }),
       gNext: () => this.setState(s => ({ gIdx: s.gIdx + 1 < list.length ? s.gIdx + 1 : 0, gProgress: 0 })),
@@ -1193,7 +1187,7 @@ class Component extends DCLogic {
     });
     const allServices = [];
     CATS.forEach(c => c.items.forEach((it, i) => allServices.push({
-      name: it.name, catLabel: c.name.toUpperCase(),
+      name: it.name, duration: it.duration, catLabel: c.name.toUpperCase(),
       open: () => { this.setState({ dCat: c.name, dSvc: i, ddOpen: false, ddBooked: false }); toPanel(); },
     })));
     const cat = CATS.find(c => c.name === dCat);
@@ -1263,10 +1257,12 @@ class Component extends DCLogic {
       ],
     };
     const items = cat ? cat.items.map((it, i) => ({
-      ...it, slot: 'dd-' + cat.name + '-' + i,
+      // Keyed by the treatment, not by its position: positions shifted when the
+      // menu was reordered, which left photos pinned to the wrong treatment.
+      ...it, slot: 'gdd-svc-' + it.slug,
       photo: it.img || (CAT_PICS[cat.name] || [])[i % ((CAT_PICS[cat.name] || []).length || 1)] || (cat.pic && cat.pic[0]) || '',
       photoHint: it.name + ' photo',
-      href: '/gent-service?s=' + slugify(it.name),
+      href: '/gent-service?s=' + it.slug,
       durationLabel: it.duration || 'BY REQUEST',
       open: () => { this.setState({ dSvc: i, ddOpen: false, ddBooked: false }); toPanel(); },
     })) : [];
@@ -1277,7 +1273,9 @@ class Component extends DCLogic {
     const DOWS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
     const MONS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
     const kOf = (dt) => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
-    const now = new Date();
+    // Days in Dubai time, whatever the visitor's own time zone.
+    const dnow = window.ECO.booking.now();
+    const now = new Date(dnow.y, dnow.mo, dnow.d);
     const ddDays = [];
     for (let i = 0; i < 12; i++) {
       const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
@@ -1290,10 +1288,13 @@ class Component extends DCLogic {
         pick: () => this.setState({ day: key, ddError: false }),
       });
     }
-    const TIMES = ['10:00','11:30','13:00','14:30','16:00','17:30','19:00','20:30'];
-    const seed = Number((this.state.day || '').slice(-1) || 0);
-    const ddTimes = TIMES.map((label, idx) => {
-      const taken = (idx + seed) % 4 === 1;
+    // A request, not a reservation: no simulated "reserved" slots. Times
+    // come from the opening hours and the treatment's length; times already
+    // past in Dubai are disabled.
+    const ddOffset = this.state.day ? Math.round((new Date(this.state.day + 'T00:00:00') - new Date(kOf(now) + 'T00:00:00')) / 86400000) : 0;
+    const ddSlots = window.ECO.booking.slots('him', ddOffset, detail ? detail.duration : '');
+    const ddTimes = ddSlots.map((sl) => {
+      const label = sl.label, taken = sl.past;
       const on = this.state.time === label && !taken;
       return {
         label, taken,
@@ -1320,9 +1321,11 @@ class Component extends DCLogic {
     }) : [];
     const wa = (this.props.whatsapp ?? '').replace(/[^0-9]/g, '');
     const missing = [];
+    const ddPhoneOk = window.ECO.booking.phone(this.state.phone);
     if (!this.state.day || !chosenTime) missing.push('a day and time');
     if (!this.state.name.trim()) missing.push('your name');
     if (!this.state.phone.trim()) missing.push('a phone number');
+    else if (!ddPhoneOk) missing.push('a valid phone number (e.g. 050 123 4567 or +44 7700 900123)');
     const missingMsg = missing.length === 1 ? 'Please add ' + missing[0] + '.'
       : 'Please add ' + missing.slice(0, -1).join(', ') + ' and ' + missing[missing.length - 1] + '.';
     const ddSubmit = () => {
@@ -1331,7 +1334,7 @@ class Component extends DCLogic {
         'Treatment: ' + detail.name + (detail.price ? ' (' + detail.price + ')' : '')];
       if (extraNames.length) lines.push('Also interested in: ' + extraNames.join(', '));
       lines.push('Date & time: ' + whenText,
-        'Name: ' + this.state.name, 'Phone: ' + this.state.phone);
+        'Name: ' + this.state.name, 'Phone: ' + ddPhoneOk);
       if (wa) window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
       this.setState({ ddBooked: true, ddError: false, ritual: detail.name });
     };
@@ -1343,6 +1346,7 @@ class Component extends DCLogic {
       ddError: !!this.state.ddError && missing.length > 0,
       ddErrorMsg: missingMsg,
       ddBaseDuration: detail ? detail.durationLabel : '',
+      ddTotal: detail ? detail.durationLabel : '',
       ddGuest: this.state.name.trim() ? (this.state.name + (this.state.phone.trim() ? ' · ' + this.state.phone : '')) : 'Add your name and phone',
       ddHasExtras: extraNames.length > 0,
       ddChosenExtras: ddExtras.filter(x => extraNames.indexOf(x.name) >= 0),
@@ -1442,7 +1446,8 @@ class Component extends DCLogic {
     const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
     const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const today = new Date();
+    const tnow = window.ECO.booking.now();
+    const today = new Date(tnow.y, tnow.mo, tnow.d);
     const keyOf = (y,m,d) => y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
     const todayKey = keyOf(today.getFullYear(), today.getMonth(), today.getDate());
     const offset = this.state.monthOffset || 0;
@@ -1457,7 +1462,7 @@ class Component extends DCLogic {
       const past = key < todayKey;
       const on = this.state.day === key;
       calCells.push({
-        label: String(d), key,
+        label: String(d), key, past,
         cursor: past ? 'not-allowed' : 'pointer',
         bg: on ? '#C9A860' : 'transparent',
         border: on ? '#C9A860' : past ? 'transparent' : 'rgba(244,239,227,.18)',
@@ -1467,12 +1472,12 @@ class Component extends DCLogic {
     }
     const dayParts = this.state.day ? this.state.day.split('-').map(Number) : null;
     const pickedDate = dayParts ? new Date(dayParts[0], dayParts[1] - 1, dayParts[2]) : null;
-    const TIMES = ["10:00","11:30","13:00","14:30","16:00","17:30","19:00","20:30"];
-    const takenSeed = (this.state.day || '').slice(-1);
-    const slots = TIMES.map((label, idx) => {
-      const taken = (idx + Number(takenSeed || 0)) % 4 === 1;
-      return { value: label, label: taken ? label + ' — reserved' : label, taken };
-    });
+    // Opening hours and the chosen ritual's length decide the times; past
+    // ones (in Dubai) are disabled. No simulated "reserved" slots.
+    const ritualSvc = this.state.ritual ? window.ECO.flat('him').find(x => x.name === this.state.ritual) : null;
+    const dayOffset = pickedDate ? Math.round((pickedDate - today) / 86400000) : 1;
+    const slots = window.ECO.booking.slots('him', dayOffset, ritualSvc ? ritualSvc.duration : '').map(sl => (
+      { value: sl.label, label: sl.past ? sl.label + ' (passed)' : sl.label, taken: sl.past }));
     const picked = pickedDate ? { dow: DOW[pickedDate.getDay()], num: String(pickedDate.getDate()), mon: MON[pickedDate.getMonth()] } : null;
     const chosen = slots.find(s2 => s2.value === this.state.time);
     const validTime = chosen && !chosen.taken ? chosen.label : null;
@@ -1659,12 +1664,13 @@ class Component extends DCLogic {
       setName: (e) => this.setState({ name: e.target.value, formError: false }),
       setPhone: (e) => this.setState({ phone: e.target.value, formError: false }),
       submitBooking: () => {
-        if (!this.state.name.trim() || !this.state.phone.trim() || !this.state.day || !validTime || !this.state.ritual) return this.setState({ formError: true });
+        const phoneOk = window.ECO.booking.phone(this.state.phone);
+        if (!this.state.name.trim() || !phoneOk || !this.state.day || !validTime || !this.state.ritual) return this.setState({ formError: true });
         const msg = 'Hello Ecosophy Aesthetic Spa Men Care Center, I would like to book:\n\n' +
           'Ritual: ' + this.state.ritual + '\n' +
           'Date & time: ' + slotText + '\n' +
           'Name: ' + this.state.name + '\n' +
-          'Phone: ' + this.state.phone;
+          'Phone: ' + phoneOk;
         window.open('https://wa.me/' + wa.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(msg), '_blank');
         this.setState({ booked: true, formError: false });
       },
