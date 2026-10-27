@@ -12,7 +12,7 @@ export default {
     },
     "classic-manicure": {
      "name": "Classic Manicure",
-     "desc": "Shaping, cuticle care and a hand massage.",
+     "desc": "Shaping, cuticle care and a short hand rejuvenating ritual.",
      "cat": "Nails"
     },
     "classic-smart-russian-manicure-machine": {
@@ -167,7 +167,7 @@ export default {
     },
     "spa-pedicure": {
      "name": "Spa Pedicure",
-     "desc": "A pedicure with scrub, mask and massage.",
+     "desc": "A pedicure with scrub, mask and a foot rejuvenating ritual.",
      "cat": "Nails"
     },
     "ecosophy-signature-pedicure": {
@@ -200,7 +200,7 @@ export default {
      "desc": "A pedicure with a hard gel finish.",
      "cat": "Nails"
     },
-    "foot-reflexology-massage-pedicure-add-on": {
+    "foot-reflexology-rejuvenating-pedicure-add-on": {
      "name": "Foot Reflexology Rejuvenating (Pedicure Add-On)",
      "desc": "Reflexology added to your pedicure.",
      "cat": "Nails"
@@ -895,17 +895,17 @@ export default {
      "desc": "A treatment to even out intimate-area skin tone.",
      "cat": "Aesthetic Dermatology"
     },
-    "relaxing-massage": {
+    "relaxing-body-rejuvenating": {
      "name": "Relaxing Body Rejuvenating",
      "desc": "Light, flowing pressure to unwind the whole body.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "balinese-relaxing-massage": {
+    "balinese-relaxing-body-rejuvenating": {
      "name": "Balinese Relaxing Body Rejuvenating",
      "desc": "Slow oil-based bodywork in the Balinese tradition.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "swedish-massage": {
+    "swedish-body-rejuvenating": {
      "name": "Swedish Body Rejuvenating",
      "desc": "Classic long strokes for circulation and tension relief.",
      "cat": "Body Rejuvenating & Wellness"
@@ -915,7 +915,7 @@ export default {
      "desc": "Firm pressure that works into knots and tight muscle.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "hot-stone-massage": {
+    "hot-stone-body-rejuvenating": {
      "name": "Hot Stone Body Rejuvenating",
      "desc": "Warm basalt stones ease deep muscular tightness.",
      "cat": "Body Rejuvenating & Wellness"
@@ -935,17 +935,17 @@ export default {
      "desc": "Gentle rhythmic work to reduce fluid and puffiness.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "face-lymphatic-massage": {
+    "face-lymphatic-rejuvenating": {
      "name": "Face Lymphatic Rejuvenating",
      "desc": "Lymphatic drainage for a de-puffed, defined face.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "prenatal-massage": {
+    "prenatal-body-rejuvenating": {
      "name": "Prenatal Body Rejuvenating",
      "desc": "Safe, supported body rejuvenating during pregnancy.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "postpartum-massage": {
+    "postpartum-body-rejuvenating": {
      "name": "Postpartum Body Rejuvenating",
      "desc": "Restorative bodywork after birth.",
      "cat": "Body Rejuvenating & Wellness"
@@ -955,17 +955,17 @@ export default {
      "desc": "Deep relaxation on a warm water bed.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "jacuzzi-massage": {
+    "jacuzzi-body-rejuvenating": {
      "name": "Jacuzzi Body Rejuvenating",
      "desc": "Warm hydrotherapy jets on the back and legs.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "head-massage": {
+    "head-rejuvenating": {
      "name": "Head Rejuvenating",
      "desc": "Scalp, neck and shoulder release.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "back-massage": {
+    "back-rejuvenating": {
      "name": "Back Rejuvenating",
      "desc": "Thirty focused minutes on the back.",
      "cat": "Body Rejuvenating & Wellness"
@@ -975,27 +975,27 @@ export default {
      "desc": "Pressure-point work on the feet.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "foot-massage": {
+    "foot-rejuvenating": {
      "name": "Foot Rejuvenating",
      "desc": "Relaxing rejuvenating work for tired feet.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "relaxing-massage-home-service": {
+    "relaxing-body-rejuvenating-home-service": {
      "name": "Relaxing Body Rejuvenating — Home Service",
      "desc": "Relaxing body rejuvenating, at your home.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "lymphatic-drainage-massage-home-service": {
+    "lymphatic-drainage-body-rejuvenating-home-service": {
      "name": "Lymphatic Drainage Body Rejuvenating — Home Service",
      "desc": "Lymphatic drainage, at your home.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "postpartum-massage-home-service": {
+    "postpartum-body-rejuvenating-home-service": {
      "name": "Postpartum Body Rejuvenating — Home Service",
      "desc": "Postpartum body rejuvenating, at your home.",
      "cat": "Body Rejuvenating & Wellness"
     },
-    "endospheres-massage": {
+    "endospheres-body-rejuvenating": {
      "name": "Endospheres Body Rejuvenating",
      "desc": "Compressive microvibration for drainage and tone.",
      "cat": "Slimming & Body Contouring"
@@ -1020,7 +1020,7 @@ export default {
      "desc": "Radiofrequency for firmness and contour.",
      "cat": "Slimming & Body Contouring"
     },
-    "slimming-massage-manual-anti-cellulite": {
+    "slimming-body-rejuvenating-manual-anti-cellulite": {
      "name": "Slimming Body Rejuvenating (Manual Anti-Cellulite)",
      "desc": "Firm manual rejuvenating work for cellulite and contour.",
      "cat": "Slimming & Body Contouring"
@@ -1095,12 +1095,12 @@ export default {
      "desc": "Gentle heat for recovery and circulation.",
      "cat": "SPA & Moroccan Bath"
     },
-    "moroccan-bath-plus-1-hour-balinese-massage": {
+    "moroccan-bath-plus-1-hour-balinese-body-rejuvenating": {
      "name": "Moroccan Bath + 1-Hour Balinese Body Rejuvenating",
      "desc": "Traditional Moroccan bath, then full-body Balinese rejuvenating.",
      "cat": "Ecosophy Signature Packages & Combo Offers"
     },
-    "classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage": {
+    "classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-body-rejuvenating": {
      "name": "Classic Moroccan Bath + 20-Min Infrared Sauna + Relaxing Body Rejuvenating",
      "desc": "Bath, sauna and body rejuvenating in one visit.",
      "cat": "Ecosophy Signature Packages & Combo Offers"
@@ -1171,13 +1171,33 @@ export default {
      "cat": "Ecosophy Signature Packages & Combo Offers"
     }
    },
-   "legacy": {}
+   "legacy": {
+    "foot-reflexology-massage-pedicure-add-on": "foot-reflexology-rejuvenating-pedicure-add-on",
+    "relaxing-massage": "relaxing-body-rejuvenating",
+    "balinese-relaxing-massage": "balinese-relaxing-body-rejuvenating",
+    "swedish-massage": "swedish-body-rejuvenating",
+    "hot-stone-massage": "hot-stone-body-rejuvenating",
+    "face-lymphatic-massage": "face-lymphatic-rejuvenating",
+    "prenatal-massage": "prenatal-body-rejuvenating",
+    "postpartum-massage": "postpartum-body-rejuvenating",
+    "jacuzzi-massage": "jacuzzi-body-rejuvenating",
+    "head-massage": "head-rejuvenating",
+    "back-massage": "back-rejuvenating",
+    "foot-massage": "foot-rejuvenating",
+    "relaxing-massage-home-service": "relaxing-body-rejuvenating-home-service",
+    "lymphatic-drainage-massage-home-service": "lymphatic-drainage-body-rejuvenating-home-service",
+    "postpartum-massage-home-service": "postpartum-body-rejuvenating-home-service",
+    "endospheres-massage": "endospheres-body-rejuvenating",
+    "slimming-massage-manual-anti-cellulite": "slimming-body-rejuvenating-manual-anti-cellulite",
+    "moroccan-bath-plus-1-hour-balinese-massage": "moroccan-bath-plus-1-hour-balinese-body-rejuvenating",
+    "classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-massage": "classic-moroccan-bath-plus-20-min-infrared-sauna-plus-relaxing-body-rejuvenating"
+   }
   },
   "him": {
    "path": "/gent-service",
    "services": {
-    "sport-massage": {
-     "name": "Sport Massage",
+    "sports-body-rejuvenating": {
+     "name": "Sports Body Rejuvenating",
      "desc": "Stretch work, deep tissue and heat therapy in one session.",
      "cat": "Body Wellness"
     },
@@ -1206,27 +1226,27 @@ export default {
      "desc": "Wooden tools contour and stimulate the body.",
      "cat": "Body Wellness"
     },
-    "feet-massage": {
+    "feet-rejuvenating": {
      "name": "Feet Rejuvenating",
      "desc": "Pressure-point work on the feet, felt everywhere.",
      "cat": "Body Wellness"
     },
-    "holistic-massage": {
+    "holistic-body-rejuvenating": {
      "name": "Holistic Body Rejuvenating",
      "desc": "Full-body rejuvenating that works on body and mind together.",
      "cat": "Body Wellness"
     },
-    "neck-shoulder-massage": {
+    "neck-shoulder-rejuvenating": {
      "name": "Neck & Shoulder Rejuvenating",
      "desc": "An hour on the neck, shoulders and upper back.",
      "cat": "Body Wellness"
     },
-    "face-massage": {
+    "face-rejuvenating": {
      "name": "Face Rejuvenating",
      "desc": "Manual rejuvenating work on the face, jaw and scalp.",
      "cat": "Body Wellness"
     },
-    "30-minutes-massage": {
+    "30-minute-body-rejuvenating": {
      "name": "30-Minute Body Rejuvenating",
      "desc": "A short body rejuvenating session on the area that needs it most.",
      "cat": "Body Wellness"
@@ -1236,7 +1256,7 @@ export default {
      "desc": "Therapeutic rejuvenating work for a specific ache or stiffness.",
      "cat": "Body Wellness"
     },
-    "slimming-massage": {
+    "slimming-body-rejuvenating": {
      "name": "Slimming Body Rejuvenating",
      "desc": "Firm, brisk rejuvenating work over the areas that hold fat and fluid.",
      "cat": "Body Wellness"
@@ -1251,17 +1271,17 @@ export default {
      "desc": "Focused work on the abdomen for tone and bloating.",
      "cat": "Body Wellness"
     },
-    "home-service-massage": {
+    "home-service-body-rejuvenating": {
      "name": "Home Service Body Rejuvenating",
      "desc": "A one-hour body rejuvenating session at your home or hotel.",
      "cat": "Body Wellness"
     },
-    "balinese-massage-home-service": {
+    "balinese-body-rejuvenating-home-service": {
      "name": "Balinese Body Rejuvenating — Home Service",
      "desc": "Traditional Balinese body rejuvenating, at your home.",
      "cat": "Body Wellness"
     },
-    "home-service-holistic-massage": {
+    "holistic-body-rejuvenating-home-service": {
      "name": "Holistic Body Rejuvenating — Home Service",
      "desc": "Our holistic full-body rejuvenating, at your home.",
      "cat": "Body Wellness"
@@ -1281,7 +1301,7 @@ export default {
      "desc": "Gentle heat to support muscle recovery, improve circulation and ease tension.",
      "cat": "Moroccan Bath & Relaxation"
     },
-    "sauna-and-massage": {
+    "sauna-body-rejuvenating-program": {
      "name": "Sauna & Body Rejuvenating Program",
      "desc": "Infrared sauna, followed by body rejuvenating.",
      "cat": "Moroccan Bath & Relaxation"
@@ -1311,8 +1331,8 @@ export default {
      "desc": "Compressive microvibration for skin tone and circulation.",
      "cat": "Advanced Aesthetic Care"
     },
-    "endosphere-face-massage": {
-     "name": "Endosphere Face Massage",
+    "endosphere-face-rejuvenating": {
+     "name": "Endosphere Face Rejuvenating",
      "desc": "Microvibration facial treatment for tone and lift.",
      "cat": "Advanced Aesthetic Care"
     },
@@ -1376,12 +1396,12 @@ export default {
      "desc": "A free 15-minute taster of Endospheres therapy.",
      "cat": "Advanced Aesthetic Care"
     },
-    "standard-package-moroccan-bath-plus-relaxing-body-massage": {
+    "standard-package-moroccan-bath-plus-relaxing-body-rejuvenating": {
      "name": "Standard Package: Moroccan Bath + Relaxing Body Rejuvenating",
      "desc": "A Moroccan bath followed by relaxing body rejuvenating.",
      "cat": "Ecosophy Signature Packages & Combo Offers"
     },
-    "quick-recovery-moroccan-bath-plus-massage": {
+    "moroccan-bath-plus-body-rejuvenating": {
      "name": "Moroccan Bath + Body Rejuvenating",
      "desc": "A Moroccan bath and body rejuvenating, for tired muscles.",
      "cat": "Ecosophy Signature Packages & Combo Offers"
@@ -1461,7 +1481,7 @@ export default {
      "desc": "Five one-hour Balinese body rejuvenating sessions.",
      "cat": "Courses & Multi-Session Plans"
     },
-    "sport-massage-5-sessions": {
+    "sports-body-rejuvenating-5-sessions": {
      "name": "Sports Body Rejuvenating — 5 Sessions",
      "desc": "Five one-hour sports body rejuvenating sessions.",
      "cat": "Courses & Multi-Session Plans"
@@ -1476,12 +1496,12 @@ export default {
      "desc": "Five one-hour deep tissue body rejuvenating sessions.",
      "cat": "Courses & Multi-Session Plans"
     },
-    "holistic-massage-5-sessions": {
+    "holistic-body-rejuvenating-5-sessions": {
      "name": "Holistic Body Rejuvenating — 5 Sessions",
      "desc": "Five one-hour holistic body rejuvenating sessions.",
      "cat": "Courses & Multi-Session Plans"
     },
-    "slimming-massage-5-sessions": {
+    "slimming-body-rejuvenating-5-sessions": {
      "name": "Slimming Body Rejuvenating — 5 Sessions",
      "desc": "A course of five slimming body rejuvenating sessions.",
      "cat": "Courses & Multi-Session Plans"
@@ -1528,32 +1548,49 @@ export default {
     }
    },
    "legacy": {
-    "sports-recovery-ritual": "sport-massage",
+    "sports-recovery-ritual": "sports-body-rejuvenating",
     "balinese-massage": "relaxing-balinese",
     "deep-tissue-massage": "deep-tissue",
     "hot-stone-massage": "hot-stone",
     "lymphatic-drainage-massage": "lymphatic-drainage",
-    "30-minute-massage": "30-minutes-massage",
+    "30-minute-massage": "30-minute-body-rejuvenating",
     "medical-therapy-massage": "medical-therapy",
     "detox-slimming-body-wrap": "detox-slimming-body-wraps",
-    "holistic-massage-home-service": "home-service-holistic-massage",
+    "holistic-massage-home-service": "holistic-body-rejuvenating-home-service",
     "classic-moroccan-bath": "classic-moroccan-hammam",
     "royal-moroccan-bath": "royal-moroccan-hammam",
     "infrared-sauna-session": "sauna",
-    "sauna-massage-program": "sauna-and-massage",
+    "sauna-massage-program": "sauna-body-rejuvenating-program",
     "sauna-plus-hydrafacial": "sauna-and-hydrafacial",
     "hydrafacial": "hydrafacial-basic",
     "professional-skin-cleansing": "deep-cleansing",
     "men-s-signature-facial": "ecosophy-signature-facial",
-    "endospheres-face": "endosphere-face-massage",
+    "endospheres-face": "endosphere-face-rejuvenating",
     "anti-aging-whitening-facial": "anti-aging-and-whitening-facial",
     "deep-cleansing-add-on": "add-on-deep-cleansing",
     "emsculpt-slimming": "emsculpt-and-slimming",
     "emsculpt-slimming-free-trial": "free-trial-emsculpt-and-slimming",
     "endospheres-free-trial": "free-trial-endosphere",
-    "sports-massage-5-sessions": "sport-massage-5-sessions",
+    "sports-massage-5-sessions": "sports-body-rejuvenating-5-sessions",
     "emsculpt-slimming-5-sessions": "emsculpt-and-slimming-5-sessions",
-    "emsculpt-slimming-10-sessions": "emsculpt-and-slimming-10-sessions"
+    "emsculpt-slimming-10-sessions": "emsculpt-and-slimming-10-sessions",
+    "sport-massage": "sports-body-rejuvenating",
+    "feet-massage": "feet-rejuvenating",
+    "holistic-massage": "holistic-body-rejuvenating",
+    "neck-shoulder-massage": "neck-shoulder-rejuvenating",
+    "face-massage": "face-rejuvenating",
+    "30-minutes-massage": "30-minute-body-rejuvenating",
+    "slimming-massage": "slimming-body-rejuvenating",
+    "home-service-massage": "home-service-body-rejuvenating",
+    "balinese-massage-home-service": "balinese-body-rejuvenating-home-service",
+    "home-service-holistic-massage": "holistic-body-rejuvenating-home-service",
+    "sauna-and-massage": "sauna-body-rejuvenating-program",
+    "endosphere-face-massage": "endosphere-face-rejuvenating",
+    "standard-package-moroccan-bath-plus-relaxing-body-massage": "standard-package-moroccan-bath-plus-relaxing-body-rejuvenating",
+    "quick-recovery-moroccan-bath-plus-massage": "moroccan-bath-plus-body-rejuvenating",
+    "sport-massage-5-sessions": "sports-body-rejuvenating-5-sessions",
+    "holistic-massage-5-sessions": "holistic-body-rejuvenating-5-sessions",
+    "slimming-massage-5-sessions": "slimming-body-rejuvenating-5-sessions"
    }
   }
  }

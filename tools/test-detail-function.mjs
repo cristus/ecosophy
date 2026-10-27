@@ -28,7 +28,7 @@ r = await run('https://x.dev/service?s=glass-skin-package', 'her');
 ok(r.status === 200 && writes.some(w => w[0] === 'link[rel="canonical"]' && w[2] === 'https://ecosophy.pages.dev/service?s=glass-skin-package'), 'treatment gets its own canonical');
 ok(writes.some(w => w[0] === 'title' && /^Glass Skin Package · /.test(w[2])), 'treatment gets its own title');
 ok(writes.some(w => w[0] === 'meta[name="description"]' && /HydraFacial/.test(w[2])), 'treatment gets its own description');
-r = await run('https://x.dev/gent-service?s=feet-massage', 'him');
+r = await run('https://x.dev/gent-service?s=feet-rejuvenating', 'him');
 ok(writes.some(w => w[0] === 'title' && /^Feet Rejuvenating/.test(w[2])), 'renamed treatment titled with the approved name');
 r = await run('https://x.dev/gent-service', 'him');
 ok(r.status === 301 && r.headers.get('location').endsWith('/gent-services'), 'no slug 301s to the menu');

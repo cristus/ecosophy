@@ -18,19 +18,19 @@ const PAGES = {
   'Ecosophy For Her.dc.html': {
     route: 'for-her.html',
     title: 'Ecosophy Beauty Lounge — Dubai',
-    description: 'Moroccan bath, Balinese massage and skin rituals for women, in a calm green room in Dubai.',
+    description: 'Moroccan bath, Balinese body rejuvenating and skin rituals for women, in a calm green room in Dubai.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy For Him.dc.html': {
     route: 'for-him.html',
     title: 'Ecosophy Aesthetic Spa — Dubai',
-    description: "The gentlemen's retreat. Moroccan bath, deep tissue massage, skin and grooming rituals for men in Dubai.",
+    description: "The gentlemen's retreat. Moroccan bath, deep tissue body rejuvenating, skin and grooming rituals for men in Dubai.",
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Services.dc.html': {
     route: 'services.html',
     title: 'Spa Treatment Menu — Ecosophy for Her',
-    description: 'The full treatment menu for Ecosophy Beauty Lounge, Dubai — massage, hammam, facials and body rituals.',
+    description: 'The full treatment menu for Ecosophy Beauty Lounge, Dubai — body rejuvenating, hammam, facials and body rituals.',
     mark: 'favicons/mark-woman-gold-180.png',
   },
   'Ecosophy Service Detail.dc.html': {
@@ -42,7 +42,7 @@ const PAGES = {
   'Ecosophy Gent Services.dc.html': {
     route: 'gent-services.html',
     title: 'Treatment Menu — Ecosophy Aesthetic Spa',
-    description: 'The full treatment menu for Ecosophy Aesthetic Spa, Dubai — massage, hammam, skin and grooming.',
+    description: 'The full treatment menu for Ecosophy Aesthetic Spa, Dubai — body rejuvenating, hammam, skin and grooming.',
     mark: 'favicons/mark-man-gold-180.png',
   },
   'Ecosophy Gallery.dc.html': {
