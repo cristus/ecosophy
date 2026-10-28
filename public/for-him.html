@@ -812,7 +812,7 @@ a:hover { color:#B98F3E; }
 
       <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; border-top:1px solid rgba(201,168,96,.22); padding-top:16px; margin-top:10px;">
         <span style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#9FB0A0;">{{ gCounter }}</span>
-        <a class="r-tap" href="https://www.instagram.com/ecosophy_gentspa/" style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY.AE</a>
+        <a class="r-tap" href="https://www.instagram.com/ecosophy_gentspa/" style="font-size:var(--fs-lg); letter-spacing:2.5px; color:#C9A860;">FOLLOW @ECOSOPHY_GENTSPA</a>
       </div>
     </div>
 
@@ -1085,34 +1085,31 @@ a:hover { color:#B98F3E; }
 class Component extends DCLogic {
   state = { name: '', phone: '', day: null, time: null, ritual: null, monthOffset: 0, booked: false, formError: false, dCat: null, dSvc: null, gFilter: null, gIdx: null, gProgress: 0 };
   reelItems() {
-    const L = u => [u, '', ''];
-    // One distinct still per ritual, all from this page's own set — /gent-gallery
-    // runs its film strip off the photographs its own sections show.
-    const paje = L('uploads/eco-him-07.jpg');
-    const stone = L('uploads/eco-him-svc-photo-2026-07-25-02-03-59.jpg');
-    const hume = L('uploads/eco-him-svc-photo-2026-08-02-15-49-50.jpg');
-    const fac = L('uploads/imgi_26_mens-beauty-treatment.jpg');
-    const caishan = L('uploads/eco-him-svc-img-1110.png');
-    const room = L('uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg');
-    const element = L('uploads/photo_2026-08-02_19-37-29.jpg');
-    const shave = L('uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg');
-    const nick = L('uploads/748718184_18114511022477475_8211076763529339827_n.jpg');
-    const machine = L('uploads/eco-him-machine.jpg');
+    // Each still is the treatment's own photo from the catalogue - the
+    // client's archive (menservice.images/) - so the card, the enlarged view
+    // and the treatment page always show the same file.
+    const P = svc => [(window.ECO.find('him', svc) || { svc: { img: '' } }).svc.img, '', ''];
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-hammam', pic: paje,
+      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-hammam', pic: P('royal-moroccan-hammam'),
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Hammam', svc: 'classic-moroccan-hammam', pic: stone,
+      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Hammam', svc: 'classic-moroccan-hammam', pic: P('classic-moroccan-hammam'),
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
-      { type: 'FACIALS', title: 'HydraFacial Basic', svc: 'hydrafacial-basic', pic: hume,
-        caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
-      { type: 'FACIALS', title: 'Ecosophy Signature Facial', svc: 'ecosophy-signature-facial', pic: fac,
+      { type: 'FACIALS', title: 'Ecosophy Signature Facial', svc: 'ecosophy-signature-facial', pic: P('ecosophy-signature-facial'),
         caption: 'Deep cleanse and hydration built for beard-line and city skin.', cta: 'BOOK A FACIAL' },
-      { type: 'BODY REJUVENATING', title: 'Balinese Body Rejuvenating', svc: 'relaxing-balinese', pic: caishan,
+      { type: 'FACIALS', title: 'Express Facial', svc: 'express-facial', pic: P('express-facial'),
+        caption: 'A quick cleanse and refresh.', cta: 'BOOK A FACIAL' },
+      { type: 'BODY REJUVENATING', title: 'Balinese Body Rejuvenating', svc: 'relaxing-balinese', pic: P('relaxing-balinese'),
         caption: 'Sixty minutes of slow oil-based bodywork with therapists from Bali.', cta: 'BOOK A SESSION' },
-      { type: 'BODY REJUVENATING', title: 'Hot Stone Body Rejuvenating', svc: 'hot-stone', pic: room,
+      { type: 'BODY REJUVENATING', title: 'Hot Stone Body Rejuvenating', svc: 'hot-stone', pic: P('hot-stone'),
         caption: 'Warm basalt stones ease deep muscular tightness.', cta: 'BOOK A SESSION' },
-      { type: 'THE SPA', title: 'Infrared Sauna Session', svc: 'sauna', pic: machine,
+      // THE SPA stays ahead of EMSCULPT: the owner's saved filter label EMSCULPT
+      // sits on the last bubble, so that bubble has to be the Emsculpt one.
+      { type: 'THE SPA', title: 'Infrared Sauna Session', svc: 'sauna', pic: P('sauna'),
         caption: 'Gentle heat to support recovery and ease tension.', cta: 'BOOK THE SAUNA' },
+      { type: 'EMSCULPT', title: 'Emsculpt', svc: 'emsculpt', pic: P('emsculpt'),
+        caption: 'Muscle-building electromagnetic sessions.', cta: 'BOOK EMSCULPT' },
+      { type: 'EMSCULPT', title: 'Emsculpt and Slimming', svc: 'emsculpt-and-slimming', pic: P('emsculpt-and-slimming'),
+        caption: 'Emsculpt, combined with a slimming treatment.', cta: 'BOOK EMSCULPT' },
     ];
   }
   reelVals() {
@@ -1575,32 +1572,27 @@ class Component extends DCLogic {
         // rooms and the product shots; none of them appear here, so the two
         // pages share no photograph at all.
         const P = {
-          mroom: ['uploads/775244964_18119167235477475_6941524398570787900_n.jpg','',''],
-          lounge1: ['uploads/photo_2026-08-02_19-37-29.jpg','',''],
-          lounge2: ['uploads/photo_2026-08-02_19-37-25.jpg','',''],
-          // The wet room. What used to sit here was an AI render - the one
-          // synthetic image on a rail of real photographs, and it read as such.
-          // The tub itself was tried next and looked like a bathroom at card
-          // size, so the card carries the room instead, which also keeps the
-          // rail consistent: BODY REJUVENATING, THE CENTRE and SAUNA are empty rooms too.
-          hammam: ['uploads/eco-him-07.jpg','',''],
-          stone: ['uploads/khampha-phimmachak-aof9V5B3EmQ-unsplash.jpg','',''],
-          leaf: ['uploads/bart-zimny-W5XTTLpk1-I-unsplash.jpg','',''],
-          fman: ['uploads/imgi_33_man-getting-a-facial-treatment.jpg','',''],
-          shave: ['uploads/imgi_18_cosmetician-doing-purifying-face-treatment-for-man.jpg','',''],
-          sauna: ['uploads/748718184_18114511022477475_8211076763529339827_n.jpg','',''],
-          bed: ['uploads/imgi_23_man-getting-facial-treatment-at-beauty-salon.jpg','',''],
-          fac1: ['uploads/imgi_8_young-man-receiving-cosmetic-treatment-at-the-spa.jpg','',''],
-          machine: ['uploads/eco-him-machine.jpg','',''],
+          bodyA: ['uploads/eco-him-svc-img-1110.png','',''],
+          bodyB: ['uploads/eco-him-svc-photo-2026-07-25-02-03-04.jpg','',''],
+          hammam: ['uploads/eco-him-svc-photo-2026-07-25-02-03-59.jpg','',''],
+          bathProducts: ['uploads/eco-him-room-products-1.jpg','',''],
+          facialA: ['uploads/eco-him-svc-photo-2026-08-02-15-49-50.jpg','',''],
+          facialB: ['uploads/eco-him-svc-photo-2026-07-25-02-02-55.jpg','',''],
+          room: ['uploads/eco-him-svc-treatment-room.jpg','',''],
+          products: ['uploads/eco-him-room-products-2.jpg','',''],
+          emsculpt: ['uploads/eco-him-svc-photo-2026-08-02-15-49-59.jpg','',''],
+          facialEq: ['uploads/eco-him-room-facial-equipment.jpg','',''],
+          // The archive has one photograph of the sauna, so the card holds it.
+          sauna: ['uploads/eco-him-svc-photo-2026-08-02-15-48-52.jpg','',''],
         };
         const u = p => (p[0].charAt(0) === '.' || p[0].indexOf('uploads/') === 0) ? p[0] : 'https://images.unsplash.com/photo-' + p[0] + '?q=75&w=440&auto=format&fit=crop';
         const base = [
-          ['massage','BODY REJUVENATING','body rejuvenating room','Slow oil-based bodywork with therapists from Bali.',[P.mroom,P.bed]],
-          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam,P.stone]],
-          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.fman,P.shave]],
-          ['centre','THE CENTRE','reception & lounge','Where every visit begins: reception, tea and the quiet lounge.',[P.lounge1,P.lounge2]],
-          ['skin','SKIN & GROOMING','mens facial','Purifying masks and beard-line skin care.',[P.fac1,P.machine]],
-          ['sauna','INFRARED SAUNA','infrared sauna','Infrared heat for muscle recovery and circulation.',[P.sauna,P.leaf]],
+          ['massage','BODY REJUVENATING','body rejuvenating','Slow oil-based bodywork with therapists from Bali.',[P.bodyA,P.bodyB]],
+          ['bath','MOROCCAN BATH','hammam','Steam, black soap and a full body scrub on heated marble.',[P.hammam,P.bathProducts]],
+          ['facial','FACIALS','facial','Deep cleansing, extraction and hydration in one session.',[P.facialA,P.facialB]],
+          ['centre','THE CENTRE','treatment room','Private treatment rooms and the professional products we use.',[P.room,P.products]],
+          ['skin','ADVANCED AESTHETICS','emsculpt','Emsculpt, Endospheres and professional facial devices.',[P.emsculpt,P.facialEq]],
+          ['sauna','INFRARED SAUNA','infrared sauna','Infrared heat for muscle recovery and circulation.',[P.sauna,P.sauna]],
         ];
         const w = heroMobile ? 'min(42vw,178px)' : 'max(min(16vw,30vh),118px)';
         const gap = heroMobile ? '5px' : '-4px';

@@ -245,7 +245,7 @@
     ] }),
 
     C({ key: 'lashes', name: 'Eyelashes', slot: 'svc-cat-lashes', ddSlot: 'dd-cat-Eyelashes',
-      img: 'eco-her-svc-lashes-volume-1.jpg',
+      img: 'eco-her-makeup-1.jpg',
       blurb: 'Russian-speaking lash masters. Extensions, lifts and refills mapped to your eye shape and the look you want.',
       items: [
       S('Classic Natural Lashes', 'lashes', '150 min', '220 AED',
@@ -902,7 +902,7 @@
   var HIM_CATS = [
 
     C({ key: 'massage', name: 'Body Wellness', slot: 'gsvc-cat-massage', ddSlot: 'gdd-cat-Massages',
-      img: '775244964_18119167235477475_6941524398570787900_n.jpg',
+      img: 'eco-him-svc-img-1110.png',
       blurb: 'Sports recovery, deep tissue and full body wellness, with therapists trained in Bali and Kerala.',
       items: [
       S('Sports Body Rejuvenating', 'massage', '60 min', '200 AED',
@@ -977,7 +977,7 @@
     ] }),
 
     C({ key: 'bath', name: 'Moroccan Bath & Relaxation', slot: 'gsvc-cat-spa', ddSlot: 'gdd-cat-Spa',
-      img: 'eco-him-07.jpg',
+      img: 'eco-him-svc-photo-2026-07-25-02-03-59.jpg',
       blurb: 'Moroccan bath, infrared sauna and the packages that combine them.',
       items: [
       S('Classic Moroccan Hammam', 'bath', '60 min', '160 AED',
@@ -1000,7 +1000,7 @@
     ] }),
 
     C({ key: 'aesthetic', name: 'Advanced Aesthetic Care', slot: 'gsvc-cat-aesthetic', ddSlot: 'gdd-cat-Aesthetic',
-      img: 'imgi_33_man-getting-a-facial-treatment.jpg',
+      img: 'eco-him-svc-photo-2026-08-02-15-49-50.jpg',
       blurb: 'Advanced facial and body treatments for men, from HydraFacial and professional cleansing to Dermapen, Emsculpt and Endospheres.',
       items: [
       S('HydraFacial Basic', 'facial', '60 min', '250 AED',
@@ -1058,8 +1058,8 @@
     ] }),
 
     C({ key: 'pkg', name: 'Ecosophy Signature Packages & Combo Offers', slot: 'gsvc-cat-pkg', ddSlot: 'gdd-cat-Packages',
-      img: '748718184_18114511022477475_8211076763529339827_n.jpg',
-      blurb: 'Two or three treatments combined into one visit.',
+      img: 'eco-him-svc-treatment-room.jpg',
+      blurb: 'Multiple treatments combined in one visit.',
       items: [
       S('Standard Package: Moroccan Bath + Relaxing Body Rejuvenating', 'pkg', '60 min', '300 AED',
         'A Moroccan bath followed by relaxing body rejuvenating.',
@@ -1096,7 +1096,7 @@
     ] }),
 
     C({ key: 'removal', name: 'Shaving & Waxing', slot: 'gsvc-cat-removal', ddSlot: 'gdd-cat-Removal',
-      img: 'eco-him-machine.jpg',
+      img: 'eco-him-svc-treatment-room.jpg',
       blurb: 'Body hair removal for men, from a quick underarm tidy to full-body waxing.',
       items: [
       S('Body Shaving', 'removal', '60 min', '180 AED',
@@ -1120,7 +1120,7 @@
     ] }),
 
     C({ key: 'courses', name: 'Courses & Multi-Session Plans', slot: 'gsvc-cat-courses', ddSlot: 'gdd-cat-Courses',
-      img: 'eco-him-12.jpg',
+      img: 'eco-him-svc-img-1110.png',
       blurb: 'Your favourite treatments booked as a course, for better results and a better price per session.',
       items: [
       S('Moroccan Hammam — 3 Sessions', 'bath', '3 × 60 min', '350 AED',
@@ -1239,30 +1239,6 @@
       ],
     },
     her: {
-      // The client’s own lash photographs (23 October): two shoots, each in two
-      // crops. Volume and pattern sets show the volume set; classic, lifts, tint
-      // and refills the natural set. Newer than the handoff, which kept the
-      // older website photo for this section.
-      'eco-her-svc-lashes-volume-1.jpg': [
-        '3d-lashes', 'any-volume-lashes', 'led-lashes',
-        'kylie-pattern', 'wet-pattern', 'lash-refill-within-14-days-3d-mega-volume',
-        'led-lash-refill-within-1-week', 'led-lash-refill-26-days-and-above',
-      ],
-      'eco-her-svc-lashes-volume-2.jpg': [
-        'mega-volume', 'special-offer-any-volume', 'rays-kim-kardashian-pattern',
-        'anime-pattern', 'lash-refill-within-25-days-3d-mega-volume', 'led-lash-refill-15-days',
-        'lash-extension-home-service',
-      ],
-      'eco-her-svc-lashes-natural-1.jpg': [
-        'classic-natural-lashes', 'silk-lashes', 'lower-lashes',
-        'eyelash-lifting', 'lash-refill-within-1-week', 'lash-refill-after-21-days',
-        'weekly-lash',
-      ],
-      'eco-her-svc-lashes-natural-2.jpg': [
-        '2d-lashes', 'half-set-lashes', 'lash-tint',
-        'eyelash-brow-lifting-combo', 'lash-refill-within-14-days-classic-2d', 'lash-refill-after-30-days',
-        'eyelash-removal',
-      ],
       'eco-her-nails-1.jpg': [
         'cut-and-file', 'classic-manicure', 'classic-smart-russian-manicure-machine',
         'spa-manicure-alessandro', 'soft-gel-manicure', 'overlay-manicure',
@@ -1481,7 +1457,7 @@
     skin:     [UP + 'eco-her-facial-1.jpg', 'THE SKIN ROOM'],
     water:    [UP + 'eco-her-jacuzzi-1.jpg', 'WATER SUITE'],
     nails:    [UP + 'eco-her-nails-1.jpg', 'THE NAIL STUDIO'],
-    lashes:   [UP + 'eco-her-svc-lashes-natural-2.jpg', 'THE LASH ROOM'],
+    lashes:   [UP + 'eco-her-makeup-1.jpg', 'THE LASH ROOM'],
     hair:     [UP + 'eco-her-hair-1.jpg', 'THE HAIR STUDIO'],
     makeup:   [UP + 'eco-her-makeup-2.jpg', 'MAKE-UP'],
     products: [UP + 'eco-her-products-1.jpg', 'PRODUCTS'],

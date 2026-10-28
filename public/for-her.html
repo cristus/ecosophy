@@ -1100,9 +1100,11 @@ class Component extends DCLogic {
     const rJacuzzi     = L('uploads/eco-her-jacuzzi-1.jpg');
     const rSauna       = L('uploads/eco-her-sauna-2.jpg');
     return [
-      { type: 'MOROCCAN BATH', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-bath', pic: rBathRoyal,
+      // Not 'MOROCCAN BATH': a saved editor edit relabels whatever shows that
+      // text as 'Semi-Permanent Makeup', which put the wrong name on this filter.
+      { type: 'THE HAMMAM', title: 'Royal Moroccan Bath', svc: 'royal-moroccan-bath', pic: rBathRoyal,
         caption: 'Steam, black soap, deep exfoliation and a nourishing body mask.', cta: 'BOOK THE BATH' },
-      { type: 'MOROCCAN BATH', title: 'Classic Moroccan Bath', svc: 'classic-moroccan-bath', pic: rBathClassic,
+      { type: 'THE HAMMAM', title: 'Classic Moroccan Bath', svc: 'classic-moroccan-bath', pic: rBathClassic,
         caption: 'Steam, black soap and gentle exfoliation.', cta: 'BOOK THE BATH' },
       { type: 'FACIALS', title: 'HydraFacial', svc: 'basic-hydrafacial', pic: rHydra,
         caption: 'Deep cleansing, extraction and hydration in one session.', cta: 'BOOK A FACIAL' },
@@ -1632,7 +1634,7 @@ class Component extends DCLogic {
       tPhotoA: 'her-rev-a-' + tIdx,
       tPhotoSrcA: TESTI[tIdx].pic,
       tPhotoHintA: TESTI[tIdx].service + ' — the work',
-      aboutTags: ['RUSSIAN NAIL & LASH MASTERS','TOP BROW MASTER','SEMI-PERMANENT MAKEUP','DERMAPEN 4','ADVANCED FACIALS','CUSTOMIZED SLIMMING','SPA & Wellness'],
+      aboutTags: ['RUSSIAN NAIL & LASH MASTERS','TOP BROW MASTER','SEMI-PERMANENT MAKEUP','DERMAPEN 4','ADVANCED FACIALS','Customized Slimming','SPA & Wellness'],
       aboutCategories: ['NAILS','LASHES','BROWS','FACIALS','BODY','BODY REJUVENATING'],
       cards, featuredCard: cards[0], listCards: cards.slice(1),
       ...dd,
